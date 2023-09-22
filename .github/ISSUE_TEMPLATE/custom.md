@@ -1,6 +1,6 @@
 ---
 name: Custom issue template
-about: Describe this issue template's purpose here.
+about: A standard issue template for any issues, with Description and DoD.
 title: ''
 labels: ''
 assignees: ''
@@ -8,9 +8,8 @@ assignees: ''
 ---
 
 ## Description
-
-
-## Acceptance criteria
+<!---Please specify the task in more details-->
 
 
 ## Definition of Done (DoD)
+<!---What conditions must be satisfied to make this issue considered as resolved?-->
