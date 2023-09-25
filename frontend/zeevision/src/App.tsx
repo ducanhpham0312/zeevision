@@ -1,22 +1,29 @@
-import { StyledButton } from './components/StyledButton';
-import { useUIStore } from './contexts/useUIStore'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import CounterTest from './components/CounterTest';
+import Navbar from './components/navbar/Navbar';
+
+const Layout = () => (
+  <>
+    <Navbar/>
+    <Outlet/>
+  </>
+)
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout/>,
+    children: [
+      {
+        path: "counter",
+        element: <CounterTest />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  const { count, increaseCount } = useUIStore();
-
-  return (
-    <>
-      <h1>Vite + React</h1>
-      <div>
-        <StyledButton onClick={increaseCount}>
-          {`count is ${count.toString()}`}
-        </StyledButton>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-    </>
-  )
+  return <RouterProvider router={router}/>
 }
 
 export default App

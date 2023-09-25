@@ -16,8 +16,10 @@
     "@emotion/styled": "^11.11.0",
     "@mui/base": "^5.0.0-beta.16",
     "@mui/system": "^5.14.10",
+    "@types/react-router-dom": "^5.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
