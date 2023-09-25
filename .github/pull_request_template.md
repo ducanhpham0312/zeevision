@@ -1,6 +1,6 @@
 ### Linked issue
-<!-- Please modify the your-issue-number below with your issue number. -->
-https://github.com/ducanhpham0312/zeevision/issues/your-issue-number
+<!-- Please modify the your-issue-number below with your issue number written on the issue ticket. -->
+Closes #your-issue-number
 
 
 ### Description
