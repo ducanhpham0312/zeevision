@@ -1,0 +1,41 @@
+name: Backend
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            cgo-enabled: 0
+          - goos: darwin
+            goarch: amd64
+            cgo-enabled: 1
+          - goos: darwin
+            goarch: arm64
+            cgo-enabled: 1
+
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+      CGO_ENABLED: ${{ matrix.cgo-enabled }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21.x"
+
+      - name: Build
+        run: go build -C ./backend -v ./cmd/zeevision/main.go
