@@ -9,7 +9,7 @@ function CounterTest() {
       <h1>Vite + React</h1>
       <div>
         <StyledButton onClick={increaseCount}>
-          {`count is ${count.toString()}`}
+          {`count is ${count}`}
         </StyledButton>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR

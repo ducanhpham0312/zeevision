@@ -1,6 +1,11 @@
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import CounterTest from './components/CounterTest';
 import Navbar from './components/navbar/Navbar';
+import ProcessesPage from './pages/ProcessesPage';
+import InstancesPage from './pages/InstancesPage';
+import IncidentsPage from './pages/IncidentsPage';
+import JobsPage from './pages/jobsPage';
+import MessagesPage from './pages/messagesPage';
+import ErrorsPage from './pages/ErrorsPage';
 
 const Layout = () => (
   <>
@@ -15,8 +20,28 @@ const router = createBrowserRouter([
     element: <Layout/>,
     children: [
       {
-        path: "counter",
-        element: <CounterTest />,
+        path: "processes",
+        element: <ProcessesPage />,
+      },
+      {
+        path: "instances",
+        element: <InstancesPage />,
+      },
+      {
+        path: "incidents",
+        element: <IncidentsPage />,
+      },
+      {
+        path: "jobs",
+        element: <JobsPage />,
+      },
+      {
+        path: "messages",
+        element: <MessagesPage />,
+      },
+      {
+        path: "errors",
+        element: <ErrorsPage />,
       },
     ],
   },
