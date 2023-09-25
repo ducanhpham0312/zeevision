@@ -66,7 +66,7 @@ const StyledButtonComponent = styled(Button, { shouldForwardProp: props => props
   position: relative;
   font-weight: 600;
   font-size: 1,125rem;
-  background-color: ${variant === "contained" ? PRIMARY[500] : "white"};
+  background-color: ${variant === "contained" ? PRIMARY[900] : "white"};
   padding: ${
     size === "large" ? "18px 14px" : size === "small" ? "4px 12px" : "12px 14px"
   };
@@ -80,17 +80,17 @@ const StyledButtonComponent = styled(Button, { shouldForwardProp: props => props
     bottom: 0;
     border-radius: 4px;
     height: ${active ? "4px" : "0"}; /* Set the height of the line based on 'active' */
-    background-color: ${PRIMARY[500]}; /* Color of the line */
+    background-color: ${PRIMARY[900]}; /* Color of the line */
     transition: height 100ms ease; /* Transition only the height property */
   }
 
-  outline: ${variant === "outlined" ? `2px solid ${PRIMARY[500]}` : "none"};
-  color: ${variant === "contained" ? "white" : PRIMARY[500]};
+  outline: ${variant === "outlined" ? `2px solid ${PRIMARY[900]}` : "none"};
+  color: ${variant === "contained" ? "white" : PRIMARY[900]};
   transition: all 150ms ease;
   cursor: pointer;
 
   &:hover {
-    background-color: ${variant === "contained" ? PRIMARY[400] : PRIMARY[50]};
+    background-color: ${variant === "contained" ? PRIMARY[800] : PRIMARY[50]};
   }
 `
 );
