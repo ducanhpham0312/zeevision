@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: backend/
+      dockerfile: Dockerfile  
+    image: zeevision-backend:latest  
+    container_name: zeevision-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - zeevision_network
+#  frontend:
+#    build:
+#      context: frontend/zeevision/
+#      dockerfile: Dockerfile
+#    image: zeevision-frontend:latest
+#    container_name: zeevision-frontend
+#    ports:
+#      - "3000:3000"
+#    networks:
+#      - zeevision_network
+
+networks:
+  zeevision_network:
+    driver: bridge  # You can use a different driver if needed
