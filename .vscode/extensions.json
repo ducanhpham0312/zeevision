@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "golang.go",
+    "github.vscode-github-actions",
+    "ms-azuretools.vscode-docker",
+    "yzhang.markdown-all-in-one",
+    "redhat.vscode-yaml"
+  ]
+}
