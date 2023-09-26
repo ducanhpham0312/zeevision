@@ -1,10 +1,10 @@
-import CounterTest from "../components/CounterTest";
+import BpmnTest from "../components/BpmnTest";
 
 export default function ProcessesPage({}: {}) {
   return (
     <>
       <p>ProcessesPage</p>
-      <CounterTest />
+      <BpmnTest />
     </>
   );
 }

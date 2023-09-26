@@ -4,13 +4,17 @@ import ProcessesPage from './pages/ProcessesPage';
 import InstancesPage from './pages/InstancesPage';
 import IncidentsPage from './pages/IncidentsPage';
 import JobsPage from './pages/jobsPage';
-import MessagesPage from './pages/messagesPage';
+
 import ErrorsPage from './pages/ErrorsPage';
+import MessagesPage from './pages/MessagesPage';
 
 const Layout = () => (
   <>
     <Navbar/>
-    <Outlet/>
+    <div style={{ marginTop: "100px"}}>
+
+      <Outlet/>
+    </div>
   </>
 )
 

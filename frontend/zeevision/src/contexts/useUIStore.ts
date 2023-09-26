@@ -1,12 +1,16 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface UIStoreType {
-  count : number,
+  count: number;
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
   increaseCount: () => void;
-
 }
 
 export const useUIStore = create<UIStoreType>((set) => ({
   count: 0,
-  increaseCount: () => set(({count}) => ({ count : count + 1}))
-}))
+  isSidebarOpen: false,
+  toggleSidebar: () =>
+    set(({ isSidebarOpen }) => ({ isSidebarOpen: !isSidebarOpen })),
+  increaseCount: () => set(({ count }) => ({ count: count + 1 })),
+}));

@@ -1,77 +1,72 @@
 import { styled } from "@mui/system";
 import { StyledButton } from "../styled-component/StyledButton";
-import { useNavigate, useLocation } from "react-router-dom";
-
-const NavigationPath: { name: string; path: string }[] = [
-  {
-    name: "PROCESSES",
-    path: "/processes",
-  },
-  {
-    name: "INSTANCES",
-    path: "/instances",
-  },
-  {
-    name: "INCIDENTS",
-    path: "/incidents",
-  },
-  {
-    name: "JOBS",
-    path: "/jobs",
-  },
-  {
-    name: "MESSAGES",
-    path: "/messages",
-  },
-  {
-    name: "ERRORS",
-    path: "/errors",
-  },
-];
+import MenuIcon from "@mui/icons-material/Menu";
+import { useUIStore } from "../../contexts/useUIStore";
+import Sidebar from "./Sidebar";
 
 function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { isSidebarOpen, toggleSidebar } = useUIStore();
 
   return (
     <NavbarComponent>
-      <div>
-        <div>NAVBAR</div>
-      </div>
-      <Divider />
-      <div style={{ display: "flex", gap: "10px" }}>
-        {NavigationPath.map((nav) => (
+      <FloatContainer expand={isSidebarOpen}>
+        <div
+          style={{
+            backgroundColor: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <StyledButton
-            active={location.pathname.includes(nav.path)}
+            active={isSidebarOpen}
             variant="text"
-            size="large"
-            onClick={() => navigate(nav.path)}
-            key={nav.path}
+            size="standard"
+            onClick={toggleSidebar}
           >
-            {nav.name}
+            <MenuIcon />
           </StyledButton>
-        ))}
-      </div>
+          <div style={{ paddingRight: "20px" }}>ZEEVISION</div>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: "white",
+            maxHeight: isSidebarOpen ? "1000px" : "0",
+            transition: "max-height 300ms ease",
+            overflow: "hidden",
+          }}
+        >
+          <Sidebar />
+        </div>
+      </FloatContainer>
     </NavbarComponent>
   );
 }
 
 const NavbarComponent = styled("header")(
   ({}) => `
-  display: flex;
-  width: 100%;
-  padding: 0px 20px;
-  box-sizing: border-box;
+  display: fixed;
+  position: absolute;
+  padding: 15px 20px;
   align-items: center;
   gap: 30px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-`);
+  z-index: 10;
+`
+);
 
-const Divider = styled("div")(
-  ({}) => `
-  height: 80%;
-  width: 0;
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
+const FloatContainer = styled("div", {
+  shouldForwardProp: (props) => props !== "expand",
+})(
+  ({ expand }: { expand: boolean }) => `
+  display: flex;
+  flex-direction: column;
+  width: ${expand ? "230px" : "180px"};
+  justify-content: space-between;
+  // background-color: grey;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: width 300ms ease;
 `
 );
 

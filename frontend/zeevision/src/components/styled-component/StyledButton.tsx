@@ -1,6 +1,7 @@
 import { Button } from "@mui/base";
 import { styled } from "@mui/system";
 import { PRIMARY } from "../../theme/palette";
+import { ReactNode } from "react";
 
 export type ButtonVariantType = "text" | "contained" | "outlined";
 
@@ -20,7 +21,7 @@ interface ButtonProps {
    */
   label?: string;
 
-  children?: string;
+  children?: ReactNode;
 
   /**
    * toggleable button
@@ -88,6 +89,7 @@ const StyledButtonComponent = styled(Button, { shouldForwardProp: props => props
   color: ${variant === "contained" ? "white" : PRIMARY[900]};
   transition: all 150ms ease;
   cursor: pointer;
+  box-sizing: border-box;
 
   &:hover {
     background-color: ${variant === "contained" ? PRIMARY[800] : PRIMARY[50]};
