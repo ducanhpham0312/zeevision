@@ -71,7 +71,7 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Check formatting of Go files
-        run: >
+        run: |
           test -z "$UNFORMATTED_FILES" || {
             echo "$UNFORMATTED_FILES" | while read -r filename
             do
