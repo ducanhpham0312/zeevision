@@ -24,4 +24,4 @@ services:
 
 networks:
   zeevision_network:
-    driver: bridge  # You can use a different driver if needed
+    driver: bridge
