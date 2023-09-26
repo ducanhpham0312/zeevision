@@ -3,43 +3,50 @@ import { StyledButton } from "../styled-component/StyledButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useUIStore } from "../../contexts/useUIStore";
 import Sidebar from "./Sidebar";
+import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 
 function Navbar() {
-  const { isSidebarOpen, toggleSidebar } = useUIStore();
+  const { isSidebarOpen, toggleSidebar, closeSidebar } = useUIStore();
 
   return (
     <NavbarComponent>
-      <FloatContainer expand={isSidebarOpen}>
-        <div
-          style={{
-            backgroundColor: "white",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <StyledButton
-            active={isSidebarOpen}
-            variant="text"
-            size="standard"
-            onClick={toggleSidebar}
+      <ClickAwayListener
+        mouseEvent="onMouseDown"
+        touchEvent="onTouchStart"
+        onClickAway={closeSidebar}
+      >
+        <FloatContainer expand={isSidebarOpen}>
+          <div
+            style={{
+              backgroundColor: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            <MenuIcon />
-          </StyledButton>
-          <div style={{ paddingRight: "20px" }}>ZEEVISION</div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: "white",
-            maxHeight: isSidebarOpen ? "1000px" : "0",
-            transition: "max-height 300ms ease",
-            overflow: "hidden",
-          }}
-        >
-          <Sidebar />
-        </div>
-      </FloatContainer>
+            <StyledButton
+              active={isSidebarOpen}
+              variant="text"
+              size="standard"
+              onClick={toggleSidebar}
+            >
+              <MenuIcon />
+            </StyledButton>
+            <div style={{ paddingRight: "20px" }}>ZEEVISION</div>
+          </div>
+          <div
+            style={{
+              backgroundColor: "white",
+              maxHeight: isSidebarOpen ? "1000px" : "0",
+              transition: "max-height 300ms ease",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <Sidebar />
+          </div>
+        </FloatContainer>
+      </ClickAwayListener>
     </NavbarComponent>
   );
 }
