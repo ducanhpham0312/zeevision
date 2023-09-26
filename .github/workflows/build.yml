@@ -71,4 +71,11 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Check formatting of Go files
-        run: test -z "$UNFORMATTED_FILES"
+        run: >
+          test -z "$UNFORMATTED_FILES" || {
+            echo "$UNFORMATTED_FILES" | while read -r filename
+            do
+                echo "::error file=$filename::Missing gofmt"
+            done
+            exit 1
+          }
