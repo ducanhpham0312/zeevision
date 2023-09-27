@@ -1,0 +1,32 @@
+name: CI/CD with ESLint and Prettier
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js and dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Run ESLint (check)
+        run: npm run lint
+
+      - name: Run ESLint (fix)
+        run: npm run lint:fix
+
+      - name: Run Prettier
+        run: npm run prettier

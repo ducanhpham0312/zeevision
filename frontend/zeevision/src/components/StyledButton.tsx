@@ -53,5 +53,5 @@ const StyledButtonComponent = styled(Button)(
   &:hover {
     background-color: ${PRIMARY[600]};
   }
-`
+`,
 );

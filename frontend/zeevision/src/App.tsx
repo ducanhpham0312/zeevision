@@ -1,5 +1,5 @@
-import { StyledButton } from './components/StyledButton';
-import { useUIStore } from './contexts/useUIStore'
+import { StyledButton } from "./components/StyledButton";
+import { useUIStore } from "./contexts/useUIStore";
 
 function App() {
   const { count, increaseCount } = useUIStore();
@@ -16,7 +16,7 @@ function App() {
         </p>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
