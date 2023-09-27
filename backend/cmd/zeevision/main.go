@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/ducanhpham0312/zeevision/backend/internal/example"
+	"github.com/ducanhpham0312/zeevision/backend/internal/receiver"
 )
 
 // Entry point for the application.
 func main() {
-	fmt.Println(example.HelloWorld())
+	receiver.SomeData()
 }
