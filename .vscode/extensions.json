@@ -4,6 +4,10 @@
     "github.vscode-github-actions",
     "ms-azuretools.vscode-docker",
     "yzhang.markdown-all-in-one",
-    "redhat.vscode-yaml"
+    "redhat.vscode-yaml",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "figma.figma-vscode-extension",
+    "eamodio.gitlens"
   ]
 }
