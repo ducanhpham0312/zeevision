@@ -1,10 +1,7 @@
-import CounterTest from "../components/CounterTest";
-
-export default function ErrorsPage({}: {}) {
+export default function ErrorsPage() {
   return (
     <>
-      <p>ErrorsPage</p>
-      <CounterTest />
+      <h1>ErrorsPage</h1>
     </>
   );
 }

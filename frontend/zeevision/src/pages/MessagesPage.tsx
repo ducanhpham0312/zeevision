@@ -1,10 +1,7 @@
-import CounterTest from "../components/CounterTest";
-
-export default function MessagesPage({}: {}) {
+export default function MessagesPage() {
   return (
     <>
-      <p>MessagesPage</p>
-      <CounterTest />
+      <h1>MessagesPage</h1>
     </>
   );
 }

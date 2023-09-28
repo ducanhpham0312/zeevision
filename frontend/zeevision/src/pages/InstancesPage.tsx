@@ -1,10 +1,7 @@
-import CounterTest from "../components/CounterTest";
-
-export default function InstancesPage({}: {}) {
+export default function InstancesPage() {
   return (
     <>
-      <p>InstancesPage</p>
-      <CounterTest />
+      <h1>InstancesPage</h1>
     </>
   );
 }

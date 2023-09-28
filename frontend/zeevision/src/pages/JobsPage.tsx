@@ -1,10 +1,7 @@
-import CounterTest from "../components/CounterTest";
-
-export default function JobsPage({}: {}) {
+export default function JobsPage() {
   return (
     <>
-      <p>JobsPage</p>
-      <CounterTest />
+      <h1>JobsPage</h1>
     </>
   );
 }

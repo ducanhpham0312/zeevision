@@ -1,10 +1,7 @@
-import BpmnTest from "../components/BpmnTest";
-
-export default function ProcessesPage({}: {}) {
+export default function ProcessesPage() {
   return (
     <>
-      <p>ProcessesPage</p>
-      <BpmnTest />
+      <h1>ProcessesPage</h1>
     </>
   );
 }
