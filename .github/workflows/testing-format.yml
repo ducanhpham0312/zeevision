@@ -1,4 +1,4 @@
-name: CI/CD with ESLint and Prettier
+name: Frontend - CI/CD with ESLint and Prettier
 
 on:
   push:
