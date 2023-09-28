@@ -24,8 +24,8 @@ interface ButtonProps {
 }
 
 export const StyledButton = ({
-  primary = false,
-  size = "standard",
+  // primary = false,
+  // size = "standard",
   label,
   children,
   ...props
@@ -38,7 +38,7 @@ export const StyledButton = ({
 };
 
 const StyledButtonComponent = styled(Button)(
-  ({ theme }) => `
+  () => `
   all: unset;
   font-weight: 600;
   font-size: 0.875rem;
