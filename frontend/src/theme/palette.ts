@@ -1,5 +1,5 @@
 export const PRIMARY = {
-  50: "#e5f2ff",
+  50: "#f6f8ff",
   100: "#cfe6ff",
   200: "#a9cfff",
   300: "#76adff",
