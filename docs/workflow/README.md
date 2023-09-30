@@ -13,12 +13,11 @@ Please do your work with the following steps. You can click each of the steps to
 
 ### Create an issue ticket
 - Open the [project board](https://github.com/users/ducanhpham0312/projects/1/views/1). 
-- Under the *Backlog* column, click the **+ Add item** button. 
-- ![Add item](img/add-item-button.png)
+- Under the *Backlog* column, click the **+ Add item** button. <br>![Add item](img/add-item-button.png)
 - Select our repository by typing **#** followed by the repository name **zeevision**. 
-- In the pop-up menu, select **Create new issue**. ![Create new issue](img/create-new-issue-button.png)
-- Then in the pop-up menu, choose **Custom issue template** ![Select custom issue](img/select-custom-issue.png)
-- In the issue, add issue title, description and definition of done. Try to write them as clear and as detailed as possible. Also add assignees (if needed) and corresponding labels. Then select **Create**. ![Issue card](img/issue-card.png)
+- In the pop-up menu, select **Create new issue**. <br>![Create new issue](img/create-new-issue-button.png)
+- Then in the pop-up menu, choose **Custom issue template** <br>![Select custom issue](img/select-custom-issue.png)
+- In the issue, add issue title, description and definition of done. Try to write them as clear and as detailed as possible. Also add assignees (if needed) and corresponding labels. Then select **Create**. <br>![Issue card](img/issue-card.png)
   - You might also want to estimate the work for the task with story points. Open the ticket in detailed (by clicking the title) and you should see the **Story points** field. The current scale is 1 to 5. Here's my brief description on each.
     - 1: The task is quite simple, you are pretty sure what to do and/or it needs little effort to learn about the task and accomplish.
     - 2: The task is slightly bigger, you can briefly sketch the steps to do it in your head. Little learning is required.
@@ -42,14 +41,14 @@ Please do your work with the following steps. You can click each of the steps to
 ### Create a pull request (PR), waiting for review, making changes, and merge to `master`
 After pushing your code to the remote branch, and you think it completes that task specified in the Project Board, you can create a PR. 
 - Go to the [**Pull requests** tab](https://github.com/ducanhpham0312/zeevision/pulls) in the repository. If you recently pushed to the branch, it will prompt to ask you to create a PR. Select **Create Pull request**. If you cannot see it, follow the steps below.
-  - Select **New pull request** button. ![New PR](img/new-pr-button.png)
-  - Under **compare** button, select the branch that needs review. ![Select compare branch](img/select-pr-branch.png)
+  - Select **New pull request** button. <br>![New PR](img/new-pr-button.png)
+  - Under **compare** button, select the branch that needs review. <br>![Select compare branch](img/select-pr-branch.png)
 - Write the PR title (NOTE: also follow Conventional Commits, describe what this PR does), a detailed description and how to test this PR as suggested by the PR template.
 - Select **Create pull request**
 - Open the Project Board and move the ticket to **Code review** column.
 
 Request a review from other members, receive feedback, making changes, getting approval, and merge to `master`
-- After creating a PR, remember to select all project members for review (except our customer Locke). ![Request reviewers](img/request-reviewers.png)
+- After creating a PR, remember to select all project members for review (except our customer Locke). <br>![Request reviewers](img/request-reviewers.png)
 - After reviewing, 3 situations can happen:
   - The reviewer requested some changes to the PR. Usually it is in the form of one big comment of the whole PR in general, followed by some small comments specifically in the code files.
     - Please read the one big comment first and see if there's anything to do there.
@@ -72,7 +71,7 @@ It is stated above that someone will review your PR. This also means that you wi
   git checkout <the-branch-from-that-PR>    Switch to the branch of the PR.
   ```
 - Check if the code works as expected after testing. 
-- Go back to the browser and select **Add your review** ![Add review button](img/add-pr-review.png)
+- Go back to the browser and select **Add your review** <br>![Add review button](img/add-pr-review.png)
 - As stated above (that there could be 3 ways to receive PR comments), there would also be 3 ways of commenting on other's PR.
   - The PR needs changes. Go to the specific file that you think, after testing, that it should be changed here. Click on the **+** button on next to that line's line number and add a comment. After all your suggested changes are added, select **Review changes** button on the top right, write some general comments about the PRs (and maybe also something that should be fixed before looking into the file-specific comments), select **Request changes** and click **Submit review**. After he/she makes changes, you should get notified, then you should `git pull` the updated code to your local machine. Test it again, request changes if needed... until there's nothing to correct them. Now you can select **Approve** button and complete the review.
   - The PR needs slight modification, and you think it's very small that doesn't need to re-review, you can select **Approve** but with a comment on what he/she should do before merging it to `master`.
@@ -82,3 +81,4 @@ It is stated above that someone will review your PR. This also means that you wi
 ### Notes about code reviews
 - Please don't perceive code review comments as any form of attack. They exist to ensure the master branch remains functional and of high quality. These comments also serve as a tool to help you improve. They might come across as blunt, but this directness serves a purpose: it minimizes misunderstandings and enhances efficiency by reducing back-and-forth communication. You should anticipate at least one comment per PR; if there aren't any, the reviewer might not have been thorough enough (with some exceptions). Don't just accept these comments at face value; challenge them and view them as learning opportunities.
 - Junior team members should also participate in code reviews. It doesn't require special skills -- just a fresh perspective (which comes naturally) and a questioning attitude. Depending on the size and nature of the changes, a review might take some time. However, you can learn as much from reviewing as you can from implementing the feature yourself. And always remember to test!
+  
