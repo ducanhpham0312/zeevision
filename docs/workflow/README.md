@@ -18,12 +18,12 @@ Please do your work with the following steps. You can click each of the steps to
 - In the pop-up menu, select **Create new issue**. <br>![Create new issue](img/create-new-issue-button.png)
 - Then in the pop-up menu, choose **Custom issue template** <br>![Select custom issue](img/select-custom-issue.png)
 - In the issue, add issue title, description and definition of done. Try to write them as clear and as detailed as possible. Also add assignees (if needed) and corresponding labels. Then select **Create**. <br>![Issue card](img/issue-card.png)
-  - You might also want to estimate the work for the task with story points. Open the ticket in detailed (by clicking the title) and you should see the **Story points** field. The current scale is 1 to 5. Here's my brief description on each.
+  - You might also want to estimate the work for the task with story points. Open the ticket in detailed (by clicking the title) and you should see the **Story points** field. We are using the Fibonacci scale for story points (1,2,3,5,8,13...). Here's my brief description on each.
     - 1: The task is quite simple, you are pretty sure what to do and/or it needs little effort to learn about the task and accomplish.
     - 2: The task is slightly bigger, you can briefly sketch the steps to do it in your head. Little learning is required.
     - 3: The workload for this task is large enough that you are probably not being able to do it in one sitting. It may take some time for you to understand what to do. Some learning is required
-    - 4 & 5: The task is large. It needs decent amount of investigation, planning, learning, implementing, or even collaboration. 
-      - This value should be rarely used. Try to split one big task into multiple smaller tasks (hence smaller value). However, in some case it is not possible and it must do as a whole.
+    - 5: The task is large. It needs decent amount of investigation, planning, learning, implementing, or even collaboration. 
+    - 8+: This task is too large to be in one ticket and one PR. Try to split it task into multiple smaller tasks.
 - If you decide to do the task this sprint, move it to the **Todo (current sprint)** column.
 ### Create a branch and work locally
 - Move the ticket you are going to work to the **In Progress** column in the Project Board.
