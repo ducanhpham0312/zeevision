@@ -1,0 +1,98 @@
+name: Backend
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            cgo-enabled: 0
+          - goos: darwin
+            goarch: amd64
+            cgo-enabled: 1
+          - goos: darwin
+            goarch: arm64
+            cgo-enabled: 1
+
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+      CGO_ENABLED: ${{ matrix.cgo-enabled }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21.x"
+
+      - name: Build
+        run: go build -C ./backend -v ./cmd/zeevision/main.go
+
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21.x"
+
+      - name: Get all Go files
+        working-directory: ./backend
+        run: |
+          {
+            echo 'GOFILES<<EOF'
+            find . -name '*.go' -type f -not -path "./vendor/*"
+            echo EOF
+          } >> "$GITHUB_ENV"
+
+      - name: Get all unformatted Go files
+        working-directory: ./backend
+        run: |
+          {
+            echo 'UNFORMATTED_FILES<<EOF'
+            gofmt -l $GOFILES
+            echo EOF
+          } >> "$GITHUB_ENV"
+
+      - name: Check formatting of Go files
+        run: |
+          test -z "$UNFORMATTED_FILES" || {
+            echo "$UNFORMATTED_FILES" | while read -r filename
+            do
+                echo "::error file=$filename::Missing gofmt"
+            done
+            exit 1
+          }
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21.x"
+
+      - name: Run tests
+        working-directory: ./backend
+        run: go test -v ./...
