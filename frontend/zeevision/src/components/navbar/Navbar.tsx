@@ -1,79 +1,79 @@
 import { styled } from "@mui/system";
 import { StyledButton } from "../styled-component/StyledButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useUIStore } from "../../contexts/useUIStore";
-import Sidebar from "./Sidebar";
-import { ClickAwayListener } from "@mui/base/ClickAwayListener";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const NavigationPath: { name: string; path: string }[] = [
+  {
+    name: "PROCESSES",
+    path: "/processes",
+  },
+  {
+    name: "INSTANCES",
+    path: "/instances",
+  },
+  {
+    name: "INCIDENTS",
+    path: "/incidents",
+  },
+  {
+    name: "JOBS",
+    path: "/jobs",
+  },
+  {
+    name: "MESSAGES",
+    path: "/messages",
+  },
+  {
+    name: "ERRORS",
+    path: "/errors",
+  },
+];
 
 function Navbar() {
-  const { isSidebarOpen, toggleSidebar, closeSidebar } = useUIStore();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <NavbarComponent>
-      <ClickAwayListener
-        mouseEvent="onMouseDown"
-        touchEvent="onTouchStart"
-        onClickAway={closeSidebar}
-      >
-        <FloatContainer expand={isSidebarOpen}>
-          <div
-            style={{
-              backgroundColor: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
+      <div>
+        <div>NAVBAR</div>
+      </div>
+      <Divider />
+      <div style={{ display: "flex", gap: "10px" }}>
+        {NavigationPath.map((nav) => (
+          <StyledButton
+            active={location.pathname.includes(nav.path)}
+            variant="text"
+            size="large"
+            onClick={() => navigate(nav.path)}
+            key={nav.path}
           >
-            <StyledButton
-              active={isSidebarOpen}
-              variant="text"
-              size="standard"
-              onClick={toggleSidebar}
-            >
-              <MenuIcon />
-            </StyledButton>
-            <div style={{ paddingRight: "20px" }}>ZEEVISION</div>
-          </div>
-          <div
-            style={{
-              backgroundColor: "white",
-              maxHeight: isSidebarOpen ? "1000px" : "0",
-              transition: "max-height 300ms ease",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
-            <Sidebar />
-          </div>
-        </FloatContainer>
-      </ClickAwayListener>
+            {nav.name}
+          </StyledButton>
+        ))}
+      </div>
     </NavbarComponent>
   );
 }
 
 const NavbarComponent = styled("header")(
-  ({}) => `
-  display: fixed;
-  position: absolute;
-  padding: 15px 20px;
+  () => `
+  display: flex;
+  position: fixed;
+  width: 100%;
+  padding: 0px 20px;
+  box-sizing: border-box;
   align-items: center;
   gap: 30px;
-  z-index: 10;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `
 );
 
-const FloatContainer = styled("div", {
-  shouldForwardProp: (props) => props !== "expand",
-})(
-  ({ expand }: { expand: boolean }) => `
-  display: flex;
-  flex-direction: column;
-  width: ${expand ? "230px" : "180px"};
-  justify-content: space-between;
-  // background-color: grey;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  transition: width 300ms ease;
+const Divider = styled("div")(
+  () => `
+  height: 40px;
+  width: 0;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
 `
 );
 

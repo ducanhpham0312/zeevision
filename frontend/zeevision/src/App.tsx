@@ -1,27 +1,25 @@
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Navbar from './components/navbar/Navbar';
-import ProcessesPage from './pages/ProcessesPage';
-import InstancesPage from './pages/InstancesPage';
-import IncidentsPage from './pages/IncidentsPage';
-import JobsPage from './pages/jobsPage';
-
-import ErrorsPage from './pages/ErrorsPage';
-import MessagesPage from './pages/MessagesPage';
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import Navbar from "./components/navbar/Navbar";
+import ProcessesPage from "./pages/ProcessesPage";
+import InstancesPage from "./pages/InstancesPage";
+import IncidentsPage from "./pages/IncidentsPage";
+import ErrorsPage from "./pages/ErrorsPage";
+import MessagesPage from "./pages/MessagesPage";
+import JobsPage from "./pages/JobsPage";
 
 const Layout = () => (
   <>
-    <Navbar/>
-    <div style={{ marginTop: "100px"}}>
-
-      <Outlet/>
+    <Navbar />
+    <div style={{ marginTop: "70px" }}>
+      <Outlet />
     </div>
   </>
-)
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout/>,
+    element: <Layout />,
     children: [
       {
         path: "processes",
@@ -52,7 +50,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router}/>
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
