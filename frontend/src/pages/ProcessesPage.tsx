@@ -4,14 +4,14 @@ export default function ProcessesPage() {
   return (
     <>
       <h1>ProcessesPage</h1>
-      <div>
-        <BpmnViewer width={400} bpmn={bpmnXML}/>
-      </div>
+      <BpmnViewer width={400} bpmnString={bpmnString} />
+      <BpmnViewer width={400} bpmnString={bpmnString} />
+      <BpmnViewer width={400} bpmnString={bpmnString} />
     </>
   );
 }
 
-const bpmnXML = `<?xml version="1.0" encoding="UTF-8"?>
+const bpmnString = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0vyqcr3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.13.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
   <bpmn:process id="multi-instance-process" name="Multi Instance Process" isExecutable="true">
     <bpmn:extensionElements />

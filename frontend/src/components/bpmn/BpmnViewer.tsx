@@ -1,44 +1,44 @@
-import Modeler from "bpmn-js/lib/Viewer";
+import Viewer from "bpmn-js/lib/Viewer";
 import "./bpmn-js.css";
 import { useEffect, useRef } from "react";
 
 // create a modeler
 
-function BpmnViewer({ bpmn, width }: { bpmn: string; width: number }) {
+function BpmnViewer({
+  bpmnString,
+  width,
+}: {
+  bpmnString: string;
+  width: number;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const modeler = new Modeler({
+    const modeler = new Viewer({
       container: containerRef.current as HTMLDivElement,
       width: width,
     });
 
-    async function openDiagram(xml: any) {
+    async function openDiagram(xmlString: string) {
       try {
-        await modeler.importXML(xml);
+        await modeler.importXML(xmlString);
 
         // access viewer components
-        var canvas = modeler.get("canvas") as any;
+        const canvas = modeler.get("canvas");
 
         // zoom to fit full viewport
         canvas.zoom("fit-viewport");
-
-        containerRef.current?.classList.add("with-error");
-        containerRef.current?.classList.remove("with-diagram");
       } catch (err) {
-        containerRef.current?.classList.remove("with-error");
-        containerRef.current?.classList.add("with-diagram");
-
         console.error(err);
       }
     }
 
-    openDiagram(bpmn);
+    openDiagram(bpmnString);
 
     return () => {
       modeler.destroy();
     };
-  }, []);
+  }, [bpmnString, width]);
 
   return <div ref={containerRef} style={{ userSelect: "none" }} id="canvas" />;
 }
