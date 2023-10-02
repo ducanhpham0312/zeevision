@@ -1,4 +1,5 @@
-name: Frontend - CI/CD with ESLint and Prettier
+---
+name: Frontend
 
 on:
   push:
@@ -12,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./frontend/zeevision
+        working-directory: ./frontend
 
     steps:
       - name: Checkout code
@@ -29,8 +30,11 @@ jobs:
       - name: Run ESLint (check)
         run: npm run lint
 
-      - name: Run ESLint (fix)
-        run: npm run lint:fix
+      # - name: Run ESLint (fix)
+      #   run: npm run lint:fix
 
-      - name: Run Prettier
+      - name: Run Prettier (check)
         run: npm run prettier
+
+      # - name: Run Prettier (fix)
+      #   run: npm run prettier:fix
