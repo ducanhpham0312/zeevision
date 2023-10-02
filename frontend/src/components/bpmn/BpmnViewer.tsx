@@ -1,15 +1,15 @@
 import Modeler from "bpmn-js/lib/Viewer";
-import "./bpmn-js.css"
+import "./bpmn-js.css";
 import { useEffect, useRef } from "react";
 
 // create a modeler
 
 function BpmnViewer({ bpmn, width }: { bpmn: string; width: number }) {
-  const containerRef = useRef<HTMLDivElement>();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const modeler = new Modeler({
-      container: containerRef.current,
+      container: containerRef.current as HTMLDivElement,
       width: width,
     });
 
@@ -18,7 +18,7 @@ function BpmnViewer({ bpmn, width }: { bpmn: string; width: number }) {
         await modeler.importXML(xml);
 
         // access viewer components
-        var canvas = modeler.get("canvas");
+        var canvas = modeler.get("canvas") as any;
 
         // zoom to fit full viewport
         canvas.zoom("fit-viewport");
