@@ -1,4 +1,7 @@
+---
 name: Backend
+
+# yamllint disable-line rule:truthy
 
 on:
   push:
