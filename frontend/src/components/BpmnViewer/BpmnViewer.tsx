@@ -1,22 +1,21 @@
 import Viewer from "bpmn-js/lib/Viewer";
-import "./bpmn-js.css";
 import { useEffect, useRef } from "react";
+import "./bpmn-js.css";
 
 // create a modeler
 
-function BpmnViewer({
-  bpmnString,
-  width,
-}: {
+interface BpmnViewerProps {
   bpmnString: string;
   width: number;
-}) {
+}
+
+export function BpmnViewer({ bpmnString, width }: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const modeler = new Viewer({
       container: containerRef.current as HTMLDivElement,
-      width: width,
+      width: width
     });
 
     async function openDiagram(xmlString: string) {
@@ -24,7 +23,7 @@ function BpmnViewer({
         await modeler.importXML(xmlString);
 
         // access viewer components
-        const canvas = modeler.get("canvas");
+        const canvas = modeler.get("canvas") as any;
 
         // zoom to fit full viewport
         canvas.zoom("fit-viewport");
@@ -42,5 +41,3 @@ function BpmnViewer({
 
   return <div ref={containerRef} style={{ userSelect: "none" }} id="canvas" />;
 }
-
-export default BpmnViewer;

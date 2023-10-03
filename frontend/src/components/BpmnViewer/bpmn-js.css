@@ -143,3 +143,11 @@
   height: 20px;
   width: 20px;
 }
+
+.bjs-powered-by {
+  display: none;
+}
+
+#canvas {
+  display: flex;
+}
