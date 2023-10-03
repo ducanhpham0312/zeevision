@@ -2,7 +2,6 @@
 name: Frontend
 
 # yamllint disable-line rule:truthy
-
 on:
   push:
     branches: ["master"]
@@ -32,11 +31,5 @@ jobs:
       - name: Run ESLint (check)
         run: npm run lint
 
-      # - name: Run ESLint (fix)
-      #   run: npm run lint:fix
-
       - name: Run Prettier (check)
         run: npm run prettier
-
-      # - name: Run Prettier (fix)
-      #   run: npm run prettier:fix
