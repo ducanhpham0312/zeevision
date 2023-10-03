@@ -1,3 +1,4 @@
+---
 version: "3"
 
 services:
@@ -5,7 +6,7 @@ services:
     build:
       context: "backend/"
       dockerfile: "Dockerfile"
-    image: "zeevision-backend:latest"  
+    image: "zeevision-backend:latest"
     container_name: "zeevision-backend"
     networks:
       - zeevision_network
