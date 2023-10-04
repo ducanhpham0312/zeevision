@@ -42,46 +42,6 @@ jobs:
       - name: Build
         run: go build -C ./backend -v ./cmd/zeevision/main.go
 
-  format-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "1.21.x"
-
-      - name: Get all Go files
-        working-directory: ./backend
-        run: |
-          {
-            echo 'GOFILES<<EOF'
-            find . -name '*.go' -type f -not -path "./vendor/*"
-            echo EOF
-          } >> "$GITHUB_ENV"
-
-      - name: Get all unformatted Go files
-        working-directory: ./backend
-        run: |
-          {
-            echo 'UNFORMATTED_FILES<<EOF'
-            gofmt -l $GOFILES
-            echo EOF
-          } >> "$GITHUB_ENV"
-
-      - name: Check formatting of Go files
-        run: |
-          test -z "$UNFORMATTED_FILES" || {
-            echo "$UNFORMATTED_FILES" | while read -r filename
-            do
-                echo "::error file=$filename::Missing gofmt"
-            done
-            exit 1
-          }
-
   lint:
     runs-on: ubuntu-latest
 
