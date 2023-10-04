@@ -28,7 +28,7 @@ const LoadedBpmnViewer = () => {
   }, []);
 
   return (
-    <div style={{ border: "1px solid black"}}>
+    <div style={{ border: "1px solid black", display: "flex", justifyContent: "center"}}>
       <BpmnViewer width={500} bpmnString={bpmnXml} />
     </div>
   );
