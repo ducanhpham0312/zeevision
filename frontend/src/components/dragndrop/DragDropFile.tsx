@@ -5,21 +5,31 @@ import { useDropzone } from "react-dropzone";
 
 import React from "react";
 import { PRIMARY } from "../../theme/palette";
+import { useModalStore } from "../../contexts/modalStore";
 
 interface DragDropFileProps {}
 
 export const DragDropFile: React.FC<DragDropFileProps> = () => {
   const [isDragActive, setIsDragActive] = useState(false);
+  const [openModal] = useModalStore((state) => [state.openModal]);
   const [file, setFile] = useState<File | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Only accept bpmn files
-    if (acceptedFiles.length > 0 && acceptedFiles[0].name!.endsWith(".bpmn")) {
-      setFile(acceptedFiles[0]);
-      console.log(acceptedFiles[0]);
-    }
-    setIsDragActive(false);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      // Only accept bpmn files
+      if (
+        acceptedFiles.length > 0 &&
+        acceptedFiles[0].name!.endsWith(".bpmn")
+      ) {
+        setFile(acceptedFiles[0]);
+        console.log(acceptedFiles[0]);
+      }
+      // Open the modal upon successful file drop
+      setIsDragActive(false);
+      openModal();
+    },
+    [openModal]
+  );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -66,13 +76,14 @@ const StyledModal = styled(Modal)`
   align-items: center;
   justify-content: center;
 `;
-const DropzoneArea = styled(Box)`
+const DropzoneArea = styled(Box)<{ isDragActive: boolean }>`
   width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: ${(props) => (props.isDragActive ? "1300" : "-1")};
 `;
 
 const StyledBox = styled(Box)`
