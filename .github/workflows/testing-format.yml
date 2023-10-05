@@ -1,0 +1,35 @@
+---
+name: Frontend
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js and dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Run ESLint (check)
+        run: npm run lint
+
+      - name: Run Prettier (check)
+        run: npm run prettier

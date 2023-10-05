@@ -1,0 +1,16 @@
+---
+version: "3"
+
+services:
+  backend:
+    build:
+      context: "backend/"
+      dockerfile: "Dockerfile"
+    image: "zeevision-backend:latest"
+    container_name: "zeevision-backend"
+    networks:
+      - zeevision_network
+
+networks:
+  zeevision_network:
+    driver: bridge

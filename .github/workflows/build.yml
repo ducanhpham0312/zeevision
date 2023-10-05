@@ -1,5 +1,7 @@
+---
 name: Backend
 
+# yamllint disable-line rule:truthy
 on:
   push:
     branches: ["master"]
@@ -10,72 +12,58 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        include:
-          - goos: linux
-            goarch: amd64
-            cgo-enabled: 0
-          - goos: darwin
-            goarch: amd64
-            cgo-enabled: 1
-          - goos: darwin
-            goarch: arm64
-            cgo-enabled: 1
-
-    env:
-      GOOS: ${{ matrix.goos }}
-      GOARCH: ${{ matrix.goarch }}
-      CGO_ENABLED: ${{ matrix.cgo-enabled }}
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v5
         with:
-          go-version: "1.21.x"
+          context: ./backend
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
 
-      - name: Build
-        run: go build -C ./backend -v ./cmd/zeevision/main.go
-
-  format-check:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21.x"
+          # golangci-lint uses caching internally.
+          cache: false
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.54
+          working-directory: ./backend
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: "1.21.x"
 
-      - name: Get all Go files
+      - name: Run tests
         working-directory: ./backend
-        run: |
-          {
-            echo 'GOFILES<<EOF'
-            find . -name '*.go' -type f -not -path "./vendor/*"
-            echo EOF
-          } >> "$GITHUB_ENV"
-
-      - name: Get all unformatted Go files
-        working-directory: ./backend
-        run: |
-          {
-            echo 'UNFORMATTED_FILES<<EOF'
-            gofmt -l $GOFILES
-            echo EOF
-          } >> "$GITHUB_ENV"
-
-      - name: Check formatting of Go files
-        run: |
-          test -z "$UNFORMATTED_FILES" || {
-            echo "$UNFORMATTED_FILES" | while read -r filename
-            do
-                echo "::error file=$filename::Missing gofmt"
-            done
-            exit 1
-          }
+        run: go test -v ./...
