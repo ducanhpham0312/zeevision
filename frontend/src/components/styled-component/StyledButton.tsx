@@ -53,7 +53,9 @@ export const StyledButton = ({
   );
 };
 
-const StyledButtonComponent = styled(Button, { shouldForwardProp: props => props !== "active"})(
+const StyledButtonComponent = styled(Button, {
+  shouldForwardProp: (props) => props !== "active",
+})(
   ({
     active,
     variant,
@@ -80,7 +82,9 @@ const StyledButtonComponent = styled(Button, { shouldForwardProp: props => props
     right: 0;
     bottom: 0;
     border-radius: 4px;
-    height: ${active ? "4px" : "0"}; /* Set the height of the line based on 'active' */
+    height: ${
+      active ? "4px" : "0"
+    }; /* Set the height of the line based on 'active' */
     background-color: ${PRIMARY[900]}; /* Color of the line */
     transition: height 100ms ease; /* Transition only the height property */
   }
