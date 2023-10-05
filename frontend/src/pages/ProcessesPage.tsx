@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { BpmnViewer } from "../components/BpmnViewer";
 
-const bpmnPathList = [
-  "../bpmn/money-loan.bpmn",
-  "../bpmn/order-main.bpmn",
-  "../bpmn/multi-instance-process.bpmn",
-  "../bpmn/order-subprocess.bpmn",
+const bpmnImportFunctionList = [
+  () => import("../bpmn/money-loan.bpmn"),
+  () => import("../bpmn/order-main.bpmn"),
+  () => import("../bpmn/multi-instance-process.bpmn"),
+  () => import("../bpmn/order-subprocess.bpmn"),
 ];
 
 export default function ProcessesPage() {
   const [bpmnStringList, setBpmnStringList] = useState<string[]>(
-    new Array(bpmnPathList.length).fill("")
+    new Array(bpmnImportFunctionList.length).fill("")
   );
 
   useEffect(() => {
-    bpmnPathList.forEach((path, i) =>
-      import(path)
+    bpmnImportFunctionList.forEach((importFunction, i) =>
+      importFunction()
         .then((module) => module.default)
         .then((bpmnUrl) =>
           fetch(bpmnUrl)
