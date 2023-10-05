@@ -60,6 +60,8 @@ const NavbarComponent = styled("header")(
   () => `
   display: flex;
   position: fixed;
+  z-index: 1000;
+  background-color: white;
   width: 100%;
   padding: 0px 20px;
   box-sizing: border-box;
