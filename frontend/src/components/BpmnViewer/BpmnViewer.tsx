@@ -1,6 +1,5 @@
 import Viewer from "bpmn-js/lib/Viewer";
 import { useEffect, useRef } from "react";
-import "./bpmn-js.css";
 
 // create a modeler
 
@@ -15,7 +14,8 @@ export function BpmnViewer({ bpmnString, width }: BpmnViewerProps) {
   useEffect(() => {
     const modeler = new Viewer({
       container: containerRef.current as HTMLDivElement,
-      width: width
+      width: width,
+      height: 300
     });
 
     async function openDiagram(xmlString: string) {
