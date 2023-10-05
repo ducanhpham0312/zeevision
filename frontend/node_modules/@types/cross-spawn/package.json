@@ -1,0 +1,32 @@
+{
+    "name": "@types/cross-spawn",
+    "version": "6.0.3",
+    "description": "TypeScript definitions for cross-spawn",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/cross-spawn",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Alorel",
+            "url": "https://github.com/Alorel",
+            "githubUsername": "Alorel"
+        },
+        {
+            "name": "ExE Boss",
+            "url": "https://github.com/ExE-Boss",
+            "githubUsername": "ExE-Boss"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/cross-spawn"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/node": "*"
+    },
+    "typesPublisherContentHash": "dbda1a0e73c5b9ae45fb3a784cb1a2c9fa0a3dd535a32954b28d7f1ea1c1408a",
+    "typeScriptVersion": "4.3"
+}

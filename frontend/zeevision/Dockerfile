@@ -16,7 +16,7 @@ RUN npm install
 COPY . .
 
 # Expose the port that development server runs on 
-EXPOSE 3000
+EXPOSE 5173
 
 # Define the command to start development server 
 CMD ["npm", "run", "dev"]
