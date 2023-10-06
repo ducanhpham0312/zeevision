@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { StyledButton } from "../styled-component/StyledButton";
+import { StyledButton } from "../StyledButton/StyledButton";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const NavigationPath: { name: string; path: string }[] = [

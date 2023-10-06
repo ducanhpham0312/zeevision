@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BpmnViewer } from "../components/BpmnViewer";
-import { StyledButton } from "../components/styled-component/StyledButton";
+import { StyledButton } from "../components/StyledButton/StyledButton";
 import { useUIStore } from "../contexts/useUIStore";
 
 const bpmnImportFunctionList = [
