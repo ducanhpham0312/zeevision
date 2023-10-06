@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@mui/base";
+import { Button } from "@mui/base";
 import { styled } from "@mui/system";
 import { PRIMARY } from "../../theme/palette";
 import { ReactNode } from "react";
@@ -7,7 +7,7 @@ export type ButtonVariantType = "text" | "contained" | "outlined";
 
 export type ButtonSizeType = "small" | "standard" | "large";
 
-export interface StyledButtonProps extends ButtonProps {
+interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
@@ -24,18 +24,23 @@ export interface StyledButtonProps extends ButtonProps {
   children?: ReactNode;
 
   /**
-   * toggleable button (only visible in "text" button varian)
+   * toggleable button
    */
   active?: boolean;
+
+  /**
+   * Optional click handler
+   */
+  onClick?: () => void;
 }
 
-export function StyledButton({
+export const StyledButton = ({
   variant = "outlined",
   size = "standard",
   label,
   children,
   ...props
-}: StyledButtonProps) {
+}: ButtonProps) => {
   return (
     <StyledButtonComponent
       variant={variant}
@@ -46,7 +51,7 @@ export function StyledButton({
       {label || children}
     </StyledButtonComponent>
   );
-}
+};
 
 const StyledButtonComponent = styled(Button, {
   shouldForwardProp: (props) => props !== "active",
