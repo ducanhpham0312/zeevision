@@ -97,10 +97,12 @@ export const FullWidth: Story = {
   render: () => {
     return (
       <>
-      <p>Container</p>
-      <div style={{ width: "500px", padding: "10px", border: "1px solid black" }}>
-        <Button variant="contained" fullWidth label="Full Width" />
-      </div>
+        <p>Container</p>
+        <div
+          style={{ width: "500px", padding: "10px", border: "1px solid black" }}
+        >
+          <Button variant="contained" fullWidth label="Full Width" />
+        </div>
       </>
     );
   },
