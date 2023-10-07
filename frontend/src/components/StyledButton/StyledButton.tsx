@@ -1,7 +1,6 @@
 import { Button, ButtonProps, buttonClasses } from "@mui/base";
 import { styled } from "@mui/system";
 import { PRIMARY } from "../../theme/palette";
-import { ReactNode } from "react";
 
 export type ButtonVariantType = "text" | "contained" | "outlined";
 
@@ -21,7 +20,15 @@ export interface StyledButtonProps extends ButtonProps {
    */
   label?: string;
 
-  children?: ReactNode;
+  /**
+   * Button width in number of pixel
+   */
+  width?: number;
+
+  /**
+   * Should the button occupies all the avaiable space?
+   */
+  fullWidth?: boolean;
 
   /**
    * toggleable button (only visible in "text" button varian)
@@ -49,20 +56,14 @@ export function StyledButton({
 }
 
 const StyledButtonComponent = styled(Button, {
-  shouldForwardProp: (props) => props !== "active",
+  shouldForwardProp: (props) => props !== "fullWidth" && props !== "active",
 })(
-  ({
-    active,
-    variant,
-    size,
-  }: {
-    active?: boolean;
-    size: ButtonSizeType;
-    variant: ButtonVariantType;
-  }) => `
+  ({ active, variant, size, width, fullWidth }: StyledButtonProps) => `
   all: unset;
   position: relative;
   font-weight: 600;
+  text-align: center;
+  width: ${fullWidth ? "100%" : width ? `${width}px` : "auto"};
   font-size: 1,125rem;
   background-color: ${variant === "contained" ? PRIMARY[900] : "white"};
   padding: ${

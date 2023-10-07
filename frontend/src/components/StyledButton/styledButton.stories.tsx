@@ -75,6 +75,37 @@ export const Text: Story = {
   },
 };
 
+const widths = [100, 200, 400];
+export const VariesWidth: Story = {
+  render: () => {
+    return (
+      <div style={{ display: "flex", gap: "10px" }}>
+        {widths.map((width) => (
+          <Button
+            variant="contained"
+            width={width}
+            key={width}
+            label={`${width}px`}
+          />
+        ))}
+      </div>
+    );
+  },
+};
+
+export const FullWidth: Story = {
+  render: () => {
+    return (
+      <>
+      <p>Container</p>
+      <div style={{ width: "500px", padding: "10px", border: "1px solid black" }}>
+        <Button variant="contained" fullWidth label="Full Width" />
+      </div>
+      </>
+    );
+  },
+};
+
 export const Large: Story = {
   args: {
     size: "large",
