@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@mui/base";
+import { Button, ButtonProps, buttonClasses } from "@mui/base";
 import { styled } from "@mui/system";
 import { PRIMARY } from "../../theme/palette";
 import { ReactNode } from "react";
@@ -92,6 +92,10 @@ const StyledButtonComponent = styled(Button, {
 
   &:hover {
     background-color: ${variant === "contained" ? PRIMARY[800] : PRIMARY[50]};
+  }
+
+  &.${buttonClasses.active} {
+    background-color: ${variant === "contained" ? PRIMARY[900] : PRIMARY[100]};
   }
 `
 );
