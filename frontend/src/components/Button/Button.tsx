@@ -1,4 +1,8 @@
-import { Button, ButtonProps, buttonClasses } from "@mui/base";
+import {
+  Button as ButtonMUI,
+  ButtonProps as ButtonMUIProps,
+  buttonClasses,
+} from "@mui/base";
 import { styled } from "@mui/system";
 import { PRIMARY } from "../../theme/palette";
 
@@ -6,7 +10,7 @@ export type ButtonVariantType = "text" | "contained" | "outlined";
 
 export type ButtonSizeType = "small" | "standard" | "large";
 
-export interface StyledButtonProps extends ButtonProps {
+export interface ButtonProps extends ButtonMUIProps {
   /**
    * Is this the principal call to action on the page?
    */
@@ -36,13 +40,13 @@ export interface StyledButtonProps extends ButtonProps {
   active?: boolean;
 }
 
-export function StyledButton({
+export function Button({
   variant = "outlined",
   size = "standard",
   label,
   children,
   ...props
-}: StyledButtonProps) {
+}: ButtonProps) {
   return (
     <StyledButtonComponent
       variant={variant}
@@ -55,10 +59,10 @@ export function StyledButton({
   );
 }
 
-const StyledButtonComponent = styled(Button, {
+const StyledButtonComponent = styled(ButtonMUI, {
   shouldForwardProp: (props) => props !== "fullWidth" && props !== "active",
 })(
-  ({ active, variant, size, width, fullWidth }: StyledButtonProps) => `
+  ({ active, variant, size, width, fullWidth }: ButtonProps) => `
   all: unset;
   position: relative;
   font-weight: 600;

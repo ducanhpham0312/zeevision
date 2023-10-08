@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { StyledButton as Button, StyledButtonProps } from "./StyledButton";
+import { Button, ButtonProps } from "./Button";
 import { useState } from "react";
 
 const meta = {
@@ -19,7 +19,7 @@ const ToggleableButton = ({
   active,
   setActive,
   ...props
-}: StyledButtonProps & {
+}: ButtonProps & {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -46,7 +46,7 @@ export const Outlined: Story = {
   },
 };
 
-export const Toggle: Story = (args: StyledButtonProps) => {
+export const Toggle: Story = (args: ButtonProps) => {
   const [active, setActive] = useState(false);
 
   return (

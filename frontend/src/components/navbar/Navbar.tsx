@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { StyledButton } from "../StyledButton/StyledButton";
+import { Button } from "../Button";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const NavigationPath: { name: string; path: string }[] = [
@@ -41,7 +41,7 @@ function Navbar() {
       <Divider />
       <div style={{ display: "flex", gap: "10px" }}>
         {NavigationPath.map((nav) => (
-          <StyledButton
+          <Button
             active={location.pathname.includes(nav.path)}
             variant="text"
             size="large"
@@ -49,7 +49,7 @@ function Navbar() {
             key={nav.path}
           >
             {nav.name}
-          </StyledButton>
+          </Button>
         ))}
       </div>
     </NavbarComponent>
