@@ -6,7 +6,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-func ConsumeStream(addrs []string, topic string, partition int32, msgChannel chan [] byte) {
+func ConsumeStream(addrs []string, topic string, partition int32, msgChannel chan []byte) {
 	config := sarama.NewConfig()
 
 	// Needs to run on localhost for now vs the docker container.

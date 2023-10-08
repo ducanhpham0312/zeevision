@@ -15,6 +15,6 @@ func main() {
 
 	for {
 		msg := <-msgChannel
-		fmt.Sprintf("Message received: %s\n", msg)
+		fmt.Printf("Message received: %s\n", msg)
 	}
 }
