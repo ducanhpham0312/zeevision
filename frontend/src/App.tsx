@@ -6,12 +6,12 @@ import IncidentsPage from "./pages/IncidentsPage";
 import ErrorsPage from "./pages/ErrorsPage";
 import MessagesPage from "./pages/MessagesPage";
 import JobsPage from "./pages/JobsPage";
-import { SnackbarMessage } from "./components/SnackbarMessage/SnackbarMessage";
+import { Snackbar } from "./components/Snackbar";
 
 const Layout = () => (
   <>
     <Navbar />
-    <SnackbarMessage />
+    <Snackbar />
     <div style={{ marginTop: "70px" }}>
       <Outlet />
     </div>

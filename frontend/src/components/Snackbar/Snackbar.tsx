@@ -4,12 +4,12 @@ import { styled } from "@mui/system";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import ErrorIcon from "@mui/icons-material/Error";
 import CloseIcon from "@mui/icons-material/Close";
-import { Snackbar } from "@mui/base/Snackbar";
+import { Snackbar as SnackbarMUI } from "@mui/base/Snackbar";
 import { PRIMARY } from "../../theme/palette";
 import { useUIStore } from "../../contexts/useUIStore";
 import { SnackbarCloseReason } from "@mui/base";
 
-export function SnackbarMessage() {
+export function Snackbar() {
   const { snackMessage, closeSnackMessage } = useUIStore();
   const { open, message, title, type } = snackMessage;
   const [exited, setExited] = React.useState(true);
@@ -34,63 +34,61 @@ export function SnackbarMessage() {
   };
 
   return (
-    <React.Fragment>
-      <StyledSnackbar
-        autoHideDuration={3000}
-        open={open}
-        onClose={handleClose}
-        exited={exited}
+    <StyledSnackbar
+      autoHideDuration={3000}
+      open={open}
+      onClose={handleClose}
+      exited={exited}
+    >
+      <Transition
+        timeout={{ enter: 400, exit: 400 }}
+        in={open}
+        appear
+        unmountOnExit
+        onEnter={handleOnEnter}
+        onExited={handleOnExited}
+        nodeRef={nodeRef}
       >
-        <Transition
-          timeout={{ enter: 400, exit: 400 }}
-          in={open}
-          appear
-          unmountOnExit
-          onEnter={handleOnEnter}
-          onExited={handleOnExited}
-          nodeRef={nodeRef}
-        >
-          {(status) => (
-            <SnackbarContent
-              style={{
-                transform: positioningStyles[status],
-                transition: "transform 300ms ease",
-              }}
-              ref={nodeRef}
-            >
-              {type === "success" ? (
-                <CheckRoundedIcon
-                  sx={{
-                    color: PRIMARY[800],
-                    flexShrink: 0,
-                    width: "1.25rem",
-                    height: "1.5rem",
-                  }}
-                />
-              ) : (
-                <ErrorIcon
-                  sx={{
-                    color: "red",
-                    flexShrink: 0,
-                    width: "1.25rem",
-                    height: "1.5rem",
-                  }}
-                />
-              )}
-              <div className="snackbar-message">
-                <p className="snackbar-title">{title}</p>
-                <p className="snackbar-description">{message}</p>
-              </div>
-              <CloseIcon
-                // type-gymnastic needed ..
-                onClick={handleClose as () => void}
-                className="snackbar-close-icon"
+        {(status) => (
+          <SnackbarContent
+            style={{
+              transform: positioningStyles[status],
+              transition: "transform 300ms ease",
+            }}
+            ref={nodeRef}
+          >
+            {type === "success" ? (
+              <CheckRoundedIcon
+                sx={{
+                  color: PRIMARY[800],
+                  flexShrink: 0,
+                  width: "1.25rem",
+                  height: "1.5rem",
+                }}
               />
-            </SnackbarContent>
-          )}
-        </Transition>
-      </StyledSnackbar>
-    </React.Fragment>
+            ) : (
+              <ErrorIcon
+                sx={{
+                  color: "red",
+                  flexShrink: 0,
+                  width: "1.25rem",
+                  height: "1.5rem",
+                }}
+              />
+            )}
+            <div className="snackbar-message">
+              <p className="snackbar-title">{title}</p>
+              <p className="snackbar-description">{message}</p>
+            </div>
+            <CloseIcon
+              // type-gymnastic needed ..
+              onClick={handleClose as () => void}
+              className="snackbar-close-icon"
+            />
+          </SnackbarContent>
+        )}
+      </Transition>
+    </StyledSnackbar>
   );
 }
 
@@ -107,7 +105,7 @@ const grey = {
   900: "#24292f",
 };
 
-const StyledSnackbar = styled(Snackbar)`
+const StyledSnackbar = styled(SnackbarMUI)`
   position: fixed;
   z-index: 5500;
   display: flex;
