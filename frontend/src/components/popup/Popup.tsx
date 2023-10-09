@@ -1,11 +1,11 @@
-import React from "react";
-import clsx from "clsx";
+import React, { forwardRef } from "react";
+// import clsx from "clsx";
 import { Modal, ModalProps } from "@mui/base";
 import { styled } from "@mui/system";
-import { StyledButton } from "../styled-component/StyledButton";
+import { Button } from "../Button";
 import CloseIcon from "@mui/icons-material/Close";
 
-interface PopupProps extends Omit<ModalProps, "children"> {
+export interface PopupProps extends Omit<ModalProps, "children"> {
   title: string;
   children: React.ReactNode[];
 }
@@ -16,17 +16,14 @@ export const Popup: React.FC<PopupProps> = ({ title, children, ...props }) => {
       <StyledModal
         {...props}
         slots={{ backdrop: StyledBackdrop }}
-        closeAfterTransition
+        // closeAfterTransition
       >
         <PopupContainer>
           <PopupTitle>
             <p>{title}</p>
-            <StyledButton
-              variant={"text"}
-              onClick={props.onClose as () => void}
-            >
+            <Button variant={"text"} onClick={props.onClose as () => void}>
               <CloseIcon />
-            </StyledButton>
+            </Button>
           </PopupTitle>
           {children}
         </PopupContainer>
@@ -35,7 +32,7 @@ export const Popup: React.FC<PopupProps> = ({ title, children, ...props }) => {
   );
 };
 
-const PopupTitle = styled("div")`
+export const PopupTitle = styled("div")`
   display: flex;
   height: 50px;
   line-height: 5px;
@@ -53,6 +50,13 @@ export const PopupContent = styled("div")`
   margin-top: 10px;
   flex-grow: 1;
   padding-left: 20px;
+  overflow-y: scroll;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 20px;
+  }
 `;
 
 export const PopupAction = styled("div")`
@@ -62,21 +66,22 @@ export const PopupAction = styled("div")`
   padding: 10px;
 `;
 
-const Backdrop = React.forwardRef<
+const Backdrop = forwardRef<
   HTMLDivElement,
   { open?: boolean; className: string }
 >((props, ref) => {
   const { open, className, ...other } = props;
   return (
     <div
-      className={clsx({ "MuiBackdrop-open": open }, className)}
+      // className={clsx({ "MuiBackdrop-open": open }, className)}
+      className={className}
       ref={ref}
       {...other}
     />
   );
 });
 
-const StyledBackdrop = styled(Backdrop)`
+export const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
   position: fixed;
   inset: 0;
@@ -85,7 +90,7 @@ const StyledBackdrop = styled(Backdrop)`
 `;
 
 // make this responsive
-const PopupContainer = styled("div")`
+export const PopupContainer = styled("div")`
   width: 800px;
   border: 1px solid black;
   overflow-y: auto;
@@ -97,7 +102,7 @@ const PopupContainer = styled("div")`
   border-radius: 8px;
 `;
 
-const StyledModal = styled(Modal)`
+export const StyledModal = styled(Modal)`
   position: fixed;
   z-index: 1300;
   inset: 0;

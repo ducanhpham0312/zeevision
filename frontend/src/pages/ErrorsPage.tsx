@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { Popup, PopupAction, PopupContent } from "../components/popup/Popup";
-import { styled } from "@mui/system";
-import { StyledButton } from "../components/styled-component/StyledButton";
-import { Style } from "@mui/icons-material";
+import { Button } from "../components/Button";
+import { Popup, PopupAction, PopupContent } from "../components/Popup/Popup";
 
 export default function ErrorsPage() {
   const [open, setOpen] = useState(false);
@@ -11,62 +9,29 @@ export default function ErrorsPage() {
   return (
     <>
       <h1>ErrorsPage</h1>
-      <StyledButton onClick={handleOpen}>Open Modal dey</StyledButton>
+      <Button onClick={handleOpen}>Open Modal</Button>
       <Popup open={open} onClose={handleClose} title={"Deploy a process"}>
         <PopupContent>
-          <StyledButton>Deploy a file </StyledButton>
-          <p>Or drag the files to the box belows</p>
-          <p>hi</p>
+          <div>
+            <Button>Deploy a file (.bpmn) </Button>
+            <p>Or drag the files to the box belows</p>
+          </div>
+          <div>
+            {[...new Array(50)]
+              .map(
+                () => `Cras mattis consectetur purus sit amet fermentum.
+Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
+              )
+              .join("\n")}
+          </div>
         </PopupContent>
         <PopupAction>
-          <StyledButton onClick={handleClose}>Cancel</StyledButton>
-          <StyledButton variant="contained">Deploy process</StyledButton>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button variant="contained">Deploy process</Button>
         </PopupAction>
       </Popup>
     </>
   );
 }
-
-const blue = {
-  200: "#99CCF3",
-  400: "#3399FF",
-  500: "#007FFF",
-};
-
-const grey = {
-  50: "#f6f8fa",
-  100: "#eaeef2",
-  200: "#d0d7de",
-  300: "#afb8c1",
-  400: "#8c959f",
-  500: "#6e7781",
-  600: "#57606a",
-  700: "#424a53",
-  800: "#32383f",
-  900: "#24292f",
-};
-const TriggerButton = styled("button")(
-  ({ theme }) => `
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
-  border-radius: 12px;
-  padding: 6px 12px;
-  line-height: 1.5;
-  background: transparent;
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[200]};
-  color: ${theme.palette.mode === "dark" ? grey[100] : grey[900]};
-
-  &:hover {
-    background: ${theme.palette.mode === "dark" ? grey[800] : grey[50]};
-    border-color: ${theme.palette.mode === "dark" ? grey[600] : grey[300]};
-  }
-
-  &:focus-visible {
-    border-color: ${blue[400]};
-    outline: 3px solid ${theme.palette.mode === "dark" ? blue[500] : blue[200]};
-  }
-  `
-);
