@@ -34,7 +34,7 @@ func New(conf *Config) (*Endpoint, error) {
 	})
 
 	// TODO: disable for now, investigate later.
-	router.SetTrustedProxies(nil)
+	_ = router.SetTrustedProxies(nil)
 
 	return &Endpoint{
 		router:  router,
