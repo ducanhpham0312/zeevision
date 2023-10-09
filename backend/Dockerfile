@@ -21,4 +21,8 @@ FROM alpine:3.18
 WORKDIR /app
 COPY --from=builder /zeevision /usr/bin/zeevision
 
+ENV PORT=8080
+
+EXPOSE 8080
+
 CMD ["zeevision"]
