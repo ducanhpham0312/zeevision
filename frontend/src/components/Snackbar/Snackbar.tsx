@@ -13,6 +13,7 @@ export function Snackbar() {
   const { snackMessage, closeSnackMessage } = useUIStore();
   const { open, message, title, type } = snackMessage;
   const [exited, setExited] = React.useState(true);
+  const timeoutId = React.useRef<number | undefined>();
   const nodeRef = React.useRef(null);
 
   const handleClose = (
@@ -33,13 +34,25 @@ export function Snackbar() {
     setExited(true);
   };
 
+  React.useEffect(() => {
+    if (open) {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+      timeoutId.current = setTimeout(() => {
+        closeSnackMessage();
+      }, 3000) as unknown as number;
+    }
+
+    return () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+    };
+  }, [snackMessage]);
+
   return (
-    <StyledSnackbar
-      autoHideDuration={3000}
-      open={open}
-      onClose={handleClose}
-      exited={exited}
-    >
+    <StyledSnackbar open={open} onClose={handleClose} exited={exited}>
       <Transition
         timeout={{ enter: 400, exit: 400 }}
         in={open}

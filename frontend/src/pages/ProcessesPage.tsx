@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BpmnViewer } from "../components/BpmnViewer";
-import { StyledButton } from "../components/styled-component/StyledButton";
+import { Button } from "../components/Button";
 import { useUIStore } from "../contexts/useUIStore";
 
 const bpmnImportFunctionList = [
@@ -38,7 +38,7 @@ export default function ProcessesPage() {
     setSnackMessage({
       title: "This is a test",
       message:
-        "Everything was sent to the desired address. Everything was sent to the desired address.",
+        "Everything was sent to the desired address.",
       type,
     });
   };
@@ -47,12 +47,10 @@ export default function ProcessesPage() {
     <>
       <h1>ProcessesPage</h1>
 
-      <StyledButton onClick={() => handleClick("success")}>
+      <Button onClick={() => handleClick("success")}>
         Test success snackbar
-      </StyledButton>
-      <StyledButton onClick={() => handleClick("error")}>
-        Test error snackbar
-      </StyledButton>
+      </Button>
+      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
 
       <div style={{ gap: "20px" }}>
         {bpmnStringList.map((bpmn, i) => (

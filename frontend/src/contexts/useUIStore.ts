@@ -24,7 +24,7 @@ export const useUIStore = create<UIStoreType>((set) => ({
     })),
 }));
 
-type SnackMessageType = {
+export type SnackMessageType = {
   title: string;
   message: string;
   type: "success" | "error";
