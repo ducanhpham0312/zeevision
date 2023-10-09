@@ -29,6 +29,24 @@ export const Primary: Story = {
           <Button>Deploy a file (.bpmn)</Button>
           <p>Or drag the files to the box below</p>
         </div>
+      </PopupContent>
+      <PopupAction>
+        <Button>Cancel</Button>
+        <Button variant="contained">Deploy process</Button>
+      </PopupAction>
+    </Popup>
+  ),
+};
+
+export const Scrollable: Story = {
+  args: {
+    open: true,
+    title: "Deploy a Process",
+    children: [],
+  },
+  render: (args) => (
+    <Popup {...args}>
+      <PopupContent>
         <div>
           {[...new Array(50)]
             .map(
