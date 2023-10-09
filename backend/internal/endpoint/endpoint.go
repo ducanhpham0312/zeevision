@@ -33,6 +33,9 @@ func New(conf *Config) (*Endpoint, error) {
 		websocketTunnel(ctx, upgrader)
 	})
 
+	// TODO: disable for now, investigate later.
+	router.SetTrustedProxies(nil)
+
 	return &Endpoint{
 		router:  router,
 		address: address,
