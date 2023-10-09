@@ -1,5 +1,4 @@
 import React, { forwardRef } from "react";
-// import clsx from "clsx";
 import { Modal, ModalProps } from "@mui/base";
 import { styled } from "@mui/system";
 import { Button } from "../Button";
@@ -70,15 +69,8 @@ const Backdrop = forwardRef<
   HTMLDivElement,
   { open?: boolean; className: string }
 >((props, ref) => {
-  const { open, className, ...other } = props;
-  return (
-    <div
-      // className={clsx({ "MuiBackdrop-open": open }, className)}
-      className={className}
-      ref={ref}
-      {...other}
-    />
-  );
+  const { className, ...other } = props;
+  return <div className={className} ref={ref} {...other} />;
 });
 
 export const StyledBackdrop = styled(Backdrop)`
