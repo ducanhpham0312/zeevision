@@ -1,5 +1,5 @@
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
-import Navbar from "./components/navbar/Navbar";
+import { Navbar } from "./components/Navbar";
 import ProcessesPage from "./pages/ProcessesPage";
 import InstancesPage from "./pages/InstancesPage";
 import IncidentsPage from "./pages/IncidentsPage";

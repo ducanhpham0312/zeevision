@@ -12,28 +12,28 @@ export type ButtonSizeType = "small" | "standard" | "large";
 
 export interface ButtonProps extends ButtonMUIProps {
   /**
-   * Is this the principal call to action on the page?
+   * Defines the visual style of the button as either "text", "contained", or "outlined".
+   * - "text": A button with no background and a basic appearance.
+   * - "contained": A button with a solid background color, ideally used for the principal call to action on the page.
+   * - "outlined": A button with a border and no background color.
    */
   variant?: ButtonVariantType;
   /**
-   * How large should the button be?
+   * Specifies the size of the button.
    */
   size?: ButtonSizeType;
   /**
-   * Button contents
+   * Defines the button contents.
    */
   label?: string;
-
   /**
-   * Button width in number of pixel
+   * Sets the button width in number of pixels.
    */
   width?: number;
-
   /**
-   * Should the button occupies all the avaiable space?
+   * Determines whether the button should occupy all available space.
    */
   fullWidth?: boolean;
-
   /**
    * toggleable button (only visible in "text" button varian)
    */
@@ -48,18 +48,13 @@ export function Button({
   ...props
 }: ButtonProps) {
   return (
-    <StyledButtonComponent
-      variant={variant}
-      size={size}
-      type="button"
-      {...props}
-    >
+    <StyledButton variant={variant} size={size} type="button" {...props}>
       {label || children}
-    </StyledButtonComponent>
+    </StyledButton>
   );
 }
 
-const StyledButtonComponent = styled(ButtonMUI, {
+const StyledButton = styled(ButtonMUI, {
   shouldForwardProp: (props) => props !== "fullWidth" && props !== "active",
 })(
   ({ active, variant, size, width, fullWidth }: ButtonProps) => `

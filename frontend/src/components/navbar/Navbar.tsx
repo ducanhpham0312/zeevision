@@ -29,7 +29,7 @@ const NavigationPath: { name: string; path: string }[] = [
   },
 ];
 
-function Navbar() {
+export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -78,5 +78,3 @@ const Divider = styled("div")(
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 `
 );
-
-export default Navbar;
