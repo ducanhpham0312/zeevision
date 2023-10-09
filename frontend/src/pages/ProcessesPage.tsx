@@ -32,10 +32,10 @@ export default function ProcessesPage() {
     );
   }, []);
 
-  const { setSnackMessage } = useUIStore();
+  const { setSnackbarContent } = useUIStore();
 
   const handleClick = (type: "success" | "error") => {
-    setSnackMessage({
+    setSnackbarContent({
       title: "This is a test",
       message:
         "Everything was sent to the desired address.",

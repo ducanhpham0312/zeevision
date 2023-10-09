@@ -1,24 +1,24 @@
 import { create } from "zustand";
 
 interface UIStoreType {
-  snackMessage: SnackMessageType;
-  setSnackMessage: (content: Omit<SnackMessageType, "open">) => void;
-  closeSnackMessage: () => void;
+  snackbarContent: SnackMessageType;
+  setSnackbarContent: (content: Omit<SnackMessageType, "open">) => void;
+  closeSnackBar: () => void;
 }
 
 export const useUIStore = create<UIStoreType>((set) => ({
-  snackMessage: {
+  snackbarContent: {
     title: "",
     message: "",
     type: "success",
     open: false,
   },
-  setSnackMessage: (content) =>
-    set({ snackMessage: { ...content, open: true } }),
-  closeSnackMessage: () =>
-    set(({ snackMessage }) => ({
-      snackMessage: {
-        ...snackMessage,
+  setSnackbarContent: (content) =>
+    set({ snackbarContent: { ...content, open: true } }),
+  closeSnackBar: () =>
+    set(({ snackbarContent }) => ({
+      snackbarContent: {
+        ...snackbarContent,
         open: false,
       },
     })),

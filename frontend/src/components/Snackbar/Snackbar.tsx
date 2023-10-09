@@ -10,8 +10,8 @@ import { useUIStore } from "../../contexts/useUIStore";
 import { SnackbarCloseReason } from "@mui/base";
 
 export function Snackbar() {
-  const { snackMessage, closeSnackMessage } = useUIStore();
-  const { open, message, title, type } = snackMessage;
+  const { snackbarContent, closeSnackBar } = useUIStore();
+  const { open, message, title, type } = snackbarContent;
   const [exited, setExited] = React.useState(true);
   const timeoutId = React.useRef<number | undefined>();
   const nodeRef = React.useRef(null);
@@ -23,7 +23,7 @@ export function Snackbar() {
     if (reason === "clickaway") {
       return;
     }
-    closeSnackMessage();
+    closeSnackBar();
   };
 
   const handleOnEnter = () => {
@@ -40,7 +40,7 @@ export function Snackbar() {
         clearTimeout(timeoutId.current);
       }
       timeoutId.current = setTimeout(() => {
-        closeSnackMessage();
+        closeSnackBar();
       }, 3000) as unknown as number;
     }
 
@@ -49,7 +49,7 @@ export function Snackbar() {
         clearTimeout(timeoutId.current);
       }
     };
-  }, [snackMessage]);
+  }, [snackbarContent]);
 
   return (
     <StyledSnackbar open={open} onClose={handleClose} exited={exited}>
@@ -67,11 +67,13 @@ export function Snackbar() {
             style={{
               transform: positioningStyles[status],
               transition: "transform 300ms ease",
+              alignContent: "start",
             }}
             ref={nodeRef}
           >
             {type === "success" ? (
               <CheckRoundedIcon
+                className="success-icon"
                 sx={{
                   color: PRIMARY[800],
                   flexShrink: 0,
@@ -81,6 +83,7 @@ export function Snackbar() {
               />
             ) : (
               <ErrorIcon
+                className="error-icon"
                 sx={{
                   color: "red",
                   flexShrink: 0,
@@ -93,11 +96,17 @@ export function Snackbar() {
               <p className="snackbar-title">{title}</p>
               <p className="snackbar-description">{message}</p>
             </div>
-            <CloseIcon
-              // type-gymnastic needed ..
+
+            <button
+              className="close-button"
+              style={{ all: "unset", height: "24px" }}
               onClick={handleClose as () => void}
-              className="snackbar-close-icon"
-            />
+            >
+              <CloseIcon
+                sx={{ fontSize: "20px" }}
+                className="snackbar-close-icon"
+              />
+            </button>
           </SnackbarContent>
         )}
       </Transition>
