@@ -141,12 +141,20 @@ type Record[V any] struct {
 	BrokerVersion        string        `json:"brokerVersion"`
 }
 
+type Zeebe = any                  // TODO
+type Deployment = any             // TODO
+type DeploymentDistribution = any // TODO
+type Error = any                  // TODO
+type Incident = any               // TODO
 type Job = Record[JobValue]
 type JobBatch = Record[JobBatchValue]
 type Message = Record[MessageValue]
 type MessageSubscription = Record[MessageSubscriptionValue]
+type MessageSubscriptionStartEvent = any // TODO
+type Process = any                       // TODO
 type ProcessEvent = Record[ProcessEventValue]
 type ProcessInstance = Record[ProcessInstanceValue]
+type ProcessInstanceResult = any // TODO
 type ProcessMessageSubscription = Record[ProcessMessageSubscriptionValue]
 type Timer = Record[TimerValue]
 type Variable = Record[VariableValue]
