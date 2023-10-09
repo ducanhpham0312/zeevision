@@ -169,17 +169,6 @@ const SnackbarContent = styled("div")(
     font-weight: 300;
     color: ${grey[800]};
   }
-
-  & .snackbar-close-icon {
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 2px;
-    border-radius: 4px;
-
-    &:hover {
-      background: ${grey[50]};
-    }
-  }
   `
 );
 

@@ -37,12 +37,12 @@ describe("Snackbar Component", () => {
     expect(getByText("Default title")).toBeInTheDocument();
   });
 
-  test("renders success icon when type is 'success'", () => {
+  it("renders success icon when type is 'success'", () => {
     const { container } = render(<Snackbar />);
     expect(container.querySelector(".success-icon")).toBeInTheDocument();
   });
 
-  test("renders error icon when type is 'error'", () => {
+  it("renders error icon when type is 'error'", () => {
     require("../../contexts/useUIStore").useUIStore.mockImplementation(() => ({
       snackbarContent: getSnackbarContentByType("error"),
       closeSnackBar: mockCloseSnackFunction,
