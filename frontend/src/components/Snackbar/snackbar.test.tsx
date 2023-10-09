@@ -25,6 +25,8 @@ describe("Snackbar Component", () => {
   beforeEach(() => {
     mockCloseSnackFunction.mockClear();
     // Reset the mock implementation before each test
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require("../../contexts/useUIStore").useUIStore.mockImplementation(() => ({
       snackbarContent: getSnackbarContentByType("success"),
       closeSnackBar: mockCloseSnackFunction,
@@ -43,6 +45,7 @@ describe("Snackbar Component", () => {
   });
 
   it("renders error icon when type is 'error'", () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require("../../contexts/useUIStore").useUIStore.mockImplementation(() => ({
       snackbarContent: getSnackbarContentByType("error"),
       closeSnackBar: mockCloseSnackFunction,

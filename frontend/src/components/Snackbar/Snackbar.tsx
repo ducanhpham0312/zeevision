@@ -16,10 +16,7 @@ export function Snackbar() {
   const timeoutId = React.useRef<number | undefined>();
   const nodeRef = React.useRef(null);
 
-  const handleClose = (
-    _: Event | React.SyntheticEvent<any, Event> | null,
-    reason: SnackbarCloseReason
-  ) => {
+  const handleClose = (_: Event | null, reason: SnackbarCloseReason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -49,10 +46,14 @@ export function Snackbar() {
         clearTimeout(timeoutId.current);
       }
     };
-  }, [snackbarContent]);
+  }, [snackbarContent, closeSnackBar, open]);
 
   return (
-    <StyledSnackbar open={open} onClose={handleClose} exited={exited}>
+    <StyledSnackbar
+      open={open}
+      onClose={handleClose as () => void}
+      exited={exited}
+    >
       <Transition
         timeout={{ enter: 400, exit: 400 }}
         in={open}

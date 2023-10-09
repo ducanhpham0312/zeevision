@@ -37,8 +37,7 @@ export default function ProcessesPage() {
   const handleClick = (type: "success" | "error") => {
     setSnackbarContent({
       title: "This is a test",
-      message:
-        "Everything was sent to the desired address.",
+      message: "Everything was sent to the desired address.",
       type,
     });
   };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Snackbar } from ".";
 
 const meta = {
-  title: "Components/Snackbar",
+  title: "Assets/Snackbar",
   component: Snackbar,
   parameters: {
     layout: "centered",
