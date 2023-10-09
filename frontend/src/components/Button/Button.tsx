@@ -1,73 +1,68 @@
-import { Button } from "@mui/base";
+import {
+  Button as ButtonMUI,
+  ButtonProps as ButtonMUIProps,
+  buttonClasses,
+} from "@mui/base";
 import { styled } from "@mui/system";
 import { PRIMARY } from "../../theme/palette";
-import { ReactNode } from "react";
 
 export type ButtonVariantType = "text" | "contained" | "outlined";
 
 export type ButtonSizeType = "small" | "standard" | "large";
 
-interface ButtonProps {
+export interface ButtonProps extends ButtonMUIProps {
   /**
-   * Is this the principal call to action on the page?
+   * Defines the visual style of the button as either "text", "contained", or "outlined".
+   * - "text": A button with no background and a basic appearance.
+   * - "contained": A button with a solid background color, ideally used for the principal call to action on the page.
+   * - "outlined": A button with a border and no background color.
    */
   variant?: ButtonVariantType;
   /**
-   * How large should the button be?
+   * Specifies the size of the button.
    */
   size?: ButtonSizeType;
   /**
-   * Button contents
+   * Defines the button contents.
    */
   label?: string;
-
-  children?: ReactNode;
-
   /**
-   * toggleable button
+   * Sets the button width in number of pixels.
+   */
+  width?: number;
+  /**
+   * Determines whether the button should occupy all available space.
+   */
+  fullWidth?: boolean;
+  /**
+   * toggleable button (only visible in "text" button varian)
    */
   active?: boolean;
-
-  /**
-   * Optional click handler
-   */
-  onClick?: () => void;
 }
 
-export const StyledButton = ({
+export function Button({
   variant = "outlined",
   size = "standard",
   label,
   children,
   ...props
-}: ButtonProps) => {
+}: ButtonProps) {
   return (
-    <StyledButtonComponent
-      variant={variant}
-      size={size}
-      type="button"
-      {...props}
-    >
+    <StyledButton variant={variant} size={size} type="button" {...props}>
       {label || children}
-    </StyledButtonComponent>
+    </StyledButton>
   );
-};
+}
 
-const StyledButtonComponent = styled(Button, {
-  shouldForwardProp: (props) => props !== "active",
+const StyledButton = styled(ButtonMUI, {
+  shouldForwardProp: (props) => props !== "fullWidth" && props !== "active",
 })(
-  ({
-    active,
-    variant,
-    size,
-  }: {
-    active?: boolean;
-    size: ButtonSizeType;
-    variant: ButtonVariantType;
-  }) => `
+  ({ active, variant, size, width, fullWidth }: ButtonProps) => `
   all: unset;
   position: relative;
   font-weight: 600;
+  text-align: center;
+  width: ${fullWidth ? "100%" : width ? `${width}px` : "auto"};
   font-size: 1,125rem;
   background-color: ${variant === "contained" ? PRIMARY[900] : "white"};
   padding: ${
@@ -97,6 +92,10 @@ const StyledButtonComponent = styled(Button, {
 
   &:hover {
     background-color: ${variant === "contained" ? PRIMARY[800] : PRIMARY[50]};
+  }
+
+  &.${buttonClasses.active} {
+    background-color: ${variant === "contained" ? PRIMARY[900] : PRIMARY[100]};
   }
 `
 );
