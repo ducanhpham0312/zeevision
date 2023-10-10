@@ -177,7 +177,6 @@ func WithTypedValue[V NamedValueType](untyped UntypedRecord) (Record[V], error) 
 	}, nil
 }
 
-type Zeebe = any // TODO
 type Deployment = Record[DeploymentValue]
 type DeploymentDistribution = Record[DeploymentDistributionValue]
 type Error = Record[ErrorValue]
