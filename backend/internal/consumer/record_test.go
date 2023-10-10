@@ -41,7 +41,7 @@ const jsonJobRecord = `{
 
 func TestJobRecord(t *testing.T) {
 	expectedJobRecord := Job{
-		PartitionId: 14,
+		PartitionID: 14,
 		Value: JobValue{
 			Deadline:                 -1,
 			ProcessInstanceKey:       31525197427841255,
@@ -51,10 +51,10 @@ func TestJobRecord(t *testing.T) {
 			ProcessDefinitionVersion: 1,
 			ProcessDefinitionKey:     2251799813686516,
 			ElementInstanceKey:       31525197429944928,
-			ElementId:                "SomeElement",
+			ElementID:                "SomeElement",
 			ErrorMessage:             "",
 			CustomHeaders:            map[string]any{},
-			BpmnProcessId:            "SomeBPMN",
+			BpmnProcessID:            "SomeBPMN",
 			Variables:                map[string]any{},
 			Type:                     "someType",
 			ErrorCode:                "",

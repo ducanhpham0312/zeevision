@@ -127,7 +127,7 @@ const (
 )
 
 type Record[V any] struct {
-	PartitionId          int64         `json:"partitionId"`
+	PartitionID          int64         `json:"partitionId"`
 	Value                V             `json:"value"`
 	RejectionType        RejectionType `json:"rejectionType"`
 	RejectionReason      string        `json:"rejectionReason"`
@@ -168,10 +168,10 @@ type JobValue struct {
 	ProcessDefinitionVersion int64          `json:"processDefinitionVersion"`
 	ProcessDefinitionKey     int64          `json:"processDefinitionKey"`
 	ElementInstanceKey       int64          `json:"elementInstanceKey"`
-	ElementId                string         `json:"elementId"`
+	ElementID                string         `json:"elementId"`
 	ErrorMessage             string         `json:"errorMessage"`
 	CustomHeaders            map[string]any `json:"customHeaders"`
-	BpmnProcessId            string         `json:"bpmnProcessId"`
+	BpmnProcessID            string         `json:"bpmnProcessId"`
 	Variables                map[string]any `json:"variables"`
 	Type                     string         `json:"type"`
 	ErrorCode                string         `json:"errorCode"`
@@ -192,7 +192,7 @@ type JobBatchValue struct {
 
 type MessageValue struct {
 	Deadline       int64          `json:"deadline"`
-	MessageId      string         `json:"messageId"`
+	MessageID      string         `json:"messageId"`
 	Variables      map[string]any `json:"variables"`
 	CorrelationKey string         `json:"correlationKey"`
 	Name           string         `json:"name"`
@@ -205,7 +205,7 @@ type MessageSubscriptionValue struct {
 	MessageKey         int64          `json:"messageKey"`
 	MessageName        string         `json:"messageName"`
 	Interrupting       bool           `json:"interrupting"`
-	BpmnProcessId      string         `json:"bpmnProcessId"`
+	BpmnProcessID      string         `json:"bpmnProcessId"`
 	Variables          map[string]any `json:"variables"`
 	CorrelationKey     string         `json:"correlationKey"`
 }
@@ -215,14 +215,14 @@ type ProcessEventValue struct {
 	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
 	Variables            map[string]any `json:"variables"`
 	ScopeKey             int64          `json:"scopeKey"`
-	TargetElementId      string         `json:"targetElementId"`
+	TargetElementID      string         `json:"targetElementId"`
 }
 
 type ProcessInstanceValue struct {
-	BpmnProcessId            string `json:"bpmnProcessId"`
+	BpmnProcessID            string `json:"bpmnProcessId"`
 	ProcessInstanceKey       int64  `json:"processInstanceKey"`
 	ProcessDefinitionKey     int64  `json:"processDefinitionKey"`
-	ElementId                string `json:"elementId"`
+	ElementID                string `json:"elementId"`
 	FlowScopeKey             int64  `json:"flowScopeKey"`
 	BpmnEventType            string `json:"bpmnEventType"`
 	ParentProcessInstanceKey int64  `json:"parentProcessInstanceKey"`
@@ -232,9 +232,9 @@ type ProcessInstanceValue struct {
 }
 
 type ProcessMessageSubscriptionValue struct {
-	BpmnProcessId      string         `json:"bpmnProcessId"`
+	BpmnProcessID      string         `json:"bpmnProcessId"`
 	ElementInstanceKey int64          `json:"elementInstanceKey"`
-	ElementId          string         `json:"elementId"`
+	ElementID          string         `json:"elementId"`
 	Variables          map[string]any `json:"variables"`
 	MessageKey         int64          `json:"messageKey"`
 	MessageName        string         `json:"messageName"`
@@ -244,7 +244,7 @@ type ProcessMessageSubscriptionValue struct {
 }
 
 type TimerValue struct {
-	TargetElementId      string `json:"targetElementId"`
+	TargetElementID      string `json:"targetElementId"`
 	ProcessInstanceKey   int64  `json:"processInstanceKey"`
 	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
 	ElementInstanceKey   int64  `json:"elementInstanceKey"`
@@ -255,7 +255,7 @@ type TimerValue struct {
 type VariableValue struct {
 	ProcessInstanceKey   int64  `json:"processInstanceKey"`
 	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
-	BpmnProcessId        string `json:"bpmnProcessId"`
+	BpmnProcessID        string `json:"bpmnProcessId"`
 	ScopeKey             int64  `json:"scopeKey"`
 	Name                 string `json:"name"`
 	Value                string `json:"value"`
