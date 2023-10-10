@@ -1,8 +1,33 @@
+// This package defines the record types for the consumer.
+//
+// Enums here are mainly for documentation purposes as JSON
+// unmarshaling isn't restricted by them.
+
 package consumer
 
 import (
 	"encoding/json"
 	"fmt"
+)
+
+// BpmnElementType indicates the BPMN 2.0 task type.
+// TODO: this list is not verified with data.
+type BpmnElementType string
+
+func (b BpmnElementType) String() string {
+	return string(b)
+}
+
+const (
+	BpmnElementTypeBusinessRuleTask BpmnElementType = "BUSINESS_RULE_TASK"
+	BpmnElementTypeManualTask       BpmnElementType = "MANUAL_TASK"
+	BpmnElementTypeScriptTask       BpmnElementType = "SCRIPT_TASK"
+	BpmnElementTypeReceiveTask      BpmnElementType = "RECEIVE_TASK"
+	BpmnElementTypeServiceTask      BpmnElementType = "SERVICE_TASK"
+	BpmnElementTypeSendTask         BpmnElementType = "SEND_TASK"
+	// Also known as abstract task.
+	BpmnElementTypeUndefinedTask BpmnElementType = "UNDEFINED_TASK"
+	BpmnElementTypeUserTask      BpmnElementType = "USER_TASK"
 )
 
 // Intent indicates the intent of the record.
@@ -380,16 +405,17 @@ func (ProcessEventValue) ValueType() ValueType {
 
 // ProcessInstance record's 'value' field.
 type ProcessInstanceValue struct {
-	BpmnProcessID            string `json:"bpmnProcessId"`
-	ProcessInstanceKey       int64  `json:"processInstanceKey"`
-	ProcessDefinitionKey     int64  `json:"processDefinitionKey"`
-	ElementID                string `json:"elementId"`
-	FlowScopeKey             int64  `json:"flowScopeKey"`
-	BpmnEventType            string `json:"bpmnEventType"`
-	ParentProcessInstanceKey int64  `json:"parentProcessInstanceKey"`
-	ParentElementInstanceKey int64  `json:"parentElementInstanceKey"`
-	BpmnElementType          string `json:"bpmnElementType"`
-	Version                  int64  `json:"version"`
+	BpmnProcessID        string `json:"bpmnProcessId"`
+	ProcessInstanceKey   int64  `json:"processInstanceKey"`
+	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
+	ElementID            string `json:"elementId"`
+	FlowScopeKey         int64  `json:"flowScopeKey"`
+	// TODO: make this into an enum.
+	BpmnEventType            string          `json:"bpmnEventType"`
+	ParentProcessInstanceKey int64           `json:"parentProcessInstanceKey"`
+	ParentElementInstanceKey int64           `json:"parentElementInstanceKey"`
+	BpmnElementType          BpmnElementType `json:"bpmnElementType"`
+	Version                  int64           `json:"version"`
 }
 
 func (ProcessInstanceValue) ValueType() ValueType {

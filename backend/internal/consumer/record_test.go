@@ -288,7 +288,7 @@ var expcetedProcessInstanceRecord = ProcessInstance{
 		BpmnEventType:            "UNSPECIFIED",
 		ParentProcessInstanceKey: -1,
 		ParentElementInstanceKey: -1,
-		BpmnElementType:          "SERVICE_TASK",
+		BpmnElementType:          BpmnElementTypeServiceTask,
 		Version:                  1,
 	},
 	RejectionType:        RejectionTypeNullVal,
