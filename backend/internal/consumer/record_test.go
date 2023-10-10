@@ -83,6 +83,17 @@ func TestUntypedRecord(t *testing.T) {
 	assert.Equal(t, expectedJobRecord, jobRecord)
 }
 
+func TestUntypedRecordWrongType(t *testing.T) {
+	// Delay value unmarshaling until we know the value type
+	var untypedJobRecord UntypedRecord
+	err := json.Unmarshal([]byte(jsonJobRecord), &untypedJobRecord)
+	assert.NoError(t, err)
+
+	// Try to unmashal the value field into the wrong type
+	_, err = WithTypedValue[ProcessInstanceValue](untypedJobRecord)
+	assert.EqualError(t, err, "record: cannot convert 'JOB' into 'PROCESS_INSTANCE'")
+}
+
 func TestJobRecord(t *testing.T) {
 	var jobRecord Job
 	err := json.Unmarshal([]byte(jsonJobRecord), &jobRecord)

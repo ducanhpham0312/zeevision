@@ -1,6 +1,9 @@
 package consumer
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Intent string
 
@@ -145,10 +148,17 @@ type Record[V any] struct {
 
 type UntypedRecord = Record[json.RawMessage]
 
-func WithTypedValue[V any](untyped UntypedRecord) (Record[V], error) {
+func WithTypedValue[V NamedValueType](untyped UntypedRecord) (Record[V], error) {
 	var value V
+	targetValueType := value.ValueType()
+
+	if untyped.ValueType != targetValueType {
+		return Record[V]{}, fmt.Errorf("record: cannot convert '%s' into '%s'", untyped.ValueType, targetValueType)
+
+	}
+
 	if err := json.Unmarshal(untyped.Value, &value); err != nil {
-		return Record[V]{}, err
+		return Record[V]{}, fmt.Errorf("record: %w", err)
 	}
 
 	return Record[V]{
@@ -185,6 +195,10 @@ type ProcessMessageSubscription = Record[ProcessMessageSubscriptionValue]
 type Timer = Record[TimerValue]
 type Variable = Record[VariableValue]
 
+type NamedValueType interface {
+	ValueType() ValueType
+}
+
 type JobValue struct {
 	Deadline                 int64          `json:"deadline"`
 	ProcessInstanceKey       int64          `json:"processInstanceKey"`
@@ -204,6 +218,10 @@ type JobValue struct {
 	Worker                   string         `json:"worker"`
 }
 
+func (JobValue) ValueType() ValueType {
+	return ValueTypeJob
+}
+
 type JobBatchValue struct {
 	Truncated         bool  `json:"truncated"`
 	MaxJobsToActivate int64 `json:"maxJobsToActivate"`
@@ -216,6 +234,10 @@ type JobBatchValue struct {
 	JobKeys []any `json:"jobKeys"`
 }
 
+func (JobBatchValue) ValueType() ValueType {
+	return ValueTypeJobBatch
+}
+
 type MessageValue struct {
 	Deadline       int64          `json:"deadline"`
 	MessageID      string         `json:"messageId"`
@@ -223,6 +245,10 @@ type MessageValue struct {
 	CorrelationKey string         `json:"correlationKey"`
 	Name           string         `json:"name"`
 	TimeToLive     int64          `json:"timeToLive"`
+}
+
+func (MessageValue) ValueType() ValueType {
+	return ValueTypeMessage
 }
 
 type MessageSubscriptionValue struct {
@@ -236,12 +262,20 @@ type MessageSubscriptionValue struct {
 	CorrelationKey     string         `json:"correlationKey"`
 }
 
+func (MessageSubscriptionValue) ValueType() ValueType {
+	return ValueTypeMessageSubscription
+}
+
 type ProcessEventValue struct {
 	ProcessInstanceKey   int64          `json:"processInstanceKey"`
 	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
 	Variables            map[string]any `json:"variables"`
 	ScopeKey             int64          `json:"scopeKey"`
 	TargetElementID      string         `json:"targetElementId"`
+}
+
+func (ProcessEventValue) ValueType() ValueType {
+	return ValueTypeProcessEvent
 }
 
 type ProcessInstanceValue struct {
@@ -257,6 +291,10 @@ type ProcessInstanceValue struct {
 	Version                  int64  `json:"version"`
 }
 
+func (ProcessInstanceValue) ValueType() ValueType {
+	return ValueTypeProcessInstance
+}
+
 type ProcessMessageSubscriptionValue struct {
 	BpmnProcessID      string         `json:"bpmnProcessId"`
 	ElementInstanceKey int64          `json:"elementInstanceKey"`
@@ -269,6 +307,10 @@ type ProcessMessageSubscriptionValue struct {
 	ProcessInstanceKey int64          `json:"processInstanceKey"`
 }
 
+func (ProcessMessageSubscriptionValue) ValueType() ValueType {
+	return ValueTypeProcessMessageSubscription
+}
+
 type TimerValue struct {
 	TargetElementID      string `json:"targetElementId"`
 	ProcessInstanceKey   int64  `json:"processInstanceKey"`
@@ -278,6 +320,10 @@ type TimerValue struct {
 	Repetitions          int64  `json:"repetitions"`
 }
 
+func (TimerValue) ValueType() ValueType {
+	return ValueTypeTimer
+}
+
 type VariableValue struct {
 	ProcessInstanceKey   int64  `json:"processInstanceKey"`
 	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
@@ -285,4 +331,8 @@ type VariableValue struct {
 	ScopeKey             int64  `json:"scopeKey"`
 	Name                 string `json:"name"`
 	Value                string `json:"value"`
+}
+
+func (VariableValue) ValueType() ValueType {
+	return ValueTypeVariable
 }
