@@ -19,6 +19,13 @@ func main() {
 	brokers := []string{"127.0.0.1:9092"}
 	go consumer.ConsumeStream(brokers, "zeebe-message", 0, msgChannel)
 
+	go func() {
+		for {
+			msg := <-msgChannel
+			fmt.Printf("Message received: %s\n", msg)
+		}
+	}()
+
 	// Create default configuration.
 	conf := &endpoint.Config{
 		Port: DefaultPort,
@@ -41,10 +48,5 @@ func main() {
 
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
-	}
-
-	for {
-		msg := <-msgChannel
-		fmt.Printf("Message received: %s\n", msg)
 	}
 }
