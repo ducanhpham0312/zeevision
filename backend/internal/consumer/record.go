@@ -1,5 +1,7 @@
 package consumer
 
+import "encoding/json"
+
 type Intent string
 
 func (i Intent) String() string {
@@ -139,6 +141,30 @@ type Record[V any] struct {
 	RecordType           RecordType    `json:"recordType"`
 	Intent               Intent        `json:"intent"`
 	BrokerVersion        string        `json:"brokerVersion"`
+}
+
+type UntypedRecord = Record[json.RawMessage]
+
+func WithTypedValue[V any](untyped UntypedRecord) (Record[V], error) {
+	var value V
+	if err := json.Unmarshal(untyped.Value, &value); err != nil {
+		return Record[V]{}, err
+	}
+
+	return Record[V]{
+		PartitionID:          untyped.PartitionID,
+		Value:                value,
+		RejectionType:        untyped.RejectionType,
+		RejectionReason:      untyped.RejectionReason,
+		SourceRecordPosition: untyped.SourceRecordPosition,
+		Key:                  untyped.Key,
+		Timestamp:            untyped.Timestamp,
+		Position:             untyped.Position,
+		ValueType:            untyped.ValueType,
+		RecordType:           untyped.RecordType,
+		Intent:               untyped.Intent,
+		BrokerVersion:        untyped.BrokerVersion,
+	}, nil
 }
 
 type Zeebe = any                  // TODO

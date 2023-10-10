@@ -39,39 +39,51 @@ const jsonJobRecord = `{
 	"brokerVersion": "8.2.15"
 }`
 
-func TestJobRecord(t *testing.T) {
-	expectedJobRecord := Job{
-		PartitionID: 14,
-		Value: JobValue{
-			Deadline:                 -1,
-			ProcessInstanceKey:       31525197427841255,
-			Retries:                  3,
-			RetryBackoff:             0,
-			RecurringTime:            -1,
-			ProcessDefinitionVersion: 1,
-			ProcessDefinitionKey:     2251799813686516,
-			ElementInstanceKey:       31525197429944928,
-			ElementID:                "SomeElement",
-			ErrorMessage:             "",
-			CustomHeaders:            map[string]any{},
-			BpmnProcessID:            "SomeBPMN",
-			Variables:                map[string]any{},
-			Type:                     "someType",
-			ErrorCode:                "",
-			Worker:                   "",
-		},
-		RejectionType:        RejectionTypeNullVal,
-		RejectionReason:      "",
-		SourceRecordPosition: 308989657,
-		Key:                  31525197429944929,
-		Timestamp:            1696756438613,
-		Position:             308991363,
-		ValueType:            ValueTypeJob,
-		RecordType:           RecordTypeEvent,
-		Intent:               IntentCreated,
-		BrokerVersion:        "8.2.15",
-	}
+var expectedJobRecord = Job{
+	PartitionID: 14,
+	Value: JobValue{
+		Deadline:                 -1,
+		ProcessInstanceKey:       31525197427841255,
+		Retries:                  3,
+		RetryBackoff:             0,
+		RecurringTime:            -1,
+		ProcessDefinitionVersion: 1,
+		ProcessDefinitionKey:     2251799813686516,
+		ElementInstanceKey:       31525197429944928,
+		ElementID:                "SomeElement",
+		ErrorMessage:             "",
+		CustomHeaders:            map[string]any{},
+		BpmnProcessID:            "SomeBPMN",
+		Variables:                map[string]any{},
+		Type:                     "someType",
+		ErrorCode:                "",
+		Worker:                   "",
+	},
+	RejectionType:        RejectionTypeNullVal,
+	RejectionReason:      "",
+	SourceRecordPosition: 308989657,
+	Key:                  31525197429944929,
+	Timestamp:            1696756438613,
+	Position:             308991363,
+	ValueType:            ValueTypeJob,
+	RecordType:           RecordTypeEvent,
+	Intent:               IntentCreated,
+	BrokerVersion:        "8.2.15",
+}
 
+func TestUntypedRecord(t *testing.T) {
+	// Delay value unmarshaling until we know the value type
+	var untypedJobRecord UntypedRecord
+	err := json.Unmarshal([]byte(jsonJobRecord), &untypedJobRecord)
+	assert.NoError(t, err)
+
+	// Unmarshal the value field into the correct type
+	jobRecord, err := WithTypedValue[JobValue](untypedJobRecord)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedJobRecord, jobRecord)
+}
+
+func TestJobRecord(t *testing.T) {
 	var jobRecord Job
 	err := json.Unmarshal([]byte(jsonJobRecord), &jobRecord)
 
