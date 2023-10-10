@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// Intent indicates the intent of the record.
 type Intent string
 
 func (i Intent) String() string {
@@ -71,6 +72,7 @@ const (
 	IntentUpdateRetries            Intent = "UPDATE_RETRIES"
 )
 
+// RecordType indicates the type of the record.
 type RecordType string
 
 func (r RecordType) String() string {
@@ -83,6 +85,8 @@ const (
 	RecordTypeEvent            RecordType = "EVENT"
 )
 
+// RejectionType indicates the type of the rejection for a record.
+// RejectionType has associated reason in 'rejectionReason' field.
 type RejectionType string
 
 func (r RejectionType) String() string {
@@ -99,6 +103,7 @@ const (
 	RejectionTypeProcessingError     RejectionType = "PROCESSING_ERROR"
 )
 
+// ValueType indicates the structure of the 'value' field in a record.
 type ValueType string
 
 func (v ValueType) String() string {
@@ -131,6 +136,9 @@ const (
 	ValueTypeVariableDocument              ValueType = "VARIABLE_DOCUMENT"
 )
 
+// Container for all types of incoming records.
+//
+// The 'value' field is generic and can be of any type.
 type Record[V any] struct {
 	PartitionID          int64         `json:"partitionId"`
 	Value                V             `json:"value"`
@@ -146,8 +154,14 @@ type Record[V any] struct {
 	BrokerVersion        string        `json:"brokerVersion"`
 }
 
+// UntypedRecord is a record whose 'value' field isn't parsed.
 type UntypedRecord = Record[json.RawMessage]
 
+// WithTypedValue converts an UntypedRecord into a typed Record.
+//
+// Function validates the 'valueType' field of the record and returns
+// an error if it doesn't match the type of the value. Any JSON unmarshaling
+// errors are also returned.
 func WithTypedValue[V NamedValueType](untyped UntypedRecord) (Record[V], error) {
 	var value V
 	targetValueType := value.ValueType()
@@ -177,6 +191,8 @@ func WithTypedValue[V NamedValueType](untyped UntypedRecord) (Record[V], error) 
 	}, nil
 }
 
+// All possible record types.
+
 type Deployment = Record[DeploymentValue]
 type DeploymentDistribution = Record[DeploymentDistributionValue]
 type Error = Record[ErrorValue]
@@ -194,21 +210,25 @@ type ProcessMessageSubscription = Record[ProcessMessageSubscriptionValue]
 type Timer = Record[TimerValue]
 type Variable = Record[VariableValue]
 
+// NamedValueType is an interface for all record types which have known
+// structure based on the 'valueType' field.
 type NamedValueType interface {
 	ValueType() ValueType
 }
 
+// Deployment record's 'value' field.
 type DeploymentValue struct {
-	Resources                    []Resource                     `json:"resources"`
-	ProcessMetadata              []ProcessMetadata              `json:"processMetadata"`
-	DecisionRequirementsMetadata []DecisionRequirementsMetadata `json:"decisionRequirementsMetadata"`
-	DecisionMetadata             []DecisionMetadata             `json:"decisionMetadata"`
+	Resources                    []DeploymentValueResource                     `json:"resources"`
+	ProcessMetadata              []DeploymentValueProcessMetadata              `json:"processMetadata"`
+	DecisionRequirementsMetadata []DeploymentValueDecisionRequirementsMetadata `json:"decisionRequirementsMetadata"`
+	DecisionMetadata             []DeploymentValueDecisionMetadata             `json:"decisionMetadata"`
 }
 
 func (DeploymentValue) ValueType() ValueType {
 	return ValueTypeDeployment
 }
 
+// DeploymentDistribution record's 'value' field.
 type DeploymentDistributionValue struct {
 	PartitionID int64 `json:"partitionId"`
 }
@@ -217,6 +237,7 @@ func (DeploymentDistributionValue) ValueType() ValueType {
 	return ValueTypeDeploymentDistribution
 }
 
+// Error record's 'value' field.
 type ErrorValue struct {
 	ExceptionMessage   string `json:"exceptionMessage"`
 	Stacktrace         string `json:"stacktrace"`
@@ -228,6 +249,7 @@ func (ErrorValue) ValueType() ValueType {
 	return ValueTypeError
 }
 
+// Incident record's 'value' field.
 type IncidentValue struct {
 	ErrorType            string `json:"errorType"`
 	ErrorMessage         string `json:"errorMessage"`
@@ -244,6 +266,7 @@ func (IncidentValue) ValueType() ValueType {
 	return ValueTypeIncident
 }
 
+// Job record's 'value' field.
 type JobValue struct {
 	Deadline                 int64          `json:"deadline"`
 	ProcessInstanceKey       int64          `json:"processInstanceKey"`
@@ -267,6 +290,7 @@ func (JobValue) ValueType() ValueType {
 	return ValueTypeJob
 }
 
+// JobBatch record's 'value' field.
 type JobBatchValue struct {
 	Truncated         bool    `json:"truncated"`
 	MaxJobsToActivate int64   `json:"maxJobsToActivate"`
@@ -281,6 +305,7 @@ func (JobBatchValue) ValueType() ValueType {
 	return ValueTypeJobBatch
 }
 
+// Message record's 'value' field.
 type MessageValue struct {
 	Deadline       int64          `json:"deadline"`
 	MessageID      string         `json:"messageId"`
@@ -294,6 +319,7 @@ func (MessageValue) ValueType() ValueType {
 	return ValueTypeMessage
 }
 
+// MessageStartEventSubscription record's 'value' field.
 type MessageStartEventSubscriptionValue struct {
 	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
 	StartEventID         string         `json:"startEventId"`
@@ -309,6 +335,7 @@ func (MessageStartEventSubscriptionValue) ValueType() ValueType {
 	return ValueTypeMessageStartEventSubscription
 }
 
+// MessageSubscription record's 'value' field.
 type MessageSubscriptionValue struct {
 	ProcessInstanceKey int64          `json:"processInstanceKey"`
 	ElementInstanceKey int64          `json:"elementInstanceKey"`
@@ -324,6 +351,7 @@ func (MessageSubscriptionValue) ValueType() ValueType {
 	return ValueTypeMessageSubscription
 }
 
+// Process record's 'value' field.
 type ProcessValue struct {
 	BpmnProcessID        string `json:"bpmnProcessId"`
 	Version              int64  `json:"version"`
@@ -337,6 +365,7 @@ func (ProcessValue) ValueType() ValueType {
 	return ValueTypeProcess
 }
 
+// ProcessEvent record's 'value' field.
 type ProcessEventValue struct {
 	ProcessInstanceKey   int64          `json:"processInstanceKey"`
 	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
@@ -349,6 +378,7 @@ func (ProcessEventValue) ValueType() ValueType {
 	return ValueTypeProcessEvent
 }
 
+// ProcessInstance record's 'value' field.
 type ProcessInstanceValue struct {
 	BpmnProcessID            string `json:"bpmnProcessId"`
 	ProcessInstanceKey       int64  `json:"processInstanceKey"`
@@ -366,6 +396,7 @@ func (ProcessInstanceValue) ValueType() ValueType {
 	return ValueTypeProcessInstance
 }
 
+// ProcessInstanceResult record's 'value' field.
 type ProcessInstanceResultValue struct {
 	BpmnProcessID        string         `json:"bpmnProcessId"`
 	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
@@ -378,6 +409,7 @@ func (ProcessInstanceResultValue) ValueType() ValueType {
 	return ValueTypeProcessInstanceResult
 }
 
+// ProcessMessageSubscription record's 'value' field.
 type ProcessMessageSubscriptionValue struct {
 	BpmnProcessID      string         `json:"bpmnProcessId"`
 	ElementInstanceKey int64          `json:"elementInstanceKey"`
@@ -394,6 +426,7 @@ func (ProcessMessageSubscriptionValue) ValueType() ValueType {
 	return ValueTypeProcessMessageSubscription
 }
 
+// Timer record's 'value' field.
 type TimerValue struct {
 	TargetElementID      string `json:"targetElementId"`
 	ProcessInstanceKey   int64  `json:"processInstanceKey"`
@@ -407,6 +440,7 @@ func (TimerValue) ValueType() ValueType {
 	return ValueTypeTimer
 }
 
+// Variable record's 'value' field.
 type VariableValue struct {
 	ProcessInstanceKey   int64  `json:"processInstanceKey"`
 	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
@@ -420,14 +454,14 @@ func (VariableValue) ValueType() ValueType {
 	return ValueTypeVariable
 }
 
-// Detail types for DeploymentValue
+// Detail types for DeploymentValue.
 
-type Resource struct {
+type DeploymentValueResource struct {
 	Resource     []byte `json:"resource"`
 	ResourceName string `json:"resourceName"`
 }
 
-type ProcessMetadata struct {
+type DeploymentValueProcessMetadata struct {
 	BpmnProcessID        string `json:"bpmnProcessId"`
 	Version              int64  `json:"version"`
 	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
@@ -436,7 +470,7 @@ type ProcessMetadata struct {
 	IsDuplicate          bool   `json:"isDuplicate"`
 }
 
-type DecisionRequirementsMetadata struct {
+type DeploymentValueDecisionRequirementsMetadata struct {
 	DecisionRequirementsID      string `json:"decisionRequirementsId"`
 	DecisionRequirementsName    string `json:"decisionRequirementsName"`
 	DecisionRequirementsVersion int64  `json:"decisionRequirementsVersion"`
@@ -447,7 +481,7 @@ type DecisionRequirementsMetadata struct {
 	IsDuplicate                 bool   `json:"isDuplicate"`
 }
 
-type DecisionMetadata struct {
+type DeploymentValueDecisionMetadata struct {
 	DecisionID              string `json:"decisionId"`
 	Version                 int64  `json:"version"`
 	DecisionKey             int64  `json:"decisionKey"`
