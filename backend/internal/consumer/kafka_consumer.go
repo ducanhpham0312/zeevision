@@ -1,4 +1,4 @@
-package receiver
+package consumer
 
 import (
 	"log"
@@ -9,7 +9,6 @@ import (
 func ConsumeStream(addrs []string, topic string, partition int32, msgChannel chan []byte) {
 	config := sarama.NewConfig()
 
-	// Needs to run on localhost for now vs the docker container.
 	consumer, err := sarama.NewConsumer(addrs, config)
 	if err != nil {
 		panic(err)
