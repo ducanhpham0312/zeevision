@@ -177,26 +177,72 @@ func WithTypedValue[V NamedValueType](untyped UntypedRecord) (Record[V], error) 
 	}, nil
 }
 
-type Zeebe = any                  // TODO
-type Deployment = any             // TODO
-type DeploymentDistribution = any // TODO
-type Error = any                  // TODO
-type Incident = any               // TODO
+type Zeebe = any // TODO
+type Deployment = Record[DeploymentValue]
+type DeploymentDistribution = Record[DeploymentDistributionValue]
+type Error = Record[ErrorValue]
+type Incident = Record[IncidentValue]
 type Job = Record[JobValue]
 type JobBatch = Record[JobBatchValue]
 type Message = Record[MessageValue]
+type MessageStartEventSubscription = Record[MessageStartEventSubscriptionValue]
 type MessageSubscription = Record[MessageSubscriptionValue]
-type MessageSubscriptionStartEvent = any // TODO
-type Process = any                       // TODO
+type Process = Record[ProcessValue]
 type ProcessEvent = Record[ProcessEventValue]
 type ProcessInstance = Record[ProcessInstanceValue]
-type ProcessInstanceResult = any // TODO
+type ProcessInstanceResult = Record[ProcessInstanceResultValue]
 type ProcessMessageSubscription = Record[ProcessMessageSubscriptionValue]
 type Timer = Record[TimerValue]
 type Variable = Record[VariableValue]
 
 type NamedValueType interface {
 	ValueType() ValueType
+}
+
+type DeploymentValue struct {
+	Resources                    []Resource                     `json:"resources"`
+	ProcessMetadata              []ProcessMetadata              `json:"processMetadata"`
+	DecisionRequirementsMetadata []DecisionRequirementsMetadata `json:"decisionRequirementsMetadata"`
+	DecisionMetadata             []DecisionMetadata             `json:"decisionMetadata"`
+}
+
+func (DeploymentValue) ValueType() ValueType {
+	return ValueTypeDeployment
+}
+
+type DeploymentDistributionValue struct {
+	PartitionID int64 `json:"partitionId"`
+}
+
+func (DeploymentDistributionValue) ValueType() ValueType {
+	return ValueTypeDeploymentDistribution
+}
+
+type ErrorValue struct {
+	ExceptionMessage   string `json:"exceptionMessage"`
+	Stacktrace         string `json:"stacktrace"`
+	ErrorEventPosition int64  `json:"errorEventPosition"`
+	ProcessInstanceKey int64  `json:"processInstanceKey"`
+}
+
+func (ErrorValue) ValueType() ValueType {
+	return ValueTypeError
+}
+
+type IncidentValue struct {
+	ErrorType            string `json:"errorType"`
+	ErrorMessage         string `json:"errorMessage"`
+	BpmnProcessID        string `json:"bpmnProcessId"`
+	ProcessInstanceKey   int64  `json:"processInstanceKey"`
+	ElementID            string `json:"elementId"`
+	ElementInstanceKey   int64  `json:"elementInstanceKey"`
+	JobKey               int64  `json:"jobKey"`
+	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
+	VariableScopeKey     int64  `json:"variableScopeKey"`
+}
+
+func (IncidentValue) ValueType() ValueType {
+	return ValueTypeIncident
 }
 
 type JobValue struct {
@@ -223,15 +269,13 @@ func (JobValue) ValueType() ValueType {
 }
 
 type JobBatchValue struct {
-	Truncated         bool  `json:"truncated"`
-	MaxJobsToActivate int64 `json:"maxJobsToActivate"`
-	// TODO: what is the inner type
-	Jobs    []any  `json:"jobs"`
-	Type    string `json:"type"`
-	Timeout int64  `json:"timeout"`
-	Worker  string `json:"worker"`
-	// TODO: what is the inner type
-	JobKeys []any `json:"jobKeys"`
+	Truncated         bool    `json:"truncated"`
+	MaxJobsToActivate int64   `json:"maxJobsToActivate"`
+	Jobs              []Job   `json:"jobs"`
+	Type              string  `json:"type"`
+	Timeout           int64   `json:"timeout"`
+	Worker            string  `json:"worker"`
+	JobKeys           []int64 `json:"jobKeys"`
 }
 
 func (JobBatchValue) ValueType() ValueType {
@@ -251,6 +295,21 @@ func (MessageValue) ValueType() ValueType {
 	return ValueTypeMessage
 }
 
+type MessageStartEventSubscriptionValue struct {
+	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
+	StartEventID         string         `json:"startEventId"`
+	MessageName          string         `json:"messageName"`
+	BpmnProcessID        string         `json:"bpmnProcessId"`
+	CorrelationKey       string         `json:"correlationKey"`
+	MessageKey           int64          `json:"messageKey"`
+	ProcessInstanceKey   int64          `json:"processInstanceKey"`
+	Variables            map[string]any `json:"variables"`
+}
+
+func (MessageStartEventSubscriptionValue) ValueType() ValueType {
+	return ValueTypeMessageStartEventSubscription
+}
+
 type MessageSubscriptionValue struct {
 	ProcessInstanceKey int64          `json:"processInstanceKey"`
 	ElementInstanceKey int64          `json:"elementInstanceKey"`
@@ -264,6 +323,19 @@ type MessageSubscriptionValue struct {
 
 func (MessageSubscriptionValue) ValueType() ValueType {
 	return ValueTypeMessageSubscription
+}
+
+type ProcessValue struct {
+	BpmnProcessID        string `json:"bpmnProcessId"`
+	Version              int64  `json:"version"`
+	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
+	ResourceName         string `json:"resourceName"`
+	Checksum             []byte `json:"checksum"`
+	Resource             []byte `json:"resource"`
+}
+
+func (ProcessValue) ValueType() ValueType {
+	return ValueTypeProcess
 }
 
 type ProcessEventValue struct {
@@ -293,6 +365,18 @@ type ProcessInstanceValue struct {
 
 func (ProcessInstanceValue) ValueType() ValueType {
 	return ValueTypeProcessInstance
+}
+
+type ProcessInstanceResultValue struct {
+	BpmnProcessID        string         `json:"bpmnProcessId"`
+	ProcessDefinitionKey int64          `json:"processDefinitionKey"`
+	ProcessInstanceKey   int64          `json:"processInstanceKey"`
+	Variables            map[string]any `json:"variables"`
+	Version              int64          `json:"version"`
+}
+
+func (ProcessInstanceResultValue) ValueType() ValueType {
+	return ValueTypeProcessInstanceResult
 }
 
 type ProcessMessageSubscriptionValue struct {
@@ -335,4 +419,41 @@ type VariableValue struct {
 
 func (VariableValue) ValueType() ValueType {
 	return ValueTypeVariable
+}
+
+// Detail types for DeploymentValue
+
+type Resource struct {
+	Resource     []byte `json:"resource"`
+	ResourceName string `json:"resourceName"`
+}
+
+type ProcessMetadata struct {
+	BpmnProcessID        string `json:"bpmnProcessId"`
+	Version              int64  `json:"version"`
+	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
+	ResourceName         string `json:"resourceName"`
+	Checksum             []byte `json:"checksum"`
+	IsDuplicate          bool   `json:"isDuplicate"`
+}
+
+type DecisionRequirementsMetadata struct {
+	DecisionRequirementsID      string `json:"decisionRequirementsId"`
+	DecisionRequirementsName    string `json:"decisionRequirementsName"`
+	DecisionRequirementsVersion int64  `json:"decisionRequirementsVersion"`
+	DecisionRequirementsKey     int64  `json:"decisionRequirementsKey"`
+	Namespace                   string `json:"namespace"`
+	ResourceName                string `json:"resourceName"`
+	Checksum                    []byte `json:"checksum"`
+	IsDuplicate                 bool   `json:"isDuplicate"`
+}
+
+type DecisionMetadata struct {
+	DecisionID              string `json:"decisionId"`
+	Version                 int64  `json:"version"`
+	DecisionKey             int64  `json:"decisionKey"`
+	DecisionName            string `json:"decisionName"`
+	DecisionRequirementsID  string `json:"decisionRequirementsId"`
+	DecisionRequirementsKey int64  `json:"decisionRequirementsKey"`
+	IsDuplicate             bool   `json:"isDuplicate"`
 }
