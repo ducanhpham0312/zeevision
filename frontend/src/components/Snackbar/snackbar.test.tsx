@@ -36,7 +36,7 @@ describe("Snackbar Component", () => {
   it("render correctly", () => {
     const { asFragment } = render(<Snackbar />);
     expect(asFragment()).toMatchSnapshot();
-  })
+  });
 
   it("renders and displays the message and title", () => {
     const { getByText } = render(<Snackbar />);
