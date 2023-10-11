@@ -1,7 +1,7 @@
 import { act, fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Snackbar } from "./Snackbar";
-import { SnackMessageType } from "../../contexts/useUIStore";
+import { SnackMessageType, useUIStore } from "../../contexts/useUIStore";
 
 const mockCloseSnackFunction = jest.fn();
 
@@ -25,9 +25,7 @@ describe("Snackbar Component", () => {
   beforeEach(() => {
     mockCloseSnackFunction.mockClear();
     // Reset the mock implementation before each test
-
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    require("../../contexts/useUIStore").useUIStore.mockImplementation(() => ({
+    jest.mocked(useUIStore).mockImplementation(() => ({
       snackbarContent: getSnackbarContentByType("success"),
       closeSnackBar: mockCloseSnackFunction,
     }));
