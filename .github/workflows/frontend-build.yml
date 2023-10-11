@@ -36,10 +36,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Node.js and dependencies
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run ESLint (check)
         run: npm run lint
@@ -58,10 +61,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Node.js and dependencies
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      - name: Install dependencies
+        run: npm install
+  
       - name: Run unit tests
         run: npm test
