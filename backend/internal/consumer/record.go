@@ -244,9 +244,9 @@ type NamedValueType interface {
 // Deployment record's 'value' field.
 type DeploymentValue struct {
 	Resources                    []DeploymentValueResource                     `json:"resources"`
-	ProcessMetadata              []DeploymentValueProcessMetadata              `json:"processMetadata"`
+	ProcessesMetadata            []DeploymentValueProcessesMetadata            `json:"processesMetadata"`
 	DecisionRequirementsMetadata []DeploymentValueDecisionRequirementsMetadata `json:"decisionRequirementsMetadata"`
-	DecisionMetadata             []DeploymentValueDecisionMetadata             `json:"decisionMetadata"`
+	DecisionsMetadata            []DeploymentValueDecisionsMetadata            `json:"decisionsMetadata"`
 }
 
 func (DeploymentValue) ValueType() ValueType {
@@ -487,13 +487,13 @@ type DeploymentValueResource struct {
 	ResourceName string `json:"resourceName"`
 }
 
-type DeploymentValueProcessMetadata struct {
+type DeploymentValueProcessesMetadata struct {
 	BpmnProcessID        string `json:"bpmnProcessId"`
 	Version              int64  `json:"version"`
 	ProcessDefinitionKey int64  `json:"processDefinitionKey"`
 	ResourceName         string `json:"resourceName"`
 	Checksum             []byte `json:"checksum"`
-	IsDuplicate          bool   `json:"isDuplicate"`
+	Duplicate            bool   `json:"duplicate"`
 }
 
 type DeploymentValueDecisionRequirementsMetadata struct {
@@ -504,15 +504,15 @@ type DeploymentValueDecisionRequirementsMetadata struct {
 	Namespace                   string `json:"namespace"`
 	ResourceName                string `json:"resourceName"`
 	Checksum                    []byte `json:"checksum"`
-	IsDuplicate                 bool   `json:"isDuplicate"`
+	Duplicate                   bool   `json:"duplicate"`
 }
 
-type DeploymentValueDecisionMetadata struct {
+type DeploymentValueDecisionsMetadata struct {
 	DecisionID              string `json:"decisionId"`
 	Version                 int64  `json:"version"`
 	DecisionKey             int64  `json:"decisionKey"`
 	DecisionName            string `json:"decisionName"`
 	DecisionRequirementsID  string `json:"decisionRequirementsId"`
 	DecisionRequirementsKey int64  `json:"decisionRequirementsKey"`
-	IsDuplicate             bool   `json:"isDuplicate"`
+	Duplicate               bool   `json:"duplicate"`
 }
