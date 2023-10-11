@@ -6,8 +6,49 @@ import ErrorIcon from "@mui/icons-material/Error";
 import CloseIcon from "@mui/icons-material/Close";
 import { Snackbar as SnackbarMUI } from "@mui/base/Snackbar";
 import { PRIMARY } from "../../theme/palette";
-import { useUIStore } from "../../contexts/useUIStore";
+import { SnackMessageType, useUIStore } from "../../contexts/useUIStore";
 import { SnackbarCloseReason } from "@mui/base";
+
+type TransitionStatus =
+  | "entering"
+  | "entered"
+  | "exiting"
+  | "exited"
+  | "unmounted";
+
+interface SnackbarContentProps {
+  /**
+   * The message to be displayed within the snackbar.
+   */
+  message: SnackMessageType["message"];
+  /**
+   * The title of the snackbar.
+   */
+  title: SnackMessageType["title"];
+  /**
+   * The type of the snackbar which determines its appearance and icon.
+   * For example, 'error' or 'success'.
+   */
+  type: SnackMessageType["type"];
+  /**
+   * The status of the transition states which affect snackbar visibility and positioning.
+   */
+  status: TransitionStatus;
+  /**
+   * A mutable ref object which is used to manage the component's
+   * render cycle and avoid potential issues during transition phases.
+   */
+  nodeRef?: React.MutableRefObject<null>;
+  /**
+   * A function that handles the closing of the snackbar.
+   * It can be triggered by a user action (e.g., clicking a button)
+   * or programmatically, depending on the implementation.
+   *
+   * @param _: Event or null - The triggering event or null if closed programmatically.
+   * @param reason: SnackbarCloseReason - Describes why the snackbar is being closed.
+   */
+  handleClose: (_: Event | null, reason: SnackbarCloseReason) => void;
+}
 
 export function Snackbar() {
   const { snackbarContent, closeSnackBar } = useUIStore();
@@ -65,53 +106,71 @@ export function Snackbar() {
       >
         {(status) => (
           <SnackbarContent
-            style={{
-              transform: positioningStyles[status],
-              transition: "transform 300ms ease",
-              alignContent: "start",
-            }}
-            ref={nodeRef}
-          >
-            {type === "success" ? (
-              <CheckRoundedIcon
-                className="success-icon"
-                sx={{
-                  color: PRIMARY[800],
-                  flexShrink: 0,
-                  width: "1.25rem",
-                  height: "1.5rem",
-                }}
-              />
-            ) : (
-              <ErrorIcon
-                className="error-icon"
-                sx={{
-                  color: "red",
-                  flexShrink: 0,
-                  width: "1.25rem",
-                  height: "1.5rem",
-                }}
-              />
-            )}
-            <div className="snackbar-message">
-              <p className="snackbar-title">{title}</p>
-              <p className="snackbar-description">{message}</p>
-            </div>
-
-            <button
-              className="close-button"
-              style={{ all: "unset", height: "24px" }}
-              onClick={handleClose as () => void}
-            >
-              <CloseIcon
-                sx={{ fontSize: "20px" }}
-                className="snackbar-close-icon"
-              />
-            </button>
-          </SnackbarContent>
+            type={type}
+            title={title}
+            message={message}
+            status={status}
+            handleClose={handleClose}
+            nodeRef={nodeRef}
+          />
         )}
       </Transition>
     </StyledSnackbar>
+  );
+}
+
+export function SnackbarContent({
+  type,
+  status,
+  title,
+  message,
+  handleClose,
+  nodeRef,
+}: SnackbarContentProps) {
+  return (
+    <StyledSnackbarContent
+      type={type}
+      style={{
+        transform: positioningStyles[status],
+        transition: "transform 300ms ease",
+        alignContent: "start",
+      }}
+      ref={nodeRef}
+    >
+      {type === "success" ? (
+        <CheckRoundedIcon
+          className="success-icon"
+          sx={{
+            color: PRIMARY[800],
+            flexShrink: 0,
+            width: "1.25rem",
+            height: "1.5rem",
+          }}
+        />
+      ) : (
+        <ErrorIcon
+          className="error-icon"
+          sx={{
+            color: "red",
+            flexShrink: 0,
+            width: "1.25rem",
+            height: "1.5rem",
+          }}
+        />
+      )}
+      <div className="snackbar-message">
+        <p className="snackbar-title">{title}</p>
+        <p className="snackbar-description">{message}</p>
+      </div>
+
+      <button
+        className="close-button"
+        style={{ all: "unset", height: "24px" }}
+        onClick={handleClose as () => void}
+      >
+        <CloseIcon sx={{ fontSize: "20px" }} className="snackbar-close-icon" />
+      </button>
+    </StyledSnackbarContent>
   );
 }
 
@@ -138,14 +197,14 @@ const StyledSnackbar = styled(SnackbarMUI)`
   min-width: 300px;
 `;
 
-const SnackbarContent = styled("div")(
-  () => `
+const StyledSnackbarContent = styled("div")(
+  ({ type }: { type: SnackMessageType["type"] }) => `
   display: flex;
   gap: 8px;
   overflow: hidden;
   background-color: ${PRIMARY[50]};
-  border-radius: 8px;
-  border: 1px solid ${PRIMARY[300]};
+  border-radius: 4px;
+  border: 1px solid ${type === "error" ? "red" : PRIMARY[300]};
   box-shadow: ${`0 2px 16px ${grey[200]}`};
   padding: 0.75rem;
   color: ${grey[900]};
