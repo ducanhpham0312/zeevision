@@ -16,14 +16,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Node.js and dependencies
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
       - name: Install dependencies and build
-        run: npm install
-             npm run build
+        run: | 
+            npm install
+            npm run build
 
   lint:
     runs-on: ubuntu-latest
