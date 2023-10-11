@@ -22,7 +22,7 @@ jobs:
           node-version: 18
 
       - name: Install dependencies and build
-        run: | 
+        run: |
             npm install
             npm run build
 
