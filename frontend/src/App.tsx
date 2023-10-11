@@ -6,11 +6,13 @@ import IncidentsPage from "./pages/IncidentsPage";
 import ErrorsPage from "./pages/ErrorsPage";
 import MessagesPage from "./pages/MessagesPage";
 import JobsPage from "./pages/JobsPage";
+import { Snackbar } from "./components/Snackbar";
 import { useEffect } from "react";
 
 const Layout = () => (
   <>
     <Navbar />
+    <Snackbar />
     <div style={{ marginTop: "70px" }}>
       <Outlet />
     </div>
