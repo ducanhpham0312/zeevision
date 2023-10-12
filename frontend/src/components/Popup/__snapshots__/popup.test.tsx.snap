@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Popup Component does not render when closed 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
+exports[`Popup Component renders correctly when open 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;

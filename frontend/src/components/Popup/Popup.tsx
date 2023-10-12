@@ -6,11 +6,23 @@ import React, { MouseEventHandler, forwardRef } from "react";
 import { Button } from "../Button";
 
 export interface PopupProps extends Omit<ModalProps, "children"> {
+  /**
+   * The title displayed at the top of the popup.
+   */
   title: string;
+
+  /**
+   *  Elements or components displayed inside the popup.
+   */
   children: React.ReactNode[];
+
+  /**
+   *  Determines if the popup is visible.
+   */
+  open: boolean;
 }
 
-export const Popup: React.FC<PopupProps> = ({ title, children, ...props }) => {
+export function Popup({ title, children, ...props }: PopupProps) {
   return (
     <div>
       <StyledModal
@@ -32,12 +44,12 @@ export const Popup: React.FC<PopupProps> = ({ title, children, ...props }) => {
       </StyledModal>
     </div>
   );
-};
+}
 
 interface FadeProps {
   children: React.ReactElement;
   in?: boolean;
-  onClick?: MouseEventHandler<HTMLDivElement> | undefined;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
   onExited?: (node: HTMLElement, isAppearing: boolean) => void;
 }
