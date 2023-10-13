@@ -6,7 +6,7 @@ on:
   push:
     branches: ["master", "74-ci-optimization"]
     paths-ignore:
-      - 'backend/**'
+      - 'frontend/**'
   pull_request:
     branches: ["master"]
 
