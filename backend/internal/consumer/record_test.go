@@ -52,7 +52,7 @@ var expectedJobRecord = Job{
 		ElementInstanceKey:       31525197429944928,
 		ElementID:                "SomeElement",
 		ErrorMessage:             "",
-		CustomHeaders:            map[string]any{},
+		CustomHeaders:            map[string]string{},
 		BpmnProcessID:            "SomeBPMN",
 		Variables:                map[string]any{},
 		Type:                     "someType",

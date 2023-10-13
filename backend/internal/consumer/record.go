@@ -304,22 +304,22 @@ func (IncidentValue) ValueType() ValueType {
 
 // Job record's 'value' field.
 type JobValue struct {
-	Deadline                 int64          `json:"deadline"`
-	ProcessInstanceKey       int64          `json:"processInstanceKey"`
-	Retries                  int64          `json:"retries"`
-	RetryBackoff             int64          `json:"retryBackoff"`
-	RecurringTime            int64          `json:"recurringTime"`
-	ProcessDefinitionVersion int64          `json:"processDefinitionVersion"`
-	ProcessDefinitionKey     int64          `json:"processDefinitionKey"`
-	ElementInstanceKey       int64          `json:"elementInstanceKey"`
-	ElementID                string         `json:"elementId"`
-	ErrorMessage             string         `json:"errorMessage"`
-	CustomHeaders            map[string]any `json:"customHeaders"`
-	BpmnProcessID            string         `json:"bpmnProcessId"`
-	Variables                map[string]any `json:"variables"`
-	Type                     string         `json:"type"`
-	ErrorCode                string         `json:"errorCode"`
-	Worker                   string         `json:"worker"`
+	Deadline                 int64             `json:"deadline"`
+	ProcessInstanceKey       int64             `json:"processInstanceKey"`
+	Retries                  int64             `json:"retries"`
+	RetryBackoff             int64             `json:"retryBackoff"`
+	RecurringTime            int64             `json:"recurringTime"`
+	ProcessDefinitionVersion int64             `json:"processDefinitionVersion"`
+	ProcessDefinitionKey     int64             `json:"processDefinitionKey"`
+	ElementInstanceKey       int64             `json:"elementInstanceKey"`
+	ElementID                string            `json:"elementId"`
+	ErrorMessage             string            `json:"errorMessage"`
+	CustomHeaders            map[string]string `json:"customHeaders"`
+	BpmnProcessID            string            `json:"bpmnProcessId"`
+	Variables                map[string]any    `json:"variables"`
+	Type                     string            `json:"type"`
+	ErrorCode                string            `json:"errorCode"`
+	Worker                   string            `json:"worker"`
 }
 
 func (JobValue) ValueType() ValueType {
