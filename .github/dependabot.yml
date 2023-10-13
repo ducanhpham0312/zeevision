@@ -20,7 +20,7 @@ updates:
       - "dependabot"
       - "go deps"
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/frontend"
     schedule:
       interval: "weekly"
       day: "sunday"
