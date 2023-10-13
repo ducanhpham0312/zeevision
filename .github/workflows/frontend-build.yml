@@ -1,6 +1,6 @@
 ---
 name: Frontend
-
+ 
 # yamllint disable-line rule:truthy
 on:
   push:
