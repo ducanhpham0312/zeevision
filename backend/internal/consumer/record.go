@@ -204,7 +204,6 @@ func WithTypedValue[V NamedValueType](untyped UntypedRecord) (Record[V], error) 
 
 	if untyped.ValueType != targetValueType {
 		return Record[V]{}, fmt.Errorf("record: cannot convert '%s' into '%s'", untyped.ValueType, targetValueType)
-
 	}
 
 	if err := json.Unmarshal(untyped.Value, &value); err != nil {
