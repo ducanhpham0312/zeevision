@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { BpmnViewer } from "../components/BpmnViewer";
+import { Button } from "../components/Button";
+import { useUIStore } from "../contexts/useUIStore";
 
 const bpmnImportFunctionList = [
   () => import("../bpmn/money-loan.bpmn"),
@@ -30,9 +32,25 @@ export default function ProcessesPage() {
     );
   }, []);
 
+  const { setSnackbarContent } = useUIStore();
+
+  const handleClick = (type: "success" | "error") => {
+    setSnackbarContent({
+      title: "This is a test",
+      message: "Everything was sent to the desired address.",
+      type,
+    });
+  };
+
   return (
     <>
       <h1>ProcessesPage</h1>
+
+      <Button onClick={() => handleClick("success")}>
+        Test success snackbar
+      </Button>
+      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
+
       <div style={{ gap: "20px" }}>
         {bpmnStringList.map((bpmn, i) => (
           <BpmnViewer key={i} width={400} bpmnString={bpmn} />
