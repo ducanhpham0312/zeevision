@@ -11,7 +11,7 @@ updates:
       - "dependabot"
       - "gha deps"
   - package-ecosystem: "gomod"
-    directory: "/"
+    directory: "/backend"
     schedule:
       interval: "weekly"
       day: "sunday"
