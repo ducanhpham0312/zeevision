@@ -5,11 +5,25 @@ services:
   backend:
     build:
       context: "backend/"
-      dockerfile: "Dockerfile"
+      dockerfile: Dockerfile
     image: "zeevision-backend:latest"
     container_name: "zeevision-backend"
     networks:
       - zeevision_network
+
+  frontend:
+    build:
+      context: "frontend/"
+      dockerfile: Dockerfile
+    image: "zeevision-frontend:latest"
+    container_name: "zeevision-frontend"
+    networks:
+      - zeevision_network
+    ports:
+      - "8080:8080"
+    # TODO: remove this when we have retry logic in the frontend
+    depends_on:
+      - backend
 
 networks:
   zeevision_network:
