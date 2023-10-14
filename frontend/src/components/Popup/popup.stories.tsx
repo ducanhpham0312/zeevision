@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../Button";
 import { Popup, PopupAction, PopupContent } from "./Popup";
 import { useState } from "react";
+import mockdata from "./mockdata.json";
 
 const meta = {
   title: "Assets/Popup",
@@ -46,54 +47,18 @@ const ButtonWithHooks = ({ text }: { text?: Array<string> }) => {
 
 export const Primary: Story = {
   args: {
-    open: true,
-    title: "Deploy a Process",
-    children: [],
+    open: mockdata.primary.open,
+    title: mockdata.primary.title,
+    children: mockdata.primary.children,
   },
   render: () => <ButtonWithHooks />,
 };
 
 export const Scrollable: Story = {
   args: {
-    open: true,
-    title: "Deploy a Process",
-    children: [],
+    open: mockdata.scrollable.open,
+    title: mockdata.scrollable.title,
+    children: mockdata.scrollable.children,
   },
-  render: () => (
-    <ButtonWithHooks
-      text={[
-        "Cras mattis consectetur purus sit amet fermentum.",
-        "Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
-        "Morbi leo risus, porta ac consectetur ac, vestibulum at eros.",
-        "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
-      ]}
-    />
-  ),
+  render: () => <ButtonWithHooks text={mockdata.scrollable.children} />,
 };
-// export const Scrollable: Story = {
-//   args: {
-//     open: true,
-//     title: "Deploy a Process",
-//     children: [],
-//   },
-//   render: (args) => (
-//     <Popup {...args}>
-//       <PopupContent>
-//         <div>
-//           {[...new Array(50)]
-//             .map(
-//               () => `Cras mattis consectetur purus sit amet fermentum.
-// Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-// Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-// Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-//             )
-//             .join("\n")}
-//         </div>
-//       </PopupContent>
-//       <PopupAction>
-//         <Button>Cancel</Button>
-//         <Button variant="contained">Deploy process</Button>
-//       </PopupAction>
-//     </Popup>
-//   ),
-// };
