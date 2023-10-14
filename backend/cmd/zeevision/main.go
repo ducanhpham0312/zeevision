@@ -15,7 +15,9 @@ const DefaultPort = 8080
 // Entry point for the application.
 func main() {
 	msgChannel := make(chan []byte)
+
 	// Launch goroutine for consuming from specified topic and partition
+	// TODO: Lookup Kafka IP.
 	brokers := []string{"127.0.0.1:9092"}
 	go consumer.ConsumeStream(brokers, "zeebe-message", 0, msgChannel)
 
