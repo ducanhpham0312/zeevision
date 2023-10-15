@@ -23,19 +23,19 @@ func ConsumeStream(addrs []string, topic string, partition int32, msgChannel cha
 
 	defer func() {
 		if err := consumer.Close(); err != nil {
-			log.Fatalln(err)
+			log.Fatal("consumer close error:", err)
 		}
 	}()
 
 	partitionConsumer, err := consumer.ConsumePartition(
 		topic, partition, sarama.OffsetNewest)
 	if err != nil {
-		panic(err)
+		log.Fatal("consume partition error:", err)
 	}
 
 	defer func() {
 		if err := partitionConsumer.Close(); err != nil {
-			log.Fatalln(err)
+			log.Fatal("partition consumer close error:", err)
 		}
 	}()
 

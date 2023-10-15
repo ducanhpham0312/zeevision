@@ -10,6 +10,9 @@ services:
     container_name: "zeevision-backend"
     networks:
       - zeevision_network
+      - kafka_network
+    environment:
+      - "KAFKA_ADDR=kafka:9093"
 
   frontend:
     build:
@@ -21,10 +24,9 @@ services:
       - zeevision_network
     ports:
       - "8080:8080"
-    # TODO: remove this when we have retry logic in the frontend
-    depends_on:
-      - backend
 
 networks:
   zeevision_network:
     driver: bridge
+  kafka_network:
+    external: true
