@@ -33,26 +33,17 @@ exports[`Table Component renders horizontal table correctly 1`] = `
       aria-label="custom pagination table"
     >
       <tr>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             items
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             [
   {
@@ -70,126 +61,81 @@ exports[`Table Component renders horizontal table correctly 1`] = `
 ]
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             1696667765
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             Show History
           </pre>
         </td>
       </tr>
       <tr>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             isValid
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             true
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             1696667765
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             Show History
           </pre>
         </td>
       </tr>
       <tr>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             total
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             200
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             1696667765
           </pre>
         </td>
-        <td
-          align="left"
-          style="width: 160px;"
-        >
+        <td>
           <pre>
             Show History
           </pre>

@@ -21,7 +21,7 @@ export interface TableProps {
 }
 
 export function Table({ orientation, header, content }: TableProps) {
-  if (header.length === 0 || orientation === "") return;
+  if (header.length === 0 || orientation === "") return null;
   return (
     <StyledTable>
       {orientation === "horizontal" ? (
