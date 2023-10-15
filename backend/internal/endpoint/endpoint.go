@@ -14,6 +14,7 @@ import (
 type Config struct {
 	// The port used to host the server.
 	Port uint16
+	ZeebeMsgChannel chan []byte
 }
 
 // Endpoint represents a server that handles incoming requests.

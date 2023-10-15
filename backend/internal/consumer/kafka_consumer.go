@@ -7,7 +7,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-func ConsumeStream(addrs []string, topic string, partition int32, msgChannel chan []byte) {
+func ConsumeStream(addrs []string, topics []string, partition int32, msgChannel chan []byte) {
 	config := sarama.NewConfig()
 
 	// TODO(#120): Add robust retry logic and error recovery.
@@ -27,24 +27,32 @@ func ConsumeStream(addrs []string, topic string, partition int32, msgChannel cha
 		}
 	}()
 
-	partitionConsumer, err := consumer.ConsumePartition(
-		topic, partition, sarama.OffsetNewest)
-	if err != nil {
-		log.Fatal("consume partition error:", err)
+	partitionConsumers := []sarama.PartitionConsumer{}
+
+	for _, topic := range topics {
+		partitionConsumer, err := consumer.ConsumePartition(
+			topic, partition, sarama.OffsetNewest)
+
+		if err != nil {
+			log.Fatal("consume partition error:", err)
+		}
+
+		defer func() {
+			if err := partitionConsumer.Close(); err != nil {
+				log.Fatal("partition consumer close error:", err)
+			}
+		}()
+
+		partitionConsumers = append(partitionConsumers, partitionConsumer)
 	}
 
-	defer func() {
-		if err := partitionConsumer.Close(); err != nil {
-			log.Fatal("partition consumer close error:", err)
-		}
-	}()
-
-	consumed := 0
 	for {
-		msg := <-partitionConsumer.Messages()
-		log.Printf("Consumed message offset %d\n", msg.Offset)
-		log.Printf("value: %s\n", string(msg.Value))
-		consumed++
-		msgChannel <- msg.Value
+		// TODO: these should be separate goroutines
+		for _, partitionConsumer := range partitionConsumers {
+			msg := <-partitionConsumer.Messages()
+			log.Printf("Consumed message offset %d\n", msg.Offset)
+			log.Printf("value: %s\n", string(msg.Value))
+			msgChannel <- msg.Value
+		}
 	}
 }
