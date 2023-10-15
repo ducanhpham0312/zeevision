@@ -3,7 +3,6 @@
 exports[`Table Component renders horizontal table correctly 1`] = `
 <DocumentFragment>
   <table
-    aria-label="custom pagination table"
     class="css-wsrcxp"
   >
     <thead
@@ -344,7 +343,6 @@ exports[`Table Component renders horizontal table correctly 1`] = `
 exports[`Table Component renders vertical table correctly 1`] = `
 <DocumentFragment>
   <table
-    aria-label="custom pagination table"
     class="css-wsrcxp"
   >
     <tbody
