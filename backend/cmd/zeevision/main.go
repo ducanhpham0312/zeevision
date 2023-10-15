@@ -23,8 +23,6 @@ func main() {
 	}
 	log.Printf("Listening for Kafka at %s\n", kafkaAddr)
 
-	msgChannel := make(chan []byte)
-
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
 	topics := []string{"zeebe-deployment"}
@@ -33,7 +31,7 @@ func main() {
 
 	go func() {
 		for {
-			msg := <-msgChannel
+			msg := <-consumerConfig.GetChannel("zeebe-deployment")
 			fmt.Printf("Message received: %s\n", msg)
 		}
 	}()
