@@ -28,7 +28,8 @@ func main() {
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
 	topics := []string{"zeebe-deployment"}
-	go consumer.ConsumeStream(brokers, topics, 0, msgChannel)
+	consumerConfig := consumer.NewConsumerConfig(brokers, topics, 0)
+	go consumer.ConsumeStream(consumerConfig)
 
 	go func() {
 		for {

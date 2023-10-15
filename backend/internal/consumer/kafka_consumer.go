@@ -7,14 +7,46 @@ import (
 	"github.com/IBM/sarama"
 )
 
-func ConsumeStream(addrs []string, topics []string, partition int32, msgChannel chan []byte) {
+type ConsumerConfig struct {
+	brokers       []string
+	topicChannels map[string]chan []byte
+	partition     int32
+
+	topicConsumers map[string]sarama.PartitionConsumer
+}
+
+// GetChannel returns the message channel in config corresponding to topic.
+//
+// Returns the channel, or nil if no corresponding channel was found.
+func (config ConsumerConfig) GetChannel(topic string) chan []byte {
+	if channel, ok := config.topicChannels[topic]; ok {
+		return channel
+	}
+	return nil
+}
+
+func NewConsumerConfig(brokers, topics []string, partition int32) ConsumerConfig {
+	topicChannels := map[string]chan []byte{}
+	for _, topic := range topics {
+		topicChannels[topic] = make(chan []byte)
+	}
+	return ConsumerConfig{
+		brokers,
+		topicChannels,
+		partition,
+
+		map[string]sarama.PartitionConsumer{},
+	}
+}
+
+func ConsumeStream(consumerConfig ConsumerConfig) {
 	config := sarama.NewConfig()
 
 	// TODO(#120): Add robust retry logic and error recovery.
-	consumer, err := sarama.NewConsumer(addrs, config)
+	consumer, err := sarama.NewConsumer(consumerConfig.brokers, config)
 	for err != nil {
 		log.Printf("Error while creating consumer: %v", err)
-		consumer, err = sarama.NewConsumer(addrs, config)
+		consumer, err = sarama.NewConsumer(consumerConfig.brokers, config)
 
 		// Wait before retrying.
 		const WaitSeconds = 5
@@ -27,11 +59,9 @@ func ConsumeStream(addrs []string, topics []string, partition int32, msgChannel 
 		}
 	}()
 
-	partitionConsumers := []sarama.PartitionConsumer{}
-
-	for _, topic := range topics {
+	for topic, _ := range consumerConfig.topicChannels {
 		partitionConsumer, err := consumer.ConsumePartition(
-			topic, partition, sarama.OffsetNewest)
+			topic, consumerConfig.partition, sarama.OffsetNewest)
 
 		if err != nil {
 			log.Fatal("consume partition error:", err)
@@ -43,16 +73,16 @@ func ConsumeStream(addrs []string, topics []string, partition int32, msgChannel 
 			}
 		}()
 
-		partitionConsumers = append(partitionConsumers, partitionConsumer)
+		consumerConfig.topicConsumers[topic] = partitionConsumer
 	}
 
 	for {
 		// TODO: these should be separate goroutines
-		for _, partitionConsumer := range partitionConsumers {
+		for topic, partitionConsumer := range consumerConfig.topicConsumers {
 			msg := <-partitionConsumer.Messages()
 			log.Printf("Consumed message offset %d\n", msg.Offset)
 			log.Printf("value: %s\n", string(msg.Value))
-			msgChannel <- msg.Value
+			consumerConfig.GetChannel(topic) <- msg.Value
 		}
 	}
 }
