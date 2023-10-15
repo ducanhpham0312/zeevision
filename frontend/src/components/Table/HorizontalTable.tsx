@@ -47,7 +47,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         ).map((row, rowIdx) => (
           <tr key={rowIdx}>
             {row.map((cell, index) => (
-              <td key={index} style={{ width: 160 }} align="left">
+              <td key={index}>
                 <pre>
                   {typeof cell === "string" ? prettifyJson(cell) : cell}
                 </pre>
@@ -63,7 +63,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
       </tbody>
       <tfoot>
         <tr>
-          <CustomTablePagination
+          <StyledTablePagination
             rowsPerPageOptions={[
               ...Array(10).keys(),
               { label: "All", value: -1 },
@@ -104,7 +104,7 @@ const StyledHeader = styled("thead")`
   font-weight: bold;
 `;
 
-const CustomTablePagination = styled(TablePagination)`
+const StyledTablePagination = styled(TablePagination)`
   & .${classes.toolbar} {
     display: flex;
     flex-direction: column;
