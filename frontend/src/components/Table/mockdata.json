@@ -1,112 +1,112 @@
 {
-    "instances": {
-        "orientation": "vertical",
-        "alignment": "left",
-        "headers": [
-            "Instance key",
-            "BPMN process ID",
-            "Process key",
-            "State",
-            "Time"
-        ],
-        "content": [
-            [
-                2251799813984108,
-                "money-loan",
-                2251799813685249,
-                "ELEMENT_ACTIVATING",
-                1696667765
-            ],
-            [
-                2251799813984123,
-                "multi-instance-process",
-                2251799813685123,
-                "ELEMENT_ACTIVATED",
-                1696667123
-            ],
-            [
-                2251799813984456,
-                "multi-instance-process",
-                2251799813685234,
-                "ELEMENT_ACTIVATED",
-                1696667543
-            ],
-            [
-                2251799813984678,
-                "multi-instance-process",
-                2251799813685456,
-                "ELEMENT_ACTIVATED",
-                1696667753
-            ],
-            [
-                2251799813984789,
-                "multi-instance-process",
-                2251799813685789,
-                "ELEMENT_ACTIVATED",
-                1696667263
-            ]
-        ]
-    },
-    "instanceInfo": {
-        "orientation": "horizontal",
-        "alignment": "left",
-        "headers": [
-            "Instance key",
-            "BPMN process ID",
-            "Version",
-            "Process key",
-            "State",
-            "Start time",
-            "End time"
-        ],
-        "content": [
-            [
-                2251799813984108,
-                "money-loan",
-                1,
-                2251799813685249,
-                "ELEMENT_ACTIVATING",
-                1696667765,
-                1696667800
-            ]
-        ]
-    },
-    "instanceVariables": {
-        "orientation": "vertical",
-        "alignment": "center",
-        "headers": [
-            "Element ID",
-            "Variable name",
-            "Variable value",
-            "Flow Scope Key",
-            "Time created",
-            "Option"
-        ],
-        "content": [
-            [
-                "multi-instance-process",
-                "debt",
-                "10",
-                2251799813984108,
-                1696667765,
-                "Show History"
-            ],
-            [
-                "multi-instance-process",
-                "isValid",
-                "true",
-                2251799813984108,
-                1696667765,
-                "Show History"
-            ],
-            [
-                "multi-instance-process",
-                "total",
-                "200",
-                2251799813984108,
-                1696667765,
-                "Show History"
-            ]
-        ]
-    }
+  "instances": {
+    "orientation": "vertical",
+    "alignment": "left",
+    "headers": [
+      "Instance key",
+      "BPMN process ID",
+      "Process key",
+      "State",
+      "Time"
+    ],
+    "content": [
+      [
+        2251799813984108,
+        "money-loan",
+        2251799813685249,
+        "ELEMENT_ACTIVATING",
+        1696667765
+      ],
+      [
+        2251799813984123,
+        "multi-instance-process",
+        2251799813685123,
+        "ELEMENT_ACTIVATED",
+        1696667123
+      ],
+      [
+        2251799813984456,
+        "multi-instance-process",
+        2251799813685234,
+        "ELEMENT_ACTIVATED",
+        1696667543
+      ],
+      [
+        2251799813984678,
+        "multi-instance-process",
+        2251799813685456,
+        "ELEMENT_ACTIVATED",
+        1696667753
+      ],
+      [
+        2251799813984789,
+        "multi-instance-process",
+        2251799813685789,
+        "ELEMENT_ACTIVATED",
+        1696667263
+      ]
+    ]
+  },
+  "vertical": {
+    "orientation": "vertical",
+    "alignment": "left",
+    "headers": [
+      "Instance key",
+      "BPMN process ID",
+      "Version",
+      "Process key",
+      "State",
+      "Start time",
+      "End time"
+    ],
+    "content": [
+      [
+        2251799813984108,
+        "multi-instance-process",
+        1,
+        2251799813685249,
+        "ELEMENT_ACTIVATING",
+        1696667765,
+        1696667800
+      ]
+    ]
+  },
+  "horizontal": {
+    "orientation": "horizontal",
+    "alignment": "center",
+    "headers": [
+      "Element ID",
+      "Variable name",
+      "Variable value",
+      "Flow Scope Key",
+      "Time created",
+      "Option"
+    ],
+    "content": [
+      [
+        "multi-instance-process",
+        "items",
+        "[{\"id\":1,\"value\":10,\"inCart\":10,\"inStock\":20},{\"id\":2,\"value\":20,\"inCart\":2,\"inStock\":10}]",
+        2251799813984108,
+        1696667765,
+        "Show History"
+      ],
+      [
+        "multi-instance-process",
+        "isValid",
+        "true",
+        2251799813984108,
+        1696667765,
+        "Show History"
+      ],
+      [
+        "multi-instance-process",
+        "total",
+        "200",
+        2251799813984108,
+        1696667765,
+        "Show History"
+      ]
+    ]
+  }
 }

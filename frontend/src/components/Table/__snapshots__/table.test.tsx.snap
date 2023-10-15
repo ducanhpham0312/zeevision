@@ -1,0 +1,412 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table Component renders horizontal table correctly 1`] = `
+<DocumentFragment>
+  <table
+    aria-label="custom pagination table"
+    class="css-wsrcxp"
+  >
+    <thead
+      class="css-axxbb4"
+    >
+      <tr>
+        <th>
+          Element ID
+        </th>
+        <th>
+          Variable name
+        </th>
+        <th>
+          Variable value
+        </th>
+        <th>
+          Flow Scope Key
+        </th>
+        <th>
+          Time created
+        </th>
+        <th>
+          Option
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      aria-label="custom pagination table"
+    >
+      <tr>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            multi-instance-process
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            items
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            [
+  {
+    "id": 1,
+    "value": 10,
+    "inCart": 10,
+    "inStock": 20
+  },
+  {
+    "id": 2,
+    "value": 20,
+    "inCart": 2,
+    "inStock": 10
+  }
+]
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            2251799813984108
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            1696667765
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            multi-instance-process
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            isValid
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            true
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            2251799813984108
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            1696667765
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            multi-instance-process
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            total
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            200
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            2251799813984108
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            1696667765
+          </pre>
+        </td>
+        <td
+          align="left"
+          style="width: 160px;"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td
+          class="css-7ugj6v MuiTablePagination-root"
+          colspan="6"
+        >
+          <div
+            class="MuiTablePagination-toolbar"
+          >
+            <div
+              class="MuiTablePagination-spacer"
+            />
+            <p
+              class="MuiTablePagination-selectLabel"
+              id=":r1:"
+            >
+              Rows per page:
+            </p>
+            <select
+              aria-label="rows per page"
+              aria-labelledby=":r1: :r0:"
+              class="MuiTablePagination-select"
+              id=":r0:"
+            >
+              <option
+                class="MuiTablePagination-menuItem"
+                value="0"
+              >
+                0
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="1"
+              >
+                1
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="2"
+              >
+                2
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="3"
+              >
+                3
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="4"
+              >
+                4
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="5"
+              >
+                5
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="6"
+              >
+                6
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="7"
+              >
+                7
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="8"
+              >
+                8
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="9"
+              >
+                9
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="-1"
+              >
+                All
+              </option>
+            </select>
+            <p
+              class="MuiTablePagination-displayedRows"
+            >
+              1–3 of 3
+            </p>
+            <div
+              class="MuiTablePagination-actions"
+            >
+              <button
+                aria-label="Go to first page"
+                disabled=""
+                title="Go to first page"
+              >
+                <span>
+                  |⇽
+                </span>
+              </button>
+              <button
+                aria-label="Go to previous page"
+                disabled=""
+                title="Go to previous page"
+              >
+                <span>
+                  ⇽
+                </span>
+              </button>
+              <button
+                aria-label="Go to next page"
+                disabled=""
+                title="Go to next page"
+              >
+                <span>
+                  ⇾
+                </span>
+              </button>
+              <button
+                aria-label="Go to last page"
+                disabled=""
+                title="Go to last page"
+              >
+                <span>
+                  ⇾|
+                </span>
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</DocumentFragment>
+`;
+
+exports[`Table Component renders vertical table correctly 1`] = `
+<DocumentFragment>
+  <table
+    aria-label="custom pagination table"
+    class="css-wsrcxp"
+  >
+    <tbody
+      class="css-zcd58l"
+    >
+      <tr>
+        <th>
+          Instance key
+        </th>
+        <td>
+          2251799813984108
+        </td>
+      </tr>
+      <tr>
+        <th>
+          BPMN process ID
+        </th>
+        <td>
+          multi-instance-process
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Version
+        </th>
+        <td>
+          1
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Process key
+        </th>
+        <td>
+          2251799813685249
+        </td>
+      </tr>
+      <tr>
+        <th>
+          State
+        </th>
+        <td>
+          ELEMENT_ACTIVATING
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Start time
+        </th>
+        <td>
+          1696667765
+        </td>
+      </tr>
+      <tr>
+        <th>
+          End time
+        </th>
+        <td>
+          1696667800
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
