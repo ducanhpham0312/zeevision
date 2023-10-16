@@ -12,7 +12,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     concurrency:
-      group: "build-${{ github.workflow }}-${{ github.head_ref || github.run_id }}"
+      group: >-
+        build-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
       cancel-in-progress: true
 
     defaults:
@@ -36,7 +37,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     concurrency:
-      group: "lint-${{ github.workflow }}-${{ github.head_ref || github.run_id }}"
+      group: >-
+        lint-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
       cancel-in-progress: true
 
     defaults:
@@ -64,7 +66,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     concurrency:
-      group: "test-${{ github.workflow }}-${{ github.head_ref || github.run_id }}"
+      group: >-
+        test-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
       cancel-in-progress: true
 
     defaults:
