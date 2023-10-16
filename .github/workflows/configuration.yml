@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: >-
-        yaml-lint-${{ github.workflow }}
+        yml-lint-${{ github.workflow }}
         -${{ github.head_ref || github.run_id }}
       cancel-in-progress: true
 
