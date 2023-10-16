@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
 
     defaults:
       run:
@@ -27,11 +30,14 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-            npm install
-            npm run build
+          npm install
+          npm run build
 
   lint:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
 
     defaults:
       run:
@@ -57,6 +63,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
 
     defaults:
       run:
