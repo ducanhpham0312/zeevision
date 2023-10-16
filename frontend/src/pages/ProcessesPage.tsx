@@ -1,97 +1,61 @@
-import { ChangeEvent, useEffect, useRef } from "react";
-import { DragDropFile } from "../components/dragndrop/DragDropFile";
-import { StyledPopUpModal } from "../components/styled-component/StyledPopUpModal";
-import { useModalStore } from "../contexts/modalStore";
-import { styled } from "@mui/system";
+import { useEffect, useState } from "react";
+import { BpmnViewer } from "../components/BpmnViewer";
+import { Button } from "../components/Button";
+import { useUIStore } from "../contexts/useUIStore";
+
+const bpmnImportFunctionList = [
+  () => import("../bpmn/money-loan.bpmn"),
+  () => import("../bpmn/order-main.bpmn"),
+  () => import("../bpmn/multi-instance-process.bpmn"),
+  () => import("../bpmn/order-subprocess.bpmn"),
+];
 
 export default function ProcessesPage() {
-  const [isModalOpen, openModal, closeModal] = useModalStore((state) => [
-    state.isModalOpen,
-    state.openModal,
-    state.closeModal,
-  ]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [bpmnStringList, setBpmnStringList] = useState<string[]>(
+    new Array(bpmnImportFunctionList.length).fill("")
+  );
+
   useEffect(() => {
-    console.log("Modal state:", isModalOpen);
-  }, [isModalOpen]);
+    bpmnImportFunctionList.forEach((importFunction, i) =>
+      importFunction()
+        .then((module) => module.default)
+        .then((bpmnUrl) =>
+          fetch(bpmnUrl)
+            .then((response) => response.text())
+            .then((bpmn) => {
+              setBpmnStringList((prev) =>
+                prev.map((val, index) => (index !== i ? val : bpmn))
+              );
+            })
+            .catch(console.error)
+        )
+    );
+  }, []);
 
-  const handleFileUploadClick = () => {
-    openModal();
-    // click on file input
-    fileInputRef.current?.click();
-  };
+  const { setSnackbarContent } = useUIStore();
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-
-    if (files && files.length > 0 && files[0].name!.endsWith(".bpmn")) {
-      console.log("Selected file:", files[0].name);
-    }
+  const handleClick = (type: "success" | "error") => {
+    setSnackbarContent({
+      title: "This is a test",
+      message: "Everything was sent to the desired address.",
+      type,
+    });
   };
 
   return (
     <>
       <h1>ProcessesPage</h1>
-      <DragDropFile />
-      <TriggerButton type="button" onClick={handleFileUploadClick}>
-        Upload the file
-      </TriggerButton>
 
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
+      <Button onClick={() => handleClick("success")}>
+        Test success snackbar
+      </Button>
+      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
 
-      <StyledPopUpModal open={isModalOpen} onClose={closeModal}>
-        <h2>Modal Content Here</h2>
-      </StyledPopUpModal>
+      <div style={{ gap: "20px" }}>
+        {bpmnStringList.map((bpmn, i) => (
+          <BpmnViewer key={i} width={400} bpmnString={bpmn} />
+        ))}
+      </div>
     </>
   );
 }
-
-const blue = {
-  200: "#99CCF3",
-  400: "#3399FF",
-  500: "#007FFF",
-};
-
-const grey = {
-  50: "#f6f8fa",
-  100: "#eaeef2",
-  200: "#d0d7de",
-  300: "#afb8c1",
-  400: "#8c959f",
-  500: "#6e7781",
-  600: "#57606a",
-  700: "#424a53",
-  800: "#32383f",
-  900: "#24292f",
-};
-
-const TriggerButton = styled("button")(
-  ({ theme }) => `
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
-  border-radius: 12px;
-  padding: 6px 12px;
-  line-height: 1.5;
-  background: transparent;
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[200]};
-  color: ${theme.palette.mode === "dark" ? grey[100] : grey[900]};
-
-  &:hover {
-    background: ${theme.palette.mode === "dark" ? grey[800] : grey[50]};
-    border-color: ${theme.palette.mode === "dark" ? grey[600] : grey[300]};
-  }
-
-  &:focus-visible {
-    border-color: ${blue[400]};
-    outline: 3px solid ${theme.palette.mode === "dark" ? blue[500] : blue[200]};
-  }
-  `
-);

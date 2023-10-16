@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { StyledButton } from "../styled-component/StyledButton";
+import { Button } from "../Button";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const NavigationPath: { name: string; path: string }[] = [
@@ -29,7 +29,7 @@ const NavigationPath: { name: string; path: string }[] = [
   },
 ];
 
-function Navbar() {
+export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,7 +41,7 @@ function Navbar() {
       <Divider />
       <div style={{ display: "flex", gap: "10px" }}>
         {NavigationPath.map((nav) => (
-          <StyledButton
+          <Button
             active={location.pathname.includes(nav.path)}
             variant="text"
             size="large"
@@ -49,7 +49,7 @@ function Navbar() {
             key={nav.path}
           >
             {nav.name}
-          </StyledButton>
+          </Button>
         ))}
       </div>
     </NavbarComponent>
@@ -60,6 +60,8 @@ const NavbarComponent = styled("header")(
   () => `
   display: flex;
   position: fixed;
+  z-index: 1000;
+  background-color: white;
   width: 100%;
   padding: 0px 20px;
   box-sizing: border-box;
@@ -76,5 +78,3 @@ const Divider = styled("div")(
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 `
 );
-
-export default Navbar;
