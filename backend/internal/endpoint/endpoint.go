@@ -24,8 +24,9 @@ const (
 	WebsocketPath = "/ws"
 
 	// Environment variables used to configure the endpoint.
-	EnvVarAppPort = "APP_PORT"
-	EnvVarAPIPort = "API_PORT"
+	EnvVarAppPort = "ZEEVISION_APP_PORT"
+	EnvVarAPIPort = "ZEEVISION_API_PORT"
+	EnvVarProd    = "ZEEVISION_PROD"
 
 	// Default port values.
 	DefaultAppPort = 8080
@@ -38,6 +39,10 @@ type Config struct {
 	AppPort uint16
 	// The port used to host the API.
 	APIPort uint16
+	// Whether the endpoint is running in production mode.
+	// This defines if the endpoint should serve also the application
+	// files or not.
+	Production bool
 }
 
 // Endpoint represents a server that handles incoming requests.
@@ -52,9 +57,10 @@ type Endpoint struct {
 // APP_PORT and API_PORT respectively.
 func NewFromEnv() (*Endpoint, error) {
 	// Create default configuration.
-	conf := &Config{
-		AppPort: DefaultAppPort,
-		APIPort: DefaultAPIPort,
+	conf := Config{
+		AppPort:    DefaultAppPort,
+		APIPort:    DefaultAPIPort,
+		Production: false,
 	}
 
 	// Override configuration with environment variables.
@@ -76,14 +82,22 @@ func NewFromEnv() (*Endpoint, error) {
 		conf.AppPort = uint16(port)
 	}
 
+	if prod, ok := os.LookupEnv(EnvVarProd); ok && prod == "true" {
+		conf.Production = true
+	}
+
 	return New(conf)
 }
 
 // Create a new endpoint.
-func New(conf *Config) (*Endpoint, error) {
-	appServer, err := NewAppServer(conf.AppPort)
-	if err != nil {
-		return nil, err
+func New(conf Config) (*Endpoint, error) {
+	var appServer *http.Server = nil
+	if conf.Production {
+		var err error
+		appServer, err = NewAppServer(conf.AppPort)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	apiServer, err := NewAPIServer(conf.APIPort)
@@ -143,9 +157,11 @@ func NewAPIServer(port uint16) (*http.Server, error) {
 func (e *Endpoint) Run() error {
 	var g errgroup.Group
 
-	g.Go(func() error {
-		return e.appServer.ListenAndServe()
-	})
+	if e.appServer != nil {
+		g.Go(func() error {
+			return e.appServer.ListenAndServe()
+		})
+	}
 
 	g.Go(func() error {
 		return e.apiServer.ListenAndServe()

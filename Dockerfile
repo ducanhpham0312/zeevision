@@ -36,8 +36,10 @@ WORKDIR /app
 COPY --from=backend-builder /zeevision /usr/bin/zeevision
 COPY --from=frontend-builder /build/dist /app/static
 
-ENV ENDPOINT_PORT=8080
+ENV ZEEVISION_APP_PORT=8080
+ENV ZEEVISION_API_PORT=8081
+ENV ZEEVISION_PROD=true
 
-EXPOSE ${ENDPOINT_PORT}
+EXPOSE ${ZEEVISION_APP_PORT} ${ZEEVISION_API_PORT}
 
 CMD ["zeevision"]
