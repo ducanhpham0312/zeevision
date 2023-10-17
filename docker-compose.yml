@@ -5,28 +5,12 @@ services:
   backend:
     build:
       context: "backend/"
-      dockerfile: Dockerfile
+      dockerfile: "Dockerfile"
     image: "zeevision-backend:latest"
     container_name: "zeevision-backend"
     networks:
       - zeevision_network
-      - kafka_network
-    environment:
-      - "KAFKA_ADDR=kafka:9093"
-
-  frontend:
-    build:
-      context: "frontend/"
-      dockerfile: Dockerfile
-    image: "zeevision-frontend:latest"
-    container_name: "zeevision-frontend"
-    networks:
-      - zeevision_network
-    ports:
-      - "8080:8080"
 
 networks:
   zeevision_network:
     driver: bridge
-  kafka_network:
-    external: true

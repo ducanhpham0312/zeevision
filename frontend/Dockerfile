@@ -1,27 +1,22 @@
-## Dockerfile for Frontend ##
+## Dockerfile for Frontend (Development) ##
 
-# Use node as the builder image
-FROM node:18-alpine AS builder
+# Use an official Node.js runtime as a parent image
+FROM node:18
 
+# Set the working directory in the container to /app
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
 # Install project dependencies
 RUN npm install
 
-COPY . ./
+# Copy the entire project directory into the container
+COPY . .
 
-# Build the project
-RUN npm run build
+# Expose the port that development server runs on 
+EXPOSE 5173
 
-# Use nginx as the production image
-FROM nginx:1.25-alpine
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy the build output for serving
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-EXPOSE 8080
+# Define the command to start development server 
+CMD ["npm", "run", "dev" , "--", "--host"]
