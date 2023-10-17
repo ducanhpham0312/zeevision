@@ -8,13 +8,13 @@ on:
   pull_request:
     branches: ["master"]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    concurrency:
-      group: >-
-        build-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-      cancel-in-progress: true
 
     defaults:
       run:
@@ -36,10 +36,6 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    concurrency:
-      group: >-
-        lint-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-      cancel-in-progress: true
 
     defaults:
       run:
@@ -65,10 +61,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    concurrency:
-      group: >-
-        test-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-      cancel-in-progress: true
 
     defaults:
       run:
