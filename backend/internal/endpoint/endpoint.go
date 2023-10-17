@@ -31,6 +31,9 @@ const (
 	// Default port values.
 	DefaultAppPort = 8080
 	DefaultAPIPort = 8081
+
+	ServerReadTimeoutSecs  = 5
+	ServerWriteTimeoutSecs = 10
 )
 
 // Configuration used to create a new endpoint.
@@ -91,7 +94,7 @@ func NewFromEnv() (*Endpoint, error) {
 
 // Create a new endpoint.
 func New(conf Config) (*Endpoint, error) {
-	var appServer *http.Server = nil
+	var appServer *http.Server
 	if conf.Production {
 		var err error
 		appServer, err = NewAppServer(conf.AppPort)
@@ -123,8 +126,8 @@ func NewAppServer(port uint16) (*http.Server, error) {
 	return &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
 		Handler:      r,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
+		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
 	}, nil
 }
 
@@ -146,8 +149,8 @@ func NewAPIServer(port uint16) (*http.Server, error) {
 	return &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
 		Handler:      r,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
+		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
 	}, nil
 }
 
