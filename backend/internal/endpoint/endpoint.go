@@ -4,41 +4,136 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/mandrigin/gin-spa/spa"
+	"golang.org/x/sync/errgroup"
+)
+
+const (
+	// Path where the application is served.
+	AppPath = "/"
+	// Internal path where the application files are stored.
+	AppTargetPath = "./static"
+
+	// Path where the API is served.
+	WebsocketPath = "/ws"
+
+	// Environment variables used to configure the endpoint.
+	EnvVarAppPort = "APP_PORT"
+	EnvVarAPIPort = "API_PORT"
+
+	// Default port values.
+	DefaultAppPort = 8080
+	DefaultAPIPort = 8081
 )
 
 // Configuration used to create a new endpoint.
 type Config struct {
-	// The port used to host the server.
-	Port uint16
+	// The port used to host the application.
+	AppPort uint16
+	// The port used to host the API.
+	APIPort uint16
 }
 
 // Endpoint represents a server that handles incoming requests.
 type Endpoint struct {
-	router  *gin.Engine
-	address string
+	appServer *http.Server
+	apiServer *http.Server
+}
+
+// Create a new endpoint from environment variables.
+//
+// App and API ports can be configured by setting the environment variables
+// APP_PORT and API_PORT respectively.
+func NewFromEnv() (*Endpoint, error) {
+	// Create default configuration.
+	conf := &Config{
+		AppPort: DefaultAppPort,
+		APIPort: DefaultAPIPort,
+	}
+
+	// Override configuration with environment variables.
+	if port, ok := os.LookupEnv(EnvVarAPIPort); ok {
+		port, err := strconv.ParseUint(port, 10, 16)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		conf.APIPort = uint16(port)
+	}
+
+	if port, ok := os.LookupEnv(EnvVarAppPort); ok {
+		port, err := strconv.ParseUint(port, 10, 16)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		conf.AppPort = uint16(port)
+	}
+
+	return New(conf)
 }
 
 // Create a new endpoint.
 func New(conf *Config) (*Endpoint, error) {
-	router := gin.Default()
-	address := fmt.Sprintf("0.0.0.0:%d", conf.Port)
+	appServer, err := NewAppServer(conf.AppPort)
+	if err != nil {
+		return nil, err
+	}
+
+	apiServer, err := NewAPIServer(conf.APIPort)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Endpoint{
+		appServer: appServer,
+		apiServer: apiServer,
+	}, nil
+}
+
+// Create a new application server.
+func NewAppServer(port uint16) (*http.Server, error) {
+	r := gin.Default()
+
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+
+	r.Use(spa.Middleware(AppPath, AppTargetPath))
+
+	return &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      r,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}, nil
+}
+
+// Create a new API server.
+func NewAPIServer(port uint16) (*http.Server, error) {
+	r := gin.Default()
+
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+
+	// Ignore proxy headers.
+	_ = r.SetTrustedProxies(nil)
 
 	upgrader := newUpgrader()
-
-	router.GET("/ws", func(ctx *gin.Context) {
+	r.GET(WebsocketPath, func(ctx *gin.Context) {
 		websocketTunnel(ctx, upgrader)
 	})
 
-	// TODO: disable for now, investigate later.
-	_ = router.SetTrustedProxies(nil)
-
-	return &Endpoint{
-		router:  router,
-		address: address,
+	return &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      r,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}, nil
 }
 
@@ -46,7 +141,17 @@ func New(conf *Config) (*Endpoint, error) {
 //
 // This will block the current goroutine.
 func (e *Endpoint) Run() error {
-	return e.router.Run(e.address)
+	var g errgroup.Group
+
+	g.Go(func() error {
+		return e.appServer.ListenAndServe()
+	})
+
+	g.Go(func() error {
+		return e.apiServer.ListenAndServe()
+	})
+
+	return g.Wait()
 }
 
 // Handle websocket tunnel for each new connection.
@@ -79,7 +184,6 @@ func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
 // Create a new upgrader for creating the websocket connection.
 func newUpgrader() *websocket.Upgrader {
 	// Allow all origins.
-	// TODO: allow only the reverse proxy to connect.
 	checkOrigin := func(r *http.Request) bool {
 		return true
 	}
