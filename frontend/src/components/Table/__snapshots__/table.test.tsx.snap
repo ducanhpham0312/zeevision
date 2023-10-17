@@ -35,30 +35,113 @@ exports[`Table Component renders horizontal table correctly 1`] = `
       <tr>
         <td>
           <pre>
+            sixth-multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            amp
+          </pre>
+        </td>
+        <td>
+          <pre>
+            integer
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984642
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667164
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            new-multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            kmean
+          </pre>
+        </td>
+        <td>
+          <pre>
+            newValue
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984100
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667542
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            another-multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            anotherVariable
+          </pre>
+        </td>
+        <td>
+          <pre>
+            string
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984432
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667333
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
             multi-instance-process
           </pre>
         </td>
         <td>
           <pre>
-            items
+            total
           </pre>
         </td>
         <td>
           <pre>
-            [
-  {
-    "id": 1,
-    "value": 10,
-    "inCart": 10,
-    "inStock": 20
-  },
-  {
-    "id": 2,
-    "value": 20,
-    "inCart": 2,
-    "inStock": 10
-  }
-]
+            200
           </pre>
         </td>
         <td>
@@ -117,12 +200,25 @@ exports[`Table Component renders horizontal table correctly 1`] = `
         </td>
         <td>
           <pre>
-            total
+            items
           </pre>
         </td>
         <td>
           <pre>
-            200
+            [
+  {
+    "id": 1,
+    "value": 10,
+    "inCart": 10,
+    "inStock": 20
+  },
+  {
+    "id": 2,
+    "value": 20,
+    "inCart": 2,
+    "inStock": 10
+  }
+]
           </pre>
         </td>
         <td>
@@ -168,63 +264,39 @@ exports[`Table Component renders horizontal table correctly 1`] = `
             >
               <option
                 class="MuiTablePagination-menuItem"
-                value="0"
-              >
-                0
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="1"
-              >
-                1
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="2"
-              >
-                2
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="3"
-              >
-                3
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="4"
-              >
-                4
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
                 value="5"
               >
                 5
               </option>
               <option
                 class="MuiTablePagination-menuItem"
-                value="6"
+                value="10"
               >
-                6
+                10
               </option>
               <option
                 class="MuiTablePagination-menuItem"
-                value="7"
+                value="15"
               >
-                7
+                15
               </option>
               <option
                 class="MuiTablePagination-menuItem"
-                value="8"
+                value="20"
               >
-                8
+                20
               </option>
               <option
                 class="MuiTablePagination-menuItem"
-                value="9"
+                value="25"
               >
-                9
+                25
+              </option>
+              <option
+                class="MuiTablePagination-menuItem"
+                value="30"
+              >
+                30
               </option>
               <option
                 class="MuiTablePagination-menuItem"
@@ -236,7 +308,7 @@ exports[`Table Component renders horizontal table correctly 1`] = `
             <p
               class="MuiTablePagination-displayedRows"
             >
-              1–3 of 3
+              1–6 of 6
             </p>
             <div
               class="MuiTablePagination-actions"

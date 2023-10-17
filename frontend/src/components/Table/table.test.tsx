@@ -49,9 +49,7 @@ describe("Table Component", () => {
     expect(
       screen.getAllByText("multi-instance-process")[0]
     ).toBeInTheDocument();
-    expect(screen.getAllByText("multi-instance-process").length).toEqual(
-      horizontalContent.length
-    );
+    expect(screen.getAllByText("multi-instance-process").length).toEqual(3);
   });
 
   it("renders header and pagination in horizontal table when the content is empty", () => {
