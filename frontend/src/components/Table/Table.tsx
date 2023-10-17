@@ -17,7 +17,7 @@ export interface TableProps {
    * List of all content of the table. Each list member represents one row in horizontal
    * or one column in vertical orientation
    */
-  content?: (string | number)[][];
+  content: (string | number)[][];
 }
 
 export function Table({ orientation, header, content }: TableProps) {
