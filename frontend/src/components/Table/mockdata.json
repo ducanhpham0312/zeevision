@@ -106,6 +106,30 @@
         2251799813984108,
         1696667765,
         "Show History"
+      ],
+      [
+        "another-multi-instance-process",
+        "anotherVariable",
+        "string",
+        2251799813984432,
+        1696667333,
+        "Show History"
+      ],
+      [
+        "new-multi-instance-process",
+        "kmean",
+        "newValue",
+        2251799813984100,
+        1696667542,
+        "Show History"
+      ],
+      [
+        "sixth-multi-instance-process",
+        "amp",
+        "integer",
+        2251799813984642,
+        1696667164,
+        "Show History"
       ]
     ]
   }

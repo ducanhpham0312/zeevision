@@ -12,7 +12,38 @@ export interface HorizontalTableProps {
 
 export function HorizontalTable({ header, content }: HorizontalTableProps) {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [sortBy, setSortBy] = React.useState("");
+  const [sortOrder, setSortOrder] = React.useState("asc");
+  const [sortedContent, setSortedContent] =
+    React.useState<(string | number)[][]>(content);
+
+  const sortContent = React.useCallback(
+    (
+      content: (string | number)[][],
+      column: string,
+      order: string
+    ): (string | number)[][] => {
+      return content.slice().sort((a, b) => {
+        const comparison =
+          a[header.indexOf(column)] > b[header.indexOf(column)] ? 1 : -1;
+        return order === "desc" ? comparison * -1 : comparison;
+      });
+    },
+    [header]
+  );
+  React.useEffect(() => {
+    // Sort the content when sortBy or sortOrder changes
+    const sortedData = sortContent(content, sortBy, sortOrder);
+    setSortedContent(sortedData);
+  }, [content, sortBy, sortContent, sortOrder]);
+
+  const handleSort = (column: string): void => {
+    const newSortOrder =
+      column === sortBy && sortOrder === "asc" ? "desc" : "asc";
+    setSortBy(column);
+    setSortOrder(newSortOrder);
+  };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -36,14 +67,22 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
       <StyledHeader>
         <tr>
           {header.map((item) => (
-            <th key={item}>{item}</th>
+            <th key={item} onClick={() => handleSort(item)}>
+              {item}
+              {sortBy === item && (
+                <span>{sortOrder === "asc" ? " ▲" : " ▼"}</span>
+              )}
+            </th>
           ))}
         </tr>
       </StyledHeader>
       <tbody aria-label="custom pagination table">
         {(rowsPerPage > 0
-          ? content.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          : content
+          ? sortedContent.slice(
+              page * rowsPerPage,
+              page * rowsPerPage + rowsPerPage
+            )
+          : sortedContent
         ).map((row, rowIdx) => (
           <tr key={rowIdx}>
             {row.map((cell, index) => (
@@ -65,7 +104,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         <tr>
           <StyledTablePagination
             rowsPerPageOptions={[
-              ...Array(10).keys(),
+              ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
               { label: "All", value: -1 },
             ]}
             colSpan={header.length}
