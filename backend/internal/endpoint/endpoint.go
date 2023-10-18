@@ -70,7 +70,7 @@ func NewFromEnv() (*Endpoint, error) {
 	if port, ok := os.LookupEnv(EnvVarAPIPort); ok {
 		port, err := strconv.ParseUint(port, 10, 16)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		conf.APIPort = uint16(port)
@@ -79,7 +79,7 @@ func NewFromEnv() (*Endpoint, error) {
 	if port, ok := os.LookupEnv(EnvVarAppPort); ok {
 		port, err := strconv.ParseUint(port, 10, 16)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		conf.AppPort = uint16(port)
