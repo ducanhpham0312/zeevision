@@ -2,31 +2,21 @@
 version: "3"
 
 services:
-  backend:
-    build:
-      context: "backend/"
-      dockerfile: Dockerfile
-    image: "zeevision-backend:latest"
-    container_name: "zeevision-backend"
+  zeevision:
+    build: ./
+    image: "zeevision:latest"
+    container_name: zeevision
     networks:
-      - zeevision_network
       - kafka_network
     environment:
-      - "KAFKA_ADDR=kafka:9093"
-
-  frontend:
-    build:
-      context: "frontend/"
-      dockerfile: Dockerfile
-    image: "zeevision-frontend:latest"
-    container_name: "zeevision-frontend"
-    networks:
-      - zeevision_network
+      - ZEEVISION_APP_PORT=8080
+      - ZEEVISION_API_PORT=8081
+      - ZEEVISION_PROD=true
+      - "ZEEVISION_KAFKA_ADDR=kafka:9093"
     ports:
       - "8080:8080"
+      - "8081:8081"
 
 networks:
-  zeevision_network:
-    driver: bridge
   kafka_network:
     external: true

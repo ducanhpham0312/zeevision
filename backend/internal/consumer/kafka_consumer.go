@@ -2,7 +2,6 @@ package consumer
 
 import (
 	"log"
-	"time"
 
 	"github.com/IBM/sarama"
 )
@@ -10,32 +9,26 @@ import (
 func ConsumeStream(addrs []string, topic string, partition int32, msgChannel chan []byte) {
 	config := sarama.NewConfig()
 
-	// TODO(#120): Add robust retry logic and error recovery.
 	consumer, err := sarama.NewConsumer(addrs, config)
-	for err != nil {
-		log.Printf("Error while creating consumer: %v", err)
-		consumer, err = sarama.NewConsumer(addrs, config)
-
-		// Wait before retrying.
-		const WaitSeconds = 5
-		<-time.After(WaitSeconds * time.Second)
+	if err != nil {
+		panic(err)
 	}
 
 	defer func() {
 		if err := consumer.Close(); err != nil {
-			log.Fatal("consumer close error:", err)
+			log.Fatalln(err)
 		}
 	}()
 
 	partitionConsumer, err := consumer.ConsumePartition(
 		topic, partition, sarama.OffsetNewest)
 	if err != nil {
-		log.Fatal("consume partition error:", err)
+		panic(err)
 	}
 
 	defer func() {
 		if err := partitionConsumer.Close(); err != nil {
-			log.Fatal("partition consumer close error:", err)
+			log.Fatalln(err)
 		}
 	}()
 

@@ -4,30 +4,31 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/consumer"
 	"github.com/ducanhpham0312/zeevision/backend/internal/endpoint"
 )
 
-const DefaultWebsocketPort = 8080
-const DefaultKafkaAddr = "localhost:9092"
+const (
+	// Default Kafka address to use.
+	DefaultKafkaAddr = "kafka:9093"
+
+	// Environment variable used to configure the Kafka address.
+	EnvVarKafkaAddr = "ZEEVISION_KAFKA_ADDR"
+)
 
 // Entry point for the application.
 func main() {
-	// Lookup address for Kafka broker.
-	kafkaAddr, ok := os.LookupEnv("KAFKA_ADDR")
-	if !ok {
-		log.Println("KAFKA_ADDR not set; using default address")
-		kafkaAddr = DefaultKafkaAddr
+	// Get Kafka address from environment variable.
+	kafkaAddr := DefaultKafkaAddr
+	if envKafkaAddr, ok := os.LookupEnv(EnvVarKafkaAddr); ok {
+		kafkaAddr = envKafkaAddr
 	}
-	log.Printf("Listening for Kafka at %s\n", kafkaAddr)
 
 	msgChannel := make(chan []byte)
-
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
-	go consumer.ConsumeStream(brokers, "zeebe-deployment", 0, msgChannel)
+	go consumer.ConsumeStream(brokers, "zeebe-message", 0, msgChannel)
 
 	go func() {
 		for {
@@ -36,22 +37,7 @@ func main() {
 		}
 	}()
 
-	// Create default configuration.
-	conf := &endpoint.Config{
-		Port: DefaultWebsocketPort,
-	}
-
-	// Override configuration with environment variables.
-	if port, ok := os.LookupEnv("PORT"); ok {
-		port, err := strconv.ParseUint(port, 10, 16)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		conf.Port = uint16(port)
-	}
-
-	server, err := endpoint.New(conf)
+	server, err := endpoint.NewFromEnv()
 	if err != nil {
 		log.Fatal(err)
 	}
