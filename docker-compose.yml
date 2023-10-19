@@ -19,6 +19,8 @@ services:
   db:
     image: postgres
     restart: always
+    networks:
+      - kafka_network
     environment:
       POSTGRES_DB: database
       POSTGRES_USER: username
@@ -28,6 +30,19 @@ services:
       - ./db/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
     ports:
       - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    networks:
+      - kafka_network
+    environment:
+      PGADMIN_DEFAULT_EMAIL: email@example.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
 networks:
   kafka_network:
     external: true
