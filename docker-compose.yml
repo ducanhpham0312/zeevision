@@ -16,7 +16,18 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
-
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+    ports:
+      - "5432:5432"
 networks:
   kafka_network:
     external: true
