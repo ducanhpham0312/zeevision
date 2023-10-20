@@ -3,7 +3,6 @@ package consumer
 import (
 	"log"
 	"sync"
-	"time"
 
 	"github.com/IBM/sarama"
 )
@@ -27,15 +26,9 @@ type Consumer struct {
 func NewConsumer(brokers []string) (*Consumer, error) {
 	config := sarama.NewConfig()
 
-	// TODO(#120): Add robust retry logic and error recovery.
 	consumer, err := sarama.NewConsumer(brokers, config)
 	for err != nil {
-		log.Printf("Error while creating consumer: %v", err)
-		consumer, err = sarama.NewConsumer(brokers, config)
-
-		// Wait before retrying.
-		const WaitSeconds = 5
-		<-time.After(WaitSeconds * time.Second)
+		return nil, err
 	}
 
 	var wg sync.WaitGroup
