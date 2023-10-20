@@ -14,6 +14,7 @@ import (
 type Config struct {
 	// The port used to host the server.
 	Port uint16
+	// TODO: temporary solution to feed data from the consumer
 	ZeebeMsgChannel chan []byte
 }
 
@@ -31,7 +32,7 @@ func New(conf *Config) (*Endpoint, error) {
 	upgrader := newUpgrader()
 
 	router.GET("/ws", func(ctx *gin.Context) {
-		websocketTunnel(ctx, upgrader)
+		websocketTunnel(ctx, upgrader, conf.ZeebeMsgChannel)
 	})
 
 	// TODO: disable for now, investigate later.
@@ -51,7 +52,7 @@ func (e *Endpoint) Run() error {
 }
 
 // Handle websocket tunnel for each new connection.
-func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
+func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader, msgChannel chan []byte) {
 	writer, request := ctx.Writer, ctx.Request
 
 	conn, err := upgrader.Upgrade(writer, request, nil)
@@ -61,12 +62,9 @@ func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
 	}
 	defer conn.Close()
 
-	// Send sample message to client every second.
-	msgNum := 1
+	// Pipe out whatever data we receive from the kafka consumer
 	for {
-		msg := fmt.Sprintf("Hello, world! msg number: %d", msgNum)
-		msgNum++
-
+		msg := <-msgChannel
 		err := conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		if err != nil {
 			log.Println("write:", err)

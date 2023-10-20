@@ -2,87 +2,134 @@ package consumer
 
 import (
 	"log"
+	"sync"
 	"time"
 
 	"github.com/IBM/sarama"
 )
 
-type ConsumerConfig struct {
-	brokers       []string
-	topicChannels map[string]chan []byte
-	partition     int32
+type channelType chan []byte
 
-	topicConsumers map[string]sarama.PartitionConsumer
+// TODO: we likely need synchronisation on at least some of the methods of this
+// struct... or a restriction on calling any of them from outside the main
+// goroutine?
+type Consumer struct {
+	brokers []string
+	topics  []string
+
+	consumer      sarama.Consumer
+	topicChannels map[string]channelType
+
+	wg           *sync.WaitGroup
+	closeChannel chan bool
 }
 
-// GetChannel returns the message channel in config corresponding to topic.
-//
-// Returns the channel, or nil if no corresponding channel was found.
-func (config ConsumerConfig) GetChannel(topic string) chan []byte {
-	if channel, ok := config.topicChannels[topic]; ok {
-		return channel
-	}
-	return nil
-}
-
-func NewConsumerConfig(brokers, topics []string, partition int32) ConsumerConfig {
-	topicChannels := map[string]chan []byte{}
-	for _, topic := range topics {
-		topicChannels[topic] = make(chan []byte)
-	}
-	return ConsumerConfig{
-		brokers,
-		topicChannels,
-		partition,
-
-		map[string]sarama.PartitionConsumer{},
-	}
-}
-
-func ConsumeStream(consumerConfig ConsumerConfig) {
+func NewConsumer(brokers []string) (*Consumer, error) {
 	config := sarama.NewConfig()
 
 	// TODO(#120): Add robust retry logic and error recovery.
-	consumer, err := sarama.NewConsumer(consumerConfig.brokers, config)
+	consumer, err := sarama.NewConsumer(brokers, config)
 	for err != nil {
 		log.Printf("Error while creating consumer: %v", err)
-		consumer, err = sarama.NewConsumer(consumerConfig.brokers, config)
+		consumer, err = sarama.NewConsumer(brokers, config)
 
 		// Wait before retrying.
 		const WaitSeconds = 5
 		<-time.After(WaitSeconds * time.Second)
 	}
 
-	defer func() {
-		if err := consumer.Close(); err != nil {
-			log.Fatal("consumer close error:", err)
-		}
-	}()
+	var wg sync.WaitGroup
+	result := Consumer{
+		brokers: brokers,
+		topics:  []string{},
 
-	for topic, _ := range consumerConfig.topicChannels {
-		partitionConsumer, err := consumer.ConsumePartition(
-			topic, consumerConfig.partition, sarama.OffsetNewest)
+		consumer:      consumer,
+		topicChannels: map[string]channelType{},
 
-		if err != nil {
-			log.Fatal("consume partition error:", err)
-		}
+		wg:           &wg,
+		closeChannel: make(chan bool),
+	}
 
+	return &result, err
+}
+
+// ConsumeTopic creates a sarama.PartitionConsumer to consume a particular topic.
+// TODO: we may not want to return the channel if we get it from the consumer object instead
+func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel channelType, err error) {
+	// TODO: does this actually write to our err or does it shadow it
+	partitionConsumer, err := consumer.consumer.ConsumePartition(
+		topic, partition, sarama.OffsetNewest)
+
+	if err != nil {
+		return
+	}
+
+	// TODO: buffer channel sufficiently so we don't *usually* end up
+	// dropping anything or blocking too much?
+	bufSize := 10
+	msgChannel = make(channelType, bufSize)
+	consumer.topicChannels[topic] = msgChannel
+
+	closeChannel := consumer.closeChannel
+	wg := consumer.wg
+
+	// We're launching a new goroutine, increment the waitgroup counter
+	// TODO this and the goroutine creation might need to be locked? Unsure
+	// about the synchronisation here as a whole
+	wg.Add(1)
+	go func() {
+		// When this goroutine ends, signal the waitgroup that we're done
+		defer wg.Done()
 		defer func() {
 			if err := partitionConsumer.Close(); err != nil {
 				log.Fatal("partition consumer close error:", err)
 			}
 		}()
 
-		consumerConfig.topicConsumers[topic] = partitionConsumer
+	readLoop:
+		for {
+			select {
+			case _ = <-closeChannel:
+				// Synchronise reader closes on a channel
+				break readLoop
+			case msg := <-partitionConsumer.Messages():
+				// If we got a message do not block on writing
+				// it to our own message channel
+				// TODO: don't necessarily log every message like this
+				select {
+				case msgChannel <- msg.Value:
+					log.Printf("Consumed message offset %d\n", msg.Offset)
+					log.Printf("value: %s\n", string(msg.Value))
+				default:
+					// TODO: figure out a method to avoid
+					// this while not blocking indefinitely
+					// We do need to include the default case, though!
+					// Otherwise on closing we may block indefinitely
+					log.Printf("Dropping value on the floor (no reader)")
+					log.Printf("value: %s\n", string(msg.Value))
+				}
+			default:
+				// Nothing happening this loop.
+				// TODO: see if we need to add sleep/other manual yield here to
+				// avoid pathological behaviour
+			}
+		}
+	}()
+
+	return
+}
+
+// TODO: func (consumer Consumer) GetChannel(topic string) channelType
+
+func (consumer Consumer) Close() error {
+	// Close the partitionconsumers (they will simply log any errors when
+	// closing; it's hard to retry that)
+	consumer.closeChannel <- true
+	consumer.wg.Wait()
+
+	if err := consumer.consumer.Close(); err != nil {
+		return err
 	}
 
-	for {
-		// TODO: these should be separate goroutines
-		for topic, partitionConsumer := range consumerConfig.topicConsumers {
-			msg := <-partitionConsumer.Messages()
-			log.Printf("Consumed message offset %d\n", msg.Offset)
-			log.Printf("value: %s\n", string(msg.Value))
-			consumerConfig.GetChannel(topic) <- msg.Value
-		}
-	}
+	return nil
 }

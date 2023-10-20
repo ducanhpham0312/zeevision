@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -25,20 +24,28 @@ func main() {
 
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
-	topics := []string{"zeebe-deployment"}
-	consumerConfig := consumer.NewConsumerConfig(brokers, topics, 0)
-	go consumer.ConsumeStream(consumerConfig)
+	kafkaConsumer, err := consumer.NewConsumer(brokers)
+	if err != nil {
+		// TODO: error handling
+		panic("Could not start consuming")
+	}
+	// The consumer needs to be closed manually because its sub-consumers
+	// need to be closed manually
+	defer kafkaConsumer.Close()
 
-	go func() {
-		for {
-			msg := <-consumerConfig.GetChannel("zeebe-deployment")
-			fmt.Printf("Message received: %s\n", msg)
-		}
-	}()
+	topic := "zeebe-deployment"
+	msgChannel, err := kafkaConsumer.ConsumeTopic(0, topic)
+	if err != nil {
+		// TODO: error handling
+		panic("Could not start consuming")
+	}
 
 	// Create default configuration.
 	conf := &endpoint.Config{
 		Port: DefaultWebsocketPort,
+		// TODO: replace this with a pointer to the consumer, perhaps,
+		// so we can simply request the channels we want
+		ZeebeMsgChannel: msgChannel,
 	}
 
 	// Override configuration with environment variables.
