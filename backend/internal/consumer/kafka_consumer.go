@@ -98,13 +98,15 @@ func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel
 					// this while not blocking indefinitely
 					// We do need to include the default case, though!
 					// Otherwise on closing we may block indefinitely
+					// (Possibly msgChannel <- msg.Value
+					// should be part of the main select?
+					// just need to figure out how to pass
+					// the messages there. an internal channel?)
 					log.Printf("Dropping value on the floor (no reader)")
 					log.Printf("value: %s\n", string(msg.Value))
 				}
-			default:
-				// Nothing happening this loop.
-				// TODO: see if we need to add sleep/other manual yield here to
-				// avoid pathological behaviour
+			// No default case so we will simply wait when there's
+			// nothing to do
 			}
 		}
 	}()

@@ -29,17 +29,17 @@ func main() {
 	kafkaConsumer, err := consumer.NewConsumer(brokers)
 	if err != nil {
 		// TODO: error handling
-		panic("Could not start consuming")
+		panic(err)
 	}
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually
 	defer kafkaConsumer.Close()
 
-	topic := "zeebe-deployment"
+	topic := "zeebe-message"
 	msgChannel, err := kafkaConsumer.ConsumeTopic(0, topic)
 	if err != nil {
 		// TODO: error handling
-		panic("Could not start consuming")
+		panic(err)
 	}
 
 	// TODO: replace the msgChannel with a pointer to the consumer, perhaps,
