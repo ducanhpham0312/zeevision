@@ -3,6 +3,7 @@ import { DragDropFile } from "../DragDrop/DragDropFile";
 import { Popup, PopupAction, PopupContent } from "../Popup";
 import { Button } from "../Button";
 import { BpmnViewer } from "../BpmnViewer";
+import { ReadBpmnFileToString } from "../../utils/ReadBpmnFileToString";
 
 interface FileModalProps {
   isPopUpOpen: boolean;
@@ -26,21 +27,12 @@ export default function FileModal({
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
 
-    if (files && files.length > 0 && files[0].name!.endsWith(".bpmn")) {
-      console.log("Selected file:", files[0]);
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        if (e.target && e.target.result) {
-          setBpmnString(e.target.result as string);
-        }
-      };
-
-      reader.readAsText(files[0]);
+    if (files && files.length > 0) {
+      ReadBpmnFileToString(files[0], setBpmnString);
     }
   };
 
-  const handleFileDroppedOutside = (file: string) => {
+  const handleFileDroped = (file: string) => {
     setBpmnString(file as string);
     onOpenPopUp();
   };
@@ -83,7 +75,7 @@ export default function FileModal({
           <Button variant="contained">Deploy process</Button>
         </PopupAction>
       </Popup>
-      <DragDropFile onFileDropped={handleFileDroppedOutside} />
+      <DragDropFile onFileDropped={handleFileDroped} />
     </>
   );
 }

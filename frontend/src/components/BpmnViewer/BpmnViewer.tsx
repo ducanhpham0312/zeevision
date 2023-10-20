@@ -63,6 +63,7 @@ export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
     return () => {
       modeler.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bpmnString, width]);
 
   return <div ref={containerRef} style={{ userSelect: "none" }} id="canvas" />;

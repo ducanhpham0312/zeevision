@@ -4,6 +4,7 @@ interface ReadFileProps {}
 
 export const ReadFile: React.FC<ReadFileProps> = () => {
   const [bpmnContent, setBpmnContent] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isValid, setIsValid] = useState(true);
   const isXML = (str: string) => {
     const parser = new DOMParser();
