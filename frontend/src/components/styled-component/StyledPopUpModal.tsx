@@ -1,6 +1,5 @@
 import { Modal, ModalProps } from "@mui/base";
-import React, { useEffect } from "react";
-import { useModalStore } from "../../contexts/modalStore";
+import React from "react";
 import { styled } from "@mui/system";
 
 interface StyledPopUpModalProps extends ModalProps {
