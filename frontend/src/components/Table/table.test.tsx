@@ -2,18 +2,12 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Table } from ".";
 import * as mockdata from "./mockdata.json";
-const {
-  orientation: verticalOrientation,
-  headers: verticalHeader,
-  content: verticalContent,
-} = mockdata.vertical;
+const { headers: verticalHeader, content: verticalContent } = mockdata.vertical;
 
-const {
-  orientation: horizontalOrientation,
-  headers: horizontalHeaders,
-  content: horizontalContent,
-} = mockdata.horizontal;
-
+const { headers: horizontalHeaders, content: horizontalContent } =
+  mockdata.horizontal;
+const horizontalOrientation = "horizontal";
+const verticalOrientation = "vertical";
 describe("Table Component", () => {
   it("renders vertical table correctly", () => {
     const { asFragment } = render(
@@ -67,7 +61,7 @@ describe("Table Component", () => {
 
   it("does not throw error when all props are empty", () => {
     const { container } = render(
-      <Table orientation="" header={[]} content={[]} />
+      <Table orientation={horizontalOrientation} header={[]} content={[]} />
     );
     expect(container).toBeEmptyDOMElement();
   });

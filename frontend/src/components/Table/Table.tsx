@@ -25,9 +25,9 @@ export function Table({ orientation, header, content }: TableProps) {
   return (
     <StyledTable>
       {orientation === "horizontal" ? (
-        <HorizontalTable header={header} content={content!} />
+        <HorizontalTable header={header} content={content} />
       ) : (
-        <VerticalTable header={header} content={content!} />
+        <VerticalTable header={header} content={content} />
       )}
     </StyledTable>
   );
