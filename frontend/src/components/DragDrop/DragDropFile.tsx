@@ -7,6 +7,11 @@ import { useDragDrop } from "../../hooks/useDragDrop";
 import { ReadBpmnFileToString } from "../../utils/ReadBpmnFileToString";
 
 interface DragDropFileProps {
+  /**
+   * Callback function that is triggered when a file is dropped.
+   *
+   * @param fileContent - The content of the dropped file as a string.
+   */
   onFileDropped: (file: string) => void;
 }
 
@@ -36,7 +41,7 @@ export const DragDropFile: React.FC<DragDropFileProps> = ({
   );
 };
 
-const StyledModal = styled(Modal)`
+export const StyledModal = styled(Modal)`
   position: fixed;
   z-index: 1300;
   inset: 0;
@@ -45,7 +50,7 @@ const StyledModal = styled(Modal)`
   justify-content: center;
 `;
 
-const StyledBox = styled(Box)`
+export const StyledBox = styled(Box)`
   width: 400px;
   height: 200px;
   border: 3px solid ${PRIMARY[600]};

@@ -6,8 +6,19 @@ import { BpmnViewer } from "../BpmnViewer";
 import { ReadBpmnFileToString } from "../../utils/ReadBpmnFileToString";
 
 interface FileModalProps {
+  /**
+   * Determines if the Popup should be displayed.
+   */
   isPopUpOpen: boolean;
+  /**
+   * Callback function triggered to open the Popup.
+   * @returns void
+   */
   onOpenPopUp: () => void;
+  /**
+   * Callback function triggered to close the Popup.
+   * @returns void
+   */
   onClosePopUp: () => void;
 }
 export default function FileModal({

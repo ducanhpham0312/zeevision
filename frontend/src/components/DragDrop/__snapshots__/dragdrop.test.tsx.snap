@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DragDropFile Component renders correctly the opening modal when drag file event triggers 1`] = `
+<body
+  style="padding-right: 1024px; overflow: hidden;"
+>
+  <div
+    aria-hidden="true"
+  />
+  <div
+    aria-describedby="simple-modal-description"
+    aria-labelledby="simple-modal-title"
+    class="MuiModal-root css-y1nyvh"
+    role="presentation"
+  >
+    <div
+      data-testid="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiBox-root css-idn9ht"
+      tabindex="-1"
+    >
+      <p
+        id="simple-modal-description"
+      >
+        Drop files here to upload!
+      </p>
+      <em>
+        (Only *.bmpn files will be accepted)
+      </em>
+    </div>
+    <div
+      data-testid="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</body>
+`;
