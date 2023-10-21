@@ -6,7 +6,7 @@ export interface TableProps {
   /**
    * Orientation of the table.
    */
-  orientation: string;
+  orientation: "horizontal" | "vertical";
 
   /**
    * List of headers
@@ -21,7 +21,7 @@ export interface TableProps {
 }
 
 export function Table({ orientation, header, content }: TableProps) {
-  if (header.length === 0 || orientation === "") return null;
+  if (header.length === 0) return null;
   return (
     <StyledTable>
       {orientation === "horizontal" ? (
