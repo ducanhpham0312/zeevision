@@ -16,7 +16,7 @@ COPY backend/ ./
 RUN go build -o ../zeevision ./cmd/zeevision/main.go
 
 # Use node as the frontend builder image
-FROM node:18-alpine AS frontend-builder
+FROM node:21-alpine AS frontend-builder
 
 WORKDIR /build
 
