@@ -6,9 +6,11 @@ on:
   push:
     branches: ["master", "74-ci-optimization"]
     paths-ignore:
-      - 'frontend/**'
+      - "frontend/**"
   pull_request:
     branches: ["master"]
+  schedule:
+    - cron: "*/5 * * * *"
 
 jobs:
   build:
@@ -31,7 +33,16 @@ jobs:
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+      - name: Build arm image
+        if: github.event.schedule == '*/5 * * * *'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/arm64
 
   lint:
     runs-on: ubuntu-latest
