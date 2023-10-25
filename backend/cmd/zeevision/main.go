@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -25,19 +24,27 @@ func main() {
 		kafkaAddr = envKafkaAddr
 	}
 
-	msgChannel := make(chan []byte)
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
-	go consumer.ConsumeStream(brokers, "zeebe-message", 0, msgChannel)
+	kafkaConsumer, err := consumer.NewConsumer(brokers)
+	if err != nil {
+		// TODO: error handling
+		panic(err)
+	}
+	// The consumer needs to be closed manually because its sub-consumers
+	// need to be closed manually
+	defer kafkaConsumer.Close()
 
-	go func() {
-		for {
-			msg := <-msgChannel
-			fmt.Printf("Message received: %s\n", msg)
-		}
-	}()
+	topic := "zeebe-message"
+	msgChannel, err := kafkaConsumer.ConsumeTopic(0, topic)
+	if err != nil {
+		// TODO: error handling
+		panic(err)
+	}
 
-	server, err := endpoint.NewFromEnv()
+	// TODO: replace the msgChannel with a pointer to the consumer, perhaps,
+	// so we can simply request the channels we want
+	server, err := endpoint.NewFromEnv(msgChannel)
 	if err != nil {
 		log.Fatal(err)
 	}
