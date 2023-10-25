@@ -7,7 +7,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-type ChannelType chan []byte
+type ChannelType = chan []byte
 
 // TODO: we need a method of reconnecting when the connection drops. I'm not
 // entirely sure how to *detect* this, except perhaps by adding a condition
@@ -29,7 +29,7 @@ type Consumer struct {
 	msgChannel ChannelType
 
 	wg           *sync.WaitGroup
-	closeChannel chan bool
+	closeChannel chan struct{}
 }
 
 func NewConsumer(brokers []string) (*Consumer, error) {
@@ -55,21 +55,21 @@ func NewConsumer(brokers []string) (*Consumer, error) {
 		msgChannel: make(ChannelType, bufSize),
 
 		wg:           &wg,
-		closeChannel: make(chan bool),
+		closeChannel: make(chan struct{}),
 	}
 
 	return &result, err
 }
 
 // ConsumeTopic creates a sarama.PartitionConsumer to consume a particular topic.
-// TODO: we may not want to return the channel if we get it from the consumer object instead
-func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel ChannelType, err error) {
-	// TODO: does this actually write to our err or does it shadow it
+// TODO: In the future this will not return a channel but will instead connect
+// to our storage in some manner
+func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (msgChannel ChannelType, err error) {
 	partitionConsumer, err := consumer.consumer.ConsumePartition(
 		topic, partition, sarama.OffsetNewest)
 
 	if err != nil {
-		return
+		return nil, err
 	}
 	msgChannel = consumer.msgChannel
 	closeChannel := consumer.closeChannel
@@ -102,17 +102,14 @@ func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel
 				case msgChannel <- msg.Value:
 					log.Printf("Consumed message offset %d\n", msg.Offset)
 					log.Printf("value: %s\n", string(msg.Value))
-				default:
-					// TODO: figure out a method to avoid
-					// this while not blocking indefinitely
-					// We do need to include the default case, though!
-					// Otherwise on closing we may block indefinitely
-					// (Possibly msgChannel <- msg.Value
-					// should be part of the main select?
-					// just need to figure out how to pass
-					// the messages there. an internal channel?)
-					log.Printf("Dropping value on the floor (would block)")
-					log.Printf("value: %s\n", string(msg.Value))
+				case <-closeChannel:
+					// Also listen to closeChannel here to
+					// avoid dropping values on the floor
+					// (we'll end up waiting for the reader
+					// to read messages before reading more
+					// from kafka ourselves)
+					break readLoop
+
 				}
 				// No default case so we will simply wait when there's
 				// nothing to do
@@ -120,20 +117,13 @@ func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel
 		}
 	}()
 
-	return
+	return msgChannel, err
 }
 
-// TODO: func (consumer Consumer) GetChannel() ChannelType
-// except that we're actually going to be passing data to our storage/database
-// layer which will pass it on - even streaming wouldn't go directly from here,
-// probably
-// If another layer wants to have an internal channel they can implement that
-// there. The channel is just kind of a hack!
-
-func (consumer Consumer) Close() error {
+func (consumer *Consumer) Close() error {
 	// Close the partitionconsumers (they will simply log any errors when
 	// closing; it's hard to retry that)
-	consumer.closeChannel <- true
+	consumer.closeChannel <- struct{}{}
 	consumer.wg.Wait()
 
 	err := consumer.consumer.Close()
