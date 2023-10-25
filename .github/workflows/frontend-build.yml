@@ -12,6 +12,7 @@ on:
 
 jobs:
   build:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     defaults:
@@ -33,6 +34,7 @@ jobs:
             npm run build
 
   lint:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     defaults:
@@ -58,6 +60,7 @@ jobs:
         run: npm run prettier
 
   test:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     defaults:
