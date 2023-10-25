@@ -7,7 +7,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-type channelType chan []byte
+type ChannelType chan []byte
 
 // TODO: we need a method of reconnecting when the connection drops. I'm not
 // entirely sure how to *detect* this, except perhaps by adding a condition
@@ -26,7 +26,7 @@ type Consumer struct {
 	topics  []string
 
 	consumer   sarama.Consumer
-	msgChannel channelType
+	msgChannel ChannelType
 
 	wg           *sync.WaitGroup
 	closeChannel chan bool
@@ -52,7 +52,7 @@ func NewConsumer(brokers []string) (*Consumer, error) {
 		topics:  []string{},
 
 		consumer:   consumer,
-		msgChannel: make(channelType, bufSize),
+		msgChannel: make(ChannelType, bufSize),
 
 		wg:           &wg,
 		closeChannel: make(chan bool),
@@ -63,7 +63,7 @@ func NewConsumer(brokers []string) (*Consumer, error) {
 
 // ConsumeTopic creates a sarama.PartitionConsumer to consume a particular topic.
 // TODO: we may not want to return the channel if we get it from the consumer object instead
-func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel channelType, err error) {
+func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel ChannelType, err error) {
 	// TODO: does this actually write to our err or does it shadow it
 	partitionConsumer, err := consumer.consumer.ConsumePartition(
 		topic, partition, sarama.OffsetNewest)
@@ -123,7 +123,7 @@ func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel
 	return
 }
 
-// TODO: func (consumer Consumer) GetChannel() channelType
+// TODO: func (consumer Consumer) GetChannel() ChannelType
 // except that we're actually going to be passing data to our storage/database
 // layer which will pass it on - even streaming wouldn't go directly from here,
 // probably
