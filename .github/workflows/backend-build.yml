@@ -4,7 +4,7 @@ name: Backend
 # yamllint disable-line rule:truthy
 on:
   push:
-    branches: ["master", "74-ci-optimization"]
+    branches: ["master"]
     paths-ignore:
       - "frontend/**"
   pull_request:
