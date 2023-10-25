@@ -91,7 +91,7 @@ func (consumer Consumer) ConsumeTopic(partition int32, topic string) (msgChannel
 	readLoop:
 		for {
 			select {
-			case _ = <-closeChannel:
+			case <-closeChannel:
 				// Synchronise reader closes on a channel
 				break readLoop
 			case msg := <-partitionConsumer.Messages():
@@ -136,9 +136,6 @@ func (consumer Consumer) Close() error {
 	consumer.closeChannel <- true
 	consumer.wg.Wait()
 
-	if err := consumer.consumer.Close(); err != nil {
-		return err
-	}
-
-	return nil
+	err := consumer.consumer.Close()
+	return err
 }
