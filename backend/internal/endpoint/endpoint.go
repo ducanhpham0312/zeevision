@@ -54,11 +54,14 @@ type Endpoint struct {
 	apiServer *http.Server
 }
 
+// TODO the use of msgChannel throughout represents a temporary solution to
+// passing consumer data through
+
 // Create a new endpoint from environment variables.
 //
 // App and API ports can be configured by setting the environment variables
 // APP_PORT and API_PORT respectively.
-func NewFromEnv() (*Endpoint, error) {
+func NewFromEnv(msgChannel chan []byte) (*Endpoint, error) {
 	// Create default configuration.
 	conf := Config{
 		AppPort:    DefaultAppPort,
@@ -89,11 +92,11 @@ func NewFromEnv() (*Endpoint, error) {
 		conf.Production = true
 	}
 
-	return New(conf)
+	return New(conf, msgChannel)
 }
 
 // Create a new endpoint.
-func New(conf Config) (*Endpoint, error) {
+func New(conf Config, msgChannel chan []byte) (*Endpoint, error) {
 	var appServer *http.Server
 	if conf.Production {
 		var err error
@@ -103,7 +106,7 @@ func New(conf Config) (*Endpoint, error) {
 		}
 	}
 
-	apiServer, err := NewAPIServer(conf.APIPort)
+	apiServer, err := NewAPIServer(conf.APIPort, msgChannel)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +135,7 @@ func NewAppServer(port uint16) (*http.Server, error) {
 }
 
 // Create a new API server.
-func NewAPIServer(port uint16) (*http.Server, error) {
+func NewAPIServer(port uint16, msgChannel chan []byte) (*http.Server, error) {
 	r := gin.Default()
 
 	r.Use(gin.Logger())
@@ -143,7 +146,7 @@ func NewAPIServer(port uint16) (*http.Server, error) {
 
 	upgrader := newUpgrader()
 	r.GET(WebsocketPath, func(ctx *gin.Context) {
-		websocketTunnel(ctx, upgrader)
+		websocketTunnel(ctx, upgrader, msgChannel)
 	})
 
 	return &http.Server{
@@ -174,7 +177,7 @@ func (e *Endpoint) Run() error {
 }
 
 // Handle websocket tunnel for each new connection.
-func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
+func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader, msgChannel chan []byte) {
 	writer, request := ctx.Writer, ctx.Request
 
 	conn, err := upgrader.Upgrade(writer, request, nil)
@@ -184,12 +187,9 @@ func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
 	}
 	defer conn.Close()
 
-	// Send sample message to client every second.
-	msgNum := 1
+	// Pipe out whatever data we receive from the kafka consumer
 	for {
-		msg := fmt.Sprintf("Hello, world! msg number: %d", msgNum)
-		msgNum++
-
+		msg := <-msgChannel
 		err := conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		if err != nil {
 			log.Println("write:", err)
