@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'Koozu1' }}
 
     steps:
       - name: Checkout
