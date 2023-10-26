@@ -13,12 +13,10 @@ interface DragDropFileProps {
    *
    * @param fileContent - The content of the dropped file as a string.
    */
-  onFileDropped: (file: string) => void;
+  onFileDropped: (fileContent: string) => void;
 }
 
-export const DragDropFile: React.FC<DragDropFileProps> = ({
-  onFileDropped,
-}) => {
+export function DragDropFile({ onFileDropped }: DragDropFileProps) {
   const { dragging, file } = useDragDrop();
   const { setSnackbarContent } = useUIStore();
 
@@ -54,7 +52,7 @@ export const DragDropFile: React.FC<DragDropFileProps> = ({
       </StyledBox>
     </StyledModal>
   );
-};
+}
 
 export const StyledModal = styled(Modal)`
   position: fixed;
