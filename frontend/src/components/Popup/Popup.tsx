@@ -20,13 +20,24 @@ export interface PopupProps extends Omit<ModalProps, "children"> {
    *  Determines if the popup is visible.
    */
   open: boolean;
+
+  /**
+   * Determines if the modal will stay open when user click outside the modal
+   */
+  shouldNotCloseWhenClickAway?: boolean;
 }
 
-export function Popup({ title, children, ...props }: PopupProps) {
+export function Popup({
+  title,
+  children,
+  shouldNotCloseWhenClickAway,
+  ...props
+}: PopupProps) {
   return (
     <div>
       <StyledModal
         {...props}
+        onClose={shouldNotCloseWhenClickAway ? () => {} : props.onClose}
         slots={{ backdrop: StyledBackdrop }}
         closeAfterTransition
       >

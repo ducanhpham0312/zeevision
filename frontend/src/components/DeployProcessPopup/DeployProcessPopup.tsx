@@ -50,6 +50,7 @@ export function DeployProcessPopup({
 
   const handleClosePopUp = () => {
     onClosePopUp();
+    setTimeout(() => setBpmnString(""), 200);
   };
   return (
     <>
@@ -57,6 +58,7 @@ export function DeployProcessPopup({
         open={isPopUpOpen}
         onClose={handleClosePopUp}
         title={"Deploy a process"}
+        shouldNotCloseWhenClickAway
       >
         <PopupContent style={{ overflow: "hidden" }}>
           <div>
