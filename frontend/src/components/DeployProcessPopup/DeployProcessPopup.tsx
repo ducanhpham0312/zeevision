@@ -72,6 +72,7 @@ export function DeployProcessPopup({
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileChange}
+              data-testid="file-input"
             />
           </div>
           <div>

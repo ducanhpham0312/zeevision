@@ -9,7 +9,7 @@ export default function InstancesPage() {
     <>
       <h1>InstancesPage</h1>
       {/** Temporary test for open Modal */}
-      <Button onClick={handleOpen}>Open Modal</Button>
+      <Button onClick={handleOpen}>Deploy a Process</Button>
       <DeployProcessPopup
         isPopUpOpen={isPopUpOpen}
         onOpenPopUp={handleOpen}
