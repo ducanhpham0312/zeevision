@@ -1,7 +1,7 @@
 import { Modal } from "@mui/base/Modal";
 import { Box, styled } from "@mui/system";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { PRIMARY } from "../../theme/palette";
 import { useDragDrop } from "../../hooks/useDragDrop";
 import { readFileToString } from "../../utils/readFileToString";
