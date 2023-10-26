@@ -163,6 +163,7 @@ func NewAPIServer(port uint16, msgChannel chan []byte) (*http.Server, error) {
 func (e *Endpoint) Run() error {
 	var g errgroup.Group
 
+	// Run the application server if it has been configured.
 	if e.appServer != nil {
 		g.Go(func() error {
 			return e.appServer.ListenAndServe()
