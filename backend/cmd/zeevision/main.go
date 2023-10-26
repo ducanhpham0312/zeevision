@@ -1,47 +1,50 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/consumer"
 	"github.com/ducanhpham0312/zeevision/backend/internal/endpoint"
 )
 
-const DefaultPort = 8080
+const (
+	// Default Kafka address to use.
+	DefaultKafkaAddr = "kafka:9093"
+
+	// Environment variable used to configure the Kafka address.
+	EnvVarKafkaAddr = "ZEEVISION_KAFKA_ADDR"
+)
 
 // Entry point for the application.
 func main() {
-	msgChannel := make(chan []byte)
+	// Get Kafka address from environment variable.
+	kafkaAddr := DefaultKafkaAddr
+	if envKafkaAddr, ok := os.LookupEnv(EnvVarKafkaAddr); ok {
+		kafkaAddr = envKafkaAddr
+	}
+
 	// Launch goroutine for consuming from specified topic and partition
-	brokers := []string{"127.0.0.1:9092"}
-	go consumer.ConsumeStream(brokers, "zeebe-message", 0, msgChannel)
+	brokers := []string{kafkaAddr}
+	kafkaConsumer, err := consumer.NewConsumer(brokers)
+	if err != nil {
+		// TODO: error handling
+		panic(err)
+	}
+	// The consumer needs to be closed manually because its sub-consumers
+	// need to be closed manually
+	defer kafkaConsumer.Close()
 
-	go func() {
-		for {
-			msg := <-msgChannel
-			fmt.Printf("Message received: %s\n", msg)
-		}
-	}()
-
-	// Create default configuration.
-	conf := &endpoint.Config{
-		Port: DefaultPort,
+	topic := "zeebe-message"
+	msgChannel, err := kafkaConsumer.ConsumeTopic(0, topic)
+	if err != nil {
+		// TODO: error handling
+		panic(err)
 	}
 
-	// Override configuration with environment variables.
-	if port, ok := os.LookupEnv("PORT"); ok {
-		port, err := strconv.ParseUint(port, 10, 16)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		conf.Port = uint16(port)
-	}
-
-	server, err := endpoint.New(conf)
+	// TODO: replace the msgChannel with a pointer to the consumer, perhaps,
+	// so we can simply request the channels we want
+	server, err := endpoint.NewFromEnv(msgChannel)
 	if err != nil {
 		log.Fatal(err)
 	}
