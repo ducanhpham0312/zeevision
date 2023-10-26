@@ -5,8 +5,17 @@ import { useEffect, useRef } from "react";
 // create a modeler
 
 interface BpmnViewerProps {
+  /**
+   * The bpmn file content as string.
+   */
   bpmnString: string;
+  /**
+   * The width (in pixels) that the Viewer should take.
+   */
   width: number;
+  /**
+   * Set this to true for NavigatedViewer which is interactable i.e. drag, zoom in out.
+   */
   navigated?: boolean;
 }
 
@@ -21,20 +30,17 @@ export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let modeler: NavigatedViewer | Viewer;
-    if (navigated) {
-      modeler = new NavigatedViewer({
-        container: containerRef.current as HTMLDivElement,
-        width: width,
-        height: 300,
-      });
-    } else {
-      modeler = new Viewer({
-        container: containerRef.current as HTMLDivElement,
-        width: width,
-        height: 300,
-      });
-    }
+    const modeler = navigated
+      ? new NavigatedViewer({
+          container: containerRef.current as HTMLDivElement,
+          width: width,
+          height: 300,
+        })
+      : new Viewer({
+          container: containerRef.current as HTMLDivElement,
+          width: width,
+          height: 300,
+        });
 
     async function openDiagram(xmlString: string) {
       try {
@@ -63,8 +69,7 @@ export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
     return () => {
       modeler.destroy();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bpmnString, width]);
+  }, [bpmnString, width, navigated]);
 
   return <div ref={containerRef} style={{ userSelect: "none" }} id="canvas" />;
 }

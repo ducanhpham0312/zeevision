@@ -1,11 +1,12 @@
 import { ChangeEvent, useRef, useState } from "react";
-import { DragDropFile } from "../DragDrop/DragDropFile";
+import { DragDropFile } from "../DragDropFile/DragDropFile";
 import { Popup, PopupAction, PopupContent } from "../Popup";
 import { Button } from "../Button";
 import { BpmnViewer } from "../BpmnViewer";
-import { ReadBpmnFileToString } from "../../utils/ReadBpmnFileToString";
+import { readFileToString } from "../../utils/readFileToString";
+import React from "react";
 
-interface FileModalProps {
+interface DeployProcessPopupProps {
   /**
    * Determines if the Popup should be displayed.
    */
@@ -21,11 +22,11 @@ interface FileModalProps {
    */
   onClosePopUp: () => void;
 }
-export default function FileModal({
+export default function DeployProcessPopup({
   isPopUpOpen,
   onOpenPopUp,
   onClosePopUp,
-}: FileModalProps) {
+}: DeployProcessPopupProps) {
   const [bpmnString, setBpmnString] = useState<string>("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,11 +36,11 @@ export default function FileModal({
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
 
     if (files && files.length > 0) {
-      ReadBpmnFileToString(files[0], setBpmnString);
+      setBpmnString(await readFileToString(files[0]));
     }
   };
 
@@ -58,14 +59,15 @@ export default function FileModal({
         onClose={handleClosePopUp}
         title={"Deploy a process"}
       >
-        <PopupContent>
+        <PopupContent style={{ overflow: "hidden" }}>
           <div>
             <Button type="button" onClick={handleFileUploadClick}>
-              Deploy a file (.bpmn){" "}
+              Deploy a file (.bpmn)
             </Button>
-            <p>Or drag the files to the box belows</p>
+            <p>Or drag a bpmn file here</p>
             <input
               type="file"
+              accept=".bpmn"
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileChange}

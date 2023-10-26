@@ -4,7 +4,8 @@ import { Box, styled } from "@mui/system";
 import React, { useEffect } from "react";
 import { PRIMARY } from "../../theme/palette";
 import { useDragDrop } from "../../hooks/useDragDrop";
-import { ReadBpmnFileToString } from "../../utils/ReadBpmnFileToString";
+import { readFileToString } from "../../utils/readFileToString";
+import { useUIStore } from "../../contexts/useUIStore";
 
 interface DragDropFileProps {
   /**
@@ -19,10 +20,24 @@ export const DragDropFile: React.FC<DragDropFileProps> = ({
   onFileDropped,
 }) => {
   const { dragging, file } = useDragDrop();
+  const { setSnackbarContent } = useUIStore();
 
   useEffect(() => {
-    ReadBpmnFileToString(file, onFileDropped);
+    const setFile = async () => {
+      if (file) {
+        if (file.name.endsWith(".bpmn")) {
+          onFileDropped(await readFileToString(file));
+        } else {
+          setSnackbarContent({
+            title: "Invalid file type",
+            message: "The file was not .bpmn file",
+            type: "error",
+          });
+        }
+      }
+    };
 
+    setFile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
