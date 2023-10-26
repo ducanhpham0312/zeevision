@@ -58,6 +58,14 @@ function App() {
   useEffect(() => {
     websocket.addEventListener("open", () => {
       console.log("websocket: connected");
+
+      websocket.send(
+        JSON.stringify({
+          correlationId: "1",
+          resourceType: "process",
+          payload: { id: 222 },
+        })
+      );
     });
 
     websocket.addEventListener("close", () => {

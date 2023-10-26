@@ -2,14 +2,12 @@ package endpoint
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 	"github.com/mandrigin/gin-spa/spa"
 	"golang.org/x/sync/errgroup"
 )
@@ -146,7 +144,7 @@ func NewAPIServer(port uint16, msgChannel chan []byte) (*http.Server, error) {
 
 	upgrader := newUpgrader()
 	r.GET(WebsocketPath, func(ctx *gin.Context) {
-		websocketTunnel(ctx, upgrader, msgChannel)
+		websocketTunnel(ctx, upgrader)
 	})
 
 	return &http.Server{
@@ -175,40 +173,4 @@ func (e *Endpoint) Run() error {
 	})
 
 	return g.Wait()
-}
-
-// Handle websocket tunnel for each new connection.
-func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader, msgChannel chan []byte) {
-	writer, request := ctx.Writer, ctx.Request
-
-	conn, err := upgrader.Upgrade(writer, request, nil)
-	if err != nil {
-		log.Println("upgrade:", err)
-		return
-	}
-	defer conn.Close()
-
-	// Pipe out whatever data we receive from the kafka consumer
-	for {
-		msg := <-msgChannel
-		err := conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		if err != nil {
-			log.Println("write:", err)
-			break
-		}
-
-		time.Sleep(time.Second)
-	}
-}
-
-// Create a new upgrader for creating the websocket connection.
-func newUpgrader() *websocket.Upgrader {
-	// Allow all origins.
-	checkOrigin := func(r *http.Request) bool {
-		return true
-	}
-
-	return &websocket.Upgrader{
-		CheckOrigin: checkOrigin,
-	}
 }
