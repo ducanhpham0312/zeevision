@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { DragDropFile, StyledBox, StyledModal } from "./DragDropFile";
 
 const meta = {
-  title: "Assets/DragDrop",
+  title: "Assets/DragDropFile",
   component: DragDropFile,
   parameters: {
     layout: "centered",
