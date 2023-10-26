@@ -21,7 +21,7 @@ interface DeployProcessPopupProps {
    */
   onClosePopUp: () => void;
 }
-export default function DeployProcessPopup({
+export function DeployProcessPopup({
   isPopUpOpen,
   onOpenPopUp,
   onClosePopUp,

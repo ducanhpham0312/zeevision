@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
-import DeployProcessPopup from "../components/DeployProcessPopup/DeployProcessPopup";
+import { DeployProcessPopup } from "../components/DeployProcessPopup";
 export default function InstancesPage() {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const handleOpen = () => setIsPopUpOpen(true);
