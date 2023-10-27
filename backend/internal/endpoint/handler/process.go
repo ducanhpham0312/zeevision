@@ -17,7 +17,7 @@ func (h *ProcessHandler) HandleRequest(req Request) (any, error) {
 	}
 
 	idx := slices.IndexFunc(dummyProcesses, func(p ProcessResponse) bool {
-		return p.ProcessId == processReq.ID
+		return p.ProcessID == processReq.ID
 	})
 	if idx == -1 {
 		return struct{}{}, fmt.Errorf("process with id %d not found", processReq.ID)
@@ -32,7 +32,7 @@ type ProcessRequest struct {
 
 type ProcessResponse struct {
 	ProcessKey           int64                        `json:"processKey"`
-	ProcessId            int64                        `json:"processId"`
+	ProcessID            int64                        `json:"processId"`
 	Version              int64                        `json:"version"`
 	BpmnLiveStatus       string                       `json:"bpmnLiveStatus"`
 	BpmnResource         string                       `json:"bpmnResource"`
@@ -44,7 +44,7 @@ type ProcessResponse struct {
 
 type ProcessInstance struct {
 	ProcessKey       int64  `json:"processKey"`
-	ProcessId        int64  `json:"processId"`
+	ProcessID        int64  `json:"processId"`
 	Version          int64  `json:"version"`
 	BpmnLiveStatus   string `json:"bpmnLiveStatus"`
 	ActiveInstances  int64  `json:"activeInstances"`

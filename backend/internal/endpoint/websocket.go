@@ -10,6 +10,10 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+const (
+	ResponseChannelBufferSize = 16
+)
+
 // Handle websocket tunnel for each new connection.
 func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
 	writer, request := ctx.Writer, ctx.Request
@@ -21,15 +25,15 @@ func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader) {
 	}
 	defer conn.Close()
 
-	responseChannel := make(chan handler.Response, 16)
+	responseChannel := make(chan handler.Response, ResponseChannelBufferSize)
 
 	var g errgroup.Group
 	g.Go(func() error {
 		return websocketWriter(conn, responseChannel)
 	})
 	g.Go(func() error {
-		// TODO: should have only one handlers mux for all connections
-		handlers := handler.NewHandlerMux()
+		// TODO: should have only one handler mux for all connections
+		handlers := handler.NewMux()
 		return websocketReader(conn, responseChannel, handlers)
 	})
 
@@ -53,7 +57,7 @@ func websocketWriter(conn *websocket.Conn, responseChan <-chan handler.Response)
 	return nil
 }
 
-func websocketReader(conn *websocket.Conn, responseChan chan<- handler.Response, handlers *handler.HandlerMux) error {
+func websocketReader(conn *websocket.Conn, responseChan chan<- handler.Response, handlers *handler.Mux) error {
 	// Close the response channel in the end so the response writer can exit.
 	defer close(responseChan)
 

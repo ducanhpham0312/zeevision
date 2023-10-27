@@ -22,7 +22,7 @@ type ProcessesResponse struct {
 
 type ProcessesProcess struct {
 	ProcessKey     int64  `json:"processKey"`
-	ProcessId      int64  `json:"processId"`
+	ProcessID      int64  `json:"processId"`
 	Version        int64  `json:"version"`
 	BpmnLiveStatus string `json:"bpmnLiveStatus"`
 	BpmnResource   string `json:"bpmnResource"`

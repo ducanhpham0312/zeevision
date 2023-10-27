@@ -13,13 +13,3 @@ func TestUrl(t *testing.T) {
 
 	assert.Equal(t, "/processes/1", u.Path)
 }
-
-func TestAasdf(t *testing.T) {
-	input := `{
-		requestId: "1",
-		type: "processes",
-		payload: {},
-	  }`
-
-	_ = input
-}
