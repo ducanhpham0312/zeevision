@@ -5,6 +5,8 @@ name: Frontend
 on:
   push:
     branches: ["master"]
+    paths-ignore:
+      - 'backend/**'
   pull_request:
     branches: ["master"]
 
@@ -35,6 +37,7 @@ jobs:
           npm run build
 
   lint:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     defaults:

@@ -5,8 +5,12 @@ name: Backend
 on:
   push:
     branches: ["master"]
+    paths-ignore:
+      - "frontend/**"
   pull_request:
     branches: ["master"]
+  schedule:
+    - cron: "0 12 * * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -33,9 +37,19 @@ jobs:
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+      - name: Build arm image
+        if: github.event.schedule == '0 12 * * *'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/arm64
 
   lint:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     steps:
