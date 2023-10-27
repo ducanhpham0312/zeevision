@@ -13,8 +13,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "jest",
-    "coverage": "jest --collect-coverage"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
