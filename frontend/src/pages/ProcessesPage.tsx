@@ -1,61 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BpmnViewer } from "../components/BpmnViewer";
-import { Button } from "../components/Button";
-import { useUIStore } from "../contexts/useUIStore";
-
-const bpmnImportFunctionList = [
-  () => import("../bpmn/money-loan.bpmn"),
-  () => import("../bpmn/order-main.bpmn"),
-  () => import("../bpmn/multi-instance-process.bpmn"),
-  () => import("../bpmn/order-subprocess.bpmn"),
-];
+import ws from "../config/socketConfig";
 
 export default function ProcessesPage() {
-  const [bpmnStringList, setBpmnStringList] = useState<string[]>(
-    new Array(bpmnImportFunctionList.length).fill("")
-  );
-
-  useEffect(() => {
-    bpmnImportFunctionList.forEach((importFunction, i) =>
-      importFunction()
-        .then((module) => module.default)
-        .then((bpmnUrl) =>
-          fetch(bpmnUrl)
-            .then((response) => response.text())
-            .then((bpmn) => {
-              setBpmnStringList((prev) =>
-                prev.map((val, index) => (index !== i ? val : bpmn))
-              );
-            })
-            .catch(console.error)
-        )
-    );
-  }, []);
-
-  const { setSnackbarContent } = useUIStore();
-
-  const handleClick = (type: "success" | "error") => {
-    setSnackbarContent({
-      title: "This is a test",
-      message: "Everything was sent to the desired address.",
-      type,
-    });
-  };
+  const [bpmnList, setBpmnList] = useState<string[]>([]);
+  const [bpmnString, setBpmnString] = useState("");
+  ws.addEventListener("message", (ev) => {
+    console.log(`received message: ${ev.data}`);
+    setBpmnString(window.atob(JSON.parse(ev.data).value.resources[0].resource));
+    setBpmnList([...bpmnList, bpmnString]);
+  });
 
   return (
     <>
-      <h1>ProcessesPage</h1>
-
-      <Button onClick={() => handleClick("success")}>
-        Test success snackbar
-      </Button>
-      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
-
-      <div style={{ gap: "20px" }}>
-        {bpmnStringList.map((bpmn, i) => (
-          <BpmnViewer key={i} width={400} bpmnString={bpmn} />
-        ))}
-      </div>
+      {bpmnList.map((bpmnXml) => {
+        console.log(bpmnXml);
+        return <BpmnViewer key={bpmnXml} bpmnString={bpmnXml} width={400} />;
+      })}
     </>
   );
 }
