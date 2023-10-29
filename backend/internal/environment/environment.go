@@ -14,11 +14,19 @@ import (
 
 const (
 	// Environment variable used to configure the Kafka address.
-	EnvVarKafkaAddr      = "ZEEVISION_KAFKA_ADDR"
-	EnvVarAppPort        = "ZEEVISION_APP_PORT"
-	EnvVarAPIPort        = "ZEEVISION_API_PORT"
-	EnvVarProd           = "ZEEVISION_PROD"
-	EnvVarHostApp        = "ZEEVISION_HOST_APP"
+	EnvVarKafkaAddr = "ZEEVISION_KAFKA_ADDR"
+	// Environment variable used to configure the port to use for the
+	// application deployment.
+	EnvVarAppPort = "ZEEVISION_APP_PORT"
+	// Environment variable used to configure the port to use for the API.
+	EnvVarAPIPort = "ZEEVISION_API_PORT"
+	// Environment variable used to configure the production mode.
+	EnvVarProduction = "ZEEVISION_PROD"
+	// Environment variable used to configure if the application should be
+	// hosted.
+	EnvVarHostApp = "ZEEVISION_HOST_APP"
+	// Environment variable used to configure if the playground should be
+	// hosted.
 	EnvVarHostPlayground = "ZEEVISION_HOST_PLAYGROUND"
 )
 
@@ -29,72 +37,85 @@ const (
 	DefaultAppPort = 8080
 	// Default port to use for the API.
 	DefaultAPIPort = 8081
+	// Default value for production mode.
+	DefaultProduction = false
+	// Default value for hosting the application.
+	DefaultHostApp = false
+	// Default value for hosting the playground.
+	DefaultHostPlayground = false
 )
 
-var cache map[string]string
+var cache map[string]any
 
 // This function is automatically called before main() to initialize the
 // environment variables.
 func init() {
-	cache = make(map[string]string)
+	cache = make(map[string]any)
 
-	cacheIfSet(EnvVarKafkaAddr)
-	cacheIfSet(EnvVarAppPort)
-	cacheIfSet(EnvVarAPIPort)
-	cacheIfSet(EnvVarProd)
-	cacheIfSet(EnvVarHostApp)
-	cacheIfSet(EnvVarHostPlayground)
+	setOrFallback(EnvVarKafkaAddr, DefaultKafkaAddr)
+
+	setOrFallbackMap(EnvVarAppPort, DefaultAppPort, parsePort)
+	setOrFallbackMap(EnvVarAPIPort, DefaultAPIPort, parsePort)
+
+	setOrFallbackMap(EnvVarProduction, DefaultProduction, isOne)
+	setOrFallbackMap(EnvVarHostApp, DefaultHostApp, isOne)
+	setOrFallbackMap(EnvVarHostPlayground, DefaultHostPlayground, isOne)
 }
 
 func KafkaAddress() string {
-	return getOrFallback(EnvVarKafkaAddr, DefaultKafkaAddr)
+	return cache[EnvVarKafkaAddr].(string)
 }
 
 func AppPort() uint16 {
-	return portEnvVar(EnvVarAppPort, DefaultAppPort)
+	return cache[EnvVarAppPort].(uint16)
 }
 
 func APIPort() uint16 {
-	return portEnvVar(EnvVarAPIPort, DefaultAPIPort)
+	return cache[EnvVarAPIPort].(uint16)
 }
 
 func IsProduction() bool {
-	return cache[EnvVarProd] == "1"
+	return cache[EnvVarProduction].(bool)
 }
 
 func DoHostApp() bool {
-	return cache[EnvVarHostApp] == "1"
+	return cache[EnvVarHostApp].(bool)
 }
 
 func DoHostPlayground() bool {
-	return cache[EnvVarHostPlayground] == "1"
+	return cache[EnvVarHostPlayground].(bool)
 }
 
-// Helper to cache environment variable value if it has been set.
-func cacheIfSet(envVar string) {
+// Helper to save environment variable value if it has been set.
+func setOrFallback(envVar string, fallback string) {
+	setOrFallbackMap(envVar, fallback, func(s string) (string, bool) {
+		return s, true
+	})
+}
+
+// Helper to save environment variable value if it has been set with a mapper
+// function to map the string value to the desired type.
+//
+// `mapper` is a function that takes a string and returns the mapped value and
+// a boolean indicating if the mapping was successful.
+func setOrFallbackMap[T any](envVar string, fallback T, mapper func(string) (T, bool)) {
 	if value, ok := os.LookupEnv(envVar); ok {
-		cache[envVar] = value
+		if mappedValue, ok := mapper(value); ok {
+			cache[envVar] = mappedValue
+			return
+		}
 	}
+
+	cache[envVar] = fallback
 }
 
-// Helper to get environment variable value or fallback to a default value.
-func getOrFallback(envVar, fallback string) string {
-	if value, ok := cache[envVar]; ok {
-		return value
-	}
-
-	return fallback
+// Helper to parse a string to a port number.
+func parsePort(value string) (uint16, bool) {
+	port, err := strconv.ParseInt(value, 10, 16)
+	return uint16(port), err == nil
 }
 
-// Helper to get port environment variable value or fallback to a default value.
-func portEnvVar(envVar string, fallback uint16) uint16 {
-	portStr, ok := cache[envVar]
-	if !ok {
-		return fallback
-	}
-	port, err := strconv.ParseUint(portStr, 10, 16)
-	if err != nil {
-		return fallback
-	}
-	return uint16(port)
+// Helper to parse string "1" to a boolean.
+func isOne(value string) (bool, bool) {
+	return value == "1", true
 }
