@@ -27,20 +27,19 @@ updates:
     groups:
       storybook:
         patterns:
-          - "@storybook*"
+          - "@storybook/*"
           - "storybook"
       emotion:
         patterns:
-          - "@emotion*"
+          - "@emotion/*"
       mui:
         patterns:
-          - "@mui*"
-      tyescript-eslint:
-        patterns:
-          - "@typescript-eslint*"
+          - "@mui/*"
       eslint:
         patterns:
-          - "eslint*"
+          - "eslint"
+          - "eslint-*"
+          - "@typescript-eslint/*"
     open-pull-requests-limit: 10
     labels:
       - "dependabot"
