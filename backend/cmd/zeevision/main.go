@@ -2,27 +2,16 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/consumer"
 	"github.com/ducanhpham0312/zeevision/backend/internal/endpoint"
-)
-
-const (
-	// Default Kafka address to use.
-	DefaultKafkaAddr = "kafka:9093"
-
-	// Environment variable used to configure the Kafka address.
-	EnvVarKafkaAddr = "ZEEVISION_KAFKA_ADDR"
+	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 )
 
 // Entry point for the application.
 func main() {
 	// Get Kafka address from environment variable.
-	kafkaAddr := DefaultKafkaAddr
-	if envKafkaAddr, ok := os.LookupEnv(EnvVarKafkaAddr); ok {
-		kafkaAddr = envKafkaAddr
-	}
+	kafkaAddr := environment.KafkaAddress()
 
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
@@ -36,7 +25,7 @@ func main() {
 	defer kafkaConsumer.Close()
 
 	topic := "zeebe-message"
-	msgChannel, err := kafkaConsumer.ConsumeTopic(0, topic)
+	_, err = kafkaConsumer.ConsumeTopic(0, topic)
 	if err != nil {
 		// TODO: error handling
 		panic(err)
@@ -44,7 +33,7 @@ func main() {
 
 	// TODO: replace the msgChannel with a pointer to the consumer, perhaps,
 	// so we can simply request the channels we want
-	server, err := endpoint.NewFromEnv(msgChannel)
+	server, err := endpoint.NewFromEnv()
 	if err != nil {
 		log.Fatal(err)
 	}
