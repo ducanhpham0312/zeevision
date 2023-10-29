@@ -1,6 +1,6 @@
 module github.com/ducanhpham0312/zeevision/backend
 
-go 1.21.1
+go 1.21.0
 
 require (
 	github.com/IBM/sarama v1.41.3
