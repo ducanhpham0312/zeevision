@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { BpmnViewer } from ".";
 import { useEffect, useState } from "react";
-import bpmnUrl from "../../bpmn/money-loan.bpmn";
+import bpmnUrl from "./bpmn/money-loan.bpmn";
 
 const meta: Meta<typeof BpmnViewer> = {
   title: "Assets/BpmnViewer",

@@ -7,7 +7,6 @@ import ErrorsPage from "./pages/ErrorsPage";
 import MessagesPage from "./pages/MessagesPage";
 import JobsPage from "./pages/JobsPage";
 import { Snackbar } from "./components/Snackbar";
-import { useEffect } from "react";
 
 const Layout = () => (
   <>
@@ -53,26 +52,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const websocket = new WebSocket("ws://127.0.0.1:8081/ws");
-
-  useEffect(() => {
-    websocket.addEventListener("open", () => {
-      console.log("websocket: connected");
-    });
-
-    websocket.addEventListener("close", () => {
-      console.log("websocket: closed");
-    });
-
-    websocket.addEventListener("error", (event) => {
-      console.error("websocket: error:", event);
-    });
-
-    websocket.addEventListener("message", (event) => {
-      console.log("websocket message:", event.data);
-    });
-  });
-
   return <RouterProvider router={router} />;
 }
 
