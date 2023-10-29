@@ -5,12 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	qlhandler "github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/extension"
-	"github.com/99designs/gqlgen/graphql/handler/lru"
-	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/ducanhpham0312/zeevision/backend/graph"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/gin-gonic/gin"
 	"github.com/mandrigin/gin-spa/spa"
@@ -27,6 +22,7 @@ const (
 	APIPath        = "/graphql"
 	PlaygroundPath = "/playground"
 
+	// Title shown in the browser tab for the playground.
 	PlaygroundTitle = "ZeeVision Playground"
 
 	ServerReadTimeoutSecs  = 5
@@ -43,6 +39,9 @@ type Config struct {
 	// This defines if the endpoint should serve also the application
 	// files or not.
 	DoHostApp bool
+	// This defines if the endpoint should serve also the GraphQL
+	// playground or not.
+	DoHostPlayground bool
 }
 
 // Endpoint represents a server that handles incoming requests.
@@ -55,9 +54,10 @@ type Endpoint struct {
 func NewFromEnv() (*Endpoint, error) {
 	// Create configuration from environment variables.
 	conf := Config{
-		AppPort:   environment.AppPort(),
-		APIPort:   environment.APIPort(),
-		DoHostApp: environment.DoHostApp(),
+		AppPort:          environment.AppPort(),
+		APIPort:          environment.APIPort(),
+		DoHostApp:        environment.DoHostApp(),
+		DoHostPlayground: environment.DoHostPlayground(),
 	}
 
 	return New(conf)
@@ -74,7 +74,7 @@ func New(conf Config) (*Endpoint, error) {
 		}
 	}
 
-	apiServer, err := NewAPIServer(conf.APIPort)
+	apiServer, err := NewAPIServer(conf.APIPort, conf.DoHostPlayground)
 	if err != nil {
 		return nil, err
 	}
@@ -103,36 +103,13 @@ func NewAppServer(port uint16) (*http.Server, error) {
 }
 
 // Create a new API server.
-func NewAPIServer(port uint16) (*http.Server, error) {
-	// Setup GraphQL schema options.
-	rootResolver := &graph.Resolver{}
-	config := graph.Config{Resolvers: rootResolver}
-	schema := graph.NewExecutableSchema(config)
-
-	// Setup API server.
-	api := qlhandler.New(schema)
-	api.AddTransport(transport.Websocket{
-		Upgrader:              newUpgrader(),
-		KeepAlivePingInterval: KeepAlivePingInterval,
-	})
-	api.AddTransport(transport.Options{})
-	api.AddTransport(transport.GET{})
-	api.AddTransport(transport.POST{})
-	api.AddTransport(transport.MultipartForm{})
-
-	api.SetQueryCache(lru.New(1000))
-
-	api.Use(extension.Introspection{})
-	api.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New(100),
-	})
-
+func NewAPIServer(port uint16, doHostPlayground bool) (*http.Server, error) {
 	// Create mux to handle API and playground.
 	mux := http.NewServeMux()
-	mux.Handle(APIPath, api)
+	mux.Handle(APIPath, newAPIHandler())
 
 	// Host GraphQL playground if it has been configured.
-	if environment.DoHostPlayground() {
+	if doHostPlayground {
 		mux.Handle(PlaygroundPath, playground.Handler(PlaygroundTitle, APIPath))
 	}
 

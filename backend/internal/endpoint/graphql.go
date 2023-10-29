@@ -3,8 +3,40 @@ package endpoint
 import (
 	"net/http"
 
+	qlhandler "github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
+	"github.com/99designs/gqlgen/graphql/handler/lru"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/ducanhpham0312/zeevision/backend/graph"
 	"github.com/gorilla/websocket"
 )
+
+func newAPIHandler() *qlhandler.Server {
+	// Setup GraphQL schema options.
+	rootResolver := &graph.Resolver{}
+	config := graph.Config{Resolvers: rootResolver}
+	schema := graph.NewExecutableSchema(config)
+
+	// Setup API server.
+	api := qlhandler.New(schema)
+	api.AddTransport(transport.Websocket{
+		Upgrader:              newUpgrader(),
+		KeepAlivePingInterval: KeepAlivePingInterval,
+	})
+	api.AddTransport(transport.Options{})
+	api.AddTransport(transport.GET{})
+	api.AddTransport(transport.POST{})
+	api.AddTransport(transport.MultipartForm{})
+
+	api.SetQueryCache(lru.New(1000))
+
+	api.Use(extension.Introspection{})
+	api.Use(extension.AutomaticPersistedQuery{
+		Cache: lru.New(100),
+	})
+
+	return api
+}
 
 // Create a new upgrader for creating the websocket connection.
 func newUpgrader() websocket.Upgrader {
