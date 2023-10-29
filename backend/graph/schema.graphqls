@@ -1,30 +1,57 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
+# This directive is used to alter generated code.
+directive @goField(
+  # Force the generation of a resolver for this field.
+  forceResolver: Boolean
+  # The name of the field in the Go struct.
+  name: String
+  # Specify is this field is nullable.
+  omittable: Boolean
+) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
-
-type User {
-  id: ID!
-  name: String!
-}
-
+# Root level query type.
 type Query {
-  todos: [Todo!]!
-  todo(input: ID!): Todo!
-  names: [String!]!
+  processes: [Process!]!
+  process(processKey: Int!): Process
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
+type Process {
+  bpmnLiveStatus: String!
+  bpmnResource: String!
+  deploymentTime: DateTime!
+  instances: [Instance!]! @goField(forceResolver: true)
+  messageSubscriptions: [MessageSubscription!]! @goField(forceResolver: true)
+  processId: Int!
+  processKey: Int!
+  timers: [Timer!]! @goField(forceResolver: true)
+  version: Int!
 }
 
-type Mutation {
-  createTodo(input: NewTodo!): Todo!
+type Instance {
+  activeInstances: Int!
+  bpmnLiveStatus: String!
+  bpmnResource: String!
+  completedInstances: Int!
+  deploymentTime: DateTime!
+  processId: Int!
+  processKey: Int!
+  version: Int!
 }
+
+type MessageSubscription {
+  createdAt: DateTime!
+  elementId: Int!
+  messageName: String!
+  status: String!
+}
+
+type Timer {
+  dueDate: DateTime!
+  processInstanceKey: Int!
+  repetitions: String!
+  startTime: DateTime!
+  status: String!
+}
+
+# The `DateTime` scalar type represents a date and time following the
+# ISO 8601 standard. Example: "2000-01-01T12:00:00Z".
+scalar DateTime

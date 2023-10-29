@@ -2,19 +2,40 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Instance struct {
+	ActiveInstances    int64  `json:"activeInstances"`
+	BpmnLiveStatus     string `json:"bpmnLiveStatus"`
+	BpmnResource       string `json:"bpmnResource"`
+	CompletedInstances int64  `json:"completedInstances"`
+	DeploymentTime     string `json:"deploymentTime"`
+	ProcessID          int64  `json:"processId"`
+	ProcessKey         int64  `json:"processKey"`
+	Version            int64  `json:"version"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type MessageSubscription struct {
+	CreatedAt   string `json:"createdAt"`
+	ElementID   int64  `json:"elementId"`
+	MessageName string `json:"messageName"`
+	Status      string `json:"status"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type Process struct {
+	BpmnLiveStatus       string                 `json:"bpmnLiveStatus"`
+	BpmnResource         string                 `json:"bpmnResource"`
+	DeploymentTime       string                 `json:"deploymentTime"`
+	Instances            []*Instance            `json:"instances"`
+	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
+	ProcessID            int64                  `json:"processId"`
+	ProcessKey           int64                  `json:"processKey"`
+	Timers               []*Timer               `json:"timers"`
+	Version              int64                  `json:"version"`
+}
+
+type Timer struct {
+	DueDate            string `json:"dueDate"`
+	ProcessInstanceKey int64  `json:"processInstanceKey"`
+	Repetitions        string `json:"repetitions"`
+	StartTime          string `json:"startTime"`
+	Status             string `json:"status"`
 }
