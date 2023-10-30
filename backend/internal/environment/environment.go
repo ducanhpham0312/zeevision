@@ -19,9 +19,6 @@ const (
 	// Environment variable used to configure the port to use for the
 	// application deployment.
 	EnvVarAppPort = "ZEEVISION_APP_PORT"
-	// Environment variable used to configure the address to use for the
-	// application.
-	EnvVarAppAddress = "ZEEVISION_APP_ADDRESS"
 	// Environment variable used to configure the port to use for the API.
 	EnvVarAPIPort = "ZEEVISION_API_PORT"
 	// Environment variable used to configure the production mode.
