@@ -11,6 +11,11 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+const (
+	QueryCacheSize     = 1000
+	PersistedQuerySize = 100
+)
+
 func newAPIHandler() *qlhandler.Server {
 	// Setup GraphQL schema options.
 	rootResolver := &graph.Resolver{}
@@ -28,11 +33,11 @@ func newAPIHandler() *qlhandler.Server {
 	api.AddTransport(transport.POST{})
 	api.AddTransport(transport.MultipartForm{})
 
-	api.SetQueryCache(lru.New(1000))
+	api.SetQueryCache(lru.New(QueryCacheSize))
 
 	api.Use(extension.Introspection{})
 	api.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New(100),
+		Cache: lru.New(PersistedQuerySize),
 	})
 
 	return api

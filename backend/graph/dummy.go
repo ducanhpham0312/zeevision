@@ -4,8 +4,11 @@ import "github.com/ducanhpham0312/zeevision/backend/graph/model"
 
 var dummyProcesses = []*model.Process{
 	{
-		ProcessKey:           1,
-		ProcessID:            123,
+		//nolint:gomnd
+		ProcessKey: 1,
+		//nolint:gomnd
+		ProcessID: 123,
+		//nolint:gomnd
 		Version:              1,
 		BpmnLiveStatus:       "alive",
 		BpmnResource:         "a8s7dft87agvsdf=",
@@ -15,8 +18,11 @@ var dummyProcesses = []*model.Process{
 		Timers:               []*model.Timer{},
 	},
 	{
-		ProcessKey:           2,
-		ProcessID:            222,
+		//nolint:gomnd
+		ProcessKey: 2,
+		//nolint:gomnd
+		ProcessID: 222,
+		//nolint:gomnd
 		Version:              3,
 		BpmnLiveStatus:       "dead",
 		BpmnResource:         "a7s6dtf7aiw3=",
