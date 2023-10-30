@@ -1,4 +1,6 @@
-# Where are all the schema files located? globs are supported eg  src/**/*.graphqls
+---
+# Where are all the schema files located? globs are supported
+# eg. src/**/*.graphqls
 schema:
   - graph/*.graphqls
 
@@ -26,9 +28,9 @@ resolver:
 
 # This section declares type mapping between the GraphQL and go type systems
 #
-# The first line in each type will be used as defaults for resolver arguments and
-# modelgen, the others will be allowed when binding to fields. Configure them to
-# your liking
+# The first line in each type will be used as defaults for resolver arguments
+# and modelgen, the others will be allowed when binding to fields. Configure
+# them to your liking
 models:
   ID:
     model:
