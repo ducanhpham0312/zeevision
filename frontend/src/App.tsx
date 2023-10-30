@@ -1,3 +1,9 @@
+import {
+  ApolloClient,
+  InMemoryCache,
+  //ApolloProvider,
+  gql,
+} from "@apollo/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import ProcessesPage from "./pages/ProcessesPage";
@@ -52,33 +58,25 @@ const router = createBrowserRouter([
   },
 ]);
 
+const client = new ApolloClient({
+  uri: "http://127.0.0.1:8081/graphql",
+  cache: new InMemoryCache(),
+});
+
 function App() {
-  const websocket = new WebSocket("ws://127.0.0.1:8081/ws");
-
   useEffect(() => {
-    websocket.addEventListener("open", () => {
-      console.log("websocket: connected");
-
-      websocket.send(
-        JSON.stringify({
-          correlationId: "1",
-          resourceType: "process",
-          payload: { id: 222 },
-        })
-      );
-    });
-
-    websocket.addEventListener("close", () => {
-      console.log("websocket: closed");
-    });
-
-    websocket.addEventListener("error", (event) => {
-      console.error("websocket: error:", event);
-    });
-
-    websocket.addEventListener("message", (event) => {
-      console.log("websocket message:", event.data);
-    });
+    client
+      .query({
+        query: gql`
+          query Test {
+            processes {
+              processId
+              processKey
+            }
+          }
+        `,
+      })
+      .then((result) => console.log(result));
   });
 
   return <RouterProvider router={router} />;

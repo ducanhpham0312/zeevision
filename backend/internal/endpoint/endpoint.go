@@ -8,7 +8,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi"
 	"github.com/mandrigin/gin-spa/spa"
+	"github.com/rs/cors"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -68,13 +70,13 @@ func New(conf Config) (*Endpoint, error) {
 	var appServer *http.Server
 	if conf.DoHostApp {
 		var err error
-		appServer, err = NewAppServer(conf.AppPort)
+		appServer, err = NewAppServer(conf)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	apiServer, err := NewAPIServer(conf.APIPort, conf.DoHostPlayground)
+	apiServer, err := NewAPIServer(conf)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +88,7 @@ func New(conf Config) (*Endpoint, error) {
 }
 
 // Create a new application server.
-func NewAppServer(port uint16) (*http.Server, error) {
+func NewAppServer(conf Config) (*http.Server, error) {
 	r := gin.Default()
 
 	r.Use(gin.Logger())
@@ -95,7 +97,7 @@ func NewAppServer(port uint16) (*http.Server, error) {
 	r.Use(spa.Middleware(AppPath, AppTargetPath))
 
 	return &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
+		Addr:         fmt.Sprintf(":%d", conf.AppPort),
 		Handler:      r,
 		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
 		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
@@ -103,19 +105,27 @@ func NewAppServer(port uint16) (*http.Server, error) {
 }
 
 // Create a new API server.
-func NewAPIServer(port uint16, doHostPlayground bool) (*http.Server, error) {
+func NewAPIServer(conf Config) (*http.Server, error) {
+	router := chi.NewRouter()
+
+	// Allow CORS.
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowCredentials: true,
+		Debug:            true,
+	}).Handler)
+
 	// Create mux to handle API and playground.
-	mux := http.NewServeMux()
-	mux.Handle(APIPath, newAPIHandler())
+	router.Handle(APIPath, newAPIHandler())
 
 	// Host GraphQL playground if it has been configured.
-	if doHostPlayground {
-		mux.Handle(PlaygroundPath, playground.Handler(PlaygroundTitle, APIPath))
+	if conf.DoHostPlayground {
+		router.Handle(PlaygroundPath, playground.Handler(PlaygroundTitle, APIPath))
 	}
 
 	return &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
-		Handler:      mux,
+		Addr:         fmt.Sprintf(":%d", conf.APIPort),
+		Handler:      router,
 		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
 		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
 	}, nil
