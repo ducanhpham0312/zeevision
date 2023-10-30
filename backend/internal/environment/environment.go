@@ -10,6 +10,7 @@ package environment
 import (
 	"os"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -31,6 +32,9 @@ const (
 	// Environment variable used to configure if the playground should be
 	// hosted.
 	EnvVarHostPlayground = "ZEEVISION_HOST_PLAYGROUND"
+	// Environment variable used to configure the allowed origins for
+	// accessing the API.
+	EnvVarAPIAllowedOrigins = "ZEEVISION_API_ALLOWED_ORIGINS"
 )
 
 const (
@@ -48,6 +52,11 @@ const (
 	DefaultHostPlayground = false
 )
 
+var (
+	// Default value for allowed origins. None are allowed.
+	DefaultAPIAllowedOrigins = []string{}
+)
+
 var cache map[string]any
 
 // This function is automatically called before main() to initialize the
@@ -63,30 +72,47 @@ func init() {
 	setOrFallbackMap(EnvVarProduction, DefaultProduction, isOne)
 	setOrFallbackMap(EnvVarHostApp, DefaultHostApp, isOne)
 	setOrFallbackMap(EnvVarHostPlayground, DefaultHostPlayground, isOne)
+
+	setOrFallbackMap(EnvVarAPIAllowedOrigins, DefaultAPIAllowedOrigins, func(s string) ([]string, bool) {
+		return strings.Split(s, ","), true
+	})
 }
 
+// Return the full address for Kafka where consumer can connect.
 func KafkaAddress() string {
 	return cache[EnvVarKafkaAddr].(string)
 }
 
+// Return the port the application is hosted at.
 func AppPort() uint16 {
 	return cache[EnvVarAppPort].(uint16)
 }
 
+// Return the port the API is hosted at.
 func APIPort() uint16 {
 	return cache[EnvVarAPIPort].(uint16)
 }
 
+// Return whether the application is running in production mode or not.
 func IsProduction() bool {
 	return cache[EnvVarProduction].(bool)
 }
 
+// Return whether the application should host the application too or only
+// the API.
 func DoHostApp() bool {
 	return cache[EnvVarHostApp].(bool)
 }
 
+// Return whether the application should host the GraphQL playground for the
+// API.
 func DoHostPlayground() bool {
 	return cache[EnvVarHostPlayground].(bool)
+}
+
+// Return the set of allowed origins for API access.
+func APIAllowedOrigins() []string {
+	return cache[EnvVarAPIAllowedOrigins].([]string)
 }
 
 // Helper to save environment variable value if it has been set.

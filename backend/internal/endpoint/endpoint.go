@@ -44,6 +44,11 @@ type Config struct {
 	// This defines if the endpoint should serve also the GraphQL
 	// playground or not.
 	DoHostPlayground bool
+	// This defines if the endpoint is running in production mode or
+	// not.
+	Production bool
+	// This defines the allowed origins for CORS.
+	AllowedOrigins []string
 }
 
 // Endpoint represents a server that handles incoming requests.
@@ -60,6 +65,8 @@ func NewFromEnv() (*Endpoint, error) {
 		APIPort:          environment.APIPort(),
 		DoHostApp:        environment.DoHostApp(),
 		DoHostPlayground: environment.DoHostPlayground(),
+		Production:       environment.IsProduction(),
+		AllowedOrigins:   environment.APIAllowedOrigins(),
 	}
 
 	return New(conf)
@@ -89,16 +96,16 @@ func New(conf Config) (*Endpoint, error) {
 
 // Create a new application server.
 func NewAppServer(conf Config) (*http.Server, error) {
-	r := gin.Default()
+	router := gin.New()
 
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
 
-	r.Use(spa.Middleware(AppPath, AppTargetPath))
+	router.Use(spa.Middleware(AppPath, AppTargetPath))
 
 	return &http.Server{
 		Addr:         fmt.Sprintf(":%d", conf.AppPort),
-		Handler:      r,
+		Handler:      router,
 		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
 		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
 	}, nil
@@ -108,14 +115,13 @@ func NewAppServer(conf Config) (*http.Server, error) {
 func NewAPIServer(conf Config) (*http.Server, error) {
 	router := chi.NewRouter()
 
-	// Allow CORS.
+	// Allow CORS from the specified origins.
 	router.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowedOrigins:   conf.AllowedOrigins,
 		AllowCredentials: true,
-		Debug:            true,
+		Debug:            !conf.Production,
 	}).Handler)
 
-	// Create mux to handle API and playground.
 	router.Handle(APIPath, newAPIHandler())
 
 	// Host GraphQL playground if it has been configured.
