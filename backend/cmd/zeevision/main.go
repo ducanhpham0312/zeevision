@@ -24,7 +24,7 @@ func main() {
 	// need to be closed manually
 	defer kafkaConsumer.Close()
 
-	topic := "zeebe-message"
+	topic := "zeebe-deployment"
 	_, err = kafkaConsumer.ConsumeTopic(0, topic)
 	if err != nil {
 		// TODO: error handling
