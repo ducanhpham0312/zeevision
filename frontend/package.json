@@ -18,9 +18,9 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/base": "^5.0.0-beta.19",
-    "@mui/icons-material": "^5.14.13",
-    "@mui/system": "^5.14.10",
+    "@mui/base": "^5.0.0-beta.21",
+    "@mui/icons-material": "^5.14.15",
+    "@mui/system": "^5.14.15",
     "@react-spring/web": "^9.7.3",
     "@types/react-router-dom": "^5.3.3",
     "bpmn-js": "^14.0.0",
