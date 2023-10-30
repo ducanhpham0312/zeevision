@@ -1,9 +1,4 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  //ApolloProvider,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import ProcessesPage from "./pages/ProcessesPage";
@@ -13,7 +8,6 @@ import ErrorsPage from "./pages/ErrorsPage";
 import MessagesPage from "./pages/MessagesPage";
 import JobsPage from "./pages/JobsPage";
 import { Snackbar } from "./components/Snackbar";
-import { useEffect } from "react";
 
 const Layout = () => (
   <>
@@ -64,22 +58,11 @@ const client = new ApolloClient({
 });
 
 function App() {
-  useEffect(() => {
-    client
-      .query({
-        query: gql`
-          query Test {
-            processes {
-              processId
-              processKey
-            }
-          }
-        `,
-      })
-      .then((result) => console.log(result));
-  });
-
-  return <RouterProvider router={router} />;
+  return (
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
+  );
 }
 
 export default App;
