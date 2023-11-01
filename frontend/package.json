@@ -23,7 +23,7 @@
     "@mui/system": "^5.14.10",
     "@react-spring/web": "^9.7.3",
     "@types/react-router-dom": "^5.3.3",
-    "bpmn-js": "^14.0.0",
+    "bpmn-js": "^15.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
