@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
     labels:
       - "dependabot"
       - "gha deps"
@@ -14,8 +14,8 @@ updates:
     directory: "/backend"
     schedule:
       interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 5
+      day: "monday"
+    open-pull-requests-limit: 10
     labels:
       - "dependabot"
       - "go deps"
@@ -23,8 +23,24 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 5
+      day: "tuesday"
+    groups:
+      storybook:
+        patterns:
+          - "@storybook/*"
+          - "storybook"
+      emotion:
+        patterns:
+          - "@emotion/*"
+      mui:
+        patterns:
+          - "@mui/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@typescript-eslint/*"
+    open-pull-requests-limit: 10
     labels:
       - "dependabot"
       - "npm deps"
@@ -32,7 +48,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "sunday"
+      day: "wednesday"
     labels:
       - "dependabot"
       - "docker deps"
+    open-pull-requests-limit: 10
