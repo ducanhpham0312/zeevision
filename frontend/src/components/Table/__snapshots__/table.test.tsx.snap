@@ -241,7 +241,7 @@ exports[`Table Component renders horizontal table correctly 1`] = `
     <tfoot>
       <tr>
         <td
-          class="MuiTablePagination-root css-7ugj6v"
+          class="css-7ugj6v MuiTablePagination-root"
           colspan="6"
         >
           <div

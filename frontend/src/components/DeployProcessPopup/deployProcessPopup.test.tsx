@@ -1,9 +1,9 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { DragDropFile } from "../DragDropFile";
 import { DeployProcessPopup } from ".";
 import * as mockdata from "./mockdata.json";
 import { Button } from "../Button";
+import { DragDropFile } from "./DragDropFile";
 
 const fileContent = mockdata.file.content;
 const fileName = mockdata.file.name;

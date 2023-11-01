@@ -1,9 +1,9 @@
 import { ChangeEvent, useRef, useState } from "react";
-import { DragDropFile } from "../DragDropFile/DragDropFile";
-import { Popup, PopupAction, PopupContent } from "../Popup";
-import { Button } from "../Button";
-import { BpmnViewer } from "../BpmnViewer";
 import { readFileToString } from "../../utils/readFileToString";
+import { BpmnViewer } from "../BpmnViewer";
+import { Button } from "../Button";
+import { Popup, PopupAction, PopupContent } from "../Popup";
+import { DragDropFile } from "./DragDropFile";
 
 interface DeployProcessPopupProps {
   /**
