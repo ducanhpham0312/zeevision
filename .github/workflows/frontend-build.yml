@@ -37,7 +37,6 @@ jobs:
           npm run build
 
   lint:
-    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     defaults:
