@@ -1,1 +1,1 @@
-export { Popup, PopupAction, PopupContent } from "./Popup";
+export { Popup } from "./Popup";
