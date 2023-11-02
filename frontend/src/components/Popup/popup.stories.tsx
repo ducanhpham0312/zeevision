@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../Button";
 import { Popup } from "./Popup";
-import { PopupAction, PopupContent } from "./PopupChildren"
+import { PopupAction, PopupContent } from "./PopupChildren";
 import { useState } from "react";
 import mockdata from "./mockdata.json";
 
@@ -31,9 +31,7 @@ const ButtonWithHooks = ({ text }: { text?: Array<string> }) => {
             <Button>Deploy a file (.bpmn) </Button>
             <p>Or drag the files to the box belows</p>
           </div>
-          {text && (
-            <div>{[...Array(50)].map(() => text.join("\n"))}</div>
-          )}
+          {text && <div>{[...Array(50)].map(() => text.join("\n"))}</div>}
         </PopupContent>
         <PopupAction>
           <Button onClick={handleClose}>Cancel</Button>

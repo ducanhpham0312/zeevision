@@ -1,2 +1,2 @@
 export { Popup } from "./Popup";
-export { PopupAction, PopupContent } from "./PopupChildren"
+export { PopupAction, PopupContent } from "./PopupChildren";
