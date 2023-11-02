@@ -2,15 +2,15 @@ package endpoint
 
 import (
 	"fmt"
-	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
+	"github.com/go-chi/chi"
 	"github.com/mandrigin/gin-spa/spa"
+	"github.com/rs/cors"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -21,19 +21,15 @@ const (
 	AppTargetPath = "./static"
 
 	// Path where the API is served.
-	WebsocketPath = "/ws"
+	APIPath        = "/graphql"
+	PlaygroundPath = "/playground"
 
-	// Environment variables used to configure the endpoint.
-	EnvVarAppPort = "ZEEVISION_APP_PORT"
-	EnvVarAPIPort = "ZEEVISION_API_PORT"
-	EnvVarProd    = "ZEEVISION_PROD"
-
-	// Default port values.
-	DefaultAppPort = 8080
-	DefaultAPIPort = 8081
+	// Title shown in the browser tab for the playground.
+	PlaygroundTitle = "ZeeVision Playground"
 
 	ServerReadTimeoutSecs  = 5
 	ServerWriteTimeoutSecs = 10
+	KeepAlivePingInterval  = 5
 )
 
 // Configuration used to create a new endpoint.
@@ -42,10 +38,17 @@ type Config struct {
 	AppPort uint16
 	// The port used to host the API.
 	APIPort uint16
-	// Whether the endpoint is running in production mode.
 	// This defines if the endpoint should serve also the application
 	// files or not.
+	DoHostApp bool
+	// This defines if the endpoint should serve also the GraphQL
+	// playground or not.
+	DoHostPlayground bool
+	// This defines if the endpoint is running in production mode or
+	// not.
 	Production bool
+	// This defines the allowed origins for CORS.
+	AllowedOrigins []string
 }
 
 // Endpoint represents a server that handles incoming requests.
@@ -54,59 +57,33 @@ type Endpoint struct {
 	apiServer *http.Server
 }
 
-// TODO the use of msgChannel throughout represents a temporary solution to
-// passing consumer data through
-
 // Create a new endpoint from environment variables.
-//
-// App and API ports can be configured by setting the environment variables
-// APP_PORT and API_PORT respectively.
-func NewFromEnv(msgChannel chan []byte) (*Endpoint, error) {
-	// Create default configuration.
+func NewFromEnv() (*Endpoint, error) {
+	// Create configuration from environment variables.
 	conf := Config{
-		AppPort:    DefaultAppPort,
-		APIPort:    DefaultAPIPort,
-		Production: false,
+		AppPort:          environment.AppPort(),
+		APIPort:          environment.APIPort(),
+		DoHostApp:        environment.DoHostApp(),
+		DoHostPlayground: environment.DoHostPlayground(),
+		Production:       environment.IsProduction(),
+		AllowedOrigins:   environment.APIAllowedOrigins(),
 	}
 
-	// Override configuration with environment variables.
-	if port, ok := os.LookupEnv(EnvVarAPIPort); ok {
-		port, err := strconv.ParseUint(port, 10, 16)
-		if err != nil {
-			return nil, err
-		}
-
-		conf.APIPort = uint16(port)
-	}
-
-	if port, ok := os.LookupEnv(EnvVarAppPort); ok {
-		port, err := strconv.ParseUint(port, 10, 16)
-		if err != nil {
-			return nil, err
-		}
-
-		conf.AppPort = uint16(port)
-	}
-
-	if prod, ok := os.LookupEnv(EnvVarProd); ok && prod == "true" {
-		conf.Production = true
-	}
-
-	return New(conf, msgChannel)
+	return New(conf)
 }
 
 // Create a new endpoint.
-func New(conf Config, msgChannel chan []byte) (*Endpoint, error) {
+func New(conf Config) (*Endpoint, error) {
 	var appServer *http.Server
-	if conf.Production {
+	if conf.DoHostApp {
 		var err error
-		appServer, err = NewAppServer(conf.AppPort)
+		appServer, err = NewAppServer(conf)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	apiServer, err := NewAPIServer(conf.APIPort, msgChannel)
+	apiServer, err := NewAPIServer(conf)
 	if err != nil {
 		return nil, err
 	}
@@ -118,40 +95,43 @@ func New(conf Config, msgChannel chan []byte) (*Endpoint, error) {
 }
 
 // Create a new application server.
-func NewAppServer(port uint16) (*http.Server, error) {
-	r := gin.Default()
+func NewAppServer(conf Config) (*http.Server, error) {
+	router := gin.New()
 
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
 
-	r.Use(spa.Middleware(AppPath, AppTargetPath))
+	router.Use(spa.Middleware(AppPath, AppTargetPath))
 
 	return &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
-		Handler:      r,
+		Addr:         fmt.Sprintf(":%d", conf.AppPort),
+		Handler:      router,
 		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
 		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
 	}, nil
 }
 
 // Create a new API server.
-func NewAPIServer(port uint16, msgChannel chan []byte) (*http.Server, error) {
-	r := gin.Default()
+func NewAPIServer(conf Config) (*http.Server, error) {
+	router := chi.NewRouter()
 
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	// Allow CORS from the specified origins.
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   conf.AllowedOrigins,
+		AllowCredentials: true,
+		Debug:            !conf.Production,
+	}).Handler)
 
-	// Ignore proxy headers.
-	_ = r.SetTrustedProxies(nil)
+	router.Handle(APIPath, newAPIHandler())
 
-	upgrader := newUpgrader()
-	r.GET(WebsocketPath, func(ctx *gin.Context) {
-		websocketTunnel(ctx, upgrader, msgChannel)
-	})
+	// Host GraphQL playground if it has been configured.
+	if conf.DoHostPlayground {
+		router.Handle(PlaygroundPath, playground.Handler(PlaygroundTitle, APIPath))
+	}
 
 	return &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
-		Handler:      r,
+		Addr:         fmt.Sprintf(":%d", conf.APIPort),
+		Handler:      router,
 		ReadTimeout:  ServerReadTimeoutSecs * time.Second,
 		WriteTimeout: ServerWriteTimeoutSecs * time.Second,
 	}, nil
@@ -163,6 +143,7 @@ func NewAPIServer(port uint16, msgChannel chan []byte) (*http.Server, error) {
 func (e *Endpoint) Run() error {
 	var g errgroup.Group
 
+	// Run the application server if it has been configured.
 	if e.appServer != nil {
 		g.Go(func() error {
 			return e.appServer.ListenAndServe()
@@ -174,40 +155,4 @@ func (e *Endpoint) Run() error {
 	})
 
 	return g.Wait()
-}
-
-// Handle websocket tunnel for each new connection.
-func websocketTunnel(ctx *gin.Context, upgrader *websocket.Upgrader, msgChannel chan []byte) {
-	writer, request := ctx.Writer, ctx.Request
-
-	conn, err := upgrader.Upgrade(writer, request, nil)
-	if err != nil {
-		log.Println("upgrade:", err)
-		return
-	}
-	defer conn.Close()
-
-	// Pipe out whatever data we receive from the kafka consumer
-	for {
-		msg := <-msgChannel
-		err := conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		if err != nil {
-			log.Println("write:", err)
-			break
-		}
-
-		time.Sleep(time.Second)
-	}
-}
-
-// Create a new upgrader for creating the websocket connection.
-func newUpgrader() *websocket.Upgrader {
-	// Allow all origins.
-	checkOrigin := func(r *http.Request) bool {
-		return true
-	}
-
-	return &websocket.Upgrader{
-		CheckOrigin: checkOrigin,
-	}
 }

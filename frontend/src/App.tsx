@@ -1,3 +1,4 @@
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import ProcessesPage from "./pages/ProcessesPage";
@@ -51,8 +52,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const client = new ApolloClient({
+  uri: "http://127.0.0.1:8081/graphql",
+  cache: new InMemoryCache(),
+});
+
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
+  );
 }
 
 export default App;

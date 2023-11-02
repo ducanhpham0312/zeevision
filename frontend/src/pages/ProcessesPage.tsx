@@ -1,22 +1,55 @@
-import { useState } from "react";
-import { BpmnViewer } from "../components/BpmnViewer";
-import ws from "../config/socketConfig";
+import { Button } from "../components/Button";
+import { Table } from "../components/Table";
+import { useUIStore } from "../contexts/useUIStore";
+import { gql, useQuery } from "@apollo/client";
+
+const PROCESSES = gql`
+  query Test {
+    processes {
+      processId
+      processKey
+    }
+  }
+`;
 
 export default function ProcessesPage() {
-  const [bpmnList, setBpmnList] = useState<string[]>([]);
-  const [bpmnString, setBpmnString] = useState("");
-  ws.addEventListener("message", (ev) => {
-    console.log(`received message: ${ev.data}`);
-    setBpmnString(window.atob(JSON.parse(ev.data).value.resources[0].resource));
-    setBpmnList([...bpmnList, bpmnString]);
-  });
+  const { data } = useQuery(PROCESSES);
+
+  const { setSnackbarContent } = useUIStore();
+
+  const handleClick = (type: "success" | "error") => {
+    setSnackbarContent({
+      title: "This is a test",
+      message: "Everything was sent to the desired address.",
+      type,
+    });
+  };
 
   return (
     <>
-      {bpmnList.map((bpmnXml) => {
-        console.log(bpmnXml);
-        return <BpmnViewer key={bpmnXml} bpmnString={bpmnXml} width={400} />;
-      })}
+      <h1>ProcessesPage</h1>
+      <Button onClick={() => handleClick("success")}>
+        Test success snackbar
+      </Button>
+      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
+
+      <Table
+        header={["Process Key", "Process ID"]}
+        orientation="horizontal"
+        content={
+          data
+            ? data.processes.map(
+                ({
+                  processKey,
+                  processId,
+                }: {
+                  processKey: number;
+                  processId: number;
+                }) => [processKey, processId]
+              )
+            : []
+        }
+      />
     </>
   );
 }

@@ -1,0 +1,57 @@
+# This directive is used to alter generated code.
+directive @goField(
+  # Force the generation of a resolver for this field.
+  forceResolver: Boolean
+  # The name of the field in the Go struct.
+  name: String
+  # Specify is this field is nullable.
+  omittable: Boolean
+) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+# Root level query type.
+type Query {
+  processes: [Process!]!
+  process(processKey: Int!): Process
+}
+
+type Process {
+  bpmnLiveStatus: String!
+  bpmnResource: String!
+  deploymentTime: DateTime!
+  instances: [Instance!]! @goField(forceResolver: true)
+  messageSubscriptions: [MessageSubscription!]! @goField(forceResolver: true)
+  processId: Int!
+  processKey: Int!
+  timers: [Timer!]! @goField(forceResolver: true)
+  version: Int!
+}
+
+type Instance {
+  activeInstances: Int!
+  bpmnLiveStatus: String!
+  bpmnResource: String!
+  completedInstances: Int!
+  deploymentTime: DateTime!
+  processId: Int!
+  processKey: Int!
+  version: Int!
+}
+
+type MessageSubscription {
+  createdAt: DateTime!
+  elementId: Int!
+  messageName: String!
+  status: String!
+}
+
+type Timer {
+  dueDate: DateTime!
+  processInstanceKey: Int!
+  repetitions: String!
+  startTime: DateTime!
+  status: String!
+}
+
+# The `DateTime` scalar type represents a date and time following the
+# ISO 8601 standard. Example: "2000-01-01T12:00:00Z".
+scalar DateTime

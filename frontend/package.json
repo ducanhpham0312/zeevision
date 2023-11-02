@@ -16,6 +16,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.6",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/base": "^5.0.0-beta.22",
@@ -24,6 +25,7 @@
     "@react-spring/web": "^9.7.3",
     "@types/react-router-dom": "^5.3.3",
     "bpmn-js": "^15.0.0",
+    "graphql": "^16.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
