@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../Button";
 import { Popup } from "./Popup";
+import { PopupAction, PopupContent } from "./PopupChildren"
 import { useState } from "react";
 import mockdata from "./mockdata.json";
-import { styled } from "@mui/system";
 
 const meta = {
   title: "Assets/Popup",
@@ -61,24 +61,3 @@ export const Scrollable: Story = {
   },
   render: () => <ButtonWithHooks text={mockdata.scrollable.children} />,
 };
-
-const PopupContent = styled("div")`
-  margin-top: 10px;
-  flex-grow: 1;
-  padding-left: 20px;
-  overflow-y: scroll;
-  max-height: 500px;
-  > div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-right: 20px;
-  }
-`;
-
-const PopupAction = styled("div")`
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  padding: 10px;
-`;
