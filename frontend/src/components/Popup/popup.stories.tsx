@@ -31,9 +31,7 @@ const ButtonWithHooks = ({ text }: { text?: Array<string> }) => {
             <p>Or drag the files to the box belows</p>
           </div>
           {text && (
-            <>
-              <div>{[...Array(50)].map(() => text.join("\n"))}</div>
-            </>
+            <div>{[...Array(50)].map(() => text.join("\n"))}</div>
           )}
         </PopupContent>
         <PopupAction>

@@ -121,7 +121,7 @@ export const PopupAction = styled("div")`
   padding: 10px;
 `;
 
-export const StyledBackdrop = styled(Backdrop)`
+const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
   position: fixed;
   inset: 0;
@@ -130,7 +130,7 @@ export const StyledBackdrop = styled(Backdrop)`
 `;
 
 // make this responsive
-export const PopupContainer = styled("div")`
+const PopupContainer = styled("div")`
   width: 800px;
   border: 1px solid black;
   overflow-y: auto;
@@ -142,7 +142,7 @@ export const PopupContainer = styled("div")`
   border-radius: 8px;
 `;
 
-export const StyledModal = styled(Modal)`
+const StyledModal = styled(Modal)`
   position: fixed;
   z-index: 1300;
   inset: 0;
