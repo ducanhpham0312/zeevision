@@ -23,6 +23,7 @@
     "@mui/icons-material": "^5.14.16",
     "@mui/system": "^5.14.16",
     "@react-spring/web": "^9.7.3",
+    "@types/react-dropzone": "^5.1.0",
     "@types/react-router-dom": "^5.3.3",
     "bpmn-js": "^15.0.0",
     "graphql": "^16.8.1",
