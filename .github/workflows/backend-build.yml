@@ -5,8 +5,6 @@ name: Backend
 on:
   push:
     branches: ["master"]
-    paths-ignore:
-      - "frontend/**"
   pull_request:
     branches: ["master"]
   schedule:
