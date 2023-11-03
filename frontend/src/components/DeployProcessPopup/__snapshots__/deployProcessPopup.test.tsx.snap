@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeployProcessPopup Component renders the popup correctly when a file is dragged over 1`] = `
+<body
+  style="padding-right: 1024px; overflow: hidden;"
+>
+  <div
+    aria-hidden="true"
+  >
+    <div />
+  </div>
+  <div
+    aria-hidden="true"
+    class="MuiModal-root css-1lnsth0"
+    role="presentation"
+  >
+    <div
+      aria-hidden="true"
+      class="MuiModal-backdrop css-1jyxheb"
+      style="opacity: 0;"
+    />
+    <div
+      data-testid="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      style="opacity: 0;"
+      tabindex="-1"
+    >
+      <div
+        class="css-1mxqldv"
+      >
+        <div
+          class="css-rjt43j"
+        >
+          <p>
+            Deploy a process
+          </p>
+          <button
+            class="MuiButton-root css-39vfrt"
+            type="button"
+            variant="text"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              data-testid="CloseIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="css-12e8uj5"
+          style="overflow: hidden;"
+        >
+          <div>
+            <button
+              class="MuiButton-root css-1lm9n5u"
+              type="button"
+              variant="outlined"
+            >
+              Deploy a file (.bpmn)
+            </button>
+            <p>
+              Or drag a bpmn file here
+            </p>
+            <input
+              accept=".bpmn"
+              data-testid="file-input"
+              style="display: none;"
+              type="file"
+            />
+          </div>
+          <div />
+        </div>
+        <div
+          class="css-1csjh8m"
+        >
+          <button
+            class="MuiButton-root css-1lm9n5u"
+            type="button"
+            variant="outlined"
+          >
+            Cancel
+          </button>
+          <button
+            class="MuiButton-root css-11j4va6"
+            type="button"
+            variant="contained"
+          >
+            Deploy process
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      data-testid="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+  <div
+    aria-describedby="simple-modal-description"
+    aria-labelledby="simple-modal-title"
+    class="MuiModal-root css-y1nyvh"
+    role="presentation"
+  >
+    <div
+      data-testid="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiBox-root css-idn9ht"
+      tabindex="-1"
+    >
+      <p
+        id="simple-modal-description"
+      >
+        Drop files here to upload!
+      </p>
+      <em>
+        (Only *.bmpn files will be accepted)
+      </em>
+    </div>
+    <div
+      data-testid="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</body>
+`;
