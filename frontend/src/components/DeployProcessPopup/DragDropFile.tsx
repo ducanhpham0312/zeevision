@@ -54,7 +54,7 @@ export function DragDropFile({ onFileDropped }: DragDropFileProps) {
   );
 }
 
-export const StyledModal = styled(Modal)`
+const StyledModal = styled(Modal)`
   position: fixed;
   z-index: 1300;
   inset: 0;
@@ -63,7 +63,7 @@ export const StyledModal = styled(Modal)`
   justify-content: center;
 `;
 
-export const StyledBox = styled(Box)`
+const StyledBox = styled(Box)`
   width: 400px;
   height: 200px;
   border: 3px solid ${PRIMARY[600]};
