@@ -5,8 +5,6 @@ name: Backend
 on:
   push:
     branches: ["master"]
-    paths-ignore:
-      - "frontend/**"
   pull_request:
     branches: ["master"]
   schedule:
@@ -49,7 +47,6 @@ jobs:
           platforms: linux/arm64
 
   lint:
-    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
 
     steps:
