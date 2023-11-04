@@ -1,6 +1,6 @@
 # zeevision
 A Zeebe workflow monitoring application.
-
+For developers: Link to internal workflow documentation: https://github.com/ducanhpham0312/zeevision-private/blob/master/workflow/README.md
 
 | Folder | Master | Code coverage |
 |--------|--------|---------------|
