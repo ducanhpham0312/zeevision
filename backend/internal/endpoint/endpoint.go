@@ -8,7 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/gin-gonic/gin"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/mandrigin/gin-spa/spa"
 	"github.com/rs/cors"
 	"golang.org/x/sync/errgroup"
