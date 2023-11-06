@@ -7,7 +7,7 @@ require (
 	github.com/IBM/sarama v1.41.3
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-chi/chi v1.5.5
-	github.com/gorilla/websocket v1.5.0
+	github.com/gorilla/websocket v1.5.1
 	github.com/mandrigin/gin-spa v0.0.0-20200212133200-790d0c0c7335
 	github.com/rs/cors v1.10.1
 	github.com/stretchr/testify v1.8.4
