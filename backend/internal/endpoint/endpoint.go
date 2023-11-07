@@ -8,7 +8,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/gin-gonic/gin"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/mandrigin/gin-spa/spa"
 	"github.com/rs/cors"
 	"golang.org/x/sync/errgroup"
@@ -114,6 +115,8 @@ func NewAppServer(conf Config) (*http.Server, error) {
 // Create a new API server.
 func NewAPIServer(conf Config) (*http.Server, error) {
 	router := chi.NewRouter()
+	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
 
 	// Allow CORS from the specified origins.
 	router.Use(cors.New(cors.Options{
