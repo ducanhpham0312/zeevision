@@ -22,31 +22,34 @@ services:
       - "8080:8080"
       - "8081:8081"
 
-  db:
-    image: postgres:latest
+  postgres:
+    image: postgres:16.0
     networks:
+      - postgres_network
       - kafka_network
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: zeevision_db
+      POSTGRES_USER: zeevision_user
+      POSTGRES_PASSWORD: zeevision_pass
     volumes:
-      - ./db/data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - zeevison_volumn:/var/lib/postgresql/data
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:7.8
     networks:
-      - kafka_network
+      - postgres_network
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin_password
+      PGADMIN_DEFAULT_EMAIL: pg_admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pg_pass
     ports:
       - "5050:80"
     depends_on:
-      - db
+      - postgres
 
 networks:
   kafka_network:
     external: true
+  postgres_network:
+
+volumes:
+  zeevison_volumn:
