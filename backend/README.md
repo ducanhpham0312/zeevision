@@ -8,6 +8,7 @@
   - [Development guidelines](#development-guidelines)
     - [File naming](#file-naming)
     - [Named return values and Naked returns](#named-return-values-and-naked-returns)
+  - [GUI database management](#gui-database-management)
 
 This subdirectory contains code for the backend of the ZeeVision application. It serves GraphQL based API for the frontend and consumes Kafka stream of Zeebe data. Backend uses PostgreSQL to store information
 received from Kafka.
@@ -62,6 +63,34 @@ You should see a JSON response with structure similar to this:
 
 The whole GraphQL API schema is defined [here](../backend/graph/schema.graphqls), and it is used directly by [gqlgen](https://gqlgen.com/) to generate Go code.
 
+## GUI database management
+
+With `pgadmin`, you can perform query, visualise data, utilize dashboards, etc with GUI. See more [here](https://www.pgadmin.org/docs/pgadmin4/7.8/index.html)
+
+### Environment variables
+
+- `POSTGRES_DB`: zeevision_db
+- `POSTGRES_USER`: zeevision_user
+- `POSTGRES_PASSWORD`: zeevision_pass
+- `HOST`: postgres
+- `PGADMIN_EMAIL`: pg_admin@gmail.com
+- `PGADMIN_PASSWORD`: pg_pass
+
+Defined in [docker-compose.yml](../docker-compose.yml)
+
+### Set up and access step-by-step
+1.  After backend is running, open login page through [`localhost:5050`](http://localhost:5050)
+2. Log in with `PGADMIN_EMAIL` and `PGADMIN_PASSWORD`
+3. In *Quick Links* box, choose **Add New Server**, then it will pop up *Register-Server* modal 
+4. In *General* tab, put `POSTGRES_DB` into *Name* field
+5. In *Connection* tab, 
+   - put `HOST` into **Host name/address** field
+   - put `POSTGRES_USER` into **Username** field
+   - put `POSTGRES_PASSWORD` into **Password** field
+6. Choose **Save**
+
+After this you should see *Servers* on the right menu
+
 ## Architecture
 
 Simplified architecture diagram of ZeeVision and its relation Kafka, PostgreSQL and the frontend:
@@ -75,6 +104,7 @@ flowchart LR
     end
     Storage <-.->|GORM lib| postgres[(PostgreSQL)]
     Endpoint -.->|GraphQL| front([Frontend])
+    postgres <-.-> |GUI managed| pgadmin([PgAdmin])
 ```
 
 Consumer has connection to Kafka and streams them directly to _Storage_ using its provided **Store API**. Consumer here indirectly filters unnecessary information from the received messages when converting to Storage compatible types. Storage has **Fetch API** which is used by the _Endpoint_ to fetch data from the database. Endpoint has GraphQL API which is used by the _Frontend_ to query data from the backend. Arrows in the diagram show the direction of the data flow.

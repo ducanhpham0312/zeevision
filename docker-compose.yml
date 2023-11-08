@@ -8,6 +8,7 @@ services:
     container_name: zeevision
     networks:
       - kafka_network
+      - postgres_network
     environment:
       - ZEEVISION_APP_PORT=8080
       - ZEEVISION_API_PORT=8081
@@ -22,6 +23,33 @@ services:
       - "8080:8080"
       - "8081:8081"
 
+  postgres:
+    image: postgres:16.0
+    networks:
+      - postgres_network
+    environment:
+      POSTGRES_DB: zeevision_db
+      POSTGRES_USER: zeevision_user
+      POSTGRES_PASSWORD: zeevision_pass
+    volumes:
+      - zeevision_volume:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:7.8
+    networks:
+      - postgres_network
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pg_admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pg_pass
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
 networks:
   kafka_network:
     external: true
+  postgres_network:
+
+volumes:
+  zeevision_volume:
