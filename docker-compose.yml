@@ -8,6 +8,7 @@ services:
     container_name: zeevision
     networks:
       - kafka_network
+      - postgres_network
     environment:
       - ZEEVISION_APP_PORT=8080
       - ZEEVISION_API_PORT=8081
@@ -26,7 +27,6 @@ services:
     image: postgres:16.0
     networks:
       - postgres_network
-      - kafka_network
     environment:
       POSTGRES_DB: zeevision_db
       POSTGRES_USER: zeevision_user
