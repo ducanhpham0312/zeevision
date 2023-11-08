@@ -76,7 +76,7 @@ With `pgadmin`, you can perform query, visualise data, utilize dashboards, etc w
 - `PGADMIN_EMAIL`: pg_admin@gmail.com
 - `PGADMIN_PASSWORD`: pg_pass
 
-Defined [here](../docker-compose.yml)
+Defined in [docker-compose.yml](../docker-compose.yml)
 
 ### Set up and access step-by-step
 1.  After backend is running, open login page through [`localhost:5050`](http://localhost:5050)
@@ -104,7 +104,7 @@ flowchart LR
     end
     Storage <-.->|GORM lib| postgres[(PostgreSQL)]
     Endpoint -.->|GraphQL| front([Frontend])
-    postgres[(PostgreSQL)] --> |GUI managed | pgadmin([PgAdmin])
+    postgres <-.-> |GUI managed| pgadmin([PgAdmin])
 ```
 
 Consumer has connection to Kafka and streams them directly to _Storage_ using its provided **Store API**. Consumer here indirectly filters unnecessary information from the received messages when converting to Storage compatible types. Storage has **Fetch API** which is used by the _Endpoint_ to fetch data from the database. Endpoint has GraphQL API which is used by the _Frontend_ to query data from the backend. Arrows in the diagram show the direction of the data flow.
@@ -135,5 +135,3 @@ Below are some exceptions and additions to the guidelines.
 
 - Prefer to not use named return values. Return values should be obvious from the context, their types, and finally from the function/method comment.
 - Don't use naked returns. They make the code harder to read and understand.
-
-
