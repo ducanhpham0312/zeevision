@@ -6,10 +6,24 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/internal/consumer"
 	"github.com/ducanhpham0312/zeevision/backend/internal/endpoint"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
+	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
 
 // Entry point for the application.
 func main() {
+
+	dsnConfig := storage.DsnConfig{
+		User:         environment.DatabaseUser(),
+		Password:     environment.DatabasePassword(),
+		DatabaseName: environment.DatabaseName(),
+		Host:         environment.HostDatabase(),
+		Port:         environment.DatabasePort(),
+	}
+
+	db := storage.ConnectDb(dsnConfig)
+
+	storage.CreateInstanceTable(db)
+
 	// Get Kafka address from environment variable.
 	kafkaAddr := environment.KafkaAddress()
 

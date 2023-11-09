@@ -66,9 +66,9 @@ const (
 	// Default value for the database name
 	DefaultDatabaseName = "zeevision_db"
 	// Default value for hosting the database.
-	DefaultHostDatabase = false
+	DefaultHostDatabase = "postgres"
 	// Default port to use for the database. Just for developemnt mode
-	//when need to access database from local
+	// when need to access database from local
 	DefaultDatabasePort = 5432
 )
 
@@ -103,7 +103,7 @@ func init() {
 
 	setOrFallbackMap(EnvVarDatabasePort, DefaultDatabasePort, parsePort)
 
-	setOrFallbackMap(EnvVarHostDatabase, DefaultHostDatabase, isOne)
+	setOrFallback(EnvVarHostDatabase, DefaultHostDatabase)
 
 }
 
@@ -162,6 +162,11 @@ func DatabaseName() string {
 // Return the port the database is hosted at.
 func DatabasePort() uint16 {
 	return cache[EnvVarDatabasePort].(uint16)
+}
+
+// Return the database host.
+func HostDatabase() string {
+	return cache[EnvVarHostDatabase].(string)
 }
 
 // Helper to save environment variable value if it has been set.
