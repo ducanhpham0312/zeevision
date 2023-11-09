@@ -11,11 +11,11 @@ func TestAdd(t *testing.T) {
 		User:         environment.DatabaseUser(),
 		Password:     environment.DatabasePassword(),
 		DatabaseName: environment.DatabaseName(),
-		Host:         "postgres",
+		Host:         environment.HostDatabase(),
 		Port:         environment.DatabasePort(),
 	}
 
 	db := ConnectDb(dsnConfig)
 
-	CreateInstanceTable(db)
+	CreateProcessTable(db)
 }
