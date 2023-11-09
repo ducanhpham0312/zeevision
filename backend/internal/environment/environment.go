@@ -67,8 +67,7 @@ const (
 	DefaultDatabaseName = "zeevision_db"
 	// Default value for hosting the database.
 	DefaultHostDatabase = "postgres"
-	// Default port to use for the database. Just for developemnt mode
-	// when need to access database from local
+	// Default port to use for the database.
 	DefaultDatabasePort = 5432
 )
 
@@ -93,9 +92,11 @@ func init() {
 	setOrFallbackMap(EnvVarHostApp, DefaultHostApp, isOne)
 	setOrFallbackMap(EnvVarHostPlayground, DefaultHostPlayground, isOne)
 
-	setOrFallbackMap(EnvVarAPIAllowedOrigins, DefaultAPIAllowedOrigins, func(s string) ([]string, bool) {
-		return strings.Split(s, ","), true
-	})
+	setOrFallbackMap(
+		EnvVarAPIAllowedOrigins, DefaultAPIAllowedOrigins, func(s string) ([]string, bool) {
+			return strings.Split(s, ","), true
+		},
+	)
 
 	setOrFallback(EnvVarDatabaseUser, DefaultDatabaseUser)
 	setOrFallback(EnvVarDatabasePassword, DefaultDatabasePassword)
@@ -149,7 +150,7 @@ func DatabaseUser() string {
 	return cache[EnvVarDatabaseUser].(string)
 }
 
-// Return the datbase password.
+// Return the database password.
 func DatabasePassword() string {
 	return cache[EnvVarDatabasePassword].(string)
 }
@@ -171,9 +172,11 @@ func HostDatabase() string {
 
 // Helper to save environment variable value if it has been set.
 func setOrFallback(envVar string, fallback string) {
-	setOrFallbackMap(envVar, fallback, func(s string) (string, bool) {
-		return s, true
-	})
+	setOrFallbackMap(
+		envVar, fallback, func(s string) (string, bool) {
+			return s, true
+		},
+	)
 }
 
 // Helper to save environment variable value if it has been set with a mapper
