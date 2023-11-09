@@ -23,8 +23,10 @@ type DsnConfig struct {
 
 // Create a valid DSN string to connect database from DsnConfig
 func NewDsn(config DsnConfig) string {
-	dsn := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%d",
-		config.User, config.Password, config.DatabaseName, config.Host, config.Port)
+	dsn := fmt.Sprintf(
+		"user=%s password=%s dbname=%s host=%s port=%d",
+		config.User, config.Password, config.DatabaseName, config.Host, config.Port,
+	)
 	return dsn
 }
 
@@ -42,7 +44,7 @@ func ConnectDb(dsnConfig DsnConfig) *gorm.DB {
 }
 
 // AutoMigrate Process table, create, modify if the table is not existed, changed base on model
-func CreateInstanceTable(db *gorm.DB) {
+func CreateProcessTable(db *gorm.DB) {
 	err := db.AutoMigrate(&Process{})
 	if err != nil {
 		panic("Failed to create tables: " + err.Error())

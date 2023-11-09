@@ -22,7 +22,7 @@ func main() {
 
 	db := storage.ConnectDb(dsnConfig)
 
-	storage.CreateInstanceTable(db)
+	storage.CreateProcessTable(db)
 
 	// Get Kafka address from environment variable.
 	kafkaAddr := environment.KafkaAddress()
