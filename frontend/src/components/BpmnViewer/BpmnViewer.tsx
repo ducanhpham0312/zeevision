@@ -12,7 +12,7 @@ interface BpmnViewerProps {
   /**
    * The width (in pixels) that the Viewer should take.
    */
-  width: number;
+  width?: number;
   /**
    * Set this to true for NavigatedViewer which is interactable i.e. drag, zoom in out.
    */
@@ -34,12 +34,10 @@ export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
           width: width,
-          height: 300,
         })
       : new Viewer({
           container: containerRef.current as HTMLDivElement,
           width: width,
-          height: 300,
         });
 
     async function openDiagram(xmlString: string) {
@@ -71,5 +69,5 @@ export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
     };
   }, [bpmnString, width, navigated]);
 
-  return <div ref={containerRef} style={{ userSelect: "none" }} id="canvas" />;
+  return <div ref={containerRef} style={{ userSelect: "none", minWidth:"70%" }} id="canvas" />;
 }
