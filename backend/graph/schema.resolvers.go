@@ -11,11 +11,6 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/graph/model"
 )
 
-// Instances is the resolver for the instances field.
-func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error) {
-	return []*model.Instance{}, nil
-}
-
 // MessageSubscriptions is the resolver for the messageSubscriptions field.
 func (r *processResolver) MessageSubscriptions(ctx context.Context, obj *model.Process) ([]*model.MessageSubscription, error) {
 	return []*model.MessageSubscription{}, nil
@@ -42,6 +37,16 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 	return nil, fmt.Errorf("process with given key %d doesn't exist", processKey)
 }
 
+// Instances is the resolver for the instances field.
+func (r *queryResolver) Instances(ctx context.Context) ([]*model.Instance, error) {
+	panic(fmt.Errorf("not implemented: Instances - instances"))
+}
+
+// Instance is the resolver for the instance field.
+func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model.Instance, error) {
+	panic(fmt.Errorf("not implemented: Instance - instance"))
+}
+
 // Process returns ProcessResolver implementation.
 func (r *Resolver) Process() ProcessResolver { return &processResolver{r} }
 
@@ -50,3 +55,13 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type processResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error) {
+	return []*model.Instance{}, nil
+}
