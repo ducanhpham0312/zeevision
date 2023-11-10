@@ -33,9 +33,9 @@ const (
 	// accessing the API.
 	EnvVarAPIAllowedOrigins = "ZEEVISION_API_ALLOWED_ORIGINS"
 	// Environment variable used to configure the database username
-	EnvVarDatabaseUser = "ZEEVISION_DATABASE_USER"
+	EnvVarDatabaseUser = "ZEEVISION_DATABASE_USER" //nolint:all
 	// Environment variable used to configure the database user password
-	EnvVarDatabasePassword = "ZEEVISION_DATABASE_PASSWORD"
+	EnvVarDatabasePassword = "ZEEVISION_DATABASE_PASSWORD" //nolint:all
 	// Environment variable used to configure the database name
 	EnvVarDatabaseName = "ZEEVISION_DATABASE_NAME"
 	// Environment variable used to configure if the database should be
@@ -59,10 +59,6 @@ const (
 	DefaultHostApp = false
 	// Default value for hosting the playground.
 	DefaultHostPlayground = false
-	// Default value for the database username
-	DefaultDatabaseUser = "zeevision_user"
-	// Default value for the database user password
-	DefaultDatabasePassword = "zeevision_pass"
 	// Default value for the database name
 	DefaultDatabaseName = "zeevision_db"
 	// Default value for hosting the database.
@@ -98,8 +94,6 @@ func init() {
 		},
 	)
 
-	setOrFallback(EnvVarDatabaseUser, DefaultDatabaseUser)
-	setOrFallback(EnvVarDatabasePassword, DefaultDatabasePassword)
 	setOrFallback(EnvVarDatabaseName, DefaultDatabaseName)
 
 	setOrFallbackMap(EnvVarDatabasePort, DefaultDatabasePort, parsePort)

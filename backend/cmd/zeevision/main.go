@@ -13,16 +13,22 @@ import (
 func main() {
 
 	dsnConfig := storage.DsnConfig{
-		User:         environment.DatabaseUser(),
-		Password:     environment.DatabasePassword(),
+		User:         "zeevision_user",
+		Password:     "zeevision_pass",
 		DatabaseName: environment.DatabaseName(),
 		Host:         environment.HostDatabase(),
 		Port:         environment.DatabasePort(),
 	}
 
-	db := storage.ConnectDb(dsnConfig)
+	db, err := storage.ConnectDb(dsnConfig)
+	if err != nil {
+		panic(err)
+	}
 
-	storage.CreateProcessTable(db)
+	err = storage.CreateProcessTable(db)
+	if err != nil {
+		panic(err)
+	}
 
 	// Get Kafka address from environment variable.
 	kafkaAddr := environment.KafkaAddress()
