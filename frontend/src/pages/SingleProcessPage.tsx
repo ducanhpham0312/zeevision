@@ -44,39 +44,41 @@ export default function ProcessesPage() {
             "Version",
             "Deployment time",
           ]}
-          content={data ? [[processKey, processId, version, deploymentTime]] : []}
-        />
-        <BpmnViewer bpmnString={decodedBpmn}/>
-      </ProcessContainer>
-        <Table
-          orientation="horizontal"
-          header={["Instance Key", "Version", "Start time"]}
           content={
-            instances ?
-              instances.map(
+            data ? [[processKey, processId, version, deploymentTime]] : []
+          }
+        />
+        <BpmnViewer bpmnString={decodedBpmn} />
+      </ProcessContainer>
+      <Table
+        orientation="horizontal"
+        header={["Instance Key", "Version", "Start time"]}
+        content={
+          instances
+            ? instances.map(
                 ({
                   instanceKey,
                   status,
                   startTime,
                 }: {
-                  instanceKey: number,
+                  instanceKey: number;
                   status: string;
                   startTime: string;
                 }) => [instanceKey, status, startTime]
-              ) : []
-          }
-        />
+              )
+            : []
+        }
+      />
     </ProcessPageContainer>
   );
 }
 
 const ProcessPageContainer = styled("div")`
   margin: 40px;
-`
+`;
 
 const ProcessContainer = styled(`div`)`
   display: flex;
   flex-direction: row;
   margin-bottom: 40px;
-`
-
+`;

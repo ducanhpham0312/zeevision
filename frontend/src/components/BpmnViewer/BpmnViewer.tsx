@@ -69,5 +69,11 @@ export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
     };
   }, [bpmnString, width, navigated]);
 
-  return <div ref={containerRef} style={{ userSelect: "none", minWidth:"70%" }} id="canvas" />;
+  return (
+    <div
+      ref={containerRef}
+      style={{ userSelect: "none", minWidth: "70%" }}
+      id="canvas"
+    />
+  );
 }
