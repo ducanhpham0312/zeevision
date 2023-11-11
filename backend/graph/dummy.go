@@ -5,12 +5,12 @@ var dummyInstances = []*model.Instance{
 	{
 		InstanceKey: 			12345,
 		Status:						"Active",
-		StartTime:   "2023-01-02T00:00:00Z",
+		StartTime:   			"2023-01-02T00:00:00Z",
 	},
 	{
 		InstanceKey: 			54321,
 		Status:						"completed",
-		StartTime:   "2023-01-01T00:15:00Z",
+		StartTime:   			"2023-01-01T00:15:00Z",
 	},
 }
 var dummyProcesses = []*model.Process{
