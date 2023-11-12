@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Table } from ".";
 import * as mockdata from "./mockdata.json";
@@ -46,18 +46,18 @@ describe("HorizontalTable Component", () => {
   });
 
   it("header and content included in table when both props are passed", () => {
-    render(
+    const { getByText, getAllByText } = render(
       <Table
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
       />
     );
-    expect(screen.getByText("Variable value")).toBeInTheDocument();
+    expect(getByText("Variable value")).toBeInTheDocument();
     expect(
-      screen.getAllByText("multi-instance-process")[0]
+      getByText("multi-instance-process")
     ).toBeInTheDocument();
-    expect(screen.getAllByText("multi-instance-process").length).toEqual(4);
+    expect(getAllByText("multi-instance-process").length).toEqual(4);
   });
 
   it("renders header and pagination when the content is empty", () => {
@@ -81,15 +81,15 @@ describe("HorizontalTable Component", () => {
   });
 
   it("table should sort by column ascending when clicking the column name", () => {
-    render(
+    const { getByText } = render(
       <Table
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
       />
     );
-    fireEvent.click(screen.getByText("Time created"));
-    expect(screen.getByText("Time created ▲")).toBeInTheDocument();
+    fireEvent.click(getByText("Time created"));
+    expect(getByText("Time created ▲")).toBeInTheDocument();
 
     const html = document.body.innerHTML;
     const later = html.search("1696667333");
@@ -98,16 +98,16 @@ describe("HorizontalTable Component", () => {
   });
 
   it("table should sort by column descending when clicking the column name twice", () => {
-    render(
+    const { getByText } = render(
       <Table
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
       />
     );
-    fireEvent.click(screen.getByText("Time created"));
-    fireEvent.click(screen.getByText("Time created ▲"));
-    expect(screen.getByText("Time created ▼")).toBeInTheDocument();
+    fireEvent.click(getByText("Time created"));
+    fireEvent.click(getByText("Time created ▲"));
+    expect(getByText("Time created ▼")).toBeInTheDocument();
 
     const html = document.body.innerHTML;
     const later = html.search("1696667333");
