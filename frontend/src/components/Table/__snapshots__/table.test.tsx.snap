@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Table Component renders horizontal table correctly 1`] = `
+exports[`HorizontalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
     class="css-wsrcxp"
@@ -237,6 +237,134 @@ exports[`Table Component renders horizontal table correctly 1`] = `
           </pre>
         </td>
       </tr>
+      <tr>
+        <td>
+          <pre>
+            sixth-multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            amp
+          </pre>
+        </td>
+        <td>
+          <pre>
+            integer
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984642
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667164
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            new-multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            kmean
+          </pre>
+        </td>
+        <td>
+          <pre>
+            newValue
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984100
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667542
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            another-multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            anotherVariable
+          </pre>
+        </td>
+        <td>
+          <pre>
+            string
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984432
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667333
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            multi-instance-process
+          </pre>
+        </td>
+        <td>
+          <pre>
+            total
+          </pre>
+        </td>
+        <td>
+          <pre>
+            200
+          </pre>
+        </td>
+        <td>
+          <pre>
+            2251799813984108
+          </pre>
+        </td>
+        <td>
+          <pre>
+            1696667765
+          </pre>
+        </td>
+        <td>
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
     </tbody>
     <tfoot>
       <tr>
@@ -308,7 +436,7 @@ exports[`Table Component renders horizontal table correctly 1`] = `
             <p
               class="MuiTablePagination-displayedRows"
             >
-              1–6 of 6
+              1–10 of 12
             </p>
             <div
               class="MuiTablePagination-actions"
@@ -333,7 +461,6 @@ exports[`Table Component renders horizontal table correctly 1`] = `
               </button>
               <button
                 aria-label="Go to next page"
-                disabled=""
                 title="Go to next page"
               >
                 <span>
@@ -342,7 +469,6 @@ exports[`Table Component renders horizontal table correctly 1`] = `
               </button>
               <button
                 aria-label="Go to last page"
-                disabled=""
                 title="Go to last page"
               >
                 <span>
@@ -358,7 +484,7 @@ exports[`Table Component renders horizontal table correctly 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Table Component renders vertical table correctly 1`] = `
+exports[`VerticalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
     class="css-wsrcxp"

@@ -69,34 +69,28 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
           {header.map((item) => (
             <th key={item} onClick={() => handleSort(item)}>
               {item}
-              {sortBy === item && (
-                <span>{sortOrder === "asc" ? " ▲" : " ▼"}</span>
-              )}
+              {sortBy === item && (sortOrder === "asc" ? " ▲" : " ▼")}
             </th>
           ))}
         </tr>
       </StyledHeader>
       <tbody aria-label="custom pagination table">
-        {(rowsPerPage > 0
-          ? sortedContent.slice(
-              page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
-            )
-          : sortedContent
-        ).map((row, rowIdx) => (
-          <tr key={rowIdx}>
-            {row.map((cell, index) => (
-              <td key={index}>
-                <pre>
-                  {typeof cell === "string" ? prettifyJson(cell) : cell}
-                </pre>
-              </td>
-            ))}
-          </tr>
-        ))}
+        {sortedContent
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((row, rowIdx) => (
+            <tr key={rowIdx}>
+              {row.map((cell, index) => (
+                <td key={index}>
+                  <pre>
+                    {typeof cell === "string" ? prettifyJson(cell) : cell}
+                  </pre>
+                </td>
+              ))}
+            </tr>
+          ))}
         {emptyRows > 0 && (
           <tr style={{ height: 41 * emptyRows }}>
-            <td colSpan={header.length} aria-hidden />
+            <td colSpan={header.length} />
           </tr>
         )}
       </tbody>

@@ -6,7 +6,7 @@ export interface VerticalTableProps {
 }
 
 export function VerticalTable({ header, content }: VerticalTableProps) {
-  if (!content || content.length === 0) return null;
+  if (content.length < 1) return null;
   return (
     <StyledVerticalTable>
       {header.map((title, idx) => (
