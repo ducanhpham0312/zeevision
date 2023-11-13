@@ -54,9 +54,7 @@ describe("HorizontalTable Component", () => {
       />
     );
     expect(getByText("Variable value")).toBeInTheDocument();
-    expect(
-      getByText("multi-instance-process")
-    ).toBeInTheDocument();
+    expect(getAllByText("multi-instance-process")[0]).toBeInTheDocument();
     expect(getAllByText("multi-instance-process").length).toEqual(4);
   });
 
