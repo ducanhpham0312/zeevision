@@ -142,6 +142,6 @@ Below are some exceptions and additions to the guidelines.
 ### Updating type and query definitions
 During the development process, it is sometimes required to update type and queries, e.g., for `Process`, `Instance`, `Timer`, etc. All the changes must be made in `graph/schema.graphqls`:
 - Open the file and navigate to the type/query you want to update.
-- Update the type / query with correct fields. When you add new queries, you might also want to remove `@goField(forceResolver: true)` accordingly.
-- Under `/backend`, run `./run_gqlgen.sh` to update query in automatically generated files (`generated.go`, `models_gen.go`, `schema.resolvers.go`). DO NOT manually update those files.
+- Update the type / query with correct fields.
+- Under `/backend`, run `./run_gqlgen.sh` to update query in automatically generated files (`generated.go`, `models_gen.go`, `schema.resolvers.go`). DO NOT manually update those files (except `schema.resolvers.go` as the functions here create the query itself).
 - Run the backend again `./run_api.sh` and open the playground to test the new changes.
