@@ -89,7 +89,7 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   cypress-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     defaults:
       run:
@@ -112,3 +112,4 @@ jobs:
         with:
           build: npm run build
           start: npm start
+          working-directory: ./frontend
