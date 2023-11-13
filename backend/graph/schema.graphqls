@@ -22,7 +22,7 @@ type Process {
   bpmnLiveStatus: String!
   bpmnResource: String!
   deploymentTime: DateTime!
-  instances: [Instance!]!
+  instances: [Instance!]! @goField(forceResolver: true)
   messageSubscriptions: [MessageSubscription!]! @goField(forceResolver: true)
   processId: Int!
   processKey: Int!
