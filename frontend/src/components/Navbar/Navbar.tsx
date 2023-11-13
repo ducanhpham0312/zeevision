@@ -68,7 +68,7 @@ const NavbarComponent = styled("header")(
   align-items: center;
   gap: 30px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-`
+`,
 );
 
 const Divider = styled("div")(
@@ -76,5 +76,5 @@ const Divider = styled("div")(
   height: 40px;
   width: 0;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
-`
+`,
 );
