@@ -1,3 +1,5 @@
+import { withTV } from 'tailwind-variants/dist/transformer';
+
 /** @type {import('tailwindcss').Config} */
 const PRIMARY = {
   50: "#f6f8ff",
@@ -13,7 +15,7 @@ const PRIMARY = {
   950: "#010c65",
 };
 
-export default {
+export default withTV({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -27,4 +29,4 @@ export default {
     },
   },
   plugins: [],
-};
+});

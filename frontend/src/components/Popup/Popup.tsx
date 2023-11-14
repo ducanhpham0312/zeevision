@@ -45,7 +45,7 @@ export function Popup({
           <PopupContainer>
             <PopupTitle>
               <p>{title}</p>
-              <Button variant={"text"} onClick={props.onClose as () => void}>
+              <Button onClick={props.onClose as () => void}>
                 <CloseIcon />
               </Button>
             </PopupTitle>

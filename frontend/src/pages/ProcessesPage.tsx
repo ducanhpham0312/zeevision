@@ -28,7 +28,7 @@ export default function ProcessesPage() {
   return (
     <>
       <h1>ProcessesPage</h1>
-      <Button onClick={() => handleClick("success")}>
+      <Button variant="outlined" onClick={() => handleClick("success")}>
         Test success snackbar
       </Button>
       <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
@@ -45,7 +45,7 @@ export default function ProcessesPage() {
                 }: {
                   processKey: number;
                   processId: number;
-                }) => [processKey, processId]
+                }) => [processKey, processId],
               )
             : []
         }

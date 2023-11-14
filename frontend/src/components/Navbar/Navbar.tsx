@@ -1,4 +1,3 @@
-import { styled } from "@mui/system";
 import { Button } from "../Button";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -34,16 +33,15 @@ export function Navbar() {
   const location = useLocation();
 
   return (
-    <NavbarComponent>
+    <header className="fixed z-50 flex w-full items-center gap-7 border-b border-black/20 bg-background px-5">
       <div>
         <div>NAVBAR</div>
       </div>
-      <Divider />
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div className="h-10 w-0 border-l border-black/30" />
+      <div className="flex gap-3">
         {NavigationPath.map((nav) => (
           <Button
             active={location.pathname.includes(nav.path)}
-            variant="text"
             size="large"
             onClick={() => navigate(nav.path)}
             key={nav.path}
@@ -52,29 +50,6 @@ export function Navbar() {
           </Button>
         ))}
       </div>
-    </NavbarComponent>
+    </header>
   );
 }
-
-const NavbarComponent = styled("header")(
-  () => `
-  display: flex;
-  position: fixed;
-  z-index: 1000;
-  background-color: white;
-  width: 100%;
-  padding: 0px 20px;
-  box-sizing: border-box;
-  align-items: center;
-  gap: 30px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-`,
-);
-
-const Divider = styled("div")(
-  () => `
-  height: 40px;
-  width: 0;
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-`,
-);

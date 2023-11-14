@@ -31,6 +31,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
     "reconnecting-websocket": "^4.4.0",
+    "tailwind-merge": "^2.0.0",
+    "tailwind-variants": "^0.1.18",
     "zustand": "^4.4.6"
   },
   "devDependencies": {

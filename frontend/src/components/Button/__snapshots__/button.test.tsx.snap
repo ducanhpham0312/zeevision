@@ -3,11 +3,15 @@
 exports[`StyledButton Component renders correctly 1`] = `
 <DocumentFragment>
   <button
-    class="MuiButton-root css-1lm9n5u"
-    type="button"
-    variant="outlined"
+    class="relative box-border text-text hover:bg-hover active:bg-active rounded px-3 py-2"
   >
-    Snapshot
+    <div
+      class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-text duration-100"
+      style="height: 0px;"
+    />
+    <span>
+      Snapshot
+    </span>
   </button>
 </DocumentFragment>
 `;
