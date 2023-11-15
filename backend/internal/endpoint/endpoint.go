@@ -30,7 +30,6 @@ const (
 
 	ServerReadTimeoutSecs  = 5
 	ServerWriteTimeoutSecs = 10
-	KeepAlivePingInterval  = 5
 )
 
 // Configuration used to create a new endpoint.

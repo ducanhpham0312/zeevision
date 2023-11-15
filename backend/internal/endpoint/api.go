@@ -14,6 +14,8 @@ import (
 const (
 	QueryCacheSize     = 1000
 	PersistedQuerySize = 100
+
+	KeepAlivePingInterval = 5
 )
 
 func newAPIHandler() *qlhandler.Server {
