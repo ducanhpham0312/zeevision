@@ -140,6 +140,7 @@ Below are some exceptions and additions to the guidelines.
 - Don't use naked returns. They make the code harder to read and understand.
 
 ### Updating type and query definitions
+
 During the development process, it is sometimes required to update type and queries, e.g., for `Process`, `Instance`, `Timer`, etc. All the changes must be made in `graph/schema.graphqls`:
 - Open the file and navigate to the type/query you want to update.
 - Update the type / query with correct fields.
