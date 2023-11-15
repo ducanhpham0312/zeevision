@@ -7,7 +7,7 @@ import { styled } from "@mui/system";
 export default function ProcessesPage() {
   const params = useParams();
   const PROCESS = gql`
-  query Test {
+  query SingleProcess {
     process(processKey: ${params.id}) {
       processId
       processKey
@@ -39,10 +39,10 @@ export default function ProcessesPage() {
         <Table
           orientation="vertical"
           header={[
-            "Process key",
+            "Process Key",
             "BPMN Process ID",
             "Version",
-            "Deployment time",
+            "Deployment Time",
           ]}
           content={
             data ? [[processKey, processId, version, deploymentTime]] : []
@@ -52,7 +52,7 @@ export default function ProcessesPage() {
       </ProcessContainer>
       <Table
         orientation="horizontal"
-        header={["Instance Key", "Version", "Start time"]}
+        header={["Instance Key", "Version", "Start Time"]}
         content={
           instances
             ? instances.map(

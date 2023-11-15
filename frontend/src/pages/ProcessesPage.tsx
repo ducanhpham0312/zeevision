@@ -4,8 +4,9 @@ import { useUIStore } from "../contexts/useUIStore";
 import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 
-const PROCESSES = gql`
-  query Test {
+export default function ProcessesPage() {
+  const PROCESSES = gql`
+  query Processes {
     processes {
       processId
       processKey
@@ -13,8 +14,6 @@ const PROCESSES = gql`
     }
   }
 `;
-
-export default function ProcessesPage() {
   const { data } = useQuery(PROCESSES);
   const { setSnackbarContent } = useUIStore();
 
@@ -35,7 +34,7 @@ export default function ProcessesPage() {
       <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
 
       <Table
-        header={["Process Key", "Process ID", "DeploymentTime"]}
+        header={["Process Key", "Process ID", "Deployment Time"]}
         orientation="horizontal"
         content={
           data
