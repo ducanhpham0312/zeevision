@@ -73,11 +73,11 @@ With `pgadmin`, you can perform query, visualise data, utilize dashboards, etc w
 ### Environment variables
 
 - `POSTGRES_DB`: zeevision_db
-- `POSTGRES_USER`: zeevision_user
-- `POSTGRES_PASSWORD`: zeevision_pass
+- `POSTGRES_USER`: user
+- `POSTGRES_PASSWORD`: pass
 - `HOST`: postgres
-- `PGADMIN_EMAIL`: pg_admin@gmail.com
-- `PGADMIN_PASSWORD`: pg_pass
+- `PGADMIN_EMAIL`: user@example.com
+- `PGADMIN_PASSWORD`: pass
 
 Defined in [docker-compose.yml](../docker-compose.yml)
 
