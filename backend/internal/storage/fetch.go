@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Fetcher is used by the API to fetch data from the database.
 type Fetcher struct {
 	// Database object used for fetching data.
 	db *gorm.DB
