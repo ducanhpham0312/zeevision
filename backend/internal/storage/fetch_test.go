@@ -24,7 +24,9 @@ var expectedProcesses = []Process{
 
 func TestProcessesQuery(t *testing.T) {
 	testDb := newProcessesTestDb(t)
-	defer testDb.Rollback()
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
 	db := testDb.DB()
 
 	err := db.Create(expectedProcesses).Error
@@ -45,7 +47,9 @@ func TestProcessesQuery(t *testing.T) {
 
 func TestProcessQuery(t *testing.T) {
 	testDb := newProcessesTestDb(t)
-	defer testDb.Rollback()
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
 	db := testDb.DB()
 
 	expectedProcess := expectedProcesses[0]
@@ -91,7 +95,9 @@ func TestProcessQuery(t *testing.T) {
 
 func TestCancelQuery(t *testing.T) {
 	testDb := newProcessesTestDb(t)
-	defer testDb.Rollback()
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
 
 	fetcher := NewFetcher(testDb.DB())
 
