@@ -8,6 +8,7 @@ import ErrorsPage from "./pages/ErrorsPage";
 import MessagesPage from "./pages/MessagesPage";
 import JobsPage from "./pages/JobsPage";
 import { Snackbar } from "./components/Snackbar";
+import SingleProcessPage from "./pages/SingleProcessPage";
 
 const Layout = () => (
   <>
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "processes",
         element: <ProcessesPage />,
+      },
+      {
+        path: "processes/:id",
+        element: <SingleProcessPage />,
       },
       {
         path: "instances",
