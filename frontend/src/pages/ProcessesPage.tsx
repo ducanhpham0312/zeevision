@@ -38,8 +38,8 @@ export default function ProcessesPage() {
       </Button>
       <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
       <>
-          <Button onClick={handleOpen}>Deploy a Process</Button>
-         <DeployProcessPopup
+        <Button onClick={handleOpen}>Deploy a Process</Button>
+        <DeployProcessPopup
           isPopUpOpen={isPopUpOpen}
           onOpenPopUp={handleOpen}
           onClosePopUp={handleClose}

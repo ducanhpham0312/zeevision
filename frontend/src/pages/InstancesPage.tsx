@@ -10,11 +10,11 @@ export default function InstancesPage() {
         startTime
       }
     }
-  `
-  const { data } = useQuery(INSTANCES)
+  `;
+  const { data } = useQuery(INSTANCES);
   return (
-    <Table 
-      orientation="horizontal" 
+    <Table
+      orientation="horizontal"
       header={["Instance Key", "BPMN Process ID", "Status", "Start Time"]}
       content={
         data
@@ -29,7 +29,7 @@ export default function InstancesPage() {
                 processId: string;
                 status: string;
                 startTime: string;
-              }) => [instanceKey,processId, status, startTime]
+              }) => [instanceKey, processId, status, startTime]
             )
           : []
       }
