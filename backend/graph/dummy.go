@@ -23,7 +23,7 @@ var dummyInstances = []*model.Instance{
 		ProcessID:   "order-main",
 		Status:      "Completed",
 		StartTime:   "2023-01-08T00:15:00Z",
-	},
+	}
 }
 var dummyProcesses = []*model.Process{
 	{
