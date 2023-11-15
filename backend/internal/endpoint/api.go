@@ -19,9 +19,9 @@ const (
 	KeepAlivePingInterval = 5
 )
 
-func newAPIHandler(fetch *storage.Fetch) *qlhandler.Server {
+func newAPIHandler(fetcher *storage.Fetcher) *qlhandler.Server {
 	// Setup GraphQL schema options.
-	rootResolver := &graph.Resolver{Fetch: fetch}
+	rootResolver := &graph.Resolver{Fetcher: fetcher}
 	config := graph.Config{Resolvers: rootResolver}
 	schema := graph.NewExecutableSchema(config)
 

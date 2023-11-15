@@ -37,7 +37,7 @@ func main() {
 	}
 
 	// Create fetcher for fetching data from database.
-	fetch := storage.NewFetch(db)
+	fetcher := storage.NewFetcher(db)
 
 	// Get Kafka address from environment variable.
 	kafkaAddr := environment.KafkaAddress()
@@ -60,7 +60,7 @@ func main() {
 		panic(err)
 	}
 
-	server, err := endpoint.NewFromEnv(fetch)
+	server, err := endpoint.NewFromEnv(fetcher)
 	if err != nil {
 		log.Fatal(err)
 	}

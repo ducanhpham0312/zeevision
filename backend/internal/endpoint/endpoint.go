@@ -59,7 +59,7 @@ type Endpoint struct {
 }
 
 // Create a new endpoint from environment variables.
-func NewFromEnv(fetch *storage.Fetch) (*Endpoint, error) {
+func NewFromEnv(fetcher *storage.Fetcher) (*Endpoint, error) {
 	// Create configuration from environment variables.
 	conf := Config{
 		AppPort:          environment.AppPort(),
@@ -70,11 +70,11 @@ func NewFromEnv(fetch *storage.Fetch) (*Endpoint, error) {
 		AllowedOrigins:   environment.APIAllowedOrigins(),
 	}
 
-	return New(conf, fetch)
+	return New(conf, fetcher)
 }
 
 // Create a new endpoint.
-func New(conf Config, fetch *storage.Fetch) (*Endpoint, error) {
+func New(conf Config, fetcher *storage.Fetcher) (*Endpoint, error) {
 	var appServer *http.Server
 	if conf.DoHostApp {
 		var err error
@@ -84,7 +84,7 @@ func New(conf Config, fetch *storage.Fetch) (*Endpoint, error) {
 		}
 	}
 
-	apiServer, err := NewAPIServer(conf, fetch)
+	apiServer, err := NewAPIServer(conf, fetcher)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func NewAppServer(conf Config) (*http.Server, error) {
 }
 
 // Create a new API server.
-func NewAPIServer(conf Config, fetch *storage.Fetch) (*http.Server, error) {
+func NewAPIServer(conf Config, fetcher *storage.Fetcher) (*http.Server, error) {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
@@ -125,7 +125,7 @@ func NewAPIServer(conf Config, fetch *storage.Fetch) (*http.Server, error) {
 		Debug:            !conf.Production,
 	}).Handler)
 
-	router.Handle(APIPath, newAPIHandler(fetch))
+	router.Handle(APIPath, newAPIHandler(fetcher))
 
 	// Host GraphQL playground if it has been configured.
 	if conf.DoHostPlayground {

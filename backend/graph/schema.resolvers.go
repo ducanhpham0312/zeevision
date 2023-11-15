@@ -31,7 +31,7 @@ func (r *processResolver) Timers(ctx context.Context, obj *model.Process) ([]*mo
 
 // Processes is the resolver for the processes field.
 func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error) {
-	dbProcesses, err := r.Fetch.GetProcesses(ctx)
+	dbProcesses, err := r.Fetcher.GetProcesses(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch processes: %w", err)
 	}
@@ -50,7 +50,7 @@ func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error)
 
 // Process is the resolver for the process field.
 func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.Process, error) {
-	dbProcess, err := r.Fetch.GetProcess(ctx, processKey)
+	dbProcess, err := r.Fetcher.GetProcess(ctx, processKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch process: %w", err)
 	}

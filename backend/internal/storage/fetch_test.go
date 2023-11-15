@@ -30,9 +30,9 @@ func TestProcessesQuery(t *testing.T) {
 	err := db.Create(expectedProcesses).Error
 	assert.NoError(t, err)
 
-	fetch := Fetch{db: db}
+	fetcher := Fetcher{db: db}
 
-	processes, err := fetch.GetProcesses(context.Background())
+	processes, err := fetcher.GetProcesses(context.Background())
 	assert.NoError(t, err)
 
 	assert.Len(t, processes, 2)
@@ -52,7 +52,7 @@ func TestProcessQuery(t *testing.T) {
 	err := db.Create(&expectedProcess).Error
 	assert.NoError(t, err)
 
-	fetch := Fetch{db: db}
+	fetcher := Fetcher{db: db}
 
 	tests := []struct {
 		name        string
@@ -74,7 +74,7 @@ func TestProcessQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			process, err := fetch.GetProcess(context.Background(), test.processKey)
+			process, err := fetcher.GetProcess(context.Background(), test.processKey)
 
 			if test.expectedErr != "" {
 				assert.EqualError(t, err, test.expectedErr)
@@ -93,12 +93,12 @@ func TestCancelQuery(t *testing.T) {
 	testDb := newProcessesTestDb(t)
 	defer testDb.Rollback()
 
-	fetch := Fetch{db: testDb.DB()}
+	fetcher := Fetcher{db: testDb.DB()}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	_, err := fetch.GetProcesses(ctx)
+	_, err := fetcher.GetProcesses(ctx)
 	assert.EqualError(t, err, "context canceled")
 }
 
