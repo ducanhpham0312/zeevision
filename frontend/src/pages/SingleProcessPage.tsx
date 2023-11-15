@@ -7,21 +7,21 @@ import { styled } from "@mui/system";
 export default function ProcessesPage() {
   const params = useParams();
   const PROCESS = gql`
-  query SingleProcess {
-    process(processKey: ${params.id}) {
-      processId
-      processKey
-      version
-      deploymentTime
-      bpmnResource
-      instances {
-        instanceKey
-        status
-        startTime
+    query SingleProcess {
+      process(processKey: ${params.id}) {
+        processId
+        processKey
+        version
+        deploymentTime
+        bpmnResource
+        instances {
+          instanceKey
+          status
+          startTime
+        }
       }
     }
-  }
-`;
+  `;
   const { data } = useQuery(PROCESS);
   const {
     processKey,

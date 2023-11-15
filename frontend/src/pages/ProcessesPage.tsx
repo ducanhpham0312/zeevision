@@ -6,14 +6,14 @@ import { NavLink } from "react-router-dom";
 
 export default function ProcessesPage() {
   const PROCESSES = gql`
-  query Processes {
-    processes {
-      processId
-      processKey
-      deploymentTime
+    query Processes {
+      processes {
+        processId
+        processKey
+        deploymentTime
+      }
     }
-  }
-`;
+  `;
   const { data } = useQuery(PROCESSES);
   const { setSnackbarContent } = useUIStore();
 
