@@ -7,6 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
+	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 	"github.com/gin-gonic/gin"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -58,7 +59,7 @@ type Endpoint struct {
 }
 
 // Create a new endpoint from environment variables.
-func NewFromEnv() (*Endpoint, error) {
+func NewFromEnv(fetch *storage.Fetch) (*Endpoint, error) {
 	// Create configuration from environment variables.
 	conf := Config{
 		AppPort:          environment.AppPort(),
@@ -69,11 +70,11 @@ func NewFromEnv() (*Endpoint, error) {
 		AllowedOrigins:   environment.APIAllowedOrigins(),
 	}
 
-	return New(conf)
+	return New(conf, fetch)
 }
 
 // Create a new endpoint.
-func New(conf Config) (*Endpoint, error) {
+func New(conf Config, fetch *storage.Fetch) (*Endpoint, error) {
 	var appServer *http.Server
 	if conf.DoHostApp {
 		var err error
@@ -83,7 +84,7 @@ func New(conf Config) (*Endpoint, error) {
 		}
 	}
 
-	apiServer, err := NewAPIServer(conf)
+	apiServer, err := NewAPIServer(conf, fetch)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +113,7 @@ func NewAppServer(conf Config) (*http.Server, error) {
 }
 
 // Create a new API server.
-func NewAPIServer(conf Config) (*http.Server, error) {
+func NewAPIServer(conf Config, fetch *storage.Fetch) (*http.Server, error) {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
@@ -124,7 +125,7 @@ func NewAPIServer(conf Config) (*http.Server, error) {
 		Debug:            !conf.Production,
 	}).Handler)
 
-	router.Handle(APIPath, newAPIHandler())
+	router.Handle(APIPath, newAPIHandler(fetch))
 
 	// Host GraphQL playground if it has been configured.
 	if conf.DoHostPlayground {

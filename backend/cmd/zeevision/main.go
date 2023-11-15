@@ -36,6 +36,9 @@ func main() {
 		panic(err)
 	}
 
+	// Create fetcher for fetching data from database.
+	fetch := storage.NewFetch(db)
+
 	// Get Kafka address from environment variable.
 	kafkaAddr := environment.KafkaAddress()
 
@@ -57,9 +60,7 @@ func main() {
 		panic(err)
 	}
 
-	// TODO: replace the msgChannel with a pointer to the consumer, perhaps,
-	// so we can simply request the channels we want
-	server, err := endpoint.NewFromEnv()
+	server, err := endpoint.NewFromEnv(fetch)
 	if err != nil {
 		log.Fatal(err)
 	}

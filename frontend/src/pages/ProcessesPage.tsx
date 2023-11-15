@@ -14,7 +14,11 @@ export default function ProcessesPage() {
       }
     }
   `;
-  const { data } = useQuery(PROCESSES);
+  const { data } = useQuery(PROCESSES, {
+    // TODO: make constant and move to centralized place
+    pollInterval: 2000,
+  });
+
   const { setSnackbarContent } = useUIStore();
 
   const handleClick = (type: "success" | "error") => {
