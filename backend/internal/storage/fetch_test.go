@@ -30,7 +30,7 @@ func TestProcessesQuery(t *testing.T) {
 	err := db.Create(expectedProcesses).Error
 	assert.NoError(t, err)
 
-	fetcher := Fetcher{db: db}
+	fetcher := NewFetcher(testDb.DB())
 
 	processes, err := fetcher.GetProcesses(context.Background())
 	assert.NoError(t, err)
@@ -52,7 +52,7 @@ func TestProcessQuery(t *testing.T) {
 	err := db.Create(&expectedProcess).Error
 	assert.NoError(t, err)
 
-	fetcher := Fetcher{db: db}
+	fetcher := NewFetcher(testDb.DB())
 
 	tests := []struct {
 		name        string
@@ -93,7 +93,7 @@ func TestCancelQuery(t *testing.T) {
 	testDb := newProcessesTestDb(t)
 	defer testDb.Rollback()
 
-	fetcher := Fetcher{db: testDb.DB()}
+	fetcher := NewFetcher(testDb.DB())
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
