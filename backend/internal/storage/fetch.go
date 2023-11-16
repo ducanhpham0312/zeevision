@@ -19,10 +19,15 @@ func NewFetcher(db *gorm.DB) *Fetcher {
 	return &Fetcher{db: db}
 }
 
+// Returns a database object with context used for single queries.
+func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
+	return f.db.WithContext(ctx)
+}
+
 // Gets all processes.
 func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 	var processes []Process
-	err := f.db.WithContext(ctx).Find(&processes).Error
+	err := f.ContextDB(ctx).Find(&processes).Error
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +38,7 @@ func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 // Gets a process by its key.
 func (f *Fetcher) GetProcess(ctx context.Context, processKey int64) (Process, error) {
 	var process Process
-	err := f.db.WithContext(ctx).First(&process, processKey).Error
+	err := f.ContextDB(ctx).Where(&Process{ProcessKey: processKey}).First(&process).Error
 	if err != nil {
 		return Process{}, err
 	}
