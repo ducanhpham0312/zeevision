@@ -35,24 +35,25 @@ export function Popup({
 }: PopupProps) {
   return (
     <div>
-      <StyledModal
+      <Modal
         {...props}
+        className="fixed inset-0 z-50 flex items-center justify-center"
         onClose={shouldNotCloseWhenClickAway ? () => {} : props.onClose}
         slots={{ backdrop: StyledBackdrop }}
         closeAfterTransition
       >
         <Fade in={props.open}>
-          <PopupContainer>
-            <PopupTitle>
+          <div className="flex max-h-[90%] min-h-[300px] w-[800px] flex-col overflow-y-auto rounded bg-background">
+            <div className="flex items-center justify-between p-[10px] pl-[20px] text-2xl">
               <p>{title}</p>
               <Button onClick={props.onClose as () => void}>
                 <CloseIcon />
               </Button>
-            </PopupTitle>
+            </div>
             {children}
-          </PopupContainer>
+          </div>
         </Fade>
-      </StyledModal>
+      </Modal>
     </div>
   );
 }
@@ -97,46 +98,10 @@ const Backdrop = forwardRef<
   return <Fade ref={ref} in={open} {...other} />;
 });
 
-const PopupTitle = styled("div")`
-  display: flex;
-  height: 50px;
-  line-height: 5px;
-  justify-content: space-between;
-  padding: 10px;
-  padding-left: 20px;
-
-  p {
-    font-size: 25px;
-    font-weight: 700;
-  }
-`;
-
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
   position: fixed;
   inset: 0;
   background-color: rgb(0 0 0 / 0.5);
   -webkit-tap-highlight-color: transparent;
-`;
-
-// make this responsive
-const PopupContainer = styled("div")`
-  width: 800px;
-  border: 1px solid black;
-  overflow-y: auto;
-  max-height: 90%;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-radius: 8px;
-`;
-
-const StyledModal = styled(Modal)`
-  position: fixed;
-  z-index: 1300;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;

@@ -3,17 +3,16 @@
 exports[`Snackbar Component render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiSnackbar-root css-1h0um7a"
+    class="MuiSnackbar-root fixed bottom-4 right-4 z-50 flex min-w-[360px] max-w-[560px]"
     role="presentation"
   >
     <div
-      class="css-9pp65"
+      class="flex gap-2 p-4 overflow-hidden rounded text-white bg-sucess"
       style="transform: translateX(0); transition: transform 300ms ease; align-content: start;"
-      type="success"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium success-icon css-1x8ve67-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium success-icon css-c1qtpg-MuiSvgIcon-root"
         data-testid="CheckRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -23,7 +22,7 @@ exports[`Snackbar Component render correctly 1`] = `
         />
       </svg>
       <div
-        class="snackbar-message"
+        class="flex max-w-full"
       >
         <p
           class="snackbar-title"

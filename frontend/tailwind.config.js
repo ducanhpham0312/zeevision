@@ -1,4 +1,4 @@
-import { withTV } from 'tailwind-variants/dist/transformer';
+import { withTV } from "tailwind-variants/dist/transformer";
 
 /** @type {import('tailwindcss').Config} */
 const PRIMARY = {
@@ -22,7 +22,9 @@ export default withTV({
       colors: {
         hover: PRIMARY[50],
         active: PRIMARY[100],
-        text: PRIMARY[900],
+        text: "#000",
+        error: "#800",
+        sucess: "#070",
         background: "#fff",
         accent: PRIMARY[900],
       },

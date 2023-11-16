@@ -22,7 +22,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
     (
       content: (string | number)[][],
       column: string,
-      order: string
+      order: string,
     ): (string | number)[][] => {
       return content.slice().sort((a, b) => {
         const comparison =
@@ -30,7 +30,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         return order === "desc" ? comparison * -1 : comparison;
       });
     },
-    [header]
+    [header],
   );
   React.useEffect(() => {
     // Sort the content when sortBy or sortOrder changes
@@ -51,13 +51,13 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
 
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -80,7 +80,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         {(rowsPerPage > 0
           ? sortedContent.slice(
               page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
+              page * rowsPerPage + rowsPerPage,
             )
           : sortedContent
         ).map((row, rowIdx) => (

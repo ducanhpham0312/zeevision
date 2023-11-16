@@ -11,7 +11,7 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
   </div>
   <div
     aria-hidden="true"
-    class="MuiModal-root css-1lnsth0"
+    class="MuiModal-root fixed inset-0 z-50 flex items-center justify-center"
     role="presentation"
   >
     <div
@@ -28,19 +28,19 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
       tabindex="-1"
     >
       <div
-        class="css-1mxqldv"
+        class="flex max-h-[90%] min-h-[300px] w-[800px] flex-col overflow-y-auto rounded bg-background"
       >
         <div
-          class="css-rjt43j"
+          class="flex items-center justify-between p-[10px] pl-[20px] text-2xl"
         >
           <p>
             Deploy a process
           </p>
           <button
-            class="relative box-border text-text hover:bg-hover active:bg-active rounded px-3 py-2"
+            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
           >
             <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-text duration-100"
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
               style="height: 0px;"
             />
             <span>
@@ -64,11 +64,11 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
         >
           <div>
             <button
-              class="relative box-border text-text hover:bg-hover active:bg-active rounded px-3 py-2"
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
               type="button"
             >
               <div
-                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-text duration-100"
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
                 style="height: 0px;"
               />
               <span>
@@ -91,10 +91,10 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
           class="css-1csjh8m"
         >
           <button
-            class="relative box-border text-text hover:bg-hover active:bg-active rounded px-3 py-2"
+            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
           >
             <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-text duration-100"
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
               style="height: 0px;"
             />
             <span>
@@ -102,10 +102,10 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
             </span>
           </button>
           <button
-            class="relative box-border rounded text-white bg-text hover:bg-text/90 active:bg-text/80 px-3 py-2"
+            class="relative box-border rounded text-white bg-accent hover:bg-accent/90 active:bg-accent/80 px-3 py-2"
           >
             <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-text duration-100"
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
               style="height: 0px;"
             />
             <span>

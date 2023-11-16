@@ -32,7 +32,7 @@ export function Button({
       style={{ width: `${width}px` }}
     >
       <div
-        className={`transition-width absolute bottom-0 left-0 w-full transform rounded bg-text duration-100`}
+        className={`transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100`}
         style={{ height: active ? "4px" : "0px" }}
       />
       <span>{label || children}</span>
@@ -41,11 +41,11 @@ export function Button({
 }
 
 const buttonVariant = tv({
-  base: "relative box-border text-text hover:bg-hover active:bg-active rounded",
+  base: "relative box-border text-accent hover:bg-hover active:bg-active rounded",
   variants: {
     variant: {
-      contained: "text-white bg-text hover:bg-text/90 active:bg-text/80",
-      outlined: "border-2 border-text",
+      contained: "text-white bg-accent hover:bg-accent/90 active:bg-accent/80",
+      outlined: "border-2 border-accent",
     },
     size: {
       compact: "px-2 py-1",
