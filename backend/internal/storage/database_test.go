@@ -3,7 +3,6 @@ package storage
 import (
 	"testing"
 
-	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -13,11 +12,11 @@ func TestNewDsn(t *testing.T) {
 	dsnConfig := DsnConfig{
 		User:         "user",
 		Password:     "password",
-		DatabaseName: environment.DatabaseName(),
-		Host:         environment.HostDatabase(),
-		Port:         environment.DatabasePort(),
+		DatabaseName: "zeevision_db",
+		Host:         "postgres",
+		Port:         5432,
 	}
 
-	result := dsnConfig.NewDsn()
+	result := dsnConfig.String()
 	assert.Equal(t, result, DSN)
 }

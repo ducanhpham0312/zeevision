@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fmt"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -9,20 +10,20 @@ import (
 
 // Configuration to connect to database
 type DsnConfig struct {
-	// Username to login database
+	// Username used to log in to the database
 	User string
-	// User password to verify user
+	// Password of the logging in user
 	Password string
 	// Database name to be accessed
 	DatabaseName string
-	// The host used to host database
+	// The host used to host the database
 	Host string
-	// The port used to connect database
+	// The port used to connect to the database
 	Port uint16
 }
 
 // Create a valid DSN string to connect database from DsnConfig
-func (config *DsnConfig) NewDsn() string {
+func (config *DsnConfig) String() string {
 	dsn := fmt.Sprintf(
 		"user=%s password=%s dbname=%s host=%s port=%d",
 		config.User, config.Password, config.DatabaseName, config.Host, config.Port,
@@ -31,17 +32,20 @@ func (config *DsnConfig) NewDsn() string {
 }
 
 // Connect to database by DsnConfig
-func ConnectDb(dsnConfig DsnConfig) (*gorm.DB, error) {
+func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*gorm.DB, error) {
+	dsn := dsnConfig.String()
 
-	dsn := dsnConfig.NewDsn()
+	var db *gorm.DB
+	var err error
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database: %w", err)
-
+	for attempt := 1; attempt <= maxRetries; attempt++ {
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err == nil {
+			return db, nil
+		}
+		time.Sleep(retryDelay)
 	}
-
-	return db, nil
+	return nil, fmt.Errorf("maximum number of retries reached: %w", err)
 }
 
 // AutoMigrate Process table, create, modify if the table is not existed, changed base on model

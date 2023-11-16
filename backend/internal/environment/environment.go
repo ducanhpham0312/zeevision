@@ -33,16 +33,14 @@ const (
 	// accessing the API.
 	EnvVarAPIAllowedOrigins = "ZEEVISION_API_ALLOWED_ORIGINS"
 	// Environment variable used to configure the database username
-	EnvVarDatabaseUser = "ZEEVISION_DATABASE_USER" //nolint:all
+	EnvVarDatabaseUser = "ZEEVISION_DATABASE_USER" //nolint:gosec
 	// Environment variable used to configure the database user password
-	EnvVarDatabasePassword = "ZEEVISION_DATABASE_PASSWORD" //nolint:all
+	EnvVarDatabasePassword = "ZEEVISION_DATABASE_PASSWORD" //nolint:gosec
 	// Environment variable used to configure the database name
 	EnvVarDatabaseName = "ZEEVISION_DATABASE_NAME"
-	// Environment variable used to configure if the database should be
-	// hosted.
+	// Environment variable used to configure the database host name/address
 	EnvVarHostDatabase = "ZEEVISION_HOST_DATABASE"
-	// Environment variable used to configure the port to use for the
-	// database.
+	// Environment variable used to configure the port is used to connect to the database.
 	EnvVarDatabasePort = "ZEEVISION_DATABASE_PORT"
 )
 
@@ -88,18 +86,15 @@ func init() {
 	setOrFallbackMap(EnvVarHostApp, DefaultHostApp, isOne)
 	setOrFallbackMap(EnvVarHostPlayground, DefaultHostPlayground, isOne)
 
-	setOrFallbackMap(
-		EnvVarAPIAllowedOrigins, DefaultAPIAllowedOrigins, func(s string) ([]string, bool) {
-			return strings.Split(s, ","), true
-		},
-	)
+	setOrFallbackMap(EnvVarAPIAllowedOrigins, DefaultAPIAllowedOrigins, func(s string) ([]string, bool) {
+		return strings.Split(s, ","), true
+	})
 
 	setOrFallback(EnvVarDatabaseName, DefaultDatabaseName)
 
 	setOrFallbackMap(EnvVarDatabasePort, DefaultDatabasePort, parsePort)
 
 	setOrFallback(EnvVarHostDatabase, DefaultHostDatabase)
-
 }
 
 // Return the full address for Kafka where consumer can connect.
@@ -166,10 +161,9 @@ func HostDatabase() string {
 
 // Helper to save environment variable value if it has been set.
 func setOrFallback(envVar string, fallback string) {
-	setOrFallbackMap(
-		envVar, fallback, func(s string) (string, bool) {
-			return s, true
-		},
+	setOrFallbackMap(envVar, fallback, func(s string) (string, bool) {
+		return s, true
+	},
 	)
 }
 

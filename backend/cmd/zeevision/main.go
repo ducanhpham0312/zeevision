@@ -11,16 +11,17 @@ import (
 
 // Entry point for the application.
 func main() {
-
 	dsnConfig := storage.DsnConfig{
-		User:         "zeevision_user",
-		Password:     "zeevision_pass",
+		User:         environment.DatabaseUser(),
+		Password:     environment.DatabasePassword(),
 		DatabaseName: environment.DatabaseName(),
 		Host:         environment.HostDatabase(),
 		Port:         environment.DatabasePort(),
 	}
 
-	db, err := storage.ConnectDb(dsnConfig)
+	db, err := storage.ConnectDb(
+		dsnConfig, 5, 200,
+	) // retry connect database for 5 times, wait 2 secs between each
 	if err != nil {
 		panic(err)
 	}
