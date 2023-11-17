@@ -25,10 +25,10 @@ func main() {
 		Port:         environment.DatabasePort(),
 	}
 
-	// Connect to database with retry
-	db, err := storage.ConnectDb(dsnConfig, DBConnectionRetries, DBConnectionRetryDelay)
-	if err != nil {
-		panic(err)
+	db, err := storage.ConnectDb(dsnConfig)
+	for err != nil {
+		log.Print(err)
+		db, err = storage.ConnectDb(dsnConfig)
 	}
 
 	err = storage.CreateProcessTable(db)
@@ -42,16 +42,16 @@ func main() {
 	// Launch goroutine for consuming from specified topic and partition
 	brokers := []string{kafkaAddr}
 	kafkaConsumer, err := consumer.NewConsumer(brokers)
-	if err != nil {
-		// TODO: error handling
-		panic(err)
+	for err != nil {
+		log.Print(err)
+		kafkaConsumer, err = consumer.NewConsumer(brokers)
 	}
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually
 	defer kafkaConsumer.Close()
 
 	topic := "zeebe-deployment"
-	_, err = kafkaConsumer.ConsumeTopic(0, topic)
+	err = kafkaConsumer.ConsumeTopic(0, topic)
 	if err != nil {
 		// TODO: error handling
 		panic(err)

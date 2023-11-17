@@ -1,10 +1,14 @@
 package consumer
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"log"
 	"sync"
 
 	"github.com/IBM/sarama"
+	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
 
 type ChannelType = chan []byte
@@ -27,6 +31,7 @@ type Consumer struct {
 
 	consumer   sarama.Consumer
 	msgChannel ChannelType
+	storeApi   storage.StoreApi
 
 	wg           *sync.WaitGroup
 	closeChannel chan struct{}
@@ -58,20 +63,29 @@ func NewConsumer(brokers []string) (*Consumer, error) {
 		closeChannel: make(chan struct{}),
 	}
 
+	// launch a database handler goroutine
+	// TODO This is very temporary - perhaps we should instead have specialised
+	// per-topic goroutines..?
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		result.databaseUpdater()
+	}()
+
 	return &result, err
 }
 
 // ConsumeTopic creates a sarama.PartitionConsumer to consume a particular topic.
 // TODO: In the future this will not return a channel but will instead connect
 // to our storage in some manner
-func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (msgChannel ChannelType, err error) {
+func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error) {
 	partitionConsumer, err := consumer.consumer.ConsumePartition(
 		topic, partition, sarama.OffsetNewest)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
-	msgChannel = consumer.msgChannel
+	msgChannel := consumer.msgChannel
 	closeChannel := consumer.closeChannel
 	wg := consumer.wg
 
@@ -101,7 +115,7 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (msgChanne
 				select {
 				case msgChannel <- msg.Value:
 					log.Printf("Consumed message offset %d\n", msg.Offset)
-					log.Printf("value: %s\n", string(msg.Value))
+					// log.Printf("value: %s\n", string(msg.Value))
 				case <-closeChannel:
 					// Also listen to closeChannel here to
 					// avoid dropping values on the floor
@@ -117,7 +131,7 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (msgChanne
 		}
 	}()
 
-	return msgChannel, err
+	return err
 }
 
 func (consumer *Consumer) Close() error {
@@ -128,4 +142,89 @@ func (consumer *Consumer) Close() error {
 
 	err := consumer.consumer.Close()
 	return err
+}
+
+// Handle actual database updates from consumers
+func (consumer *Consumer) databaseUpdater() {
+	closeChannel := consumer.closeChannel
+	msgChannel := consumer.msgChannel
+readLoop:
+	for {
+		select {
+		case <-closeChannel:
+			// Close this one too when we get a closeChannel message
+			break readLoop
+		case msg := <-msgChannel:
+			var untypedRecord UntypedRecord
+			err := json.Unmarshal(msg, &untypedRecord)
+			if err != nil {
+				log.Printf("Failed to unmarshal: %w", err)
+				continue readLoop
+			}
+
+			switch untypedRecord.ValueType {
+			case ValueTypeDeployment:
+				record, err := WithTypedValue[DeploymentValue](untypedRecord)
+				if err != nil {
+					log.Printf("Failed to cast: %w", err)
+					continue readLoop
+				}
+
+				err = consumer.handleDeployment(&record)
+				if err != nil {
+					log.Printf("Failed to handle deployment: %w", err)
+					continue readLoop
+				}
+			}
+
+		}
+	}
+}
+
+func (consumer *Consumer) handleDeployment(record *Deployment) error {
+	storeApi := consumer.storeApi
+
+	switch record.Intent {
+	case IntentCreated:
+		resources := record.Value.Resources
+		processes := record.Value.ProcessesMetadata
+
+		resourceMap := map[string]string{}
+		for _, resource := range resources {
+			resourceMap[resource.ResourceName] = string(resource.Resource)
+		}
+
+		// Make storage for errors
+		var errs []error
+		for _, process := range processes {
+			processId := process.BpmnProcessID
+			processKey := process.ProcessDefinitionKey
+			bpmnResource := resourceMap[process.ResourceName]
+			version := process.Version
+			log.Printf("Deploying %s", bpmnResource)
+			err := storeApi.ProcessDeployed(
+				processId,
+				processKey,
+				bpmnResource,
+				version,
+			)
+			if err != nil {
+				errs = append(errs, err)
+			}
+			log.Printf("Deployed process %d (%s)",
+				processKey, processId)
+		}
+
+		if errs != nil {
+			err := fmt.Errorf("failed some deploys: %w", errors.Join(errs...))
+			return err
+		}
+
+		// We'll also get IntentFullyDistributed once it's distributed to all
+		// zeebe partitions but I'm not sure that's useful information to us
+	}
+
+	// If we get here we did nothing or missed all err returns so handling
+	// succeeded
+	return nil
 }
