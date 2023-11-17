@@ -51,7 +51,7 @@ export default function ProcessesPage() {
                   <NavLink to={processKey.toString()}>{processKey}</NavLink>,
                   processId,
                   deploymentTime,
-                ]
+                ],
               )
             : []
         }

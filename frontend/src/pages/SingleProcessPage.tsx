@@ -64,7 +64,7 @@ export default function ProcessesPage() {
                   instanceKey: number;
                   status: string;
                   startTime: string;
-                }) => [instanceKey, status, startTime]
+                }) => [instanceKey, status, startTime],
               )
             : []
         }
