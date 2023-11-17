@@ -2,11 +2,17 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/consumer"
 	"github.com/ducanhpham0312/zeevision/backend/internal/endpoint"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
+)
+
+const (
+	DBConnectionRetries    = 5
+	DBConnectionRetryDelay = 2 * time.Second
 )
 
 // Entry point for the application.
@@ -19,9 +25,8 @@ func main() {
 		Port:         environment.DatabasePort(),
 	}
 
-	db, err := storage.ConnectDb(
-		dsnConfig, 5, 200,
-	) // retry connect database for 5 times, wait 2 secs between each
+	// Connect to database with retry
+	db, err := storage.ConnectDb(dsnConfig, DBConnectionRetries, DBConnectionRetryDelay)
 	if err != nil {
 		panic(err)
 	}
