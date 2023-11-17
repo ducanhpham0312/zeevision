@@ -27,7 +27,7 @@ export default withTV({
         sucess: "#070",
         background: "#fff",
         accent: PRIMARY[900],
-        "second-accent": PRIMARY[100] + "55"
+        "second-accent": PRIMARY[100] + "55",
       },
       screens: {
         tablet: "767px",

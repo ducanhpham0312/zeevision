@@ -39,6 +39,10 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
           <button
             class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
           >
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
+            />
             <span>
               <svg
                 aria-hidden="true"
@@ -51,10 +55,6 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
                   d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
                 />
               </svg>
-              <div
-                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-                style="height: 0px;"
-              />
             </span>
           </button>
         </div>
@@ -71,12 +71,12 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
               <button
                 class="relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
               >
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
                 <span>
                   Upload a file (.bpmn)
-                  <div
-                    class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-                    style="height: 0px;"
-                  />
                 </span>
               </button>
               <input
@@ -107,23 +107,23 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
           <button
             class="relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
           >
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
+            />
             <span>
               Cancel
-              <div
-                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-                style="height: 0px;"
-              />
             </span>
           </button>
           <button
             class="relative box-border rounded text-white bg-accent hover:bg-accent/90 active:bg-accent/80 px-3 py-2"
           >
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
+            />
             <span>
               Deploy process
-              <div
-                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-                style="height: 0px;"
-              />
             </span>
           </button>
         </div>

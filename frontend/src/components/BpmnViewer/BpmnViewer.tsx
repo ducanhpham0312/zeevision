@@ -78,7 +78,7 @@ export function BpmnViewer({
       x: inner.x + inner.width / 2,
       y: inner.y + inner.height / 2,
     };
-    
+
     // zoom to fit full viewport
     canvas.zoom("fit-viewport", center);
   }, [width, height, modeler]);
