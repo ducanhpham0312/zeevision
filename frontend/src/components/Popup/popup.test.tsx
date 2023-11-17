@@ -58,7 +58,7 @@ describe("Popup Component", () => {
   it("Backdrop displays correctly when the popup is open", () => {
     render(<Popup {...openPopup} onClose={mockOnClose} />);
     const backdrop = screen.getByRole("presentation");
-    expect(backdrop).toHaveClass({
+    expect(backdrop).toHaveStyle({
       position: "fixed",
       inset: "0",
       backgroundColor: "rgb(0 0 0 / 0.5)",

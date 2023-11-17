@@ -37,13 +37,13 @@ export function Popup({
     <div>
       <Modal
         {...props}
-        className="fixed inset-0 z-50 flex items-center justify-center"
+        className="fixed inset-0 z-50 flex w-full items-center justify-center"
         onClose={shouldNotCloseWhenClickAway ? () => {} : props.onClose}
         slots={{ backdrop: StyledBackdrop }}
         closeAfterTransition
       >
         <Fade in={props.open}>
-          <div className="flex max-h-[90%] min-h-[300px] w-[800px] flex-col overflow-y-auto rounded bg-background">
+          <div className="tablet:w-[750px] flex max-h-[90%] min-h-[300px] w-[90vw] flex-col overflow-y-auto rounded bg-background">
             <div className="flex items-center justify-between p-[10px] pl-[20px] text-2xl">
               <p>{title}</p>
               <Button onClick={props.onClose as () => void}>
