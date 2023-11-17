@@ -163,8 +163,7 @@ func DatabaseHost() string {
 func setOrFallback(envVar string, fallback string) {
 	setOrFallbackMap(envVar, fallback, func(s string) (string, bool) {
 		return s, true
-	},
-	)
+	})
 }
 
 // Helper to save environment variable value if it has been set with a mapper
