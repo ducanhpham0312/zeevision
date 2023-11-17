@@ -33,12 +33,12 @@ export function Navbar() {
   const location = useLocation();
 
   return (
-    <header className="fixed z-50 flex w-full items-center gap-7 border-b border-black/20 bg-background px-5">
+    <header className="fixed z-50 flex w-full items-center gap-5 border-b border-black/20 bg-background px-5">
       <div>
-        <div>NAVBAR</div>
+        <div>ZEEVISION</div>
       </div>
       <div className="h-10 w-0 border-l border-black/30" />
-      <div className="flex gap-3">
+      <div className="flex">
         {NavigationPath.map((nav) => (
           <Button
             active={location.pathname.includes(nav.path)}
@@ -46,7 +46,7 @@ export function Navbar() {
             onClick={() => navigate(nav.path)}
             key={nav.path}
           >
-            {nav.name}
+            <p>{nav.name}</p>
           </Button>
         ))}
       </div>

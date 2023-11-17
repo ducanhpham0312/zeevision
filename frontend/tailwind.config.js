@@ -3,7 +3,7 @@ import { withTV } from "tailwind-variants/dist/transformer";
 /** @type {import('tailwindcss').Config} */
 const PRIMARY = {
   50: "#f6f8ff",
-  100: "#cfe6ff",
+  100: "#bfd6ff",
   200: "#a9cfff",
   300: "#76adff",
   400: "#4078ff",
@@ -20,13 +20,14 @@ export default withTV({
   theme: {
     extend: {
       colors: {
-        hover: PRIMARY[50],
-        active: PRIMARY[100],
+        hover: PRIMARY[100] + "55",
+        active: PRIMARY[100] + "44",
         text: "#000",
         error: "#800",
         sucess: "#070",
         background: "#fff",
         accent: PRIMARY[900],
+        "second-accent": PRIMARY[100] + "55"
       },
       screens: {
         tablet: "767px",

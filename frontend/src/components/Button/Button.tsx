@@ -44,8 +44,8 @@ const buttonVariant = tv({
   base: "relative box-border text-accent hover:bg-hover active:bg-active rounded",
   variants: {
     variant: {
-      contained: "text-white bg-accent hover:bg-accent/90 active:bg-accent/80",
-      outlined: "border-2 border-accent",
+      primary: "text-white bg-accent hover:bg-accent/90 active:bg-accent/80",
+      secondary: "bg-second-accent",
     },
     size: {
       compact: "px-2 py-1",

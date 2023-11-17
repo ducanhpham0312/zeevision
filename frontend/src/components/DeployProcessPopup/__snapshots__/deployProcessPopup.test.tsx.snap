@@ -11,7 +11,7 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
   </div>
   <div
     aria-hidden="true"
-    class="MuiModal-root fixed inset-0 z-50 flex items-center justify-center"
+    class="MuiModal-root fixed inset-0 z-50 flex w-full items-center justify-center"
     role="presentation"
   >
     <div
@@ -28,10 +28,10 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
       tabindex="-1"
     >
       <div
-        class="flex max-h-[90%] min-h-[300px] w-[800px] flex-col overflow-y-auto rounded bg-background"
+        class="tablet:w-[750px] flex max-h-[90%] min-h-[300px] w-[90vw] flex-col overflow-y-auto rounded bg-background"
       >
         <div
-          class="flex items-center justify-between p-[10px] pl-[20px] text-2xl"
+          class="flex items-center justify-between px-[20px] py-[10px] pl-[20px] text-2xl"
         >
           <p>
             Deploy a process
@@ -39,10 +39,6 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
           <button
             class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
           >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
             <span>
               <svg
                 aria-hidden="true"
@@ -55,61 +51,79 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
                   d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
                 />
               </svg>
-            </span>
-          </button>
-        </div>
-        <div
-          class="css-12e8uj5"
-          style="overflow: hidden;"
-        >
-          <div>
-            <button
-              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
-              type="button"
-            >
               <div
                 class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
                 style="height: 0px;"
               />
-              <span>
-                Deploy a file (.bpmn)
-              </span>
-            </button>
-            <p>
-              Or drag a bpmn file here
-            </p>
-            <input
-              accept=".bpmn"
-              data-testid="file-input"
-              style="display: none;"
-              type="file"
-            />
-          </div>
-          <div />
+            </span>
+          </button>
         </div>
         <div
-          class="css-1csjh8m"
+          class="css-1ra2o37"
+          style="overflow: hidden;"
         >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
+          <div
+            class="flex w-full flex-col gap-5"
           >
             <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
+              class="flex w-full items-center justify-between"
+            >
+              <button
+                class="relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+              >
+                <span>
+                  Upload a file (.bpmn)
+                  <div
+                    class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                    style="height: 0px;"
+                  />
+                </span>
+              </button>
+              <input
+                accept=".bpmn"
+                data-testid="file-input"
+                style="display: none;"
+                type="file"
+              />
+            </div>
+            <div
+              class="w-full"
+            >
+              <div
+                class="flex h-[300px] w-full items-center justify-center border-2 border-dashed"
+              >
+                <p
+                  class="text-black/40"
+                >
+                  Or drag a bpmn file here
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="css-1ju85ef"
+        >
+          <button
+            class="relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+          >
             <span>
               Cancel
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
             </span>
           </button>
           <button
             class="relative box-border rounded text-white bg-accent hover:bg-accent/90 active:bg-accent/80 px-3 py-2"
           >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
             <span>
               Deploy process
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
             </span>
           </button>
         </div>

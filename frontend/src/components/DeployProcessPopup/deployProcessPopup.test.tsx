@@ -77,7 +77,7 @@ describe("DeployProcessPopup Component", () => {
     const fileInput = screen.getByTestId("file-input");
     const mockFileInputClick = jest.spyOn(fileInput, "click");
 
-    fireEvent.click(screen.getByText("Deploy a file (.bpmn)"));
+    fireEvent.click(screen.getByText("Upload a file (.bpmn)"));
 
     expect(mockFileInputClick).toHaveBeenCalled();
 

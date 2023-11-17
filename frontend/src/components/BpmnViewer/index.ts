@@ -1,1 +1,1 @@
-export { BpmnViewer } from "./BpmnViewer";
+export { BpmnViewer, ReponsizeBpmnViewer } from "./BpmnViewer";
