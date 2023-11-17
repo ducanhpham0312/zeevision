@@ -39,7 +39,7 @@ const (
 	// Environment variable used to configure the database name
 	EnvVarDatabaseName = "ZEEVISION_DATABASE_NAME"
 	// Environment variable used to configure the database host name/address
-	EnvVarHostDatabase = "ZEEVISION_HOST_DATABASE"
+	EnvVarDatabaseHost = "ZEEVISION_DATABASE_HOST"
 	// Environment variable used to configure the port is used to connect to the database.
 	EnvVarDatabasePort = "ZEEVISION_DATABASE_PORT"
 )
@@ -91,10 +91,10 @@ func init() {
 	})
 
 	setOrFallback(EnvVarDatabaseName, DefaultDatabaseName)
-
 	setOrFallbackMap(EnvVarDatabasePort, DefaultDatabasePort, parsePort)
-
-	setOrFallback(EnvVarHostDatabase, DefaultHostDatabase)
+	setOrFallback(EnvVarDatabaseHost, DefaultHostDatabase)
+	setOrFallback(EnvVarDatabaseUser, "")
+	setOrFallback(EnvVarDatabasePassword, "")
 }
 
 // Return the full address for Kafka where consumer can connect.
@@ -155,8 +155,8 @@ func DatabasePort() uint16 {
 }
 
 // Return the database host.
-func HostDatabase() string {
-	return cache[EnvVarHostDatabase].(string)
+func DatabaseHost() string {
+	return cache[EnvVarDatabaseHost].(string)
 }
 
 // Helper to save environment variable value if it has been set.

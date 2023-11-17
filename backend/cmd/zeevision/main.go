@@ -15,7 +15,7 @@ func main() {
 		User:         environment.DatabaseUser(),
 		Password:     environment.DatabasePassword(),
 		DatabaseName: environment.DatabaseName(),
-		Host:         environment.HostDatabase(),
+		Host:         environment.DatabaseHost(),
 		Port:         environment.DatabasePort(),
 	}
 
