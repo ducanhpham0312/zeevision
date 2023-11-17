@@ -1,7 +1,7 @@
 // Collection of functions to access environment variables.
 //
 // When adding a new environment variable:
-// 1. add a environment variable name as a constant
+// 1. add an environment variable name as a constant
 // 2. initialize it in the init() function
 // 3. add a getter function
 
@@ -32,6 +32,16 @@ const (
 	// Environment variable used to configure the allowed origins for
 	// accessing the API.
 	EnvVarAPIAllowedOrigins = "ZEEVISION_API_ALLOWED_ORIGINS"
+	// Environment variable used to configure the database username
+	EnvVarDatabaseUser = "ZEEVISION_DATABASE_USER" //nolint:gosec
+	// Environment variable used to configure the database user password
+	EnvVarDatabasePassword = "ZEEVISION_DATABASE_PASSWORD" //nolint:gosec
+	// Environment variable used to configure the database name
+	EnvVarDatabaseName = "ZEEVISION_DATABASE_NAME"
+	// Environment variable used to configure the database host name/address
+	EnvVarDatabaseHost = "ZEEVISION_DATABASE_HOST"
+	// Environment variable used to configure the port is used to connect to the database.
+	EnvVarDatabasePort = "ZEEVISION_DATABASE_PORT"
 )
 
 const (
@@ -47,6 +57,12 @@ const (
 	DefaultHostApp = false
 	// Default value for hosting the playground.
 	DefaultHostPlayground = false
+	// Default value for the database name
+	DefaultDatabaseName = "zeevision_db"
+	// Default value for hosting the database.
+	DefaultHostDatabase = "postgres"
+	// Default port to use for the database.
+	DefaultDatabasePort = 5432
 )
 
 var (
@@ -73,6 +89,12 @@ func init() {
 	setOrFallbackMap(EnvVarAPIAllowedOrigins, DefaultAPIAllowedOrigins, func(s string) ([]string, bool) {
 		return strings.Split(s, ","), true
 	})
+
+	setOrFallback(EnvVarDatabaseName, DefaultDatabaseName)
+	setOrFallbackMap(EnvVarDatabasePort, DefaultDatabasePort, parsePort)
+	setOrFallback(EnvVarDatabaseHost, DefaultHostDatabase)
+	setOrFallback(EnvVarDatabaseUser, "")
+	setOrFallback(EnvVarDatabasePassword, "")
 }
 
 // Return the full address for Kafka where consumer can connect.
@@ -110,6 +132,31 @@ func DoHostPlayground() bool {
 // Return the set of allowed origins for API access.
 func APIAllowedOrigins() []string {
 	return cache[EnvVarAPIAllowedOrigins].([]string)
+}
+
+// Return the database user.
+func DatabaseUser() string {
+	return cache[EnvVarDatabaseUser].(string)
+}
+
+// Return the database password.
+func DatabasePassword() string {
+	return cache[EnvVarDatabasePassword].(string)
+}
+
+// Return the database name.
+func DatabaseName() string {
+	return cache[EnvVarDatabaseName].(string)
+}
+
+// Return the port the database is hosted at.
+func DatabasePort() uint16 {
+	return cache[EnvVarDatabasePort].(uint16)
+}
+
+// Return the database host.
+func DatabaseHost() string {
+	return cache[EnvVarDatabaseHost].(string)
 }
 
 // Helper to save environment variable value if it has been set.
