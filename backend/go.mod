@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/99designs/gqlgen v0.17.40
-	github.com/IBM/sarama v1.42.0
+	github.com/IBM/sarama v1.42.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/gorilla/websocket v1.5.1

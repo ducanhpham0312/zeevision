@@ -2,19 +2,19 @@ import { Button } from "../components/Button";
 import { Table } from "../components/Table";
 import { useUIStore } from "../contexts/useUIStore";
 import { gql, useQuery } from "@apollo/client";
-
-const PROCESSES = gql`
-  query Test {
-    processes {
-      processId
-      processKey
-    }
-  }
-`;
+import { NavLink } from "react-router-dom";
 
 export default function ProcessesPage() {
+  const PROCESSES = gql`
+    query Processes {
+      processes {
+        processId
+        processKey
+        deploymentTime
+      }
+    }
+  `;
   const { data } = useQuery(PROCESSES);
-
   const { setSnackbarContent } = useUIStore();
 
   const handleClick = (type: "success" | "error") => {
@@ -34,7 +34,7 @@ export default function ProcessesPage() {
       <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
 
       <Table
-        header={["Process Key", "Process ID"]}
+        header={["Process Key", "Process ID", "Deployment Time"]}
         orientation="horizontal"
         content={
           data
@@ -42,10 +42,16 @@ export default function ProcessesPage() {
                 ({
                   processKey,
                   processId,
+                  deploymentTime,
                 }: {
                   processKey: number;
                   processId: number;
-                }) => [processKey, processId],
+                  deploymentTime: string;
+                }) => [
+                  <NavLink to={processKey.toString()}>{processKey}</NavLink>,
+                  processId,
+                  deploymentTime,
+                ]
               )
             : []
         }
