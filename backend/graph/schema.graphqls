@@ -12,9 +12,13 @@ directive @goField(
 type Query {
   processes: [Process!]!
   process(processKey: Int!): Process
+  instances: [Instance!]!
+  instance(instanceKey: Int!): Instance
 }
 
 type Process {
+  activeInstances: Int!
+  completedInstances: Int!
   bpmnLiveStatus: String!
   bpmnResource: String!
   deploymentTime: DateTime!
@@ -27,14 +31,13 @@ type Process {
 }
 
 type Instance {
-  activeInstances: Int!
   bpmnLiveStatus: String!
   bpmnResource: String!
-  completedInstances: Int!
-  deploymentTime: DateTime!
+  startTime: DateTime!
   processId: Int!
-  processKey: Int!
+  instanceKey: Int!
   version: Int!
+  status: String!
 }
 
 type MessageSubscription {

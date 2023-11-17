@@ -3,12 +3,15 @@
 - [ZeeVision Backend](#zeevision-backend)
   - [Build and Run](#build-and-run)
   - [API and Playground](#api-and-playground)
+  - [GUI database management](#gui-database-management)
+    - [Environment variables](#environment-variables)
+    - [Set up and access step-by-step](#set-up-and-access-step-by-step)
   - [Architecture](#architecture)
   - [Directory structure](#directory-structure)
   - [Development guidelines](#development-guidelines)
     - [File naming](#file-naming)
     - [Named return values and Naked returns](#named-return-values-and-naked-returns)
-  - [GUI database management](#gui-database-management)
+    - [Updating type and query definitions](#updating-type-and-query-definitions)
 
 This subdirectory contains code for the backend of the ZeeVision application. It serves GraphQL based API for the frontend and consumes Kafka stream of Zeebe data. Backend uses PostgreSQL to store information
 received from Kafka.
@@ -135,3 +138,10 @@ Below are some exceptions and additions to the guidelines.
 
 - Prefer to not use named return values. Return values should be obvious from the context, their types, and finally from the function/method comment.
 - Don't use naked returns. They make the code harder to read and understand.
+
+### Updating type and query definitions
+During the development process, it is sometimes required to update type and queries, e.g., for `Process`, `Instance`, `Timer`, etc. All the changes must be made in `graph/schema.graphqls`:
+- Open the file and navigate to the type/query you want to update.
+- Update the type / query with correct fields.
+- Under `/backend`, run `./run_gqlgen.sh` to update query in automatically generated files (`generated.go`, `models_gen.go`, `schema.resolvers.go`). DO NOT manually update those files (except `schema.resolvers.go` as the functions here create the query itself).
+- Run the backend again `./run_api.sh` and open the playground to test the new changes.

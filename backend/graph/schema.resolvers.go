@@ -13,6 +13,9 @@ import (
 
 // Instances is the resolver for the instances field.
 func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error) {
+	if obj.ProcessKey == 1 {
+		return dummyInstances, nil
+	}
 	return []*model.Instance{}, nil
 }
 
@@ -40,6 +43,16 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 	}
 
 	return nil, fmt.Errorf("process with given key %d doesn't exist", processKey)
+}
+
+// Instances is the resolver for the instances field.
+func (r *queryResolver) Instances(ctx context.Context) ([]*model.Instance, error) {
+	panic(fmt.Errorf("not implemented: Instances - instances"))
+}
+
+// Instance is the resolver for the instance field.
+func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model.Instance, error) {
+	panic(fmt.Errorf("not implemented: Instance - instance"))
 }
 
 // Process returns ProcessResolver implementation.
