@@ -28,7 +28,7 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
       tabindex="-1"
     >
       <div
-        class="tablet:w-[750px] flex max-h-[90%] min-h-[300px] w-[90vw] flex-col overflow-y-auto rounded bg-background"
+        class="flex max-h-[90%] min-h-[300px] w-[90vw] flex-col overflow-y-auto rounded bg-background tablet:w-[750px]"
       >
         <div
           class="flex items-center justify-between px-[20px] py-[10px] pl-[20px] text-2xl"
