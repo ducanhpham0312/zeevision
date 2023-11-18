@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { readFileToString } from "../../utils/readFileToString";
-import { ReponsiveBpmnViewer } from "../BpmnViewer";
+import { ResponsiveBpmnViewer } from "../BpmnViewer";
 import { Button } from "../Button";
 import { Popup, PopupAction, PopupContent } from "../Popup";
 import { DragDropFile } from "./DragDropFile";
@@ -77,7 +77,7 @@ export function DeployProcessPopup({
             </div>
             <div className="w-full">
               {bpmnString ? (
-                <ReponsiveBpmnViewer
+                <ResponsiveBpmnViewer
                   classname="py-1 h-[300px]"
                   bpmnString={bpmnString}
                   navigated={true}
