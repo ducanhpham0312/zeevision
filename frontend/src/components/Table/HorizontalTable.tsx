@@ -64,7 +64,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
   };
   return (
     <>
-      <StyledHeader>
+      <thead className="bg-second-accent font-bold text-text">
         <tr>
           {header.map((item) => (
             <th key={item} onClick={() => handleSort(item)}>
@@ -75,7 +75,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
             </th>
           ))}
         </tr>
-      </StyledHeader>
+      </thead>
       <tbody aria-label="custom pagination table">
         {(rowsPerPage > 0
           ? sortedContent.slice(
@@ -137,11 +137,6 @@ function prettifyJson(str: string) {
   }
   return JSON.stringify(JSON.parse(str), null, 2);
 }
-
-const StyledHeader = styled("thead")`
-  background-color: #d9d9d9;
-  font-weight: bold;
-`;
 
 const StyledTablePagination = styled(TablePagination)`
   & .${classes.toolbar} {

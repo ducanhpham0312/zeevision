@@ -1,6 +1,6 @@
-import { styled } from "@mui/system";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
+import "./table.css";
 
 export interface TableProps {
   /**
@@ -23,32 +23,12 @@ export interface TableProps {
 export function Table({ orientation, header, content }: TableProps) {
   if (header.length === 0) return null;
   return (
-    <StyledTable>
+    <table>
       {orientation === "horizontal" ? (
         <HorizontalTable header={header} content={content} />
       ) : (
         <VerticalTable header={header} content={content} />
       )}
-    </StyledTable>
+    </table>
   );
 }
-
-const StyledTable = styled("table")`
-  width: 100%;
-  border-collapse: collapse;
-
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-    transition: background-color 0.3s ease;
-  }
-
-  tr:nth-of-type(even) {
-    background-color: #f5f5f5;
-  }
-  tr:hover {
-    background-color: #e0e0e0;
-  }
-`;
