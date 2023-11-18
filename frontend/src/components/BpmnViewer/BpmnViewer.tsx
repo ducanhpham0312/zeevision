@@ -92,7 +92,7 @@ export function BpmnViewer({
   );
 }
 
-export function ReponsizeBpmnViewer({
+export function ReponsiveBpmnViewer({
   classname,
   ...props
 }: BpmnViewerProps & { classname?: string }) {

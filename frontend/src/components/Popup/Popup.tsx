@@ -1,6 +1,5 @@
 import { Modal, ModalProps } from "@mui/base";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/system";
 import { animated, useSpring } from "@react-spring/web";
 import React, { MouseEventHandler, forwardRef } from "react";
 import { Button } from "../Button";
@@ -39,7 +38,7 @@ export function Popup({
         {...props}
         className="fixed inset-0 z-50 flex w-full items-center justify-center"
         onClose={shouldNotCloseWhenClickAway ? () => {} : props.onClose}
-        slots={{ backdrop: StyledBackdrop }}
+        slots={{ backdrop: Backdrop }}
         closeAfterTransition
       >
         <Fade in={props.open}>
@@ -64,6 +63,7 @@ interface FadeProps {
   onClick?: MouseEventHandler<HTMLDivElement>;
   onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
   onExited?: (node: HTMLElement, isAppearing: boolean) => void;
+  className?: string;
 }
 
 const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
@@ -84,7 +84,12 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
     },
   });
   return (
-    <animated.div ref={ref} style={style} {...other}>
+    <animated.div
+      ref={ref}
+      style={style}
+      {...other}
+      className={props.className}
+    >
       {children}
     </animated.div>
   );
@@ -95,13 +100,12 @@ const Backdrop = forwardRef<
   { children: React.ReactElement; open: boolean }
 >((props, ref) => {
   const { open, ...other } = props;
-  return <Fade ref={ref} in={open} {...other} />;
+  return (
+    <Fade
+      ref={ref}
+      in={open}
+      {...other}
+      className="fixed inset-0 -z-10 bg-black/50"
+    />
+  );
 });
-
-const StyledBackdrop = styled(Backdrop)`
-  z-index: -1;
-  position: fixed;
-  inset: 0;
-  background-color: rgb(0 0 0 / 0.5);
-  -webkit-tap-highlight-color: transparent;
-`;
