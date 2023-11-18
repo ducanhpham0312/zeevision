@@ -158,7 +158,7 @@ readLoop:
 			var untypedRecord UntypedRecord
 			err := json.Unmarshal(msg, &untypedRecord)
 			if err != nil {
-				log.Printf("Failed to unmarshal: %w", err)
+				log.Printf("Failed to unmarshal: %v", err)
 				continue readLoop
 			}
 
@@ -166,13 +166,13 @@ readLoop:
 			case ValueTypeDeployment:
 				record, err := WithTypedValue[DeploymentValue](untypedRecord)
 				if err != nil {
-					log.Printf("Failed to cast: %w", err)
+					log.Printf("Failed to cast: %v", err)
 					continue readLoop
 				}
 
 				err = consumer.handleDeployment(&record)
 				if err != nil {
-					log.Printf("Failed to handle deployment: %w", err)
+					log.Printf("Failed to handle deployment: %v", err)
 					continue readLoop
 				}
 			}
