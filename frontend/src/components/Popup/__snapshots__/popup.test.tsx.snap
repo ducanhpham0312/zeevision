@@ -25,7 +25,8 @@ exports[`Popup Component renders correctly when open 1`] = `
   >
     <div
       aria-hidden="true"
-      class="MuiModal-backdrop css-1jyxheb"
+      class="fixed inset-0 -z-10 bg-black/50"
+      ownerstate="[object Object]"
       style="opacity: 0;"
     />
     <div

@@ -22,7 +22,7 @@ jest.mock("../BpmnViewer/BpmnViewer.tsx", () => {
   return {
     __esModule: true,
     BpmnViewer: jest.fn(() => <div>BpmnViewer Mock</div>),
-    ReponsizeBpmnViewer: jest.fn(() => <div>BpmnViewer Mock</div>),
+    ReponsiveBpmnViewer: jest.fn(() => <div>BpmnViewer Mock</div>),
   };
 });
 

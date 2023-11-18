@@ -16,7 +16,8 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
   >
     <div
       aria-hidden="true"
-      class="MuiModal-backdrop css-1jyxheb"
+      class="fixed inset-0 -z-10 bg-black/50"
+      ownerstate="[object Object]"
       style="opacity: 0;"
     />
     <div
@@ -59,7 +60,7 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
           </button>
         </div>
         <div
-          class="css-1ra2o37"
+          class="mt-[10px] max-h-[500px] flex-grow overflow-y-auto pl-[20px] pr-[20px]"
           style="overflow: hidden;"
         >
           <div
@@ -102,7 +103,7 @@ exports[`DeployProcessPopup Component renders the popup correctly when a file is
           </div>
         </div>
         <div
-          class="css-1ju85ef"
+          class="flex justify-end gap-[10px] p-[15px] pr-[20px]"
         >
           <button
             class="relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
