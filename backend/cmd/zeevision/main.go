@@ -25,10 +25,10 @@ func main() {
 		Port:         environment.DatabasePort(),
 	}
 
-	db, err := storage.ConnectDb(dsnConfig)
-	for err != nil {
-		log.Print(err)
-		db, err = storage.ConnectDb(dsnConfig)
+	// Connect to database with retry
+	db, err := storage.ConnectDb(dsnConfig, DBConnectionRetries, DBConnectionRetryDelay)
+	if err != nil {
+		panic(err)
 	}
 
 	err = storage.CreateProcessTable(db)
@@ -40,11 +40,12 @@ func main() {
 	kafkaAddr := environment.KafkaAddress()
 
 	// Launch goroutine for consuming from specified topic and partition
+	storeApi := storage.NewStoreApi(db)
 	brokers := []string{kafkaAddr}
-	kafkaConsumer, err := consumer.NewConsumer(brokers)
+	kafkaConsumer, err := consumer.NewConsumer(storeApi, brokers)
 	for err != nil {
 		log.Print(err)
-		kafkaConsumer, err = consumer.NewConsumer(brokers)
+		kafkaConsumer, err = consumer.NewConsumer(storeApi, brokers)
 	}
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually

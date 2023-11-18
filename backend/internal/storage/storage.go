@@ -11,6 +11,10 @@ type StoreApi struct {
 	db *gorm.DB
 }
 
+func NewStoreApi(db *gorm.DB) *StoreApi{
+	return &StoreApi{db}
+}
+
 // call this for each processesMetadata
 func (r *StoreApi) ProcessDeployed(
 	processId string,

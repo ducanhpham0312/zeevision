@@ -31,13 +31,13 @@ type Consumer struct {
 
 	consumer   sarama.Consumer
 	msgChannel ChannelType
-	storeApi   storage.StoreApi
+	storeApi   *storage.StoreApi
 
 	wg           *sync.WaitGroup
 	closeChannel chan struct{}
 }
 
-func NewConsumer(brokers []string) (*Consumer, error) {
+func NewConsumer(storeApi *storage.StoreApi, brokers []string) (*Consumer, error) {
 	config := sarama.NewConfig()
 
 	consumer, err := sarama.NewConsumer(brokers, config)
@@ -58,6 +58,7 @@ func NewConsumer(brokers []string) (*Consumer, error) {
 
 		consumer:   consumer,
 		msgChannel: make(ChannelType, bufSize),
+		storeApi:   storeApi,
 
 		wg:           &wg,
 		closeChannel: make(chan struct{}),
