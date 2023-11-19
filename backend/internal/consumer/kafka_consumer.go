@@ -29,7 +29,7 @@ type Consumer struct {
 	brokers []string
 	topics  []string
 
-	databaseUpdater *databaseUpdater
+	storageUpdater *storageUpdater
 
 	consumer     sarama.Consumer
 	msgChannel   msgChannelType
@@ -70,13 +70,13 @@ func newConsumer(storer *storage.Storer, brokers []string) (*Consumer, error) {
 
 	var wg sync.WaitGroup
 
-	databaseUpdater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
+	storageUpdater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
 
 	result := Consumer{
 		brokers: brokers,
 		topics:  []string{},
 
-		databaseUpdater: databaseUpdater,
+		storageUpdater: storageUpdater,
 
 		consumer:     consumer,
 		msgChannel:   msgChannel,

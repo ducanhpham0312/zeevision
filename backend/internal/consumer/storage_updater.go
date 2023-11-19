@@ -10,7 +10,7 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
 
-type databaseUpdater struct {
+type storageUpdater struct {
 	storer *storage.Storer
 
 	msgChannel   msgChannelType
@@ -19,8 +19,8 @@ type databaseUpdater struct {
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer *storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *databaseUpdater {
-	result := &databaseUpdater{
+func newDatabaseUpdater(storer *storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+	result := &storageUpdater{
 		storer: storer,
 
 		msgChannel:   msgChannel,
@@ -34,14 +34,14 @@ func newDatabaseUpdater(storer *storage.Storer, msgChannel msgChannelType, close
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		result.databaseUpdaterLoop()
+		result.storageUpdaterLoop()
 	}()
 
 	return result
 }
 
 // Handle actual database updates from consumers
-func (u *databaseUpdater) databaseUpdaterLoop() {
+func (u *storageUpdater) storageUpdaterLoop() {
 	closeChannel := u.closeChannel
 	msgChannel := u.msgChannel
 readLoop:
@@ -60,13 +60,7 @@ readLoop:
 
 			switch untypedRecord.ValueType {
 			case ValueTypeDeployment:
-				record, err := WithTypedValue[DeploymentValue](untypedRecord)
-				if err != nil {
-					log.Printf("Failed to cast: %v", err)
-					continue readLoop
-				}
-
-				err = u.handleDeployment(&record)
+				err = u.handleDeployment(&untypedRecord)
 				if err != nil {
 					log.Printf("Failed to handle deployment: %v", err)
 					continue readLoop
@@ -77,8 +71,13 @@ readLoop:
 	}
 }
 
-func (u *databaseUpdater) handleDeployment(record *Deployment) error {
+func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 	storer := u.storer
+
+	record, err := WithTypedValue[DeploymentValue](*untypedRecord)
+	if err != nil {
+		return fmt.Errorf("failed to cast: %w", err)
+	}
 
 	switch record.Intent {
 	case IntentCreated:

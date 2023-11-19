@@ -46,6 +46,9 @@ func main() {
 	storer := storage.NewStorer(db)
 	brokers := []string{kafkaAddr}
 	kafkaConsumer, err := consumer.NewConsumer(storer, brokers, ConsumerRetries, ConsumerRetryDelay)
+	if err != nil {
+		panic(err)
+	}
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually
 	defer kafkaConsumer.Close()
