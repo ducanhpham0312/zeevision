@@ -7,16 +7,16 @@ import (
 )
 
 // TODO more useful name
-type StoreApi struct {
+type Storer struct {
 	db *gorm.DB
 }
 
-func NewStoreApi(db *gorm.DB) *StoreApi{
-	return &StoreApi{db}
+func NewStorer(db *gorm.DB) *Storer{
+	return &Storer{db}
 }
 
 // call this for each processesMetadata
-func (r *StoreApi) ProcessDeployed(
+func (r *Storer) ProcessDeployed(
 	processId string,
 	processKey int64,
 	bpmnResource string,

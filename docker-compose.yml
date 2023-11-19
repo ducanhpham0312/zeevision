@@ -36,8 +36,6 @@ services:
       POSTGRES_DB: zeevision_db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
-    volumes:
-      - zeevision_volume:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4:7.8
@@ -55,6 +53,3 @@ networks:
   kafka_network:
     external: true
   postgres_network:
-
-volumes:
-  zeevision_volume:

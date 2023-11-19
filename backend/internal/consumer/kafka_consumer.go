@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
@@ -31,13 +32,27 @@ type Consumer struct {
 
 	consumer   sarama.Consumer
 	msgChannel ChannelType
-	storeApi   *storage.StoreApi
+	storer   *storage.Storer
 
 	wg           *sync.WaitGroup
 	closeChannel chan struct{}
 }
 
-func NewConsumer(storeApi *storage.StoreApi, brokers []string) (*Consumer, error) {
+func NewConsumer(storer *storage.Storer, brokers []string, maxRetries int, retryDelay time.Duration) (*Consumer, error) {
+	// wrap newConsumer with retry handling
+	var err error
+	for attempt := 1; attempt <= maxRetries; attempt++ {
+		kafkaConsumer, err := newConsumer(storer, brokers)
+		if err == nil {
+			return kafkaConsumer, nil
+		}
+		time.Sleep(retryDelay)
+	}
+	return nil, fmt.Errorf("maximum number of retries reached: %w", err)
+}
+
+
+func newConsumer(storer *storage.Storer, brokers []string) (*Consumer, error) {
 	config := sarama.NewConfig()
 
 	consumer, err := sarama.NewConsumer(brokers, config)
@@ -58,7 +73,7 @@ func NewConsumer(storeApi *storage.StoreApi, brokers []string) (*Consumer, error
 
 		consumer:   consumer,
 		msgChannel: make(ChannelType, bufSize),
-		storeApi:   storeApi,
+		storer:   storer,
 
 		wg:           &wg,
 		closeChannel: make(chan struct{}),
@@ -183,7 +198,7 @@ readLoop:
 }
 
 func (consumer *Consumer) handleDeployment(record *Deployment) error {
-	storeApi := consumer.storeApi
+	storer := consumer.storer
 
 	switch record.Intent {
 	case IntentCreated:
@@ -203,7 +218,7 @@ func (consumer *Consumer) handleDeployment(record *Deployment) error {
 			bpmnResource := resourceMap[process.ResourceName]
 			version := process.Version
 			log.Printf("Deploying %s", bpmnResource)
-			err := storeApi.ProcessDeployed(
+			err := storer.ProcessDeployed(
 				processId,
 				processKey,
 				bpmnResource,

@@ -13,6 +13,9 @@ import (
 const (
 	DBConnectionRetries    = 5
 	DBConnectionRetryDelay = 2 * time.Second
+
+	ConsumerRetries = 5
+	ConsumerRetryDelay = 2 * time.Second
 )
 
 // Entry point for the application.
@@ -40,22 +43,23 @@ func main() {
 	kafkaAddr := environment.KafkaAddress()
 
 	// Launch goroutine for consuming from specified topic and partition
-	storeApi := storage.NewStoreApi(db)
+	storer := storage.NewStorer(db)
 	brokers := []string{kafkaAddr}
-	kafkaConsumer, err := consumer.NewConsumer(storeApi, brokers)
-	for err != nil {
-		log.Print(err)
-		kafkaConsumer, err = consumer.NewConsumer(storeApi, brokers)
-	}
+	kafkaConsumer, err := consumer.NewConsumer(storer, brokers, ConsumerRetries, ConsumerRetryDelay)
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually
 	defer kafkaConsumer.Close()
 
-	topic := "zeebe-deployment"
-	err = kafkaConsumer.ConsumeTopic(0, topic)
-	if err != nil {
-		// TODO: error handling
-		panic(err)
+	topics := []string{
+		"zeebe-deployment",
+		"zeebe-process",
+	}
+	for _, topic := range topics {
+		err = kafkaConsumer.ConsumeTopic(0, topic)
+		if err != nil {
+			// TODO: error handling
+			panic(err)
+		}
 	}
 
 	// TODO: replace the msgChannel with a pointer to the consumer, perhaps,
