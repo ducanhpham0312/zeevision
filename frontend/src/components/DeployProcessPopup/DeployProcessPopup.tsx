@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { readFileToString } from "../../utils/readFileToString";
-import { BpmnViewer } from "../BpmnViewer";
+import { ResponsiveBpmnViewer } from "../BpmnViewer";
 import { Button } from "../Button";
 import { Popup, PopupAction, PopupContent } from "../Popup";
 import { DragDropFile } from "./DragDropFile";
@@ -61,33 +61,40 @@ export function DeployProcessPopup({
         shouldNotCloseWhenClickAway
       >
         <PopupContent style={{ overflow: "hidden" }}>
-          <div>
-            <Button type="button" onClick={handleFileUploadClick}>
-              Deploy a file (.bpmn)
-            </Button>
-            <p>Or drag a bpmn file here</p>
-            <input
-              type="file"
-              accept=".bpmn"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-              data-testid="file-input"
-            />
-          </div>
-          <div>
-            {bpmnString && (
-              <BpmnViewer
-                width={700}
-                bpmnString={bpmnString}
-                navigated={true}
+          <div className="flex w-full flex-col gap-5">
+            <div className="flex w-full items-center justify-between">
+              <Button variant="secondary" onClick={handleFileUploadClick}>
+                Upload a file (.bpmn)
+              </Button>
+              <input
+                type="file"
+                accept=".bpmn"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                data-testid="file-input"
               />
-            )}
+            </div>
+            <div className="w-full">
+              {bpmnString ? (
+                <ResponsiveBpmnViewer
+                  classname="py-1 h-[300px]"
+                  bpmnString={bpmnString}
+                  navigated={true}
+                />
+              ) : (
+                <div className="flex h-[300px] w-full items-center justify-center border-2 border-dashed">
+                  <p className="text-black/40">Or drag a bpmn file here</p>
+                </div>
+              )}
+            </div>
           </div>
         </PopupContent>
         <PopupAction>
-          <Button onClick={handleClosePopUp}>Cancel</Button>
-          <Button variant="contained">Deploy process</Button>
+          <Button variant="secondary" onClick={handleClosePopUp}>
+            Cancel
+          </Button>
+          <Button variant="primary">Deploy process</Button>
         </PopupAction>
       </Popup>
       <DragDropFile onFileDropped={handleFileDroped} />

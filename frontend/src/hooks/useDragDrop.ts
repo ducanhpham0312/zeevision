@@ -32,32 +32,32 @@ export function useDragDrop(): UseDragDropReturnType {
     window.document.documentElement.addEventListener(
       "dragenter",
       handleDragEnter,
-      false
+      false,
     );
     window.document.documentElement.addEventListener(
       "dragleave",
       handleDragLeave,
-      false
+      false,
     );
     window.document.documentElement.addEventListener(
       "dragover",
       handleDragEnter,
-      false
+      false,
     );
     window.document.documentElement.addEventListener("drop", handleDrop, false);
 
     return () => {
       window.document.documentElement.removeEventListener(
         "dragover",
-        handleDragEnter
+        handleDragEnter,
       );
       window.document.documentElement.removeEventListener(
         "dragenter",
-        handleDragEnter
+        handleDragEnter,
       );
       window.document.documentElement.removeEventListener(
         "dragleave",
-        handleDragLeave
+        handleDragLeave,
       );
       window.document.documentElement.removeEventListener("drop", handleDrop);
     };
