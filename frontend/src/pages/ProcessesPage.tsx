@@ -28,10 +28,12 @@ export default function ProcessesPage() {
   return (
     <>
       <h1>ProcessesPage</h1>
-      <Button onClick={() => handleClick("success")}>
+      <Button variant="primary" onClick={() => handleClick("success")}>
         Test success snackbar
       </Button>
-      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
+      <Button variant="secondary" onClick={() => handleClick("error")}>
+        Test error snackbar
+      </Button>
 
       <Table
         header={["Process Key", "Process ID", "Deployment Time"]}
@@ -51,7 +53,7 @@ export default function ProcessesPage() {
                   <NavLink to={processKey.toString()}>{processKey}</NavLink>,
                   processId,
                   deploymentTime,
-                ]
+                ],
               )
             : []
         }

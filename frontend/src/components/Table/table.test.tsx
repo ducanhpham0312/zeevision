@@ -15,7 +15,7 @@ describe("Table Component", () => {
         orientation={verticalOrientation}
         header={verticalHeader}
         content={verticalContent}
-      />
+      />,
     );
     expect(asFragment()).toMatchSnapshot();
   });
@@ -26,7 +26,7 @@ describe("Table Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
-      />
+      />,
     );
     expect(asFragment()).toMatchSnapshot();
   });
@@ -37,11 +37,11 @@ describe("Table Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
-      />
+      />,
     );
     expect(screen.getByText("Variable value")).toBeInTheDocument();
     expect(
-      screen.getAllByText("multi-instance-process")[0]
+      screen.getAllByText("multi-instance-process")[0],
     ).toBeInTheDocument();
     expect(screen.getAllByText("multi-instance-process").length).toEqual(3);
   });
@@ -52,7 +52,7 @@ describe("Table Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={[]}
-      />
+      />,
     );
     expect(component.getByRole("table")).toBeInTheDocument();
     expect(component.getAllByRole("row").length).toEqual(2);
@@ -61,7 +61,7 @@ describe("Table Component", () => {
 
   it("does not throw error when all props are empty", () => {
     const { container } = render(
-      <Table orientation={horizontalOrientation} header={[]} content={[]} />
+      <Table orientation={horizontalOrientation} header={[]} content={[]} />,
     );
     expect(container).toBeEmptyDOMElement();
   });
