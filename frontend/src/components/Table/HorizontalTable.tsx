@@ -64,14 +64,20 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
   };
   return (
     <>
-      <thead className="bg-second-accent font-bold text-text">
+      <thead className="border-b border-black/10 bg-second-accent font-bold text-text">
         <tr>
           {header.map((item) => (
-            <th key={item} onClick={() => handleSort(item)}>
-              {item}
-              {sortBy === item && (
-                <span>{sortOrder === "asc" ? " ▲" : " ▼"}</span>
-              )}
+            <th
+              key={item}
+              onClick={() => handleSort(item)}
+              className="cursor-pointer p-3 text-left"
+            >
+              <div className="flex justify-between">
+                <p>{item}</p>
+                <span className="w-10 text-right">
+                  {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
+                </span>
+              </div>
             </th>
           ))}
         </tr>
@@ -84,9 +90,17 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
             )
           : sortedContent
         ).map((row, rowIdx) => (
-          <tr key={rowIdx}>
+          <tr
+            className={
+              "border-b border-black/10 " +
+              (rowIdx % 2 === 0
+                ? "hover:bg-second-accent/10"
+                : "bg-second-accent hover:bg-second-accent/20")
+            }
+            key={rowIdx}
+          >
             {row.map((cell, index) => (
-              <td key={index}>
+              <td className="p-3" key={index}>
                 <pre>
                   {typeof cell === "string" ? prettifyJson(cell) : cell}
                 </pre>

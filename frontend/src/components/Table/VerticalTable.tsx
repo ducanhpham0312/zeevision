@@ -8,9 +8,16 @@ export function VerticalTable({ header, content }: VerticalTableProps) {
   return (
     <tbody>
       {header.map((title, idx) => (
-        <tr key={title}>
-          <th>{title}</th>
-          <td>{content[0][idx]}</td>
+        <tr
+          key={title}
+          className={
+            idx % 2 === 0
+              ? "bg-second-accent hover:bg-second-accent/20"
+              : "hover:bg-second-accent/10"
+          }
+        >
+          <th className="border border-r-0 p-3 text-left">{title}</th>
+          <td className="border border-l-0 p-3 text-left">{content[0][idx]}</td>
         </tr>
       ))}
     </tbody>

@@ -1,6 +1,5 @@
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
-import "./table.css";
 
 export interface TableProps {
   /**
@@ -23,7 +22,7 @@ export interface TableProps {
 export function Table({ orientation, header, content }: TableProps) {
   if (header.length === 0) return null;
   return (
-    <table>
+    <table className="w-full border-collapse rounded border border-black/10">
       {orientation === "horizontal" ? (
         <HorizontalTable header={header} content={content} />
       ) : (
