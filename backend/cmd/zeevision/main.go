@@ -14,7 +14,7 @@ const (
 	DBConnectionRetries    = 5
 	DBConnectionRetryDelay = 2 * time.Second
 
-	ConsumerRetries = 5
+	ConsumerRetries    = 5
 	ConsumerRetryDelay = 2 * time.Second
 )
 

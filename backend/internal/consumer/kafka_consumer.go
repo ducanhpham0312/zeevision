@@ -1,8 +1,6 @@
 package consumer
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"sync"
@@ -12,7 +10,8 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
 
-type ChannelType = chan []byte
+type msgChannelType = chan []byte
+type signalChannelType = chan struct{}
 
 // TODO: we need a method of reconnecting when the connection drops. I'm not
 // entirely sure how to *detect* this, except perhaps by adding a condition
@@ -30,12 +29,13 @@ type Consumer struct {
 	brokers []string
 	topics  []string
 
-	consumer   sarama.Consumer
-	msgChannel ChannelType
-	storer   *storage.Storer
+	databaseUpdater *databaseUpdater
 
-	wg           *sync.WaitGroup
+	consumer     sarama.Consumer
+	msgChannel   msgChannelType
 	closeChannel chan struct{}
+
+	wg *sync.WaitGroup
 }
 
 func NewConsumer(storer *storage.Storer, brokers []string, maxRetries int, retryDelay time.Duration) (*Consumer, error) {
@@ -51,7 +51,6 @@ func NewConsumer(storer *storage.Storer, brokers []string, maxRetries int, retry
 	return nil, fmt.Errorf("maximum number of retries reached: %w", err)
 }
 
-
 func newConsumer(storer *storage.Storer, brokers []string) (*Consumer, error) {
 	config := sarama.NewConfig()
 
@@ -65,28 +64,26 @@ func newConsumer(storer *storage.Storer, brokers []string) (*Consumer, error) {
 	// Depending on what the storage API looks like the channel might not
 	// be needed in the end (could be wrapped by a storage call)
 	bufSize := 10
+	msgChannel := make(msgChannelType, bufSize)
+
+	closeChannel := make(signalChannelType)
 
 	var wg sync.WaitGroup
+
+	databaseUpdater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
+
 	result := Consumer{
 		brokers: brokers,
 		topics:  []string{},
 
-		consumer:   consumer,
-		msgChannel: make(ChannelType, bufSize),
-		storer:   storer,
+		databaseUpdater: databaseUpdater,
 
-		wg:           &wg,
-		closeChannel: make(chan struct{}),
+		consumer:     consumer,
+		msgChannel:   msgChannel,
+		closeChannel: closeChannel,
+
+		wg: &wg,
 	}
-
-	// launch a database handler goroutine
-	// TODO This is very temporary - perhaps we should instead have specialised
-	// per-topic goroutines..?
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		result.databaseUpdater()
-	}()
 
 	return &result, err
 }
@@ -158,89 +155,4 @@ func (consumer *Consumer) Close() error {
 
 	err := consumer.consumer.Close()
 	return err
-}
-
-// Handle actual database updates from consumers
-func (consumer *Consumer) databaseUpdater() {
-	closeChannel := consumer.closeChannel
-	msgChannel := consumer.msgChannel
-readLoop:
-	for {
-		select {
-		case <-closeChannel:
-			// Close this one too when we get a closeChannel message
-			break readLoop
-		case msg := <-msgChannel:
-			var untypedRecord UntypedRecord
-			err := json.Unmarshal(msg, &untypedRecord)
-			if err != nil {
-				log.Printf("Failed to unmarshal: %v", err)
-				continue readLoop
-			}
-
-			switch untypedRecord.ValueType {
-			case ValueTypeDeployment:
-				record, err := WithTypedValue[DeploymentValue](untypedRecord)
-				if err != nil {
-					log.Printf("Failed to cast: %v", err)
-					continue readLoop
-				}
-
-				err = consumer.handleDeployment(&record)
-				if err != nil {
-					log.Printf("Failed to handle deployment: %v", err)
-					continue readLoop
-				}
-			}
-
-		}
-	}
-}
-
-func (consumer *Consumer) handleDeployment(record *Deployment) error {
-	storer := consumer.storer
-
-	switch record.Intent {
-	case IntentCreated:
-		resources := record.Value.Resources
-		processes := record.Value.ProcessesMetadata
-
-		resourceMap := map[string]string{}
-		for _, resource := range resources {
-			resourceMap[resource.ResourceName] = string(resource.Resource)
-		}
-
-		// Make storage for errors
-		var errs []error
-		for _, process := range processes {
-			processId := process.BpmnProcessID
-			processKey := process.ProcessDefinitionKey
-			bpmnResource := resourceMap[process.ResourceName]
-			version := process.Version
-			log.Printf("Deploying %s", bpmnResource)
-			err := storer.ProcessDeployed(
-				processId,
-				processKey,
-				bpmnResource,
-				version,
-			)
-			if err != nil {
-				errs = append(errs, err)
-			}
-			log.Printf("Deployed process %d (%s)",
-				processKey, processId)
-		}
-
-		if errs != nil {
-			err := fmt.Errorf("failed some deploys: %w", errors.Join(errs...))
-			return err
-		}
-
-		// We'll also get IntentFullyDistributed once it's distributed to all
-		// zeebe partitions but I'm not sure that's useful information to us
-	}
-
-	// If we get here we did nothing or missed all err returns so handling
-	// succeeded
-	return nil
 }

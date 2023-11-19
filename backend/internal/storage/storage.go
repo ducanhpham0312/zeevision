@@ -11,7 +11,7 @@ type Storer struct {
 	db *gorm.DB
 }
 
-func NewStorer(db *gorm.DB) *Storer{
+func NewStorer(db *gorm.DB) *Storer {
 	return &Storer{db}
 }
 
