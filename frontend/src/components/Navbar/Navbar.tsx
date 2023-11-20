@@ -1,7 +1,7 @@
 import { Button } from "../Button";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export const NavigationPath: { name: string; path: string }[] = [
+const NavigationPath: { name: string; path: string }[] = [
   {
     name: "PROCESSES",
     path: "/processes",
