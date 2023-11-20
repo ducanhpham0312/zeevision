@@ -27,7 +27,7 @@ type Process struct {
 	DeploymentTime       string                 `json:"deploymentTime"`
 	Instances            []*Instance            `json:"instances"`
 	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
-	BpmnProcessID        int64                  `json:"bpmnProcessId"`
+	BpmnProcessID        string                 `json:"bpmnProcessId"`
 	ProcessKey           int64                  `json:"processKey"`
 	Timers               []*Timer               `json:"timers"`
 	Version              int64                  `json:"version"`

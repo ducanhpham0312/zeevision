@@ -24,7 +24,7 @@ type Process {
   deploymentTime: DateTime!
   instances: [Instance!]! @goField(forceResolver: true)
   messageSubscriptions: [MessageSubscription!]! @goField(forceResolver: true)
-  bpmnProcessId: Int!
+  bpmnProcessId: String!
   processKey: Int!
   timers: [Timer!]! @goField(forceResolver: true)
   version: Int!

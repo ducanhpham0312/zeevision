@@ -10,14 +10,14 @@ import (
 
 var expectedProcesses = []Process{
 	{
-		ProcessKey:   1,
-		BpmnProcessID:    1000,
-		BpmnResource: "hlasd876/fhd=",
+		ProcessKey:    1,
+		BpmnProcessID: 1000,
+		BpmnResource:  "hlasd876/fhd=",
 	},
 	{
-		ProcessKey:   2,
-		BpmnProcessID:    2000,
-		BpmnResource: "9I79a8s7gKJH",
+		ProcessKey:    2,
+		BpmnProcessID: 2000,
+		BpmnResource:  "9I79a8s7gKJH",
 	},
 }
 

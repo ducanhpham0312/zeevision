@@ -61,7 +61,7 @@ export default function ProcessesPage() {
                   deploymentTime,
                 }: {
                   processKey: number;
-                  bpmnProcessId: number;
+                  bpmnProcessId: string;
                   deploymentTime: string;
                 }) => [
                   <NavLink to={processKey.toString()}>{processKey}</NavLink>,
