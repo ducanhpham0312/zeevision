@@ -52,11 +52,11 @@ You should see a JSON response with structure similar to this:
   "data": {
     "processes": [
       {
-        "bpmnProcessId": 123,
+        "bpmnProcessId": "multi-instance-process",
         "processKey": 1
       },
       {
-        "bpmnProcessId": 222,
+        "bpmnProcessId": "money-loan",
         "processKey": 2
       }
     ]
