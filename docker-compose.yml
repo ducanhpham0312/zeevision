@@ -44,8 +44,8 @@ services:
     networks:
       - postgres_network
     environment:
-      PGADMIN_DEFAULT_EMAIL: pg_admin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: pg_pass
+      PGADMIN_DEFAULT_EMAIL: user@example.com
+      PGADMIN_DEFAULT_PASSWORD: pass
     ports:
       - "5050:80"
     depends_on:

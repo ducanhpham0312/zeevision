@@ -3,6 +3,7 @@ import { Table } from "../components/Table";
 import { useUIStore } from "../contexts/useUIStore";
 import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
+import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {
   const PROCESSES = gql`
@@ -14,7 +15,10 @@ export default function ProcessesPage() {
       }
     }
   `;
-  const { data } = useQuery(PROCESSES);
+  const { data } = useQuery(PROCESSES, {
+    pollInterval: queryPollIntervalMs,
+  });
+
   const { setSnackbarContent } = useUIStore();
 
   const handleClick = (type: "success" | "error") => {
