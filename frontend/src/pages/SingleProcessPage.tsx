@@ -2,6 +2,7 @@ import { Table } from "../components/Table";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { BpmnViewer } from "../components/BpmnViewer";
+import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {
   const params = useParams();
@@ -21,7 +22,9 @@ export default function ProcessesPage() {
       }
     }
   `;
-  const { data } = useQuery(PROCESS);
+  const { data } = useQuery(PROCESS, {
+    pollInterval: queryPollIntervalMs,
+  });
   const {
     processKey,
     processId,

@@ -28,20 +28,14 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 	var processes []Process
 	err := f.ContextDB(ctx).Find(&processes).Error
-	if err != nil {
-		return nil, err
-	}
 
-	return processes, nil
+	return processes, err
 }
 
 // Gets a process by its key.
 func (f *Fetcher) GetProcess(ctx context.Context, processKey int64) (Process, error) {
 	var process Process
 	err := f.ContextDB(ctx).Where(&Process{ProcessKey: processKey}).First(&process).Error
-	if err != nil {
-		return Process{}, err
-	}
 
-	return process, nil
+	return process, err
 }

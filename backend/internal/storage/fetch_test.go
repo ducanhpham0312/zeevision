@@ -4,9 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/ducanhpham0312/zeevision/backend/internal/testutils"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 var expectedProcesses = []Process{
@@ -23,7 +22,7 @@ var expectedProcesses = []Process{
 }
 
 func TestProcessesQuery(t *testing.T) {
-	testDb := newProcessesTestDb(t)
+	testDb := newProcessesTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -32,7 +31,7 @@ func TestProcessesQuery(t *testing.T) {
 	err := db.Create(expectedProcesses).Error
 	assert.NoError(t, err)
 
-	fetcher := NewFetcher(testDb.DB())
+	fetcher := NewFetcher(db)
 
 	processes, err := fetcher.GetProcesses(context.Background())
 	assert.NoError(t, err)
@@ -46,7 +45,7 @@ func TestProcessesQuery(t *testing.T) {
 }
 
 func TestProcessQuery(t *testing.T) {
-	testDb := newProcessesTestDb(t)
+	testDb := newProcessesTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -56,7 +55,7 @@ func TestProcessQuery(t *testing.T) {
 	err := db.Create(&expectedProcess).Error
 	assert.NoError(t, err)
 
-	fetcher := NewFetcher(testDb.DB())
+	fetcher := NewFetcher(db)
 
 	tests := []struct {
 		name        string
@@ -94,7 +93,7 @@ func TestProcessQuery(t *testing.T) {
 }
 
 func TestCancelQuery(t *testing.T) {
-	testDb := newProcessesTestDb(t)
+	testDb := newProcessesTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -109,40 +108,11 @@ func TestCancelQuery(t *testing.T) {
 }
 
 // Creates new test database with processes table.
-func newProcessesTestDb(t *testing.T) *testDb {
-	testDb := newTestDb(t)
+func newProcessesTestDB(t *testing.T) *testutils.TestDB {
+	testDb := testutils.NewTestDB(t)
 
 	err := testDb.DB().AutoMigrate(&Process{})
 	assert.NoError(t, err)
 
 	return testDb
-}
-
-// Creates new test database which starts transaction. Transaction is rolled back
-// when Rollback() is called.
-//
-// NOTE: You shouldn't use more than one test database at a time,
-// since the underlying database is shared. So no `t.Parallel()`.
-func newTestDb(t *testing.T) *testDb {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
-	assert.NoError(t, err)
-
-	tx := db.Begin()
-
-	return &testDb{db: tx}
-}
-
-// Rolls back to empty state.
-func (d *testDb) Rollback() error {
-	return d.db.Rollback().Error
-}
-
-// Returns database object.
-func (d *testDb) DB() *gorm.DB {
-	return d.db
-}
-
-// In-memory test database using sqlite.
-type testDb struct {
-	db *gorm.DB
 }
