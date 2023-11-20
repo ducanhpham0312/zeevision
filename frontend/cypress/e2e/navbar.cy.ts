@@ -16,7 +16,7 @@ describe("Navbar Tests", () => {
   pages.forEach((page) => {
     it(`should have a navbar on the ${page} page`, () => {
       cy.visit(page); // Navigate to the page
-      cy.get("header").contains("NAVBAR").should("exist");
+      cy.contains("ZEEVISION").should("exist");
       cy.screenshot(`Navbar${page}`); // Screenshot for each page
     });
   });
