@@ -19,6 +19,11 @@ services:
       # Comma separated list of allowed origins for API access.
       # Allow all origins for development.
       - "ZEEVISION_API_ALLOWED_ORIGINS=*"
+      - ZEEVISION_DATABASE_USER=user
+      - ZEEVISION_DATABASE_PASSWORD=pass
+      - ZEEVISION_DATABASE_NAME=zeevision_db
+      - ZEEVISION_DATABASE_HOST=postgres
+      - ZEEVISION_DATABASE_PORT=5432
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -29,8 +34,8 @@ services:
       - postgres_network
     environment:
       POSTGRES_DB: zeevision_db
-      POSTGRES_USER: zeevision_user
-      POSTGRES_PASSWORD: zeevision_pass
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
     volumes:
       - zeevision_volume:/var/lib/postgresql/data
 
@@ -39,8 +44,8 @@ services:
     networks:
       - postgres_network
     environment:
-      PGADMIN_DEFAULT_EMAIL: pg_admin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: pg_pass
+      PGADMIN_DEFAULT_EMAIL: user@example.com
+      PGADMIN_DEFAULT_PASSWORD: pass
     ports:
       - "5050:80"
     depends_on:

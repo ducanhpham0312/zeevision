@@ -22,7 +22,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
     (
       content: (string | number)[][],
       column: string,
-      order: string
+      order: string,
     ): (string | number)[][] => {
       return content.slice().sort((a, b) => {
         const comparison =
@@ -30,7 +30,7 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         return order === "desc" ? comparison * -1 : comparison;
       });
     },
-    [header]
+    [header],
   );
   React.useEffect(() => {
     // Sort the content when sortBy or sortOrder changes
@@ -51,42 +51,56 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
 
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
   return (
     <>
-      <StyledHeader>
+      <thead className="border-b border-black/10 bg-second-accent font-bold text-text">
         <tr>
           {header.map((item) => (
-            <th key={item} onClick={() => handleSort(item)}>
-              {item}
-              {sortBy === item && (
-                <span>{sortOrder === "asc" ? " ▲" : " ▼"}</span>
-              )}
+            <th
+              key={item}
+              onClick={() => handleSort(item)}
+              className="cursor-pointer p-3 text-left"
+            >
+              <div className="flex justify-between">
+                <p>{item}</p>
+                <span className="w-10 text-right">
+                  {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
+                </span>
+              </div>
             </th>
           ))}
         </tr>
-      </StyledHeader>
+      </thead>
       <tbody aria-label="custom pagination table">
         {(rowsPerPage > 0
           ? sortedContent.slice(
               page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
+              page * rowsPerPage + rowsPerPage,
             )
           : sortedContent
         ).map((row, rowIdx) => (
-          <tr key={rowIdx}>
+          <tr
+            className={
+              "border-b border-black/10 " +
+              (rowIdx % 2 === 0
+                ? "hover:bg-second-accent/10"
+                : "bg-second-accent hover:bg-second-accent/20")
+            }
+            key={rowIdx}
+          >
             {row.map((cell, index) => (
-              <td key={index}>
+              <td className="p-3" key={index}>
                 <pre>
                   {typeof cell === "string" ? prettifyJson(cell) : cell}
                 </pre>
@@ -137,11 +151,6 @@ function prettifyJson(str: string) {
   }
   return JSON.stringify(JSON.parse(str), null, 2);
 }
-
-const StyledHeader = styled("thead")`
-  background-color: #d9d9d9;
-  font-weight: bold;
-`;
 
 const StyledTablePagination = styled(TablePagination)`
   & .${classes.toolbar} {

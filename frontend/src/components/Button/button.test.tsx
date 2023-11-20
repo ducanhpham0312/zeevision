@@ -32,13 +32,8 @@ describe("StyledButton Component", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it("applies the correct width when the width prop is provided", () => {
-    const { getByText } = render(<Button width={300} label="Click me" />);
-    expect(getByText("Click me")).toHaveStyle("width: 300px");
-  });
-
   it("occupies all available space when fullWidth prop is true", () => {
-    const { getByText } = render(<Button fullWidth label="Click me" />);
-    expect(getByText("Click me")).toHaveStyle("width: 100%");
+    render(<Button fullWidth label="Click me" />);
+    expect(screen.getByRole("button")).toHaveClass("w-full");
   });
 });

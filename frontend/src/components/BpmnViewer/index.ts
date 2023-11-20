@@ -1,1 +1,1 @@
-export { BpmnViewer } from "./BpmnViewer";
+export { BpmnViewer, ResponsiveBpmnViewer } from "./BpmnViewer";

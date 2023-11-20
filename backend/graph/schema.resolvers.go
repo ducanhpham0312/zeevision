@@ -31,18 +31,35 @@ func (r *processResolver) Timers(ctx context.Context, obj *model.Process) ([]*mo
 
 // Processes is the resolver for the processes field.
 func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error) {
-	return dummyProcesses, nil
+	dbProcesses, err := r.Fetcher.GetProcesses(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch processes: %w", err)
+	}
+
+	processes := make([]*model.Process, 0, len(dbProcesses))
+	for _, dbProcess := range dbProcesses {
+		processes = append(processes, &model.Process{
+			ProcessKey:   dbProcess.ProcessKey,
+			ProcessID:    dbProcess.ProcessID,
+			BpmnResource: dbProcess.BpmnResource,
+		})
+	}
+
+	return processes, nil
 }
 
 // Process is the resolver for the process field.
 func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.Process, error) {
-	for _, process := range dummyProcesses {
-		if process.ProcessKey == processKey {
-			return process, nil
-		}
+	dbProcess, err := r.Fetcher.GetProcess(ctx, processKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch process: %w", err)
 	}
 
-	return nil, fmt.Errorf("process with given key %d doesn't exist", processKey)
+	return &model.Process{
+		ProcessKey:   dbProcess.ProcessKey,
+		ProcessID:    dbProcess.ProcessID,
+		BpmnResource: dbProcess.BpmnResource,
+	}, nil
 }
 
 // Instances is the resolver for the instances field.

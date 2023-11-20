@@ -5,6 +5,7 @@ import { useUIStore } from "../contexts/useUIStore";
 import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
+import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {
   const PROCESSES = gql`
@@ -16,7 +17,10 @@ export default function ProcessesPage() {
       }
     }
   `;
-  const { data } = useQuery(PROCESSES);
+  const { data } = useQuery(PROCESSES, {
+    pollInterval: queryPollIntervalMs,
+  });
+
   const { setSnackbarContent } = useUIStore();
 
   const handleClick = (type: "success" | "error") => {
@@ -33,10 +37,9 @@ export default function ProcessesPage() {
   return (
     <>
       <h1>ProcessesPage</h1>
-      <Button onClick={() => handleClick("success")}>
+      <Button variant="primary" onClick={() => handleClick("success")}>
         Test success snackbar
       </Button>
-      <Button onClick={() => handleClick("error")}>Test error snackbar</Button>
       <>
         <Button onClick={handleOpen}>Deploy a Process</Button>
         <DeployProcessPopup
@@ -45,6 +48,9 @@ export default function ProcessesPage() {
           onClosePopUp={handleClose}
         />
       </>
+      <Button variant="secondary" onClick={() => handleClick("error")}>
+        Test error snackbar
+      </Button>
       <Table
         header={["Process Key", "Process ID", "Deployment Time"]}
         orientation="horizontal"
@@ -63,7 +69,7 @@ export default function ProcessesPage() {
                   <NavLink to={processKey.toString()}>{processKey}</NavLink>,
                   processId,
                   deploymentTime,
-                ]
+                ],
               )
             : []
         }
