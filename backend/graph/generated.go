@@ -67,12 +67,12 @@ type ComplexityRoot struct {
 	Process struct {
 		ActiveInstances      func(childComplexity int) int
 		BpmnLiveStatus       func(childComplexity int) int
+		BpmnProcessID        func(childComplexity int) int
 		BpmnResource         func(childComplexity int) int
 		CompletedInstances   func(childComplexity int) int
 		DeploymentTime       func(childComplexity int) int
 		Instances            func(childComplexity int) int
 		MessageSubscriptions func(childComplexity int) int
-		ProcessID            func(childComplexity int) int
 		ProcessKey           func(childComplexity int) int
 		Timers               func(childComplexity int) int
 		Version              func(childComplexity int) int
@@ -217,6 +217,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Process.BpmnLiveStatus(childComplexity), true
 
+	case "Process.bpmnProcessId":
+		if e.complexity.Process.BpmnProcessID == nil {
+			break
+		}
+
+		return e.complexity.Process.BpmnProcessID(childComplexity), true
+
 	case "Process.bpmnResource":
 		if e.complexity.Process.BpmnResource == nil {
 			break
@@ -251,13 +258,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Process.MessageSubscriptions(childComplexity), true
-
-	case "Process.processId":
-		if e.complexity.Process.ProcessID == nil {
-			break
-		}
-
-		return e.complexity.Process.ProcessID(childComplexity), true
 
 	case "Process.processKey":
 		if e.complexity.Process.ProcessKey == nil {
@@ -1362,8 +1362,8 @@ func (ec *executionContext) fieldContext_Process_messageSubscriptions(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Process_processId(ctx context.Context, field graphql.CollectedField, obj *model.Process) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Process_processId(ctx, field)
+func (ec *executionContext) _Process_bpmnProcessId(ctx context.Context, field graphql.CollectedField, obj *model.Process) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Process_bpmnProcessId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1376,7 +1376,7 @@ func (ec *executionContext) _Process_processId(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ProcessID, nil
+		return obj.BpmnProcessID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1393,7 +1393,7 @@ func (ec *executionContext) _Process_processId(ctx context.Context, field graphq
 	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Process_processId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Process_bpmnProcessId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Process",
 		Field:      field,
@@ -1603,8 +1603,8 @@ func (ec *executionContext) fieldContext_Query_processes(ctx context.Context, fi
 				return ec.fieldContext_Process_instances(ctx, field)
 			case "messageSubscriptions":
 				return ec.fieldContext_Process_messageSubscriptions(ctx, field)
-			case "processId":
-				return ec.fieldContext_Process_processId(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Process_bpmnProcessId(ctx, field)
 			case "processKey":
 				return ec.fieldContext_Process_processKey(ctx, field)
 			case "timers":
@@ -1668,8 +1668,8 @@ func (ec *executionContext) fieldContext_Query_process(ctx context.Context, fiel
 				return ec.fieldContext_Process_instances(ctx, field)
 			case "messageSubscriptions":
 				return ec.fieldContext_Process_messageSubscriptions(ctx, field)
-			case "processId":
-				return ec.fieldContext_Process_processId(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Process_bpmnProcessId(ctx, field)
 			case "processKey":
 				return ec.fieldContext_Process_processKey(ctx, field)
 			case "timers":
@@ -4183,8 +4183,8 @@ func (ec *executionContext) _Process(ctx context.Context, sel ast.SelectionSet, 
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "processId":
-			out.Values[i] = ec._Process_processId(ctx, field, obj)
+		case "bpmnProcessId":
+			out.Values[i] = ec._Process_bpmnProcessId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

@@ -39,7 +39,7 @@ To try out the API Playground, try putting the query below to the query field an
 ```graphql
 query ManyProcesses {
     processes {
-        processId
+        bpmnProcessId
         processKey
     }
 }
@@ -52,11 +52,11 @@ You should see a JSON response with structure similar to this:
   "data": {
     "processes": [
       {
-        "processId": 123,
+        "bpmnProcessId": 123,
         "processKey": 1
       },
       {
-        "processId": 222,
+        "bpmnProcessId": 222,
         "processKey": 2
       }
     ]

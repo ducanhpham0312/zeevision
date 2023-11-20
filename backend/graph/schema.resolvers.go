@@ -39,9 +39,9 @@ func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error)
 	processes := make([]*model.Process, 0, len(dbProcesses))
 	for _, dbProcess := range dbProcesses {
 		processes = append(processes, &model.Process{
-			ProcessKey:   dbProcess.ProcessKey,
-			ProcessID:    dbProcess.ProcessID,
-			BpmnResource: dbProcess.BpmnResource,
+			ProcessKey:    dbProcess.ProcessKey,
+			BpmnProcessID: dbProcess.BpmnProcessID,
+			BpmnResource:  dbProcess.BpmnResource,
 		})
 	}
 
@@ -56,9 +56,9 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 	}
 
 	return &model.Process{
-		ProcessKey:   dbProcess.ProcessKey,
-		ProcessID:    dbProcess.ProcessID,
-		BpmnResource: dbProcess.BpmnResource,
+		ProcessKey:    dbProcess.ProcessKey,
+		BpmnProcessID: dbProcess.BpmnProcessID,
+		BpmnResource:  dbProcess.BpmnResource,
 	}, nil
 }
 

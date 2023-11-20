@@ -11,7 +11,7 @@ export default function ProcessesPage() {
   const PROCESSES = gql`
     query Processes {
       processes {
-        processId
+        bpmnProcessId
         processKey
         deploymentTime
       }
@@ -57,15 +57,15 @@ export default function ProcessesPage() {
             ? data.processes.map(
                 ({
                   processKey,
-                  processId,
+                  bpmnProcessId,
                   deploymentTime,
                 }: {
                   processKey: number;
-                  processId: number;
+                  bpmnProcessId: number;
                   deploymentTime: string;
                 }) => [
                   <NavLink to={processKey.toString()}>{processKey}</NavLink>,
-                  processId,
+                  bpmnProcessId,
                   deploymentTime,
                 ],
               )

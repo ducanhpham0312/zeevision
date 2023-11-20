@@ -9,7 +9,7 @@ export default function ProcessesPage() {
   const PROCESS = gql`
     query SingleProcess {
       process(processKey: ${params.id}) {
-        processId
+        bpmnProcessId
         processKey
         version
         deploymentTime
@@ -27,7 +27,7 @@ export default function ProcessesPage() {
   });
   const {
     processKey,
-    processId,
+    bpmnProcessId,
     version,
     deploymentTime,
     bpmnResource,
@@ -47,7 +47,7 @@ export default function ProcessesPage() {
             "Deployment Time",
           ]}
           content={
-            data ? [[processKey, processId, version, deploymentTime]] : []
+            data ? [[processKey, bpmnProcessId, version, deploymentTime]] : []
           }
         />
         <BpmnViewer bpmnString={decodedBpmn} />

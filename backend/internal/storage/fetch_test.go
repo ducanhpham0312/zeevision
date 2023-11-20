@@ -11,12 +11,12 @@ import (
 var expectedProcesses = []Process{
 	{
 		ProcessKey:   1,
-		ProcessID:    1000,
+		BpmnProcessID:    1000,
 		BpmnResource: "hlasd876/fhd=",
 	},
 	{
 		ProcessKey:   2,
-		ProcessID:    2000,
+		BpmnProcessID:    2000,
 		BpmnResource: "9I79a8s7gKJH",
 	},
 }
@@ -39,7 +39,7 @@ func TestProcessesQuery(t *testing.T) {
 	assert.Len(t, processes, 2)
 	for i := range processes {
 		assert.Equal(t, expectedProcesses[i].ProcessKey, processes[i].ProcessKey)
-		assert.Equal(t, expectedProcesses[i].ProcessID, processes[i].ProcessID)
+		assert.Equal(t, expectedProcesses[i].BpmnProcessID, processes[i].BpmnProcessID)
 		assert.Equal(t, expectedProcesses[i].BpmnResource, processes[i].BpmnResource)
 	}
 }
@@ -86,7 +86,7 @@ func TestProcessQuery(t *testing.T) {
 			assert.NoError(t, err)
 
 			assert.Equal(t, expectedProcess.ProcessKey, process.ProcessKey)
-			assert.Equal(t, expectedProcess.ProcessID, process.ProcessID)
+			assert.Equal(t, expectedProcess.BpmnProcessID, process.BpmnProcessID)
 			assert.Equal(t, expectedProcess.BpmnResource, process.BpmnResource)
 		})
 	}
