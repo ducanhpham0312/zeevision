@@ -1,15 +1,17 @@
+import { useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
 import { useUIStore } from "../contexts/useUIStore";
 import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
+import { DeployProcessPopup } from "../components/DeployProcessPopup";
 import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {
   const PROCESSES = gql`
     query Processes {
       processes {
-        processId
+        bpmnProcessId
         processKey
         deploymentTime
       }
@@ -28,6 +30,9 @@ export default function ProcessesPage() {
       type,
     });
   };
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const handleOpen = () => setIsPopUpOpen(true);
+  const handleClose = () => setIsPopUpOpen(false);
 
   return (
     <>
@@ -38,7 +43,12 @@ export default function ProcessesPage() {
       <Button variant="secondary" onClick={() => handleClick("error")}>
         Test error snackbar
       </Button>
-
+      <Button onClick={handleOpen}>Deploy a Process</Button>
+      <DeployProcessPopup
+        isPopUpOpen={isPopUpOpen}
+        onOpenPopUp={handleOpen}
+        onClosePopUp={handleClose}
+      />
       <Table
         header={["Process Key", "Process ID", "Deployment Time"]}
         orientation="horizontal"
@@ -47,15 +57,15 @@ export default function ProcessesPage() {
             ? data.processes.map(
                 ({
                   processKey,
-                  processId,
+                  bpmnProcessId,
                   deploymentTime,
                 }: {
                   processKey: number;
-                  processId: number;
+                  bpmnProcessId: string;
                   deploymentTime: string;
                 }) => [
                   <NavLink to={processKey.toString()}>{processKey}</NavLink>,
-                  processId,
+                  bpmnProcessId,
                   deploymentTime,
                 ],
               )

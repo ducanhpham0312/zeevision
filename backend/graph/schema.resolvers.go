@@ -39,9 +39,9 @@ func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error)
 	processes := make([]*model.Process, 0, len(dbProcesses))
 	for _, dbProcess := range dbProcesses {
 		processes = append(processes, &model.Process{
-			ProcessKey:   dbProcess.ProcessKey,
-			ProcessID:    dbProcess.ProcessID,
-			BpmnResource: dbProcess.BpmnResource,
+			ProcessKey:    dbProcess.ProcessKey,
+			BpmnProcessID: dbProcess.BpmnProcessID,
+			BpmnResource:  dbProcess.BpmnResource,
 		})
 	}
 
@@ -56,20 +56,25 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 	}
 
 	return &model.Process{
-		ProcessKey:   dbProcess.ProcessKey,
-		ProcessID:    dbProcess.ProcessID,
-		BpmnResource: dbProcess.BpmnResource,
+		ProcessKey:    dbProcess.ProcessKey,
+		BpmnProcessID: dbProcess.BpmnProcessID,
+		BpmnResource:  dbProcess.BpmnResource,
 	}, nil
 }
 
 // Instances is the resolver for the instances field.
 func (r *queryResolver) Instances(ctx context.Context) ([]*model.Instance, error) {
-	panic(fmt.Errorf("not implemented: Instances - instances"))
+	return dummyInstances, nil
 }
 
 // Instance is the resolver for the instance field.
 func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model.Instance, error) {
-	panic(fmt.Errorf("not implemented: Instance - instance"))
+	for _, instance := range dummyInstances {
+		if instance.InstanceKey == instanceKey {
+			return instance, nil
+		}
+	}
+	return nil, fmt.Errorf("instance with given key %d doesn't exist", instanceKey)
 }
 
 // Process returns ProcessResolver implementation.
