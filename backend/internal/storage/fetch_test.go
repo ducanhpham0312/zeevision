@@ -11,12 +11,12 @@ import (
 var expectedProcesses = []Process{
 	{
 		ProcessKey:    1,
-		BpmnProcessID: 1000,
+		BpmnProcessID: "multi-instance-process",
 		BpmnResource:  "hlasd876/fhd=",
 	},
 	{
 		ProcessKey:    2,
-		BpmnProcessID: 2000,
+		BpmnProcessID: "money-loan",
 		BpmnResource:  "9I79a8s7gKJH",
 	},
 }
