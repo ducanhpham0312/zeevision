@@ -33,7 +33,7 @@ export default function InstancesPage() {
                 bpmnProcessId: string;
                 status: string;
                 startTime: string;
-              }) => [instanceKey, bpmnProcessId, status, startTime]
+              }) => [instanceKey, bpmnProcessId, status, startTime],
             )
           : []
       }
