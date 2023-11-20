@@ -65,8 +65,9 @@ readLoop:
 					log.Printf("Failed to handle deployment: %v", err)
 					continue readLoop
 				}
+			default:
+				log.Printf("Unhandled record: %v", untypedRecord)
 			}
-
 		}
 	}
 }
