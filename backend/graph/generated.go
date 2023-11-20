@@ -49,9 +49,9 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	Instance struct {
 		BpmnLiveStatus func(childComplexity int) int
+		BpmnProcessID  func(childComplexity int) int
 		BpmnResource   func(childComplexity int) int
 		InstanceKey    func(childComplexity int) int
-		ProcessID      func(childComplexity int) int
 		StartTime      func(childComplexity int) int
 		Status         func(childComplexity int) int
 		Version        func(childComplexity int) int
@@ -133,6 +133,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Instance.BpmnLiveStatus(childComplexity), true
 
+	case "Instance.bpmnProcessId":
+		if e.complexity.Instance.BpmnProcessID == nil {
+			break
+		}
+
+		return e.complexity.Instance.BpmnProcessID(childComplexity), true
+
 	case "Instance.bpmnResource":
 		if e.complexity.Instance.BpmnResource == nil {
 			break
@@ -146,13 +153,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Instance.InstanceKey(childComplexity), true
-
-	case "Instance.processId":
-		if e.complexity.Instance.ProcessID == nil {
-			break
-		}
-
-		return e.complexity.Instance.ProcessID(childComplexity), true
 
 	case "Instance.startTime":
 		if e.complexity.Instance.StartTime == nil {
@@ -676,8 +676,8 @@ func (ec *executionContext) fieldContext_Instance_startTime(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Instance_processId(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Instance_processId(ctx, field)
+func (ec *executionContext) _Instance_bpmnProcessId(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -690,7 +690,7 @@ func (ec *executionContext) _Instance_processId(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ProcessID, nil
+		return obj.BpmnProcessID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -707,7 +707,7 @@ func (ec *executionContext) _Instance_processId(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Instance_processId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Instance_bpmnProcessId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Instance",
 		Field:      field,
@@ -1293,8 +1293,8 @@ func (ec *executionContext) fieldContext_Process_instances(ctx context.Context, 
 				return ec.fieldContext_Instance_bpmnResource(ctx, field)
 			case "startTime":
 				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "processId":
-				return ec.fieldContext_Instance_processId(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 			case "instanceKey":
 				return ec.fieldContext_Instance_instanceKey(ctx, field)
 			case "version":
@@ -1739,8 +1739,8 @@ func (ec *executionContext) fieldContext_Query_instances(ctx context.Context, fi
 				return ec.fieldContext_Instance_bpmnResource(ctx, field)
 			case "startTime":
 				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "processId":
-				return ec.fieldContext_Instance_processId(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 			case "instanceKey":
 				return ec.fieldContext_Instance_instanceKey(ctx, field)
 			case "version":
@@ -1796,8 +1796,8 @@ func (ec *executionContext) fieldContext_Query_instance(ctx context.Context, fie
 				return ec.fieldContext_Instance_bpmnResource(ctx, field)
 			case "startTime":
 				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "processId":
-				return ec.fieldContext_Instance_processId(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 			case "instanceKey":
 				return ec.fieldContext_Instance_instanceKey(ctx, field)
 			case "version":
@@ -3978,8 +3978,8 @@ func (ec *executionContext) _Instance(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "processId":
-			out.Values[i] = ec._Instance_processId(ctx, field, obj)
+		case "bpmnProcessId":
+			out.Values[i] = ec._Instance_bpmnProcessId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

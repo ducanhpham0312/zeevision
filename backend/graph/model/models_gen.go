@@ -6,7 +6,7 @@ type Instance struct {
 	BpmnLiveStatus string `json:"bpmnLiveStatus"`
 	BpmnResource   string `json:"bpmnResource"`
 	StartTime      string `json:"startTime"`
-	ProcessID      string `json:"processId"`
+	BpmnProcessID  string `json:"bpmnProcessId"`
 	InstanceKey    int64  `json:"instanceKey"`
 	Version        int64  `json:"version"`
 	Status         string `json:"status"`

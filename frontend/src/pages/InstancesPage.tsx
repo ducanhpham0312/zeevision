@@ -1,17 +1,21 @@
 import { gql, useQuery } from "@apollo/client";
 import { Table } from "../components/Table";
+import { queryPollIntervalMs } from "../utils/constants";
+
 export default function InstancesPage() {
   const INSTANCES = gql`
     query Instances {
       instances {
         instanceKey
-        processId
+        bpmnProcessId
         status
         startTime
       }
     }
   `;
-  const { data } = useQuery(INSTANCES);
+  const { data } = useQuery(INSTANCES, {
+    pollInterval: queryPollIntervalMs,
+  });
   return (
     <Table
       orientation="horizontal"
@@ -21,15 +25,15 @@ export default function InstancesPage() {
           ? data.instances.map(
               ({
                 instanceKey,
-                processId,
+                bpmnProcessId,
                 status,
                 startTime,
               }: {
                 instanceKey: number;
-                processId: string;
+                bpmnProcessId: string;
                 status: string;
                 startTime: string;
-              }) => [instanceKey, processId, status, startTime]
+              }) => [instanceKey, bpmnProcessId, status, startTime]
             )
           : []
       }

@@ -40,17 +40,15 @@ export default function ProcessesPage() {
       <Button variant="primary" onClick={() => handleClick("success")}>
         Test success snackbar
       </Button>
-      <>
-        <Button onClick={handleOpen}>Deploy a Process</Button>
-        <DeployProcessPopup
-          isPopUpOpen={isPopUpOpen}
-          onOpenPopUp={handleOpen}
-          onClosePopUp={handleClose}
-        />
-      </>
       <Button variant="secondary" onClick={() => handleClick("error")}>
         Test error snackbar
       </Button>
+      <Button onClick={handleOpen}>Deploy a Process</Button>
+      <DeployProcessPopup
+        isPopUpOpen={isPopUpOpen}
+        onOpenPopUp={handleOpen}
+        onClosePopUp={handleClose}
+      />
       <Table
         header={["Process Key", "Process ID", "Deployment Time"]}
         orientation="horizontal"

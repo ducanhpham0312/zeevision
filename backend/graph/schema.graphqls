@@ -34,7 +34,7 @@ type Instance {
   bpmnLiveStatus: String!
   bpmnResource: String!
   startTime: DateTime!
-  processId: String!
+  bpmnProcessId: String!
   instanceKey: Int!
   version: Int!
   status: String!
