@@ -19,5 +19,6 @@ type Process struct {
 	BpmnProcessID        string     `gorm:"not null"`
 	Version              int64      `gorm:"not null"`
 	BpmnResource         string     `gorm:"not null"`
+	DeploymentTime       time.Time  `gorm:"not null"`
 	Instances            []Instance `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
 }

@@ -116,6 +116,7 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "multi-instance-process",
 				Version:              1,
 				BpmnResource:         "hlasd876/fhd=",
+				DeploymentTime:       now,
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{
 					{
@@ -148,6 +149,7 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "money-loan",
 				Version:              1,
 				BpmnResource:         "9I79a8s7gKJH",
+				DeploymentTime:       now,
 				Instances:            []storage.Instance{},
 			},
 			expected: &Process{

@@ -38,7 +38,10 @@ func (f *Fetcher) GetInstance(ctx context.Context, instanceKey int64) (Instance,
 // Gets all instances for all processes.
 func (f *Fetcher) GetInstances(ctx context.Context) ([]Instance, error) {
 	var instances []Instance
-	err := f.ContextDB(ctx).Find(&instances).Error
+	err := f.ContextDB(ctx).
+		Order("start_time DESC").
+		Find(&instances).
+		Error
 
 	return instances, err
 }
@@ -48,6 +51,7 @@ func (f *Fetcher) GetInstancesForProcess(ctx context.Context, processDefKey int6
 	var instances []Instance
 	err := f.ContextDB(ctx).
 		Where(&Instance{ProcessDefinitionKey: processDefKey}).
+		Order("start_time DESC").
 		Find(&instances).
 		Error
 
@@ -68,7 +72,10 @@ func (f *Fetcher) GetProcess(ctx context.Context, processDefKey int64) (Process,
 // Gets all processes.
 func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 	var processes []Process
-	err := f.ContextDB(ctx).Find(&processes).Error
+	err := f.ContextDB(ctx).
+		Order("deployment_time DESC").
+		Find(&processes).
+		Error
 
 	return processes, err
 }

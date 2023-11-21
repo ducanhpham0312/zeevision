@@ -45,7 +45,7 @@ func FromStorageProcess(process storage.Process) *Process {
 		CompletedInstances: 0,  // TODO
 		BpmnLiveStatus:     "", // TODO
 		BpmnResource:       process.BpmnResource,
-		DeploymentTime:     time.Now().UTC().Format(time.RFC3339), // TODO
+		DeploymentTime:     process.DeploymentTime.UTC().Format(time.RFC3339),
 		BpmnProcessID:      process.BpmnProcessID,
 		ProcessKey:         process.ProcessDefinitionKey,
 		Version:            process.Version,
