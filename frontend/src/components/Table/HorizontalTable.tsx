@@ -73,10 +73,9 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
               className="cursor-pointer p-3 text-left"
             >
               <div className="flex justify-between">
-                <p>{item}</p>
-                <span className="w-10 text-right">
+                <p>{item}
                   {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
-                </span>
+                </p>
               </div>
             </th>
           ))}

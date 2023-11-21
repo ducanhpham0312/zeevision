@@ -18,9 +18,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             <p>
               Element ID
             </p>
-            <span
-              class="w-10 text-right"
-            />
           </div>
         </th>
         <th
@@ -32,9 +29,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             <p>
               Variable name
             </p>
-            <span
-              class="w-10 text-right"
-            />
           </div>
         </th>
         <th
@@ -46,9 +40,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             <p>
               Variable value
             </p>
-            <span
-              class="w-10 text-right"
-            />
           </div>
         </th>
         <th
@@ -60,9 +51,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             <p>
               Flow Scope Key
             </p>
-            <span
-              class="w-10 text-right"
-            />
           </div>
         </th>
         <th
@@ -74,9 +62,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             <p>
               Time created
             </p>
-            <span
-              class="w-10 text-right"
-            />
           </div>
         </th>
         <th
@@ -88,9 +73,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             <p>
               Option
             </p>
-            <span
-              class="w-10 text-right"
-            />
           </div>
         </th>
       </tr>
@@ -387,129 +369,185 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             sixth-multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             amp
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             integer
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984642
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667164
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             new-multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             kmean
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             newValue
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984100
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667542
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             another-multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             anotherVariable
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             string
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984432
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667333
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             total
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             200
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667765
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
