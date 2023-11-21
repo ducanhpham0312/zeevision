@@ -19,6 +19,7 @@ func Map[T, U any](slice []T, f func(T) U) []U {
 	return result
 }
 
+// Convert storage instance to GraphQL instance.
 func FromStorageInstance(instance storage.Instance) *Instance {
 	var status Status
 	if err := status.UnmarshalGQL(instance.Status); err != nil {
@@ -37,6 +38,7 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 	}
 }
 
+// Convert storage process to GraphQL process.
 func FromStorageProcess(process storage.Process) *Process {
 	return &Process{
 		ActiveInstances:    0,  // TODO

@@ -97,6 +97,7 @@ func TestInvalidStatus(t *testing.T) {
 		StartTime:            time.Now(),
 	}
 
+	// Should panic.
 	FromStorageInstance(storageInstance)
 }
 
