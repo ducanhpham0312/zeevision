@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Transition } from "react-transition-group";
-import { styled } from "@mui/system";
+import { twMerge } from "tailwind-merge";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import ErrorIcon from "@mui/icons-material/Error";
 import CloseIcon from "@mui/icons-material/Close";
 import { Snackbar as SnackbarMUI } from "@mui/base/Snackbar";
-import { PRIMARY } from "../../theme/palette";
 import { SnackMessageType, useUIStore } from "../../contexts/useUIStore";
 import { SnackbarCloseReason } from "@mui/base";
+import { VariantProps, tv } from "tailwind-variants";
 
 type TransitionStatus =
   | "entering"
@@ -16,7 +16,8 @@ type TransitionStatus =
   | "exited"
   | "unmounted";
 
-interface SnackbarContentProps {
+interface SnackbarContentProps
+  extends VariantProps<typeof snackbarContentVariant> {
   /**
    * The message to be displayed within the snackbar.
    */
@@ -39,6 +40,8 @@ interface SnackbarContentProps {
    * render cycle and avoid potential issues during transition phases.
    */
   nodeRef?: React.MutableRefObject<null>;
+
+  className?: string;
   /**
    * A function that handles the closing of the snackbar.
    * It can be triggered by a user action (e.g., clicking a button)
@@ -90,7 +93,8 @@ export function Snackbar() {
   }, [snackbarContent, closeSnackBar, open]);
 
   return (
-    <StyledSnackbar
+    <SnackbarMUI
+      className="fixed bottom-4 right-4 z-50 flex min-w-[360px] max-w-[560px]"
       open={open}
       onClose={handleClose as () => void}
       exited={exited}
@@ -115,7 +119,7 @@ export function Snackbar() {
           />
         )}
       </Transition>
-    </StyledSnackbar>
+    </SnackbarMUI>
   );
 }
 
@@ -126,10 +130,11 @@ export function SnackbarContent({
   message,
   handleClose,
   nodeRef,
+  className,
 }: SnackbarContentProps) {
   return (
-    <StyledSnackbarContent
-      type={type}
+    <div
+      className={twMerge(snackbarContentVariant({ type }), className)}
       style={{
         transform: positioningStyles[status],
         transition: "transform 300ms ease",
@@ -141,7 +146,7 @@ export function SnackbarContent({
         <CheckRoundedIcon
           className="success-icon"
           sx={{
-            color: PRIMARY[800],
+            color: "white",
             flexShrink: 0,
             width: "1.25rem",
             height: "1.5rem",
@@ -151,14 +156,14 @@ export function SnackbarContent({
         <ErrorIcon
           className="error-icon"
           sx={{
-            color: "red",
+            color: "white",
             flexShrink: 0,
             width: "1.25rem",
             height: "1.5rem",
           }}
         />
       )}
-      <div className="snackbar-message">
+      <div className="flex max-w-full">
         <p className="snackbar-title">{title}</p>
         <p className="snackbar-description">{message}</p>
       </div>
@@ -170,67 +175,19 @@ export function SnackbarContent({
       >
         <CloseIcon sx={{ fontSize: "20px" }} className="snackbar-close-icon" />
       </button>
-    </StyledSnackbarContent>
+    </div>
   );
 }
 
-const grey = {
-  50: "#f6f8fa",
-  100: "#eaeef2",
-  200: "#d0d7de",
-  300: "#afb8c1",
-  400: "#8c959f",
-  500: "#6e7781",
-  600: "#57606a",
-  700: "#424a53",
-  800: "#32383f",
-  900: "#24292f",
-};
-
-const StyledSnackbar = styled(SnackbarMUI)`
-  position: fixed;
-  z-index: 5500;
-  display: flex;
-  bottom: 16px;
-  right: 16px;
-  max-width: 560px;
-  min-width: 300px;
-`;
-
-const StyledSnackbarContent = styled("div")(
-  ({ type }: { type: SnackMessageType["type"] }) => `
-  display: flex;
-  gap: 8px;
-  overflow: hidden;
-  background-color: ${PRIMARY[50]};
-  border-radius: 4px;
-  border: 1px solid ${type === "error" ? "red" : PRIMARY[300]};
-  box-shadow: ${`0 2px 16px ${grey[200]}`};
-  padding: 0.75rem;
-  color: ${grey[900]};
-  font-weight: 500;
-  text-align: start;
-  position: relative;
-  
-  & .snackbar-message {
-    flex: 1 1 0%;
-    max-width: 100%;
-  }
-
-  & .snackbar-title {
-    margin: 0;
-    line-height: 1.5rem;
-    margin-right: 0.5rem;
-  }
-
-  & .snackbar-description {
-    margin: 0;
-    line-height: 1.5rem;
-    font-weight: 300;
-    color: ${grey[800]};
-  }
-  `
-);
+const snackbarContentVariant = tv({
+  base: "flex gap-2 p-4 overflow-hidden rounded text-white",
+  variants: {
+    type: {
+      success: "bg-sucess",
+      error: "bg-error",
+    },
+  },
+});
 
 const positioningStyles = {
   entering: "translateX(0)",

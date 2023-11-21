@@ -1,6 +1,7 @@
 import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
 import Viewer from "bpmn-js/lib/Viewer";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useElementSize } from "usehooks-ts";
 
 // create a modeler
 
@@ -12,7 +13,11 @@ interface BpmnViewerProps {
   /**
    * The width (in pixels) that the Viewer should take.
    */
-  width: number;
+  width?: number;
+  /**
+   * The height (in pixels) that the Viewer should take.
+   */
+  height?: number;
   /**
    * Set this to true for NavigatedViewer which is interactable i.e. drag, zoom in out.
    */
@@ -26,50 +31,76 @@ type ViewBoxInner = {
   height: number;
 };
 
-export function BpmnViewer({ bpmnString, width, navigated }: BpmnViewerProps) {
+export function BpmnViewer({
+  bpmnString,
+  width,
+  height,
+  navigated,
+}: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [modeler, setModeler] = useState<Viewer>();
 
   useEffect(() => {
     const modeler = navigated
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: 300,
         })
       : new Viewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: 300,
         });
 
     async function openDiagram(xmlString: string) {
       try {
         await modeler.importXML(xmlString);
-
-        // access viewer components
-        const canvas = modeler.get("canvas") as {
-          viewbox(): { inner: ViewBoxInner };
-          zoom: (mode: string, center: { x: number; y: number }) => void;
-        };
-        const { inner } = canvas.viewbox();
-
-        const center = {
-          x: inner.x + inner.width / 2,
-          y: inner.y + inner.height / 2,
-        };
-        // zoom to fit full viewport
-        canvas.zoom("fit-viewport", center);
       } catch (err) {
         console.error(err);
       }
     }
-
+    setModeler(modeler);
     openDiagram(bpmnString);
 
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, width, navigated]);
+  }, [bpmnString, navigated]);
 
-  return <div ref={containerRef} style={{ userSelect: "none" }} id="canvas" />;
+  useEffect(() => {
+    if (!modeler || (width && width < 400)) {
+      return;
+    }
+    const canvas = modeler.get("canvas") as {
+      viewbox(): { inner: ViewBoxInner };
+      zoom: (mode: string, center: { x: number; y: number }) => void;
+    };
+    const { inner } = canvas.viewbox();
+
+    const center = {
+      x: inner.x + inner.width / 2,
+      y: inner.y + inner.height / 2,
+    };
+
+    // zoom to fit full viewport
+    canvas.zoom("fit-viewport", center);
+  }, [width, height, modeler]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ userSelect: "none", width: "100%", height: "100%" }}
+      id="canvas"
+    />
+  );
+}
+
+export function ResponsiveBpmnViewer({
+  classname,
+  ...props
+}: BpmnViewerProps & { classname?: string }) {
+  const [squareRef, { width, height }] = useElementSize();
+
+  return (
+    <div ref={squareRef} className={classname}>
+      <BpmnViewer width={width} height={height} {...props} />
+    </div>
+  );
 }

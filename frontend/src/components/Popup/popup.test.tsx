@@ -12,14 +12,14 @@ describe("Popup Component", () => {
 
   it("renders correctly when open", () => {
     const { baseElement } = render(
-      <Popup {...openPopup} onClose={mockOnClose} />
+      <Popup {...openPopup} onClose={mockOnClose} />,
     );
     expect(baseElement).toMatchSnapshot();
   });
 
   it("does not render when closed", () => {
     const { baseElement } = render(
-      <Popup {...closedPopup} onClose={mockOnClose} />
+      <Popup {...closedPopup} onClose={mockOnClose} />,
     );
     expect(baseElement).toMatchSnapshot();
   });
@@ -49,7 +49,7 @@ describe("Popup Component", () => {
         <p>Test child 1</p>
         <p>Test child 2</p>
         <Button>{buttonText}</Button>
-      </Popup>
+      </Popup>,
     );
 
     expect(screen.getByText(buttonText)).toBeInTheDocument();
@@ -58,10 +58,6 @@ describe("Popup Component", () => {
   it("Backdrop displays correctly when the popup is open", () => {
     render(<Popup {...openPopup} onClose={mockOnClose} />);
     const backdrop = screen.getByRole("presentation");
-    expect(backdrop).toHaveStyle({
-      position: "fixed",
-      inset: "0",
-      backgroundColor: "rgb(0 0 0 / 0.5)",
-    });
+    expect(backdrop).toHaveClass("fixed", "inset-0");
   });
 });

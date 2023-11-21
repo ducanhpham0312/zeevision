@@ -2,33 +2,26 @@ package graph
 
 import "github.com/ducanhpham0312/zeevision/backend/graph/model"
 
-var dummyProcesses = []*model.Process{
+var dummyInstances = []*model.Instance{
 	{
 		//nolint:gomnd
-		ProcessKey: 1,
-		//nolint:gomnd
-		ProcessID: 123,
-		//nolint:gomnd
-		Version:              1,
-		BpmnLiveStatus:       "alive",
-		BpmnResource:         "a8s7dft87agvsdf=",
-		DeploymentTime:       "2023-01-01T00:00:00Z",
-		Instances:            []*model.Instance{},
-		MessageSubscriptions: []*model.MessageSubscription{},
-		Timers:               []*model.Timer{},
+		InstanceKey:   12345,
+		BpmnProcessID: "multi-instance-process",
+		Status:        "Active",
+		StartTime:     "2023-01-02T00:00:00Z",
 	},
 	{
 		//nolint:gomnd
-		ProcessKey: 2,
+		InstanceKey:   54321,
+		BpmnProcessID: "money-loan",
+		Status:        "Completed",
+		StartTime:     "2023-01-01T00:15:00Z",
+	},
+	{
 		//nolint:gomnd
-		ProcessID: 222,
-		//nolint:gomnd
-		Version:              3,
-		BpmnLiveStatus:       "dead",
-		BpmnResource:         "a7s6dtf7aiw3=",
-		DeploymentTime:       "2023-01-01T00:00:00Z",
-		Instances:            []*model.Instance{},
-		MessageSubscriptions: []*model.MessageSubscription{},
-		Timers:               []*model.Timer{},
+		InstanceKey:   55555,
+		BpmnProcessID: "order-main",
+		Status:        "Completed",
+		StartTime:     "2023-01-08T00:15:00Z",
 	},
 }

@@ -3,14 +3,13 @@
 package model
 
 type Instance struct {
-	ActiveInstances    int64  `json:"activeInstances"`
-	BpmnLiveStatus     string `json:"bpmnLiveStatus"`
-	BpmnResource       string `json:"bpmnResource"`
-	CompletedInstances int64  `json:"completedInstances"`
-	DeploymentTime     string `json:"deploymentTime"`
-	ProcessID          int64  `json:"processId"`
-	ProcessKey         int64  `json:"processKey"`
-	Version            int64  `json:"version"`
+	BpmnLiveStatus string `json:"bpmnLiveStatus"`
+	BpmnResource   string `json:"bpmnResource"`
+	StartTime      string `json:"startTime"`
+	BpmnProcessID  string `json:"bpmnProcessId"`
+	InstanceKey    int64  `json:"instanceKey"`
+	Version        int64  `json:"version"`
+	Status         string `json:"status"`
 }
 
 type MessageSubscription struct {
@@ -21,12 +20,14 @@ type MessageSubscription struct {
 }
 
 type Process struct {
+	ActiveInstances      int64                  `json:"activeInstances"`
+	CompletedInstances   int64                  `json:"completedInstances"`
 	BpmnLiveStatus       string                 `json:"bpmnLiveStatus"`
 	BpmnResource         string                 `json:"bpmnResource"`
 	DeploymentTime       string                 `json:"deploymentTime"`
 	Instances            []*Instance            `json:"instances"`
 	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
-	ProcessID            int64                  `json:"processId"`
+	BpmnProcessID        string                 `json:"bpmnProcessId"`
 	ProcessKey           int64                  `json:"processKey"`
 	Timers               []*Timer               `json:"timers"`
 	Version              int64                  `json:"version"`

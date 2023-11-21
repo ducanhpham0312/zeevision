@@ -22,6 +22,7 @@ jest.mock("../BpmnViewer/BpmnViewer.tsx", () => {
   return {
     __esModule: true,
     BpmnViewer: jest.fn(() => <div>BpmnViewer Mock</div>),
+    ResponsiveBpmnViewer: jest.fn(() => <div>BpmnViewer Mock</div>),
   };
 });
 
@@ -39,7 +40,7 @@ describe("DeployProcessPopup Component", () => {
         isPopUpOpen={true}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
-      />
+      />,
     );
 
     const file = new File([fileContent], fileName, { type: fileType });
@@ -59,7 +60,7 @@ describe("DeployProcessPopup Component", () => {
           onOpenPopUp={handleOpen}
           onClosePopUp={handleClose}
         />
-      </>
+      </>,
     );
     fireEvent.click(screen.getByText("Deploy a Process"));
     expect(handleOpen).toHaveBeenCalledTimes(1);
@@ -71,13 +72,13 @@ describe("DeployProcessPopup Component", () => {
         isPopUpOpen={true}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
-      />
+      />,
     );
 
     const fileInput = screen.getByTestId("file-input");
     const mockFileInputClick = jest.spyOn(fileInput, "click");
 
-    fireEvent.click(screen.getByText("Deploy a file (.bpmn)"));
+    fireEvent.click(screen.getByText("Upload a file (.bpmn)"));
 
     expect(mockFileInputClick).toHaveBeenCalled();
 
@@ -91,7 +92,7 @@ describe("DeployProcessPopup Component", () => {
         isPopUpOpen={true}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
-      />
+      />,
     );
 
     // Mocking the file input change event to simulate a file upload
@@ -111,7 +112,7 @@ describe("DeployProcessPopup Component", () => {
         isPopUpOpen={true}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
-      />
+      />,
     );
 
     const file = new File([fileContent], fileName, { type: fileType });
@@ -131,7 +132,7 @@ describe("DeployProcessPopup Component", () => {
         isPopUpOpen={true}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
-      />
+      />,
     );
 
     const file = new File([fileContent], fileName, { type: fileType });
@@ -154,7 +155,7 @@ describe("DeployProcessPopup Component", () => {
         isPopUpOpen={true}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
-      />
+      />,
     );
 
     fireEvent.click(screen.getByText("Cancel"));

@@ -1,8 +1,6 @@
 import { Modal } from "@mui/base/Modal";
-import { Box, styled } from "@mui/system";
 
 import { useEffect } from "react";
-import { PRIMARY } from "../../theme/palette";
 import { useDragDrop } from "../../hooks/useDragDrop";
 import { readFileToString } from "../../utils/readFileToString";
 import { useUIStore } from "../../contexts/useUIStore";
@@ -40,45 +38,16 @@ export function DragDropFile({ onFileDropped }: DragDropFileProps) {
   }, [file]);
 
   return (
-    <StyledModal
-      sx={{ pointerEvents: "none" }}
+    <Modal
+      className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center"
       open={dragging}
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
     >
-      <StyledBox>
+      <div className="flex h-[200px] w-[400px] flex-col items-center justify-center rounded border-[3px] border-text">
         <p id="simple-modal-description">Drop files here to upload!</p>
         <em>(Only *.bmpn files will be accepted)</em>
-      </StyledBox>
-    </StyledModal>
+      </div>
+    </Modal>
   );
 }
-
-const StyledModal = styled(Modal)`
-  position: fixed;
-  z-index: 1300;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledBox = styled(Box)`
-  width: 400px;
-  height: 200px;
-  border: 3px solid ${PRIMARY[600]};
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #e8f8ff;
-  cursor: pointer;
-  margin: 16px;
-
-  p {
-    color: ${PRIMARY[300]};
-    font-size: 16px;
-    text-align: center;
-  }
-`;

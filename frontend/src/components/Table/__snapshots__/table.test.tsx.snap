@@ -3,207 +3,351 @@
 exports[`HorizontalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
-    class="css-wsrcxp"
+    class="w-full border-collapse rounded border border-black/10"
   >
     <thead
-      class="css-axxbb4"
+      class="border-b border-black/10 bg-second-accent font-bold text-text"
     >
       <tr>
-        <th>
-          Element ID
+        <th
+          class="cursor-pointer p-3 text-left"
+        >
+          <div
+            class="flex justify-between"
+          >
+            <p>
+              Element ID
+            </p>
+            <span
+              class="w-10 text-right"
+            />
+          </div>
         </th>
-        <th>
-          Variable name
+        <th
+          class="cursor-pointer p-3 text-left"
+        >
+          <div
+            class="flex justify-between"
+          >
+            <p>
+              Variable name
+            </p>
+            <span
+              class="w-10 text-right"
+            />
+          </div>
         </th>
-        <th>
-          Variable value
+        <th
+          class="cursor-pointer p-3 text-left"
+        >
+          <div
+            class="flex justify-between"
+          >
+            <p>
+              Variable value
+            </p>
+            <span
+              class="w-10 text-right"
+            />
+          </div>
         </th>
-        <th>
-          Flow Scope Key
+        <th
+          class="cursor-pointer p-3 text-left"
+        >
+          <div
+            class="flex justify-between"
+          >
+            <p>
+              Flow Scope Key
+            </p>
+            <span
+              class="w-10 text-right"
+            />
+          </div>
         </th>
-        <th>
-          Time created
+        <th
+          class="cursor-pointer p-3 text-left"
+        >
+          <div
+            class="flex justify-between"
+          >
+            <p>
+              Time created
+            </p>
+            <span
+              class="w-10 text-right"
+            />
+          </div>
         </th>
-        <th>
-          Option
+        <th
+          class="cursor-pointer p-3 text-left"
+        >
+          <div
+            class="flex justify-between"
+          >
+            <p>
+              Option
+            </p>
+            <span
+              class="w-10 text-right"
+            />
+          </div>
         </th>
       </tr>
     </thead>
     <tbody
       aria-label="custom pagination table"
     >
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             sixth-multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             amp
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             integer
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984642
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667164
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             new-multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             kmean
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             newValue
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984100
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667542
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             another-multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             anotherVariable
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             string
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984432
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667333
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             total
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             200
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667765
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             isValid
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             true
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667765
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
         </td>
       </tr>
-      <tr>
-        <td>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
           <pre>
             multi-instance-process
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             items
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             [
   {
@@ -221,17 +365,23 @@ exports[`HorizontalTable Component renders correctly 1`] = `
 ]
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             2251799813984108
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             1696667765
           </pre>
         </td>
-        <td>
+        <td
+          class="p-3"
+        >
           <pre>
             Show History
           </pre>
@@ -487,64 +637,104 @@ exports[`HorizontalTable Component renders correctly 1`] = `
 exports[`VerticalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
-    class="css-wsrcxp"
+    class="w-full border-collapse rounded border border-black/10"
   >
-    <tbody
-      class="css-zcd58l"
-    >
-      <tr>
-        <th>
+    <tbody>
+      <tr
+        class="bg-second-accent hover:bg-second-accent/20"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           Instance key
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           2251799813984108
         </td>
       </tr>
-      <tr>
-        <th>
+      <tr
+        class="hover:bg-second-accent/10"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           BPMN process ID
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           multi-instance-process
         </td>
       </tr>
-      <tr>
-        <th>
+      <tr
+        class="bg-second-accent hover:bg-second-accent/20"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           Version
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           1
         </td>
       </tr>
-      <tr>
-        <th>
+      <tr
+        class="hover:bg-second-accent/10"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           Process key
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           2251799813685249
         </td>
       </tr>
-      <tr>
-        <th>
+      <tr
+        class="bg-second-accent hover:bg-second-accent/20"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           State
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           ELEMENT_ACTIVATING
         </td>
       </tr>
-      <tr>
-        <th>
+      <tr
+        class="hover:bg-second-accent/10"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           Start time
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           1696667765
         </td>
       </tr>
-      <tr>
-        <th>
+      <tr
+        class="bg-second-accent hover:bg-second-accent/20"
+      >
+        <th
+          class="border border-r-0 p-3 text-left"
+        >
           End time
         </th>
-        <td>
+        <td
+          class="border border-l-0 p-3 text-left"
+        >
           1696667800
         </td>
       </tr>
