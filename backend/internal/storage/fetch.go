@@ -24,13 +24,7 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 	return f.db.WithContext(ctx)
 }
 
-func (f *Fetcher) GetInstances(ctx context.Context) ([]Instance, error) {
-	var instances []Instance
-	err := f.ContextDB(ctx).Find(&instances).Error
-
-	return instances, err
-}
-
+// Gets an instance by its key.
 func (f *Fetcher) GetInstance(ctx context.Context, instanceKey int64) (Instance, error) {
 	var instance Instance
 	err := f.ContextDB(ctx).
@@ -41,6 +35,15 @@ func (f *Fetcher) GetInstance(ctx context.Context, instanceKey int64) (Instance,
 	return instance, err
 }
 
+// Gets all instances for all processes.
+func (f *Fetcher) GetInstances(ctx context.Context) ([]Instance, error) {
+	var instances []Instance
+	err := f.ContextDB(ctx).Find(&instances).Error
+
+	return instances, err
+}
+
+// Gets all instances for a process based on its definition key.
 func (f *Fetcher) GetInstancesForProcess(ctx context.Context, processDefKey int64) ([]Instance, error) {
 	var instances []Instance
 	err := f.ContextDB(ctx).
@@ -49,16 +52,6 @@ func (f *Fetcher) GetInstancesForProcess(ctx context.Context, processDefKey int6
 		Error
 
 	return instances, err
-}
-
-// Gets all processes.
-func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
-	var processes []Process
-	err := f.ContextDB(ctx).
-		Find(&processes).
-		Error
-
-	return processes, err
 }
 
 // Gets a process by its key.
@@ -70,4 +63,12 @@ func (f *Fetcher) GetProcess(ctx context.Context, processDefKey int64) (Process,
 		Error
 
 	return process, err
+}
+
+// Gets all processes.
+func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
+	var processes []Process
+	err := f.ContextDB(ctx).Find(&processes).Error
+
+	return processes, err
 }
