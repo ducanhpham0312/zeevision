@@ -37,14 +37,14 @@ type Instance {
   bpmnProcessId: String!
   instanceKey: Int!
   version: Int!
-  status: String!
+  status: Status!
 }
 
 type MessageSubscription {
   createdAt: DateTime!
   elementId: Int!
   messageName: String!
-  status: String!
+  status: Status!
 }
 
 type Timer {
@@ -52,7 +52,12 @@ type Timer {
   processInstanceKey: Int!
   repetitions: String!
   startTime: DateTime!
-  status: String!
+  status: Status!
+}
+
+enum Status {
+  ACTIVE
+  COMPLETED
 }
 
 # The `DateTime` scalar type represents a date and time following the

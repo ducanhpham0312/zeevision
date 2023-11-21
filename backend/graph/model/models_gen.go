@@ -2,6 +2,12 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
 type Instance struct {
 	BpmnLiveStatus string `json:"bpmnLiveStatus"`
 	BpmnResource   string `json:"bpmnResource"`
@@ -9,14 +15,14 @@ type Instance struct {
 	BpmnProcessID  string `json:"bpmnProcessId"`
 	InstanceKey    int64  `json:"instanceKey"`
 	Version        int64  `json:"version"`
-	Status         string `json:"status"`
+	Status         Status `json:"status"`
 }
 
 type MessageSubscription struct {
 	CreatedAt   string `json:"createdAt"`
 	ElementID   int64  `json:"elementId"`
 	MessageName string `json:"messageName"`
-	Status      string `json:"status"`
+	Status      Status `json:"status"`
 }
 
 type Process struct {
@@ -38,5 +44,46 @@ type Timer struct {
 	ProcessInstanceKey int64  `json:"processInstanceKey"`
 	Repetitions        string `json:"repetitions"`
 	StartTime          string `json:"startTime"`
-	Status             string `json:"status"`
+	Status             Status `json:"status"`
+}
+
+type Status string
+
+const (
+	StatusActive    Status = "ACTIVE"
+	StatusCompleted Status = "COMPLETED"
+)
+
+var AllStatus = []Status{
+	StatusActive,
+	StatusCompleted,
+}
+
+func (e Status) IsValid() bool {
+	switch e {
+	case StatusActive, StatusCompleted:
+		return true
+	}
+	return false
+}
+
+func (e Status) String() string {
+	return string(e)
+}
+
+func (e *Status) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Status(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Status", str)
+	}
+	return nil
+}
+
+func (e Status) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
@@ -19,6 +20,17 @@ func Map[T, U any](slice []T, f func(T) U) []U {
 }
 
 func FromStorageInstance(instance storage.Instance) *Instance {
+	var status Status
+	switch instance.Status {
+	case "Active":
+		status = StatusActive
+	case "Completed":
+		status = StatusCompleted
+	default:
+		// Panic will be caught by the GraphQL server as internal server error.
+		panic(fmt.Sprintf("model: unknown instance status: %s", instance.Status))
+	}
+
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
 		BpmnResource:   "", // TODO
@@ -26,7 +38,7 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 		BpmnProcessID:  instance.BpmnProcessID,
 		InstanceKey:    instance.ProcessInstanceKey,
 		Version:        1, // TODO
-		Status:         instance.Status,
+		Status:         status,
 	}
 }
 
