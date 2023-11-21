@@ -83,13 +83,10 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         </tr>
       </thead>
       <tbody aria-label="custom pagination table">
-        {(rowsPerPage > 0
-          ? sortedContent.slice(
+        {sortedContent.slice(
               page * rowsPerPage,
               page * rowsPerPage + rowsPerPage,
-            )
-          : sortedContent
-        ).map((row, rowIdx) => (
+            ).map((row, rowIdx) => (
           <tr
             className={
               "border-b border-black/10 " +
