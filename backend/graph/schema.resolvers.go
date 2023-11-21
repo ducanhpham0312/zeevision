@@ -13,10 +13,12 @@ import (
 
 // Instances is the resolver for the instances field.
 func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error) {
-	if obj.ProcessKey == 1 {
-		return dummyInstances, nil
+	dbInstances, err := r.Fetcher.GetInstancesForProcess(ctx, obj.ProcessKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch instances: %w", err)
 	}
-	return []*model.Instance{}, nil
+
+	return model.Map(dbInstances, model.FromStorageInstance), nil
 }
 
 // MessageSubscriptions is the resolver for the messageSubscriptions field.
@@ -36,16 +38,7 @@ func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error)
 		return nil, fmt.Errorf("failed to fetch processes: %w", err)
 	}
 
-	processes := make([]*model.Process, 0, len(dbProcesses))
-	for _, dbProcess := range dbProcesses {
-		processes = append(processes, &model.Process{
-			ProcessKey:    dbProcess.ProcessKey,
-			BpmnProcessID: dbProcess.BpmnProcessID,
-			BpmnResource:  dbProcess.BpmnResource,
-		})
-	}
-
-	return processes, nil
+	return model.Map(dbProcesses, model.FromStorageProcess), nil
 }
 
 // Process is the resolver for the process field.
@@ -55,26 +48,27 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 		return nil, fmt.Errorf("failed to fetch process: %w", err)
 	}
 
-	return &model.Process{
-		ProcessKey:    dbProcess.ProcessKey,
-		BpmnProcessID: dbProcess.BpmnProcessID,
-		BpmnResource:  dbProcess.BpmnResource,
-	}, nil
+	return model.FromStorageProcess(dbProcess), nil
 }
 
 // Instances is the resolver for the instances field.
 func (r *queryResolver) Instances(ctx context.Context) ([]*model.Instance, error) {
-	return dummyInstances, nil
+	dbInstances, err := r.Fetcher.GetInstances(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch instances: %w", err)
+	}
+
+	return model.Map(dbInstances, model.FromStorageInstance), nil
 }
 
 // Instance is the resolver for the instance field.
 func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model.Instance, error) {
-	for _, instance := range dummyInstances {
-		if instance.InstanceKey == instanceKey {
-			return instance, nil
-		}
+	dbInstance, err := r.Fetcher.GetInstance(ctx, instanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch instance: %w", err)
 	}
-	return nil, fmt.Errorf("instance with given key %d doesn't exist", instanceKey)
+
+	return model.FromStorageInstance(dbInstance), nil
 }
 
 // Process returns ProcessResolver implementation.

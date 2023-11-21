@@ -10,14 +10,14 @@ import (
 
 var expectedProcesses = []Process{
 	{
-		ProcessKey:    1,
-		BpmnProcessID: "multi-instance-process",
-		BpmnResource:  "hlasd876/fhd=",
+		ProcessDefinitionKey: 1,
+		BpmnProcessID:        "multi-instance-process",
+		BpmnResource:         "hlasd876/fhd=",
 	},
 	{
-		ProcessKey:    2,
-		BpmnProcessID: "money-loan",
-		BpmnResource:  "9I79a8s7gKJH",
+		ProcessDefinitionKey: 2,
+		BpmnProcessID:        "money-loan",
+		BpmnResource:         "9I79a8s7gKJH",
 	},
 }
 
@@ -38,7 +38,7 @@ func TestProcessesQuery(t *testing.T) {
 
 	assert.Len(t, processes, 2)
 	for i := range processes {
-		assert.Equal(t, expectedProcesses[i].ProcessKey, processes[i].ProcessKey)
+		assert.Equal(t, expectedProcesses[i].ProcessDefinitionKey, processes[i].ProcessDefinitionKey)
 		assert.Equal(t, expectedProcesses[i].BpmnProcessID, processes[i].BpmnProcessID)
 		assert.Equal(t, expectedProcesses[i].BpmnResource, processes[i].BpmnResource)
 	}
@@ -64,7 +64,7 @@ func TestProcessQuery(t *testing.T) {
 	}{
 		{
 			name:       "existing process",
-			processKey: expectedProcess.ProcessKey,
+			processKey: expectedProcess.ProcessDefinitionKey,
 		},
 		{
 			name:        "non-existent process",
@@ -85,7 +85,7 @@ func TestProcessQuery(t *testing.T) {
 			}
 			assert.NoError(t, err)
 
-			assert.Equal(t, expectedProcess.ProcessKey, process.ProcessKey)
+			assert.Equal(t, expectedProcess.ProcessDefinitionKey, process.ProcessDefinitionKey)
 			assert.Equal(t, expectedProcess.BpmnProcessID, process.BpmnProcessID)
 			assert.Equal(t, expectedProcess.BpmnResource, process.BpmnResource)
 		})
