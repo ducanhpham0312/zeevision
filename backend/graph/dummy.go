@@ -2,7 +2,7 @@ package graph
 
 import "github.com/ducanhpham0312/zeevision/backend/graph/model"
 
-var dummyInstances = []*model.Instance{
+var DummyInstances = []*model.Instance{
 	{
 		//nolint:gomnd
 		InstanceKey:   12345,
