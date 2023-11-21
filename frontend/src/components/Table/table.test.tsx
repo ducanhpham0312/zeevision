@@ -27,7 +27,7 @@ describe("VerticalTable Component", () => {
         orientation={verticalOrientation}
         header={verticalHeader}
         content={[]}
-      />
+      />,
     );
     expect(container.firstChild).toBeEmptyDOMElement();
   });
@@ -84,7 +84,7 @@ describe("HorizontalTable Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
-      />
+      />,
     );
     fireEvent.click(getByText("Time created"));
     expect(getByText("Time created ▲")).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe("HorizontalTable Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
-      />
+      />,
     );
     fireEvent.click(getByText("Time created"));
     fireEvent.click(getByText("Time created ▲"));
@@ -119,7 +119,7 @@ describe("HorizontalTable Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
-      />
+      />,
     );
 
     expect(getByText("1–10 of 12")).toBeInTheDocument();
@@ -133,7 +133,7 @@ describe("HorizontalTable Component", () => {
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
-      />
+      />,
     );
 
     expect(getByLabelText("rows per page")).toHaveValue("10");
