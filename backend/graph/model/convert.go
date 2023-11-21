@@ -21,14 +21,9 @@ func Map[T, U any](slice []T, f func(T) U) []U {
 
 func FromStorageInstance(instance storage.Instance) *Instance {
 	var status Status
-	switch instance.Status {
-	case "Active":
-		status = StatusActive
-	case "Completed":
-		status = StatusCompleted
-	default:
+	if err := status.UnmarshalGQL(instance.Status); err != nil {
 		// Panic will be caught by the GraphQL server as internal server error.
-		panic(fmt.Sprintf("model: unknown instance status: %s", instance.Status))
+		panic(fmt.Errorf("unmarshal storage instance: %w", err))
 	}
 
 	return &Instance{
