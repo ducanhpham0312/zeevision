@@ -130,6 +130,54 @@
         2251799813984642,
         1696667164,
         "Show History"
+      ],
+      [
+        "multi-instance-process",
+        "items",
+        "[{\"id\":1,\"value\":10,\"inCart\":10,\"inStock\":20},{\"id\":2,\"value\":20,\"inCart\":2,\"inStock\":10}]",
+        2251799813984108,
+        1696667765,
+        "Show History"
+      ],
+      [
+        "multi-instance-process",
+        "isValid",
+        "true",
+        2251799813984108,
+        1696667765,
+        "Show History"
+      ],
+      [
+        "multi-instance-process",
+        "total",
+        "200",
+        2251799813984108,
+        1696667765,
+        "Show History"
+      ],
+      [
+        "another-multi-instance-process",
+        "anotherVariable",
+        "string",
+        2251799813984432,
+        1696667333,
+        "Show History"
+      ],
+      [
+        "new-multi-instance-process",
+        "kmean",
+        "newValue",
+        2251799813984100,
+        1696667542,
+        "Show History"
+      ],
+      [
+        "sixth-multi-instance-process",
+        "amp",
+        "integer",
+        2251799813984642,
+        1696667164,
+        "Show History"
       ]
     ]
   }
