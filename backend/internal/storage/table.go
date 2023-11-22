@@ -8,6 +8,7 @@ import (
 type Instance struct {
 	ProcessInstanceKey   int64     `gorm:"primarykey"`
 	ProcessDefinitionKey int64     `gorm:"not null"`
+	Version              int64     `gorm:"not null"`
 	Status               string    `gorm:"not null"`
 	StartTime            time.Time `gorm:"not null"`
 }

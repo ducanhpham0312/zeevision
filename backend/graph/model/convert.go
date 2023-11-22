@@ -38,7 +38,7 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 		StartTime:      instance.StartTime.UTC().Format(time.RFC3339),
 		InstanceKey:    instance.ProcessInstanceKey,
 		ProcessKey:     instance.ProcessDefinitionKey,
-		Version:        1, // TODO
+		Version:        instance.Version,
 		Status:         status,
 		// Process has its own resolver and is not populated here.
 	}

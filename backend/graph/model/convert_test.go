@@ -32,6 +32,7 @@ func TestFromStorageInstance(t *testing.T) {
 			storageInstance: storage.Instance{
 				ProcessInstanceKey:   10,
 				ProcessDefinitionKey: 1,
+				Version:              1,
 				Status:               "ACTIVE",
 				StartTime:            now,
 			},
@@ -40,7 +41,7 @@ func TestFromStorageInstance(t *testing.T) {
 				StartTime:      now.UTC().Format(time.RFC3339),
 				InstanceKey:    10,
 				ProcessKey:     1,
-				Version:        1, // TODO
+				Version:        1,
 				Status:         StatusActive,
 			},
 		},
@@ -49,6 +50,7 @@ func TestFromStorageInstance(t *testing.T) {
 			storageInstance: storage.Instance{
 				ProcessInstanceKey:   20,
 				ProcessDefinitionKey: 2,
+				Version:              2,
 				Status:               "COMPLETED",
 				StartTime:            now,
 			},
@@ -57,7 +59,7 @@ func TestFromStorageInstance(t *testing.T) {
 				StartTime:      now.UTC().Format(time.RFC3339),
 				InstanceKey:    20,
 				ProcessKey:     2,
-				Version:        1, // TODO
+				Version:        2,
 				Status:         StatusCompleted,
 			},
 		},
