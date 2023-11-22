@@ -19,6 +19,10 @@ func Map[T, U any](slice []T, f func(T) U) []U {
 	return result
 }
 
+func FromStorageBpmnResource(resource storage.BpmnResource) string {
+	return resource.BpmnFile
+}
+
 // Convert storage instance to GraphQL instance.
 func FromStorageInstance(instance storage.Instance) *Instance {
 	var status Status
@@ -29,12 +33,12 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
-		BpmnResource:   "", // TODO
-		StartTime:      instance.StartTime.UTC().Format(time.RFC3339),
 		BpmnProcessID:  instance.BpmnProcessID,
+		StartTime:      instance.StartTime.UTC().Format(time.RFC3339),
 		InstanceKey:    instance.ProcessInstanceKey,
 		Version:        1, // TODO
 		Status:         status,
+		// BpmnResource has its own resolver and is not populated here.
 	}
 }
 
@@ -44,12 +48,11 @@ func FromStorageProcess(process storage.Process) *Process {
 		ActiveInstances:    0,  // TODO
 		CompletedInstances: 0,  // TODO
 		BpmnLiveStatus:     "", // TODO
-		BpmnResource:       process.BpmnResource,
-		DeploymentTime:     process.DeploymentTime.UTC().Format(time.RFC3339),
 		BpmnProcessID:      process.BpmnProcessID,
+		DeploymentTime:     process.DeploymentTime.UTC().Format(time.RFC3339),
 		ProcessKey:         process.ProcessDefinitionKey,
 		Version:            process.Version,
-		// Instances, MessageSubscriptions, and Timers have their
+		// Instances, MessageSubscriptions, Timers, BpmnResource have their
 		// own resolvers and are not populated here.
 	}
 }

@@ -31,16 +31,16 @@ func TestFromStorageInstance(t *testing.T) {
 			name: "Active instance",
 			storageInstance: storage.Instance{
 				ProcessInstanceKey:   10,
-				BpmnProcessID:        "multi-instance-process",
 				ProcessDefinitionKey: 1,
 				Status:               "ACTIVE",
 				StartTime:            now,
+				BpmnProcessID:        "main-loop",
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
-				BpmnResource:   "", // TODO
 				StartTime:      now.UTC().Format(time.RFC3339),
-				BpmnProcessID:  "multi-instance-process",
+				BpmnProcessID:  "main-loop",
+				BpmnResource:   "",
 				InstanceKey:    10,
 				Version:        1, // TODO
 				Status:         StatusActive,
@@ -50,16 +50,16 @@ func TestFromStorageInstance(t *testing.T) {
 			name: "Completed instance",
 			storageInstance: storage.Instance{
 				ProcessInstanceKey:   20,
-				BpmnProcessID:        "money-loan",
 				ProcessDefinitionKey: 2,
 				Status:               "COMPLETED",
 				StartTime:            now,
+				BpmnProcessID:        "main-loop",
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
-				BpmnResource:   "", // TODO
 				StartTime:      now.UTC().Format(time.RFC3339),
-				BpmnProcessID:  "money-loan",
+				BpmnProcessID:  "main-loop",
+				BpmnResource:   "",
 				InstanceKey:    20,
 				Version:        1, // TODO
 				Status:         StatusCompleted,
@@ -72,11 +72,10 @@ func TestFromStorageInstance(t *testing.T) {
 			actual := FromStorageInstance(test.storageInstance)
 
 			assert.Equal(t, test.expected.InstanceKey, actual.InstanceKey)
-			assert.Equal(t, test.expected.BpmnProcessID, actual.BpmnProcessID)
+			assert.Equal(t, test.expected.BpmnResource, actual.BpmnResource)
 			assert.Equal(t, test.expected.Status, actual.Status)
 			assert.Equal(t, test.expected.StartTime, actual.StartTime)
 			assert.Equal(t, test.expected.BpmnLiveStatus, actual.BpmnLiveStatus)
-			assert.Equal(t, test.expected.BpmnResource, actual.BpmnResource)
 			assert.Equal(t, test.expected.Version, actual.Version)
 		})
 	}
@@ -91,7 +90,6 @@ func TestInvalidStatus(t *testing.T) {
 
 	storageInstance := storage.Instance{
 		ProcessInstanceKey:   10,
-		BpmnProcessID:        "multi-instance-process",
 		ProcessDefinitionKey: 1,
 		Status:               "InvalidStatus",
 		StartTime:            time.Now(),
@@ -113,18 +111,17 @@ func TestFromStorageProcess(t *testing.T) {
 			name: "Active instance",
 			storageProcess: storage.Process{
 				ProcessDefinitionKey: 1,
-				BpmnProcessID:        "multi-instance-process",
 				Version:              1,
-				BpmnResource:         "hlasd876/fhd=",
 				DeploymentTime:       now,
+				BpmnProcessID:        "main-loop",
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{
 					{
 						ProcessInstanceKey:   10,
-						BpmnProcessID:        "multi-instance-process",
 						ProcessDefinitionKey: 1,
 						Status:               "Active",
 						StartTime:            now,
+						BpmnProcessID:        "main-loop",
 					},
 				},
 			},
@@ -132,9 +129,9 @@ func TestFromStorageProcess(t *testing.T) {
 				ActiveInstances:      0,  // TODO
 				CompletedInstances:   0,  // TODO
 				BpmnLiveStatus:       "", // TODO
-				BpmnResource:         "hlasd876/fhd=",
 				DeploymentTime:       now.UTC().Format(time.RFC3339),
-				BpmnProcessID:        "multi-instance-process",
+				BpmnProcessID:        "main-loop",
+				BpmnResource:         "",
 				ProcessKey:           1,
 				Version:              1,
 				Instances:            []*Instance{},
@@ -146,19 +143,18 @@ func TestFromStorageProcess(t *testing.T) {
 			name: "Completed instance",
 			storageProcess: storage.Process{
 				ProcessDefinitionKey: 2,
-				BpmnProcessID:        "money-loan",
 				Version:              1,
-				BpmnResource:         "9I79a8s7gKJH",
 				DeploymentTime:       now,
+				BpmnProcessID:        "main-loop",
 				Instances:            []storage.Instance{},
 			},
 			expected: &Process{
 				ActiveInstances:      0,  // TODO
 				CompletedInstances:   0,  // TODO
 				BpmnLiveStatus:       "", // TODO
-				BpmnResource:         "9I79a8s7gKJH",
 				DeploymentTime:       now.UTC().Format(time.RFC3339),
-				BpmnProcessID:        "money-loan",
+				BpmnProcessID:        "main-loop",
+				BpmnResource:         "",
 				ProcessKey:           2,
 				Version:              1,
 				Instances:            []*Instance{},
@@ -173,7 +169,6 @@ func TestFromStorageProcess(t *testing.T) {
 			actual := FromStorageProcess(test.storageProcess)
 
 			assert.Equal(t, test.expected.ProcessKey, actual.ProcessKey)
-			assert.Equal(t, test.expected.BpmnProcessID, actual.BpmnProcessID)
 			assert.Equal(t, test.expected.BpmnResource, actual.BpmnResource)
 			assert.Equal(t, test.expected.DeploymentTime, actual.DeploymentTime)
 			assert.Equal(t, test.expected.BpmnLiveStatus, actual.BpmnLiveStatus)

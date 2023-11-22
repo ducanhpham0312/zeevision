@@ -11,6 +11,26 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/graph/model"
 )
 
+// BpmnResource is the resolver for the bpmnResource field.
+func (r *instanceResolver) BpmnResource(ctx context.Context, obj *model.Instance) (string, error) {
+	dbBpmnResource, err := r.Fetcher.GetBpmnResource(ctx, obj.BpmnProcessID)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch bpmn resource: %w", err)
+	}
+
+	return model.FromStorageBpmnResource(dbBpmnResource), nil
+}
+
+// BpmnResource is the resolver for the bpmnResource field.
+func (r *processResolver) BpmnResource(ctx context.Context, obj *model.Process) (string, error) {
+	dbBpmnResource, err := r.Fetcher.GetBpmnResource(ctx, obj.BpmnProcessID)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch bpmn resource: %w", err)
+	}
+
+	return model.FromStorageBpmnResource(dbBpmnResource), nil
+}
+
 // Instances is the resolver for the instances field.
 func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error) {
 	dbInstances, err := r.Fetcher.GetInstancesForProcess(ctx, obj.ProcessKey)
@@ -71,11 +91,15 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 	return model.FromStorageInstance(dbInstance), nil
 }
 
+// Instance returns InstanceResolver implementation.
+func (r *Resolver) Instance() InstanceResolver { return &instanceResolver{r} }
+
 // Process returns ProcessResolver implementation.
 func (r *Resolver) Process() ProcessResolver { return &processResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type instanceResolver struct{ *Resolver }
 type processResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

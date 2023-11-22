@@ -24,6 +24,16 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 	return f.db.WithContext(ctx)
 }
 
+func (f *Fetcher) GetBpmnResource(ctx context.Context, bpmnProcessId string) (BpmnResource, error) {
+	var bpmnResource BpmnResource
+	err := f.ContextDB(ctx).
+		Where(&BpmnResource{BpmnProcessID: bpmnProcessId}).
+		First(&bpmnResource).
+		Error
+
+	return bpmnResource, err
+}
+
 // Gets an instance by its key.
 func (f *Fetcher) GetInstance(ctx context.Context, instanceKey int64) (Instance, error) {
 	var instance Instance

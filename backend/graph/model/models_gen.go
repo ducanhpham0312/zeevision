@@ -10,8 +10,8 @@ import (
 
 type Instance struct {
 	BpmnLiveStatus string `json:"bpmnLiveStatus"`
-	BpmnResource   string `json:"bpmnResource"`
 	StartTime      string `json:"startTime"`
+	BpmnResource   string `json:"bpmnResource"`
 	BpmnProcessID  string `json:"bpmnProcessId"`
 	InstanceKey    int64  `json:"instanceKey"`
 	Version        int64  `json:"version"`
@@ -30,10 +30,10 @@ type Process struct {
 	CompletedInstances   int64                  `json:"completedInstances"`
 	BpmnLiveStatus       string                 `json:"bpmnLiveStatus"`
 	BpmnResource         string                 `json:"bpmnResource"`
+	BpmnProcessID        string                 `json:"bpmnProcessId"`
 	DeploymentTime       string                 `json:"deploymentTime"`
 	Instances            []*Instance            `json:"instances"`
 	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
-	BpmnProcessID        string                 `json:"bpmnProcessId"`
 	ProcessKey           int64                  `json:"processKey"`
 	Timers               []*Timer               `json:"timers"`
 	Version              int64                  `json:"version"`

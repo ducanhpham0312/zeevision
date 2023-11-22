@@ -12,6 +12,7 @@ import (
 var migrations = []any{
 	&Process{},
 	&Instance{},
+	&BpmnResource{},
 }
 
 // Configuration to connect to database.

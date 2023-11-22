@@ -11,13 +11,11 @@ import (
 var expectedInstances = []Instance{
 	{
 		ProcessInstanceKey:   10,
-		BpmnProcessID:        "multi-instance-process",
 		ProcessDefinitionKey: 1,
 		Status:               "Active",
 	},
 	{
 		ProcessInstanceKey:   20,
-		BpmnProcessID:        "money-loan",
 		ProcessDefinitionKey: 2,
 		Status:               "Completed",
 	},
@@ -26,14 +24,10 @@ var expectedInstances = []Instance{
 var expectedProcesses = []Process{
 	{
 		ProcessDefinitionKey: 1,
-		BpmnProcessID:        "multi-instance-process",
-		BpmnResource:         "hlasd876/fhd=",
 		Instances:            expectedInstances,
 	},
 	{
 		ProcessDefinitionKey: 2,
-		BpmnProcessID:        "money-loan",
-		BpmnResource:         "9I79a8s7gKJH",
 		Instances:            []Instance{},
 	},
 }
@@ -80,7 +74,6 @@ func TestInstanceQuery(t *testing.T) {
 			assert.NoError(t, err)
 
 			assert.Equal(t, expectedInstance.ProcessInstanceKey, instance.ProcessInstanceKey)
-			assert.Equal(t, expectedInstance.BpmnProcessID, instance.BpmnProcessID)
 			assert.Equal(t, expectedInstance.ProcessDefinitionKey, instance.ProcessDefinitionKey)
 			assert.Equal(t, expectedInstance.Status, instance.Status)
 		})
@@ -105,7 +98,6 @@ func TestInstancesQuery(t *testing.T) {
 	assert.Len(t, instances, 2)
 	for i := range instances {
 		assert.Equal(t, expectedInstances[i].ProcessInstanceKey, instances[i].ProcessInstanceKey)
-		assert.Equal(t, expectedInstances[i].BpmnProcessID, instances[i].BpmnProcessID)
 		assert.Equal(t, expectedInstances[i].ProcessDefinitionKey, instances[i].ProcessDefinitionKey)
 		assert.Equal(t, expectedInstances[i].Status, instances[i].Status)
 	}
@@ -150,7 +142,6 @@ func TestInstancesForProcessQuery(t *testing.T) {
 			assert.Len(t, instances, len(test.instances))
 			for i := range instances {
 				assert.Equal(t, test.instances[i].ProcessInstanceKey, instances[i].ProcessInstanceKey)
-				assert.Equal(t, test.instances[i].BpmnProcessID, instances[i].BpmnProcessID)
 				assert.Equal(t, test.instances[i].ProcessDefinitionKey, instances[i].ProcessDefinitionKey)
 				assert.Equal(t, test.instances[i].Status, instances[i].Status)
 			}
@@ -176,8 +167,6 @@ func TestProcessesQuery(t *testing.T) {
 	assert.Len(t, processes, 2)
 	for i := range processes {
 		assert.Equal(t, expectedProcesses[i].ProcessDefinitionKey, processes[i].ProcessDefinitionKey)
-		assert.Equal(t, expectedProcesses[i].BpmnProcessID, processes[i].BpmnProcessID)
-		assert.Equal(t, expectedProcesses[i].BpmnResource, processes[i].BpmnResource)
 	}
 }
 
@@ -223,8 +212,6 @@ func TestProcessQuery(t *testing.T) {
 			assert.NoError(t, err)
 
 			assert.Equal(t, expectedProcess.ProcessDefinitionKey, process.ProcessDefinitionKey)
-			assert.Equal(t, expectedProcess.BpmnProcessID, process.BpmnProcessID)
-			assert.Equal(t, expectedProcess.BpmnResource, process.BpmnResource)
 		})
 	}
 }
