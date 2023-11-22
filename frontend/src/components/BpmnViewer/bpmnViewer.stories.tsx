@@ -24,9 +24,11 @@ const LoadedBpmnViewer = () => {
   useEffect(() => {
     fetch(bpmnUrl)
       .then((res) => res.text())
-      .then((bpmn) => setBpmnXml(bpmn));
+      .then((bpmn) => {
+        setBpmnXml(bpmn)});
   }, []);
 
+  // console.log(bpmnXml);
   return (
     <div
       style={{
@@ -35,7 +37,8 @@ const LoadedBpmnViewer = () => {
         justifyContent: "center",
       }}
     >
-      <BpmnViewer width={500} bpmnString={bpmnXml} />
+      {bpmnXml &&
+      <BpmnViewer width={500} bpmnString={bpmnXml} />}
     </div>
   );
 };

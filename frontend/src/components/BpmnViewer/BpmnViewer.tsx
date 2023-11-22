@@ -31,6 +31,12 @@ type ViewBoxInner = {
   height: number;
 };
 
+type ViewBoxOuter = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 export function BpmnViewer({
   bpmnString,
   width,
@@ -39,6 +45,7 @@ export function BpmnViewer({
 }: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [modeler, setModeler] = useState<Viewer>();
+  const [initialViewbox, setInitialViewbox] = useState<ViewBoxInner | null>(null);
 
   useEffect(() => {
     const modeler = navigated
@@ -69,15 +76,22 @@ export function BpmnViewer({
       return;
     }
     const canvas = modeler.get("canvas") as {
-      viewbox(): { inner: ViewBoxInner };
+      viewbox(): { inner: ViewBoxInner, outer: ViewBoxOuter };
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
-    const { inner } = canvas.viewbox();
+
+    console.log('Canvas viewbox:', canvas.viewbox());
+    
+    const { inner, outer } = canvas.viewbox();
+    console.log(inner);
+    console.log(outer);
 
     const center = {
       x: inner.x + inner.width / 2,
       y: inner.y + inner.height / 2,
     };
+
+    console.log(center)
 
     // zoom to fit full viewport
     canvas.zoom("fit-viewport", center);
