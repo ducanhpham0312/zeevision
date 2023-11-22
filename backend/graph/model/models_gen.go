@@ -9,13 +9,13 @@ import (
 )
 
 type Instance struct {
-	BpmnLiveStatus string `json:"bpmnLiveStatus"`
-	StartTime      string `json:"startTime"`
-	BpmnResource   string `json:"bpmnResource"`
-	BpmnProcessID  string `json:"bpmnProcessId"`
-	InstanceKey    int64  `json:"instanceKey"`
-	Version        int64  `json:"version"`
-	Status         Status `json:"status"`
+	BpmnLiveStatus string   `json:"bpmnLiveStatus"`
+	StartTime      string   `json:"startTime"`
+	InstanceKey    int64    `json:"instanceKey"`
+	ProcessKey     int64    `json:"processKey"`
+	Version        int64    `json:"version"`
+	Status         Status   `json:"status"`
+	Process        *Process `json:"process"`
 }
 
 type MessageSubscription struct {

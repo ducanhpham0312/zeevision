@@ -34,14 +34,12 @@ func TestFromStorageInstance(t *testing.T) {
 				ProcessDefinitionKey: 1,
 				Status:               "ACTIVE",
 				StartTime:            now,
-				BpmnProcessID:        "main-loop",
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
 				StartTime:      now.UTC().Format(time.RFC3339),
-				BpmnProcessID:  "main-loop",
-				BpmnResource:   "",
 				InstanceKey:    10,
+				ProcessKey:     1,
 				Version:        1, // TODO
 				Status:         StatusActive,
 			},
@@ -53,14 +51,12 @@ func TestFromStorageInstance(t *testing.T) {
 				ProcessDefinitionKey: 2,
 				Status:               "COMPLETED",
 				StartTime:            now,
-				BpmnProcessID:        "main-loop",
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
 				StartTime:      now.UTC().Format(time.RFC3339),
-				BpmnProcessID:  "main-loop",
-				BpmnResource:   "",
 				InstanceKey:    20,
+				ProcessKey:     2,
 				Version:        1, // TODO
 				Status:         StatusCompleted,
 			},
@@ -71,12 +67,7 @@ func TestFromStorageInstance(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			actual := FromStorageInstance(test.storageInstance)
 
-			assert.Equal(t, test.expected.InstanceKey, actual.InstanceKey)
-			assert.Equal(t, test.expected.BpmnResource, actual.BpmnResource)
-			assert.Equal(t, test.expected.Status, actual.Status)
-			assert.Equal(t, test.expected.StartTime, actual.StartTime)
-			assert.Equal(t, test.expected.BpmnLiveStatus, actual.BpmnLiveStatus)
-			assert.Equal(t, test.expected.Version, actual.Version)
+			assert.Equal(t, test.expected, actual)
 		})
 	}
 }
@@ -89,10 +80,7 @@ func TestInvalidStatus(t *testing.T) {
 	}()
 
 	storageInstance := storage.Instance{
-		ProcessInstanceKey:   10,
-		ProcessDefinitionKey: 1,
-		Status:               "InvalidStatus",
-		StartTime:            time.Now(),
+		Status: "InvalidStatus",
 	}
 
 	// Should panic.
@@ -114,6 +102,11 @@ func TestFromStorageProcess(t *testing.T) {
 				Version:              1,
 				DeploymentTime:       now,
 				BpmnProcessID:        "main-loop",
+				// BpmnResource should not transfer to model.Instance.
+				BpmnResource: storage.BpmnResource{
+					BpmnProcessID: "main-loop",
+					BpmnFile:      "test",
+				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{
 					{
@@ -121,22 +114,18 @@ func TestFromStorageProcess(t *testing.T) {
 						ProcessDefinitionKey: 1,
 						Status:               "Active",
 						StartTime:            now,
-						BpmnProcessID:        "main-loop",
 					},
 				},
 			},
 			expected: &Process{
-				ActiveInstances:      0,  // TODO
-				CompletedInstances:   0,  // TODO
-				BpmnLiveStatus:       "", // TODO
-				DeploymentTime:       now.UTC().Format(time.RFC3339),
-				BpmnProcessID:        "main-loop",
-				BpmnResource:         "",
-				ProcessKey:           1,
-				Version:              1,
-				Instances:            []*Instance{},
-				MessageSubscriptions: []*MessageSubscription{},
-				Timers:               []*Timer{},
+				ActiveInstances:    0,  // TODO
+				CompletedInstances: 0,  // TODO
+				BpmnLiveStatus:     "", // TODO
+				DeploymentTime:     now.UTC().Format(time.RFC3339),
+				BpmnProcessID:      "main-loop",
+				BpmnResource:       "",
+				ProcessKey:         1,
+				Version:            1,
 			},
 		},
 		{
@@ -146,20 +135,23 @@ func TestFromStorageProcess(t *testing.T) {
 				Version:              1,
 				DeploymentTime:       now,
 				BpmnProcessID:        "main-loop",
-				Instances:            []storage.Instance{},
+				// BpmnResource should not transfer to model.Instance.
+				BpmnResource: storage.BpmnResource{
+					BpmnProcessID: "main-loop",
+					BpmnFile:      "test",
+				},
+				// Instances should not transfer to model.Instance.
+				Instances: []storage.Instance{},
 			},
 			expected: &Process{
-				ActiveInstances:      0,  // TODO
-				CompletedInstances:   0,  // TODO
-				BpmnLiveStatus:       "", // TODO
-				DeploymentTime:       now.UTC().Format(time.RFC3339),
-				BpmnProcessID:        "main-loop",
-				BpmnResource:         "",
-				ProcessKey:           2,
-				Version:              1,
-				Instances:            []*Instance{},
-				MessageSubscriptions: []*MessageSubscription{},
-				Timers:               []*Timer{},
+				ActiveInstances:    0,  // TODO
+				CompletedInstances: 0,  // TODO
+				BpmnLiveStatus:     "", // TODO
+				DeploymentTime:     now.UTC().Format(time.RFC3339),
+				BpmnProcessID:      "main-loop",
+				BpmnResource:       "",
+				ProcessKey:         2,
+				Version:            1,
 			},
 		},
 	}
@@ -168,11 +160,7 @@ func TestFromStorageProcess(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			actual := FromStorageProcess(test.storageProcess)
 
-			assert.Equal(t, test.expected.ProcessKey, actual.ProcessKey)
-			assert.Equal(t, test.expected.BpmnResource, actual.BpmnResource)
-			assert.Equal(t, test.expected.DeploymentTime, actual.DeploymentTime)
-			assert.Equal(t, test.expected.BpmnLiveStatus, actual.BpmnLiveStatus)
-			assert.Equal(t, test.expected.Version, actual.Version)
+			assert.Equal(t, test.expected, actual)
 		})
 	}
 }

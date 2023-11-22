@@ -11,14 +11,14 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/graph/model"
 )
 
-// BpmnResource is the resolver for the bpmnResource field.
-func (r *instanceResolver) BpmnResource(ctx context.Context, obj *model.Instance) (string, error) {
-	dbBpmnResource, err := r.Fetcher.GetBpmnResource(ctx, obj.BpmnProcessID)
+// Process is the resolver for the process field.
+func (r *instanceResolver) Process(ctx context.Context, obj *model.Instance) (*model.Process, error) {
+	dbProcess, err := r.Fetcher.GetProcess(ctx, obj.ProcessKey)
 	if err != nil {
-		return "", fmt.Errorf("failed to fetch bpmn resource: %w", err)
+		return nil, fmt.Errorf("failed to fetch process: %w", err)
 	}
 
-	return model.FromStorageBpmnResource(dbBpmnResource), nil
+	return model.FromStorageProcess(dbProcess), nil
 }
 
 // BpmnResource is the resolver for the bpmnResource field.

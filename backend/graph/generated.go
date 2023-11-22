@@ -50,9 +50,9 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	Instance struct {
 		BpmnLiveStatus func(childComplexity int) int
-		BpmnProcessID  func(childComplexity int) int
-		BpmnResource   func(childComplexity int) int
 		InstanceKey    func(childComplexity int) int
+		Process        func(childComplexity int) int
+		ProcessKey     func(childComplexity int) int
 		StartTime      func(childComplexity int) int
 		Status         func(childComplexity int) int
 		Version        func(childComplexity int) int
@@ -96,7 +96,7 @@ type ComplexityRoot struct {
 }
 
 type InstanceResolver interface {
-	BpmnResource(ctx context.Context, obj *model.Instance) (string, error)
+	Process(ctx context.Context, obj *model.Instance) (*model.Process, error)
 }
 type ProcessResolver interface {
 	BpmnResource(ctx context.Context, obj *model.Process) (string, error)
@@ -139,26 +139,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Instance.BpmnLiveStatus(childComplexity), true
 
-	case "Instance.bpmnProcessId":
-		if e.complexity.Instance.BpmnProcessID == nil {
-			break
-		}
-
-		return e.complexity.Instance.BpmnProcessID(childComplexity), true
-
-	case "Instance.bpmnResource":
-		if e.complexity.Instance.BpmnResource == nil {
-			break
-		}
-
-		return e.complexity.Instance.BpmnResource(childComplexity), true
-
 	case "Instance.instanceKey":
 		if e.complexity.Instance.InstanceKey == nil {
 			break
 		}
 
 		return e.complexity.Instance.InstanceKey(childComplexity), true
+
+	case "Instance.process":
+		if e.complexity.Instance.Process == nil {
+			break
+		}
+
+		return e.complexity.Instance.Process(childComplexity), true
+
+	case "Instance.processKey":
+		if e.complexity.Instance.ProcessKey == nil {
+			break
+		}
+
+		return e.complexity.Instance.ProcessKey(childComplexity), true
 
 	case "Instance.startTime":
 		if e.complexity.Instance.StartTime == nil {
@@ -638,94 +638,6 @@ func (ec *executionContext) fieldContext_Instance_startTime(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Instance_bpmnResource(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Instance_bpmnResource(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().BpmnResource(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Instance_bpmnResource(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Instance",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Instance_bpmnProcessId(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Instance_bpmnProcessId(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.BpmnProcessID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Instance_bpmnProcessId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Instance",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Instance_instanceKey(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Instance_instanceKey(ctx, field)
 	if err != nil {
@@ -758,6 +670,50 @@ func (ec *executionContext) _Instance_instanceKey(ctx context.Context, field gra
 }
 
 func (ec *executionContext) fieldContext_Instance_instanceKey(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Instance",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Instance_processKey(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Instance_processKey(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProcessKey, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Instance_processKey(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Instance",
 		Field:      field,
@@ -853,6 +809,74 @@ func (ec *executionContext) fieldContext_Instance_status(ctx context.Context, fi
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Status does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Instance_process(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Instance_process(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Instance().Process(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Process)
+	fc.Result = res
+	return ec.marshalNProcess2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcess(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Instance_process(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Instance",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "activeInstances":
+				return ec.fieldContext_Process_activeInstances(ctx, field)
+			case "completedInstances":
+				return ec.fieldContext_Process_completedInstances(ctx, field)
+			case "bpmnLiveStatus":
+				return ec.fieldContext_Process_bpmnLiveStatus(ctx, field)
+			case "bpmnResource":
+				return ec.fieldContext_Process_bpmnResource(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Process_bpmnProcessId(ctx, field)
+			case "deploymentTime":
+				return ec.fieldContext_Process_deploymentTime(ctx, field)
+			case "instances":
+				return ec.fieldContext_Process_instances(ctx, field)
+			case "messageSubscriptions":
+				return ec.fieldContext_Process_messageSubscriptions(ctx, field)
+			case "processKey":
+				return ec.fieldContext_Process_processKey(ctx, field)
+			case "timers":
+				return ec.fieldContext_Process_timers(ctx, field)
+			case "version":
+				return ec.fieldContext_Process_version(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Process", field.Name)
 		},
 	}
 	return fc, nil
@@ -1341,16 +1365,16 @@ func (ec *executionContext) fieldContext_Process_instances(ctx context.Context, 
 				return ec.fieldContext_Instance_bpmnLiveStatus(ctx, field)
 			case "startTime":
 				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "bpmnResource":
-				return ec.fieldContext_Instance_bpmnResource(ctx, field)
-			case "bpmnProcessId":
-				return ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 			case "instanceKey":
 				return ec.fieldContext_Instance_instanceKey(ctx, field)
+			case "processKey":
+				return ec.fieldContext_Instance_processKey(ctx, field)
 			case "version":
 				return ec.fieldContext_Instance_version(ctx, field)
 			case "status":
 				return ec.fieldContext_Instance_status(ctx, field)
+			case "process":
+				return ec.fieldContext_Instance_process(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
 		},
@@ -1743,16 +1767,16 @@ func (ec *executionContext) fieldContext_Query_instances(ctx context.Context, fi
 				return ec.fieldContext_Instance_bpmnLiveStatus(ctx, field)
 			case "startTime":
 				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "bpmnResource":
-				return ec.fieldContext_Instance_bpmnResource(ctx, field)
-			case "bpmnProcessId":
-				return ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 			case "instanceKey":
 				return ec.fieldContext_Instance_instanceKey(ctx, field)
+			case "processKey":
+				return ec.fieldContext_Instance_processKey(ctx, field)
 			case "version":
 				return ec.fieldContext_Instance_version(ctx, field)
 			case "status":
 				return ec.fieldContext_Instance_status(ctx, field)
+			case "process":
+				return ec.fieldContext_Instance_process(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
 		},
@@ -1800,16 +1824,16 @@ func (ec *executionContext) fieldContext_Query_instance(ctx context.Context, fie
 				return ec.fieldContext_Instance_bpmnLiveStatus(ctx, field)
 			case "startTime":
 				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "bpmnResource":
-				return ec.fieldContext_Instance_bpmnResource(ctx, field)
-			case "bpmnProcessId":
-				return ec.fieldContext_Instance_bpmnProcessId(ctx, field)
 			case "instanceKey":
 				return ec.fieldContext_Instance_instanceKey(ctx, field)
+			case "processKey":
+				return ec.fieldContext_Instance_processKey(ctx, field)
 			case "version":
 				return ec.fieldContext_Instance_version(ctx, field)
 			case "status":
 				return ec.fieldContext_Instance_status(ctx, field)
+			case "process":
+				return ec.fieldContext_Instance_process(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
 		},
@@ -3979,7 +4003,27 @@ func (ec *executionContext) _Instance(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "bpmnResource":
+		case "instanceKey":
+			out.Values[i] = ec._Instance_instanceKey(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "processKey":
+			out.Values[i] = ec._Instance_processKey(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "version":
+			out.Values[i] = ec._Instance_version(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "status":
+			out.Values[i] = ec._Instance_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "process":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -3988,7 +4032,7 @@ func (ec *executionContext) _Instance(ctx context.Context, sel ast.SelectionSet,
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Instance_bpmnResource(ctx, field, obj)
+				res = ec._Instance_process(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -4015,26 +4059,6 @@ func (ec *executionContext) _Instance(ctx context.Context, sel ast.SelectionSet,
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "bpmnProcessId":
-			out.Values[i] = ec._Instance_bpmnProcessId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "instanceKey":
-			out.Values[i] = ec._Instance_instanceKey(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "version":
-			out.Values[i] = ec._Instance_version(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "status":
-			out.Values[i] = ec._Instance_status(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4993,6 +5017,10 @@ func (ec *executionContext) marshalNMessageSubscription2ᚖgithubᚗcomᚋducanh
 		return graphql.Null
 	}
 	return ec._MessageSubscription(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProcess2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcess(ctx context.Context, sel ast.SelectionSet, v model.Process) graphql.Marshaler {
+	return ec._Process(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProcess2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcessᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Process) graphql.Marshaler {

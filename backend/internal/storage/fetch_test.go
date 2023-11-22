@@ -12,22 +12,24 @@ var expectedInstances = []Instance{
 	{
 		ProcessInstanceKey:   10,
 		ProcessDefinitionKey: 1,
-		Status:               "Active",
+		Status:               "ACTIVE",
 	},
 	{
 		ProcessInstanceKey:   20,
 		ProcessDefinitionKey: 2,
-		Status:               "Completed",
+		Status:               "COMPLETED",
 	},
 }
 
 var expectedProcesses = []Process{
 	{
 		ProcessDefinitionKey: 1,
+		BpmnProcessID:        "process1",
 		Instances:            expectedInstances,
 	},
 	{
 		ProcessDefinitionKey: 2,
+		BpmnProcessID:        "process2",
 		Instances:            []Instance{},
 	},
 }
@@ -39,8 +41,8 @@ func TestInstanceQuery(t *testing.T) {
 	}()
 	db := testDb.DB()
 
-	expectedInstance := &expectedInstances[0]
-	err := db.Create(expectedInstance).Error
+	expectedInstance := expectedInstances[0]
+	err := db.Create(&expectedInstance).Error
 	assert.NoError(t, err)
 
 	fetcher := NewFetcher(db)
@@ -73,9 +75,7 @@ func TestInstanceQuery(t *testing.T) {
 			}
 			assert.NoError(t, err)
 
-			assert.Equal(t, expectedInstance.ProcessInstanceKey, instance.ProcessInstanceKey)
-			assert.Equal(t, expectedInstance.ProcessDefinitionKey, instance.ProcessDefinitionKey)
-			assert.Equal(t, expectedInstance.Status, instance.Status)
+			assert.Equal(t, expectedInstance, instance)
 		})
 	}
 }
@@ -97,9 +97,7 @@ func TestInstancesQuery(t *testing.T) {
 
 	assert.Len(t, instances, 2)
 	for i := range instances {
-		assert.Equal(t, expectedInstances[i].ProcessInstanceKey, instances[i].ProcessInstanceKey)
-		assert.Equal(t, expectedInstances[i].ProcessDefinitionKey, instances[i].ProcessDefinitionKey)
-		assert.Equal(t, expectedInstances[i].Status, instances[i].Status)
+		assert.Equal(t, expectedInstances[i], instances[i])
 	}
 }
 
@@ -141,9 +139,7 @@ func TestInstancesForProcessQuery(t *testing.T) {
 
 			assert.Len(t, instances, len(test.instances))
 			for i := range instances {
-				assert.Equal(t, test.instances[i].ProcessInstanceKey, instances[i].ProcessInstanceKey)
-				assert.Equal(t, test.instances[i].ProcessDefinitionKey, instances[i].ProcessDefinitionKey)
-				assert.Equal(t, test.instances[i].Status, instances[i].Status)
+				assert.Equal(t, test.instances[i], instances[i])
 			}
 		})
 	}
