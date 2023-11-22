@@ -34,6 +34,55 @@ var expectedProcesses = []Process{
 	},
 }
 
+func TestBpmnResourceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	expectedBpmnResource := BpmnResource{
+		BpmnProcessID: "main-loop",
+		BpmnFile:      "test",
+	}
+	err := db.Create(&expectedBpmnResource).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name          string
+		bpmnProcessID string
+		expectedErr   string
+	}{
+		{
+			name:          "existing bpmn resource",
+			bpmnProcessID: expectedBpmnResource.BpmnProcessID,
+		},
+		{
+			name:          "non-existent bpmn resource",
+			bpmnProcessID: "non-existent",
+			expectedErr:   "record not found",
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			bpmnResource, err := fetcher.GetBpmnResource(context.Background(), test.bpmnProcessID)
+
+			if test.expectedErr != "" {
+				assert.EqualError(t, err, test.expectedErr)
+				return
+			}
+			assert.NoError(t, err)
+
+			assert.Equal(t, expectedBpmnResource, bpmnResource)
+		})
+	}
+}
+
 func TestInstanceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {

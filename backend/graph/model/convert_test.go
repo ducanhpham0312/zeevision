@@ -19,6 +19,17 @@ func TestMap(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func TestFromStorageBpmnResource(t *testing.T) {
+	storageResource := storage.BpmnResource{
+		BpmnProcessID: "main-loop",
+		BpmnFile:      "test",
+	}
+	expected := "test"
+
+	actual := FromStorageBpmnResource(storageResource)
+	assert.Equal(t, expected, actual)
+}
+
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
 
