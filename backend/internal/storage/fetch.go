@@ -24,10 +24,10 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 	return f.db.WithContext(ctx)
 }
 
-func (f *Fetcher) GetBpmnResource(ctx context.Context, bpmnProcessId string) (BpmnResource, error) {
+func (f *Fetcher) GetBpmnResource(ctx context.Context, bpmnProcessID string) (BpmnResource, error) {
 	var bpmnResource BpmnResource
 	err := f.ContextDB(ctx).
-		Where(&BpmnResource{BpmnProcessID: bpmnProcessId}).
+		Where(&BpmnResource{BpmnProcessID: bpmnProcessID}).
 		First(&bpmnResource).
 		Error
 
