@@ -55,7 +55,7 @@ describe("HorizontalTable Component", () => {
     );
     expect(getByText("Variable value")).toBeInTheDocument();
     expect(getAllByText("multi-instance-process")[0]).toBeInTheDocument();
-    expect(getAllByText("multi-instance-process").length).toEqual(4);
+    expect(getAllByText("multi-instance-process").length).toEqual(6);
   });
 
   it("renders header and pagination when the content is empty", () => {
