@@ -7,7 +7,9 @@ export default function InstancesPage() {
     query Instances {
       instances {
         instanceKey
-        bpmnProcessId
+        process {
+          bpmnProcessId
+        }
         status
         startTime
       }
@@ -25,12 +27,12 @@ export default function InstancesPage() {
           ? data.instances.map(
               ({
                 instanceKey,
-                bpmnProcessId,
+                process: { bpmnProcessId },
                 status,
                 startTime,
               }: {
-                instanceKey: number;
-                bpmnProcessId: string;
+                instanceKey: string;
+                process: { bpmnProcessId: string };
                 status: string;
                 startTime: string;
               }) => [instanceKey, bpmnProcessId, status, startTime],

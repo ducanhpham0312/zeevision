@@ -8,21 +8,28 @@ import (
 	"gorm.io/gorm"
 )
 
-// Configuration to connect to database
+// List of migrations to be run on database during initialization.
+var migrations = []any{
+	&Process{},
+	&Instance{},
+	&BpmnResource{},
+}
+
+// Configuration to connect to database.
 type DsnConfig struct {
-	// Username used to log in to the database
+	// Username used to log in to the database.
 	User string
-	// Password of the logging in user
+	// Password of the logging in user.
 	Password string
-	// Database name to be accessed
+	// Database name to be accessed.
 	DatabaseName string
-	// The host used to host the database
+	// The host used to host the database.
 	Host string
-	// The port used to connect to the database
+	// The port used to connect to the database.
 	Port uint16
 }
 
-// Create a valid DSN string to connect database from DsnConfig
+// Create a valid DSN string to connect database from DsnConfig.
 func (config *DsnConfig) String() string {
 	dsn := fmt.Sprintf(
 		"user=%s password=%s dbname=%s host=%s port=%d",
@@ -31,7 +38,7 @@ func (config *DsnConfig) String() string {
 	return dsn
 }
 
-// Connect to database by DsnConfig
+// Connect to database by DsnConfig.
 func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*gorm.DB, error) {
 	dsn := dsnConfig.String()
 
@@ -48,11 +55,10 @@ func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*
 	return nil, fmt.Errorf("maximum number of retries reached: %w", err)
 }
 
-// AutoMigrate Process table, create, modify if the table is not existed, changed base on model
-func CreateProcessTable(db *gorm.DB) error {
-	err := db.AutoMigrate(&Process{})
-	if err != nil {
-		return fmt.Errorf("failed to create tables: %w", err)
+// Migrate all tables in database automatically.
+func AutoMigrate(db *gorm.DB) error {
+	if err := db.AutoMigrate(migrations...); err != nil {
+		return fmt.Errorf("failed to migrate tables: %w", err)
 	}
 
 	return nil

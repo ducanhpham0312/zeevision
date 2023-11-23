@@ -31,7 +31,7 @@ func main() {
 		panic(err)
 	}
 
-	err = storage.CreateProcessTable(db)
+	err = storage.AutoMigrate(db)
 	if err != nil {
 		panic(err)
 	}
