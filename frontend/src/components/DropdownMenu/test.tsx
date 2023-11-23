@@ -1,3 +1,5 @@
+// possibly turn this into storybook
+
 import {
   Cloud,
   CreditCard,
@@ -15,7 +17,7 @@ import {
   Users,
 } from "lucide-react";
 
-import { Button } from "./Button";
+import { Button } from "../Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,15 +31,15 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "../components/DropdownMenu";
+} from ".";
 
 export function DropdownMenuDemo() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button variant="secondary">Open</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="right" className="w-56">
+      <DropdownMenuContent side="bottom" className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

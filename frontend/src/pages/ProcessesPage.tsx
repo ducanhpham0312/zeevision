@@ -5,7 +5,7 @@ import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
 import { queryPollIntervalMs } from "../utils/constants";
-import { DropdownMenuDemo } from "../components/test";
+import { DropdownMenuDemo } from "../components/DropdownMenu/test";
 
 export default function ProcessesPage() {
   const PROCESSES = gql`
@@ -38,9 +38,7 @@ export default function ProcessesPage() {
             Deploy a Process
           </Button>
         </div>
-        <div className="relative h-[400px] w-full items-center justify-center">
-          <DropdownMenuDemo />
-        </div>
+        <DropdownMenuDemo />
         <Table
           header={["Process Key", "Process ID", "Deployment Time"]}
           orientation="horizontal"
