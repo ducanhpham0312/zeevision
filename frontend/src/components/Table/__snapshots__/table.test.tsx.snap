@@ -87,144 +87,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="p-3"
         >
           <pre>
-            sixth-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            amp
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            integer
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984642
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667164
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            new-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            kmean
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            newValue
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984100
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667542
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            another-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            anotherVariable
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            string
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984432
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667333
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
             multi-instance-process
           </pre>
         </td>
@@ -232,14 +94,27 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="p-3"
         >
           <pre>
-            total
+            items
           </pre>
         </td>
         <td
           class="p-3"
         >
           <pre>
-            200
+            [
+  {
+    "id": 1,
+    "value": 10,
+    "inCart": 10,
+    "inStock": 20
+  },
+  {
+    "id": 2,
+    "value": 20,
+    "inCart": 2,
+    "inStock": 10
+  }
+]
           </pre>
         </td>
         <td
@@ -265,7 +140,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
@@ -311,7 +186,191 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <pre>
+            multi-instance-process
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            total
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            200
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            2251799813984108
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            1696667765
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr
         class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <pre>
+            another-multi-instance-process
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            anotherVariable
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            string
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            2251799813984432
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            1696667333
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <pre>
+            new-multi-instance-process
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            kmean
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            newValue
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            2251799813984100
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            1696667542
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <pre>
+            sixth-multi-instance-process
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            amp
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            integer
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            2251799813984642
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            1696667164
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
       >
         <td
           class="p-3"
@@ -370,87 +429,41 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            sixth-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            amp
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            integer
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984642
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667164
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
         class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
         >
           <pre>
-            new-multi-instance-process
+            multi-instance-process
           </pre>
         </td>
         <td
           class="p-3"
         >
           <pre>
-            kmean
+            isValid
           </pre>
         </td>
         <td
           class="p-3"
         >
           <pre>
-            newValue
+            true
           </pre>
         </td>
         <td
           class="p-3"
         >
           <pre>
-            2251799813984100
+            2251799813984108
           </pre>
         </td>
         <td
           class="p-3"
         >
           <pre>
-            1696667542
+            1696667765
           </pre>
         </td>
         <td
@@ -463,52 +476,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
       </tr>
       <tr
         class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            another-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            anotherVariable
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            string
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984432
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667333
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
@@ -543,6 +510,52 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         >
           <pre>
             1696667765
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            Show History
+          </pre>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <pre>
+            another-multi-instance-process
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            anotherVariable
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            string
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            2251799813984432
+          </pre>
+        </td>
+        <td
+          class="p-3"
+        >
+          <pre>
+            1696667333
           </pre>
         </td>
         <td
