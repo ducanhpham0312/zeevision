@@ -1,56 +1,38 @@
 import { Table } from "../components/Table";
-import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { BpmnViewer } from "../components/BpmnViewer";
-import { queryPollIntervalMs } from "../utils/constants";
+import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
+import { useQueryProcessData } from "../hooks/useQueryProcessData";
 
-export default function ProcessesPage() {
+export default function SingleProcessPage() {
   const params = useParams();
-  const PROCESS = gql`
-    query SingleProcess {
-      process(processKey: ${params.id}) {
-        bpmnProcessId
-        processKey
-        version
-        deploymentTime
-        bpmnResource
-        instances {
-          instanceKey
-          status
-          startTime
-        }
-      }
-    }
-  `;
-  const { data } = useQuery(PROCESS, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { process } = useQueryProcessData(params.id || "");
+
   const {
     processKey,
-    bpmnProcessId,
+    // bpmnProcessId,
     version,
     deploymentTime,
     bpmnResource,
     instances,
-  } = data ? data.process : [];
-  const decodedBpmn = atob(data ? bpmnResource : "");
+  } = process;
 
   return (
     <div className="m-[40px]">
-      <div className="mb-[40px] flex">
-        <Table
-          orientation="vertical"
-          header={[
-            "Process Key",
-            "BPMN Process ID",
-            "Version",
-            "Deployment Time",
-          ]}
-          content={
-            data ? [[processKey, bpmnProcessId, version, deploymentTime]] : []
-          }
-        />
-        <BpmnViewer bpmnString={decodedBpmn} />
+      <div className="mb-[40px] flex h-[30vh]">
+        <div className="w-[30vw]">
+          <Table
+            orientation="vertical"
+            header={["Process Key", "Version", "Deployment Time"]}
+            content={process ? [[processKey, version, deploymentTime]] : []}
+          />
+        </div>
+        <div className="h-full w-full border border-black/10">
+          <ResponsiveBpmnViewer
+            navigated
+            classname="h-full w-full"
+            bpmnString={bpmnResource}
+          />
+        </div>
       </div>
       <Table
         orientation="horizontal"
