@@ -37,7 +37,6 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "@esbuild/linux-x64": "^0.19.7",
     "@storybook/addon-essentials": "^7.5.3",
     "@storybook/addon-interactions": "^7.5.3",
     "@storybook/addon-links": "^7.5.3",
