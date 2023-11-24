@@ -28,7 +28,6 @@ const LoadedBpmnViewer = () => {
         setBpmnXml(bpmn)});
   }, []);
 
-  // console.log(bpmnXml);
   return (
     <div
       style={{
@@ -38,7 +37,7 @@ const LoadedBpmnViewer = () => {
       }}
     >
       {bpmnXml &&
-      <BpmnViewer width={500} bpmnString={bpmnXml} />}
+      <BpmnViewer width={1200} height={500} bpmnString={bpmnXml} />}
     </div>
   );
 };

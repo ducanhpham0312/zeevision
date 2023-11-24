@@ -45,15 +45,18 @@ export function BpmnViewer({
 }: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [modeler, setModeler] = useState<Viewer>();
-  const [initialViewbox, setInitialViewbox] = useState<ViewBoxInner | null>(null);
 
   useEffect(() => {
     const modeler = navigated
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
+          width: width,
+          height: height
         })
-      : new Viewer({
+        : new Viewer({
           container: containerRef.current as HTMLDivElement,
+          width: width,
+          height: height
         });
 
     async function openDiagram(xmlString: string) {
@@ -69,7 +72,7 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, navigated]);
+  }, [bpmnString, height, navigated, width]);
 
   useEffect(() => {
     if (!modeler || (width && width < 400)) {
@@ -80,19 +83,12 @@ export function BpmnViewer({
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
 
-    console.log('Canvas viewbox:', canvas.viewbox());
-    
-    const { inner, outer } = canvas.viewbox();
-    console.log(inner);
-    console.log(outer);
+    const { inner } = canvas.viewbox();
 
     const center = {
       x: inner.x + inner.width / 2,
       y: inner.y + inner.height / 2,
     };
-
-    console.log(center)
-
     // zoom to fit full viewport
     canvas.zoom("fit-viewport", center);
   }, [width, height, modeler]);
@@ -102,6 +98,7 @@ export function BpmnViewer({
       ref={containerRef}
       style={{ userSelect: "none", width: "100%", height: "100%" }}
       id="canvas"
+      data-testid="canvas"  
     />
   );
 }

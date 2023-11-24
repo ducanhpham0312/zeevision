@@ -16,8 +16,8 @@ jest.mock("../../hooks/useDragDrop", () => {
   }));
 
   return { useDragDrop: useDragDropMock };
-  // Mocking a problematic component
 });
+// Mocking a problematic component
 jest.mock("../BpmnViewer/BpmnViewer.tsx", () => {
   return {
     __esModule: true,
