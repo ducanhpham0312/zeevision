@@ -2,7 +2,8 @@ import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Table } from ".";
 import * as mockdata from "./mockdata.json";
-const { headers: verticalHeader, content: verticalContent } = mockdata.vertical;
+const { headers: verticalHeaders, content: verticalContent } =
+  mockdata.vertical;
 
 const { headers: horizontalHeaders, content: horizontalContent } =
   mockdata.horizontal;
@@ -14,7 +15,7 @@ describe("VerticalTable Component", () => {
     const { asFragment } = render(
       <Table
         orientation={verticalOrientation}
-        header={verticalHeader}
+        header={verticalHeaders}
         content={verticalContent}
       />,
     );
@@ -25,7 +26,7 @@ describe("VerticalTable Component", () => {
     const { container } = render(
       <Table
         orientation={verticalOrientation}
-        header={verticalHeader}
+        header={verticalHeaders}
         content={[]}
       />,
     );
@@ -55,7 +56,7 @@ describe("HorizontalTable Component", () => {
     );
     expect(getByText("Variable value")).toBeInTheDocument();
     expect(getAllByText("multi-instance-process")[0]).toBeInTheDocument();
-    expect(getAllByText("multi-instance-process").length).toEqual(6);
+    expect(getAllByText("multi-instance-process").length).toEqual(4);
   });
 
   it("renders header, empty row and pagination when the content is empty", () => {

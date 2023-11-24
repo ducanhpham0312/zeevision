@@ -325,7 +325,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        class="border-b border-black/10 hover:bg-second-accent/10"
       >
         <td
           class="p-3"
@@ -371,7 +371,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
         class="border-b border-black/10 hover:bg-second-accent/10"
       >
         <td
@@ -431,7 +430,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        class="border-b border-black/10 hover:bg-second-accent/10"
       >
         <td
           class="p-3"
@@ -478,7 +477,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
       </tr>
       <tr
         class="border-b border-black/10 hover:bg-second-accent/10"
-        class="border-b border-black/10 hover:bg-second-accent/10"
       >
         <td
           class="p-3"
@@ -524,7 +522,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        class="border-b border-black/10 hover:bg-second-accent/10"
       >
         <td
           class="p-3"
@@ -730,115 +728,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
     </tfoot>
-  </table>
-</DocumentFragment>
-`;
-
-exports[`VerticalTable Component renders correctly 1`] = `
-<DocumentFragment>
-  <table
-    class="w-full border-collapse rounded"
-  >
-    <tbody>
-      <tr
-        class="bg-second-accent hover:bg-second-accent/20"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          Instance key
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          2251799813984108
-        </td>
-      </tr>
-      <tr
-        class="hover:bg-second-accent/10"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          BPMN process ID
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          multi-instance-process
-        </td>
-      </tr>
-      <tr
-        class="bg-second-accent hover:bg-second-accent/20"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          Version
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          1
-        </td>
-      </tr>
-      <tr
-        class="hover:bg-second-accent/10"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          Process key
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          2251799813685249
-        </td>
-      </tr>
-      <tr
-        class="bg-second-accent hover:bg-second-accent/20"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          State
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          ELEMENT_ACTIVATING
-        </td>
-      </tr>
-      <tr
-        class="hover:bg-second-accent/10"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          Start time
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          1696667765
-        </td>
-      </tr>
-      <tr
-        class="bg-second-accent hover:bg-second-accent/20"
-      >
-        <th
-          class="border border-r-0 p-3 text-left"
-        >
-          End time
-        </th>
-        <td
-          class="border border-l-0 p-3 text-left"
-        >
-          1696667800
-        </td>
-      </tr>
-    </tbody>
   </table>
 </DocumentFragment>
 `;
