@@ -8,21 +8,194 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var expectedProcesses = []Process{
+var expectedInstances = []Instance{
 	{
-		ProcessKey:    1,
-		BpmnProcessID: "multi-instance-process",
-		BpmnResource:  "hlasd876/fhd=",
+		ProcessInstanceKey:   10,
+		ProcessDefinitionKey: 1,
+		Status:               "ACTIVE",
 	},
 	{
-		ProcessKey:    2,
-		BpmnProcessID: "money-loan",
-		BpmnResource:  "9I79a8s7gKJH",
+		ProcessInstanceKey:   20,
+		ProcessDefinitionKey: 2,
+		Status:               "COMPLETED",
 	},
 }
 
+var expectedProcesses = []Process{
+	{
+		ProcessDefinitionKey: 1,
+		BpmnProcessID:        "process1",
+		Instances:            expectedInstances,
+	},
+	{
+		ProcessDefinitionKey: 2,
+		BpmnProcessID:        "process2",
+		Instances:            []Instance{},
+	},
+}
+
+func TestBpmnResourceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	expectedBpmnResource := BpmnResource{
+		BpmnProcessID: "main-loop",
+		BpmnFile:      "test",
+	}
+	err := db.Create(&expectedBpmnResource).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name          string
+		bpmnProcessID string
+		expectedErr   string
+	}{
+		{
+			name:          "existing bpmn resource",
+			bpmnProcessID: expectedBpmnResource.BpmnProcessID,
+		},
+		{
+			name:          "non-existent bpmn resource",
+			bpmnProcessID: "non-existent",
+			expectedErr:   "record not found",
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			bpmnResource, err := fetcher.GetBpmnResource(context.Background(), test.bpmnProcessID)
+
+			if test.expectedErr != "" {
+				assert.EqualError(t, err, test.expectedErr)
+				return
+			}
+			assert.NoError(t, err)
+
+			assert.Equal(t, expectedBpmnResource, bpmnResource)
+		})
+	}
+}
+
+func TestInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	expectedInstance := expectedInstances[0]
+	err := db.Create(&expectedInstance).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		expectedErr string
+	}{
+		{
+			name:        "existing instance",
+			instanceKey: expectedInstance.ProcessInstanceKey,
+		},
+		{
+			name:        "non-existent instance",
+			instanceKey: 123,
+			expectedErr: "record not found",
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			instance, err := fetcher.GetInstance(context.Background(), test.instanceKey)
+
+			if test.expectedErr != "" {
+				assert.EqualError(t, err, test.expectedErr)
+				return
+			}
+			assert.NoError(t, err)
+
+			assert.Equal(t, expectedInstance, instance)
+		})
+	}
+}
+
+func TestInstancesQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedInstances).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	instances, err := fetcher.GetInstances(context.Background())
+	assert.NoError(t, err)
+
+	assert.Len(t, instances, 2)
+	for i := range instances {
+		assert.Equal(t, expectedInstances[i], instances[i])
+	}
+}
+
+func TestInstancesForProcessQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedProcesses).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name          string
+		processDefKey int64
+		instances     []Instance
+	}{
+		{
+			name:          "existing process",
+			processDefKey: 1,
+			instances:     expectedInstances,
+		},
+		{
+			name:          "non-existent process",
+			processDefKey: 2,
+			instances:     []Instance{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			instances, err := fetcher.GetInstancesForProcess(context.Background(), test.processDefKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, instances, len(test.instances))
+			for i := range instances {
+				assert.Equal(t, test.instances[i], instances[i])
+			}
+		})
+	}
+}
+
 func TestProcessesQuery(t *testing.T) {
-	testDb := newProcessesTestDB(t)
+	testDb := newMigratedTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -38,14 +211,12 @@ func TestProcessesQuery(t *testing.T) {
 
 	assert.Len(t, processes, 2)
 	for i := range processes {
-		assert.Equal(t, expectedProcesses[i].ProcessKey, processes[i].ProcessKey)
-		assert.Equal(t, expectedProcesses[i].BpmnProcessID, processes[i].BpmnProcessID)
-		assert.Equal(t, expectedProcesses[i].BpmnResource, processes[i].BpmnResource)
+		assert.Equal(t, expectedProcesses[i].ProcessDefinitionKey, processes[i].ProcessDefinitionKey)
 	}
 }
 
 func TestProcessQuery(t *testing.T) {
-	testDb := newProcessesTestDB(t)
+	testDb := newMigratedTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -58,18 +229,18 @@ func TestProcessQuery(t *testing.T) {
 	fetcher := NewFetcher(db)
 
 	tests := []struct {
-		name        string
-		processKey  int64
-		expectedErr string
+		name          string
+		processDefKey int64
+		expectedErr   string
 	}{
 		{
-			name:       "existing process",
-			processKey: expectedProcess.ProcessKey,
+			name:          "existing process",
+			processDefKey: expectedProcess.ProcessDefinitionKey,
 		},
 		{
-			name:        "non-existent process",
-			processKey:  123,
-			expectedErr: "record not found",
+			name:          "non-existent process",
+			processDefKey: 123,
+			expectedErr:   "record not found",
 		},
 	}
 
@@ -77,7 +248,7 @@ func TestProcessQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			process, err := fetcher.GetProcess(context.Background(), test.processKey)
+			process, err := fetcher.GetProcess(context.Background(), test.processDefKey)
 
 			if test.expectedErr != "" {
 				assert.EqualError(t, err, test.expectedErr)
@@ -85,15 +256,13 @@ func TestProcessQuery(t *testing.T) {
 			}
 			assert.NoError(t, err)
 
-			assert.Equal(t, expectedProcess.ProcessKey, process.ProcessKey)
-			assert.Equal(t, expectedProcess.BpmnProcessID, process.BpmnProcessID)
-			assert.Equal(t, expectedProcess.BpmnResource, process.BpmnResource)
+			assert.Equal(t, expectedProcess.ProcessDefinitionKey, process.ProcessDefinitionKey)
 		})
 	}
 }
 
 func TestCancelQuery(t *testing.T) {
-	testDb := newProcessesTestDB(t)
+	testDb := newMigratedTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -108,10 +277,10 @@ func TestCancelQuery(t *testing.T) {
 }
 
 // Creates new test database with processes table.
-func newProcessesTestDB(t *testing.T) *testutils.TestDB {
+func newMigratedTestDB(t *testing.T) *testutils.TestDB {
 	testDb := testutils.NewTestDB(t)
 
-	err := testDb.DB().AutoMigrate(&Process{})
+	err := AutoMigrate(testDb.DB())
 	assert.NoError(t, err)
 
 	return testDb
