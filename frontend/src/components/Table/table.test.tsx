@@ -58,7 +58,7 @@ describe("HorizontalTable Component", () => {
     expect(getAllByText("multi-instance-process").length).toEqual(4);
   });
 
-  it("renders header and pagination when the content is empty", () => {
+  it("renders header, empty row and pagination when the content is empty", () => {
     const component = render(
       <Table
         orientation={horizontalOrientation}
@@ -67,7 +67,7 @@ describe("HorizontalTable Component", () => {
       />,
     );
     expect(component.getByRole("table")).toBeInTheDocument();
-    expect(component.getAllByRole("row").length).toEqual(2);
+    expect(component.getAllByRole("row").length).toEqual(3);
     expect(component.getAllByRole("button")[0]).toBeInTheDocument();
   });
 

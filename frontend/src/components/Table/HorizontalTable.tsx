@@ -102,54 +102,56 @@ export function HorizontalTable({
       <tbody aria-label="custom pagination table">
         {sortedContent
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          .map((row, rowIdx) => (
-            <>
-              <tr
-                className={
-                  "border-b border-black/10 " +
-                  (alterRowColor && rowIdx % 2 === 0
-                    ? "bg-second-accent hover:bg-second-accent/20"
-                    : "hover:bg-second-accent/10")
-                }
-                key={rowIdx}
-              >
-                {row.map((cell, index) => (
-                  <td className="p-3" key={index}>
-                    <p>
-                      {typeof cell === "string" ? prettifyJson(cell) : cell}
-                    </p>
-                  </td>
-                ))}
-                {expandElement ? (
-                  <td className="flex h-[55px] items-center justify-center p-0">
-                    <Button
-                      onClick={() =>
-                        setExpandedRow((prev) =>
-                          prev === rowIdx ? null : rowIdx,
-                        )
-                      }
-                    >
-                      {expandedRow === rowIdx ? <Minus /> : <Plus />}
-                    </Button>
-                  </td>
-                ) : null}
-
-                {optionElement ? (
-                  <td className="mt-1 flex justify-center">
-                    {optionElement(rowIdx)}
-                  </td>
-                ) : null}
-              </tr>
-              {expandElement ? (
-                <ExpandRow
-                  isIn={expandedRow === rowIdx}
-                  colSpan={header.length + 1}
+          .map((row, rowIdx) => {
+            return (
+              <>
+                <tr
+                  className={
+                    "border-b border-black/10 " +
+                    (alterRowColor && rowIdx % 2 === 0
+                      ? "bg-second-accent hover:bg-second-accent/20"
+                      : "hover:bg-second-accent/10")
+                  }
+                  key={rowIdx}
                 >
-                  {expandElement(rowIdx)}
-                </ExpandRow>
-              ) : null}
-            </>
-          ))}
+                  {row.map((cell, index) => (
+                    <td className="p-3" key={index}>
+                      <p>
+                        {typeof cell === "string" ? prettifyJson(cell) : cell}
+                      </p>
+                    </td>
+                  ))}
+                  {expandElement ? (
+                    <td className="flex h-[55px] items-center justify-center p-0">
+                      <Button
+                        onClick={() =>
+                          setExpandedRow((prev) =>
+                            prev === rowIdx ? null : rowIdx,
+                          )
+                        }
+                      >
+                        {expandedRow === rowIdx ? <Minus /> : <Plus />}
+                      </Button>
+                    </td>
+                  ) : null}
+
+                  {optionElement ? (
+                    <td className="mt-1 flex justify-center">
+                      {optionElement(rowIdx)}
+                    </td>
+                  ) : null}
+                </tr>
+                {expandElement ? (
+                  <ExpandRow
+                    isIn={expandedRow === rowIdx}
+                    colSpan={header.length + 1}
+                  >
+                    {expandElement(rowIdx)}
+                  </ExpandRow>
+                ) : null}
+              </>
+            );
+          })}
         {content.length === 0 ? (
           <tr>
             <td colSpan={colSpan}>
