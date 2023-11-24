@@ -20,6 +20,9 @@ export interface TableProps {
   content: (string | number)[][];
 
   expandElement?: (idx: number) => ReactNode;
+  optionElement?: (idx: number) => ReactNode;
+
+  alterRowColor?: boolean;
 }
 
 export function Table({ orientation, ...props }: TableProps) {

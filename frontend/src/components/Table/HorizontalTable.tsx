@@ -11,13 +11,17 @@ import { ExpandRow } from "./ExpandRow";
 export interface HorizontalTableProps {
   header: string[];
   content: (string | number)[][];
+  alterRowColor?: boolean;
   expandElement?: (idx: number) => React.ReactNode;
+  optionElement?: (idx: number) => React.ReactNode;
 }
 
 export function HorizontalTable({
   header,
   content,
+  alterRowColor,
   expandElement,
+  optionElement,
 }: HorizontalTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -100,7 +104,7 @@ export function HorizontalTable({
               <tr
                 className={
                   "border-b border-black/10 " +
-                  (rowIdx % 2 === 0
+                  (alterRowColor && rowIdx % 2 === 0
                     ? "bg-second-accent hover:bg-second-accent/20"
                     : "hover:bg-second-accent/10")
                 }
@@ -126,6 +130,8 @@ export function HorizontalTable({
                     </Button>
                   </td>
                 ) : null}
+
+                {optionElement ? <td>{optionElement(rowIdx)}</td> : null}
               </tr>
               {expandElement ? (
                 <ExpandRow
@@ -145,27 +151,33 @@ export function HorizontalTable({
       </tbody>
       <tfoot>
         <tr>
-          <StyledTablePagination
-            rowsPerPageOptions={[
-              ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
-              { label: "All", value: -1 },
-            ]}
-            colSpan={header.length}
-            count={content.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            slotProps={{
-              select: {
-                "aria-label": "rows per page",
-              },
-              actions: {
-                showFirstButton: true,
-                showLastButton: true,
-              },
-            }}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          {content.length > rowsPerPage ? (
+            <StyledTablePagination
+              rowsPerPageOptions={[
+                ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
+                { label: "All", value: -1 },
+              ]}
+              colSpan={
+                expandElement || optionElement
+                  ? header.length + 1
+                  : header.length
+              }
+              count={content.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              slotProps={{
+                select: {
+                  "aria-label": "rows per page",
+                },
+                actions: {
+                  showFirstButton: true,
+                  showLastButton: true,
+                },
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          ) : null}
         </tr>
       </tfoot>
     </>

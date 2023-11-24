@@ -43,17 +43,18 @@ export default function ProcessesPage() {
             Deploy a Process
           </Button>
         </div>
-        <DropdownMenuDemo />
         <Table
+          alterRowColor
           header={["Process Key", "Process ID", "Deployment Time"]}
           orientation="horizontal"
           expandElement={(idx: number) => (
-            <div className="p-4">
-              <p>Details:</p>
+            <div className="flex flex-col gap-4 p-4">
+              <p>Process Details:</p>
               <div>
                 <Table
                   orientation="horizontal"
                   header={["Instance Key", "Version", "Start Time"]}
+                  optionElement={() => <DropdownMenuDemo />}
                   content={
                     data.processes[idx].instances
                       ? data.processes[idx].instances.map(
