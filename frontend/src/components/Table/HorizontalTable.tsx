@@ -76,12 +76,15 @@ export function HorizontalTable({
     setPage(0);
   };
 
+  const colSpan =
+    expandElement || optionElement ? header.length + 1 : header.length;
+
   return (
     <>
       <thead className="border-b-2 border-accent font-bold text-text">
         <tr>
           {header.map((item) => (
-            <th key={item} className="cursor-pointer text-left">
+            <th key={item} className="cursor-pointer py-1 text-left">
               <Button
                 fullWidth
                 className="text-left"
@@ -118,7 +121,7 @@ export function HorizontalTable({
                   </td>
                 ))}
                 {expandElement ? (
-                  <td className="mt-1 flex h-full items-center">
+                  <td className="flex h-[55px] items-center justify-center p-0">
                     <Button
                       onClick={() =>
                         setExpandedRow((prev) =>
@@ -131,7 +134,11 @@ export function HorizontalTable({
                   </td>
                 ) : null}
 
-                {optionElement ? <td>{optionElement(rowIdx)}</td> : null}
+                {optionElement ? (
+                  <td className="mt-1 flex justify-center">
+                    {optionElement(rowIdx)}
+                  </td>
+                ) : null}
               </tr>
               {expandElement ? (
                 <ExpandRow
@@ -143,9 +150,18 @@ export function HorizontalTable({
               ) : null}
             </>
           ))}
+        {content.length === 0 ? (
+          <tr>
+            <td colSpan={colSpan}>
+              <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                <p>No data to display.</p>
+              </div>
+            </td>
+          </tr>
+        ) : null}
         {emptyRows > 0 && (
           <tr style={{ height: 41 * emptyRows }}>
-            <td colSpan={header.length} />
+            <td colSpan={colSpan} />
           </tr>
         )}
       </tbody>
@@ -157,11 +173,7 @@ export function HorizontalTable({
                 ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
                 { label: "All", value: -1 },
               ]}
-              colSpan={
-                expandElement || optionElement
-                  ? header.length + 1
-                  : header.length
-              }
+              colSpan={colSpan}
               count={content.length}
               rowsPerPage={rowsPerPage}
               page={page}

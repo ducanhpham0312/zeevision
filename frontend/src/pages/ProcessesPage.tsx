@@ -25,6 +25,7 @@ export default function ProcessesPage() {
   const { data } = useQuery(PROCESSES, {
     pollInterval: queryPollIntervalMs,
   });
+
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const handleOpen = () => setIsPopUpOpen(true);
   const handleClose = () => setIsPopUpOpen(false);
