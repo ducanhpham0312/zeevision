@@ -14,6 +14,11 @@ export default function ProcessesPage() {
         bpmnProcessId
         processKey
         deploymentTime
+        instances {
+          instanceKey
+          status
+          startTime
+        }
       }
     }
   `;
@@ -42,6 +47,32 @@ export default function ProcessesPage() {
         <Table
           header={["Process Key", "Process ID", "Deployment Time"]}
           orientation="horizontal"
+          expandElement={(idx: number) => (
+            <div className="p-4">
+              <p>Details:</p>
+              <div>
+                <Table
+                  orientation="horizontal"
+                  header={["Instance Key", "Version", "Start Time"]}
+                  content={
+                    data.processes[idx].instances
+                      ? data.processes[idx].instances.map(
+                          ({
+                            instanceKey,
+                            status,
+                            startTime,
+                          }: {
+                            instanceKey: number;
+                            status: string;
+                            startTime: string;
+                          }) => [instanceKey, status, startTime],
+                        )
+                      : []
+                  }
+                />
+              </div>
+            </div>
+          )}
           content={
             data
               ? data.processes.map(

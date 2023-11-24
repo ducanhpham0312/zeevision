@@ -4,17 +4,26 @@ import {
   TablePagination,
   tablePaginationClasses as classes,
 } from "@mui/base/TablePagination";
+import { Button } from "../Button";
+import { Minus, Plus } from "lucide-react";
+import { ExpandRow } from "./ExpandRow";
 
 export interface HorizontalTableProps {
   header: string[];
   content: (string | number)[][];
+  expandElement?: (idx: number) => React.ReactNode;
 }
 
-export function HorizontalTable({ header, content }: HorizontalTableProps) {
+export function HorizontalTable({
+  header,
+  content,
+  expandElement,
+}: HorizontalTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortBy, setSortBy] = React.useState("");
   const [sortOrder, setSortOrder] = React.useState("asc");
+  const [expandedRow, setExpandedRow] = React.useState<number | null>(null);
   const [sortedContent, setSortedContent] =
     React.useState<(string | number)[][]>(content);
 
@@ -62,22 +71,23 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   return (
     <>
-      <thead className="border-b border-black/10 bg-second-accent font-bold text-text">
+      <thead className="border-b-2 border-accent font-bold text-text">
         <tr>
           {header.map((item) => (
-            <th
-              key={item}
-              onClick={() => handleSort(item)}
-              className="cursor-pointer p-3 text-left"
-            >
-              <div className="flex justify-between">
-                <p>
-                  {item}
+            <th key={item} className="cursor-pointer text-left">
+              <Button
+                fullWidth
+                className="text-left"
+                onClick={() => handleSort(item)}
+              >
+                <div className="flex justify-between">
+                  <p>{item}</p>
                   {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
-                </p>
-              </div>
+                </div>
+              </Button>
             </th>
           ))}
         </tr>
@@ -86,23 +96,46 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
         {sortedContent
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map((row, rowIdx) => (
-            <tr
-              className={
-                "border-b border-black/10 " +
-                (rowIdx % 2 === 0
-                  ? "hover:bg-second-accent/10"
-                  : "bg-second-accent hover:bg-second-accent/20")
-              }
-              key={rowIdx}
-            >
-              {row.map((cell, index) => (
-                <td className="p-3" key={index}>
-                  <pre>
-                    {typeof cell === "string" ? prettifyJson(cell) : cell}
-                  </pre>
-                </td>
-              ))}
-            </tr>
+            <>
+              <tr
+                className={
+                  "border-b border-black/10 " +
+                  (rowIdx % 2 === 0
+                    ? "bg-second-accent hover:bg-second-accent/20"
+                    : "hover:bg-second-accent/10")
+                }
+                key={rowIdx}
+              >
+                {row.map((cell, index) => (
+                  <td className="p-3" key={index}>
+                    <p>
+                      {typeof cell === "string" ? prettifyJson(cell) : cell}
+                    </p>
+                  </td>
+                ))}
+                {expandElement ? (
+                  <td className="mt-1 flex h-full items-center">
+                    <Button
+                      onClick={() =>
+                        setExpandedRow((prev) =>
+                          prev === rowIdx ? null : rowIdx,
+                        )
+                      }
+                    >
+                      {expandedRow === rowIdx ? <Minus /> : <Plus />}
+                    </Button>
+                  </td>
+                ) : null}
+              </tr>
+              {expandElement ? (
+                <ExpandRow
+                  isIn={expandedRow === rowIdx}
+                  colSpan={header.length + 1}
+                >
+                  {expandElement(rowIdx)}
+                </ExpandRow>
+              ) : null}
+            </>
           ))}
         {emptyRows > 0 && (
           <tr style={{ height: 41 * emptyRows }}>
