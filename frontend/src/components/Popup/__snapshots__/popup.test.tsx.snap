@@ -20,12 +20,13 @@ exports[`Popup Component renders correctly when open 1`] = `
     <div />
   </div>
   <div
-    class="MuiModal-root css-1lnsth0"
+    class="MuiModal-root fixed inset-0 z-50 flex w-full items-center justify-center"
     role="presentation"
   >
     <div
       aria-hidden="true"
-      class="MuiModal-backdrop css-1jyxheb"
+      class="fixed inset-0 -z-10 bg-black/50"
+      ownerstate="[object Object]"
       style="opacity: 0;"
     />
     <div
@@ -37,30 +38,34 @@ exports[`Popup Component renders correctly when open 1`] = `
       tabindex="-1"
     >
       <div
-        class="css-1mxqldv"
+        class="flex max-h-[90%] min-h-[300px] w-[90vw] flex-col overflow-y-auto rounded bg-background tablet:w-[750px]"
       >
         <div
-          class="css-rjt43j"
+          class="flex items-center justify-between px-[20px] py-[10px] pl-[20px] text-2xl"
         >
           <p>
             Test Title
           </p>
           <button
-            class="MuiButton-root css-39vfrt"
-            type="button"
-            variant="text"
+            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
           >
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-              data-testid="CloseIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-              />
-            </svg>
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
+            />
+            <span>
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                data-testid="CloseIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                />
+              </svg>
+            </span>
           </button>
         </div>
         Test child 1

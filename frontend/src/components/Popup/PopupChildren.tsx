@@ -1,22 +1,18 @@
-import { styled } from "@mui/system";
+import { HTMLAttributes } from "react";
 
-export const PopupContent = styled("div")`
-  margin-top: 10px;
-  flex-grow: 1;
-  padding-left: 20px;
-  overflow-y: scroll;
-  max-height: 500px;
-  > div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-right: 20px;
-  }
-`;
-
-export const PopupAction = styled("div")`
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  padding: 10px;
-`;
+export function PopupContent(props: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      {...props}
+      className="mt-[10px] max-h-[500px] flex-grow overflow-y-auto pl-[20px] pr-[20px]"
+    />
+  );
+}
+export function PopupAction(props: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      {...props}
+      className="flex justify-end gap-[10px] p-[15px] pr-[20px]"
+    />
+  );
+}

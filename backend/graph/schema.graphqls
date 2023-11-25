@@ -20,11 +20,11 @@ type Process {
   activeInstances: Int!
   completedInstances: Int!
   bpmnLiveStatus: String!
-  bpmnResource: String!
+  bpmnResource: String! @goField(forceResolver: true)
+  bpmnProcessId: String!
   deploymentTime: DateTime!
   instances: [Instance!]! @goField(forceResolver: true)
   messageSubscriptions: [MessageSubscription!]! @goField(forceResolver: true)
-  processId: Int!
   processKey: Int!
   timers: [Timer!]! @goField(forceResolver: true)
   version: Int!
@@ -32,19 +32,28 @@ type Process {
 
 type Instance {
   bpmnLiveStatus: String!
-  bpmnResource: String!
   startTime: DateTime!
-  processId: Int!
+  endTime: DateTime!
   instanceKey: Int!
+  processKey: Int!
   version: Int!
-  status: String!
+  status: Status!
+  variables: [Variable!]! @goField(forceResolver: true)
+  process: Process! @goField(forceResolver: true)
+}
+
+type Variable {
+  elementId: Int!
+  name: String!
+  value: String!
+  time: DateTime!
 }
 
 type MessageSubscription {
   createdAt: DateTime!
   elementId: Int!
   messageName: String!
-  status: String!
+  status: Status!
 }
 
 type Timer {
@@ -52,7 +61,12 @@ type Timer {
   processInstanceKey: Int!
   repetitions: String!
   startTime: DateTime!
-  status: String!
+  status: Status!
+}
+
+enum Status {
+  ACTIVE
+  COMPLETED
 }
 
 # The `DateTime` scalar type represents a date and time following the

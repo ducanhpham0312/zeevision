@@ -35,7 +35,7 @@ const ButtonWithHooks = ({ text }: { text?: Array<string> }) => {
         </PopupContent>
         <PopupAction>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained">Deploy process</Button>
+          <Button variant="primary">Deploy process</Button>
         </PopupAction>
       </Popup>
     </>

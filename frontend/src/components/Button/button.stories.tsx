@@ -32,17 +32,17 @@ const ToggleableButton = ({
   );
 };
 
-export const Contained: Story = {
+export const Primary: Story = {
   args: {
-    variant: "contained",
-    label: "Contained",
+    variant: "primary",
+    label: "primary",
   },
 };
 
-export const Outlined: Story = {
+export const Secondary: Story = {
   args: {
-    variant: "outlined",
-    label: "Outlined",
+    variant: "secondary",
+    label: "secondary",
   },
 };
 
@@ -55,14 +55,13 @@ export const Toggle: Story = (args: ButtonProps) => {
         {...args}
         active={active}
         setActive={setActive}
-        variant="outlined"
+        variant="secondary"
       />
       <ToggleableButton {...args} active={active} setActive={setActive} />
     </div>
   );
 };
 Toggle.args = {
-  variant: "text",
   size: "large",
   label: "Toggleable",
   active: false,
@@ -70,7 +69,6 @@ Toggle.args = {
 
 export const Text: Story = {
   args: {
-    variant: "text",
     label: "Text",
   },
 };
@@ -82,7 +80,7 @@ export const VariesWidth: Story = {
       <div style={{ display: "flex", gap: "10px" }}>
         {widths.map((width) => (
           <Button
-            variant="contained"
+            variant="primary"
             width={width}
             key={width}
             label={`${width}px`}
@@ -101,7 +99,7 @@ export const FullWidth: Story = {
         <div
           style={{ width: "500px", padding: "10px", border: "1px solid black" }}
         >
-          <Button variant="contained" fullWidth label="Full Width" />
+          <Button variant="primary" fullWidth label="Full Width" />
         </div>
       </>
     );
@@ -117,8 +115,7 @@ export const Large: Story = {
 
 export const Small: Story = {
   args: {
-    variant: "text",
-    size: "small",
+    size: "compact",
     label: "Small",
   },
 };

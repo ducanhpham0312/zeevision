@@ -1,6 +1,5 @@
 import { Modal, ModalProps } from "@mui/base";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/system";
 import { animated, useSpring } from "@react-spring/web";
 import React, { MouseEventHandler, forwardRef } from "react";
 import { Button } from "../Button";
@@ -35,24 +34,25 @@ export function Popup({
 }: PopupProps) {
   return (
     <div>
-      <StyledModal
+      <Modal
         {...props}
+        className="fixed inset-0 z-50 flex w-full items-center justify-center"
         onClose={shouldNotCloseWhenClickAway ? () => {} : props.onClose}
-        slots={{ backdrop: StyledBackdrop }}
+        slots={{ backdrop: Backdrop }}
         closeAfterTransition
       >
         <Fade in={props.open}>
-          <PopupContainer>
-            <PopupTitle>
+          <div className="flex max-h-[90%] min-h-[300px] w-[90vw] flex-col overflow-y-auto rounded bg-background tablet:w-[750px]">
+            <div className="flex items-center justify-between px-[20px] py-[10px] pl-[20px] text-2xl">
               <p>{title}</p>
-              <Button variant={"text"} onClick={props.onClose as () => void}>
+              <Button onClick={props.onClose as () => void}>
                 <CloseIcon />
               </Button>
-            </PopupTitle>
+            </div>
             {children}
-          </PopupContainer>
+          </div>
         </Fade>
-      </StyledModal>
+      </Modal>
     </div>
   );
 }
@@ -63,6 +63,7 @@ interface FadeProps {
   onClick?: MouseEventHandler<HTMLDivElement>;
   onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
   onExited?: (node: HTMLElement, isAppearing: boolean) => void;
+  className?: string;
 }
 
 const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
@@ -83,7 +84,12 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
     },
   });
   return (
-    <animated.div ref={ref} style={style} {...other}>
+    <animated.div
+      ref={ref}
+      style={style}
+      {...other}
+      className={props.className}
+    >
       {children}
     </animated.div>
   );
@@ -94,49 +100,12 @@ const Backdrop = forwardRef<
   { children: React.ReactElement; open: boolean }
 >((props, ref) => {
   const { open, ...other } = props;
-  return <Fade ref={ref} in={open} {...other} />;
+  return (
+    <Fade
+      ref={ref}
+      in={open}
+      {...other}
+      className="fixed inset-0 -z-10 bg-black/50"
+    />
+  );
 });
-
-const PopupTitle = styled("div")`
-  display: flex;
-  height: 50px;
-  line-height: 5px;
-  justify-content: space-between;
-  padding: 10px;
-  padding-left: 20px;
-
-  p {
-    font-size: 25px;
-    font-weight: 700;
-  }
-`;
-
-const StyledBackdrop = styled(Backdrop)`
-  z-index: -1;
-  position: fixed;
-  inset: 0;
-  background-color: rgb(0 0 0 / 0.5);
-  -webkit-tap-highlight-color: transparent;
-`;
-
-// make this responsive
-const PopupContainer = styled("div")`
-  width: 800px;
-  border: 1px solid black;
-  overflow-y: auto;
-  max-height: 90%;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-radius: 8px;
-`;
-
-const StyledModal = styled(Modal)`
-  position: fixed;
-  z-index: 1300;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;

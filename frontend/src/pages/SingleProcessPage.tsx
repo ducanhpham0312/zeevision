@@ -2,14 +2,14 @@ import { Table } from "../components/Table";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { BpmnViewer } from "../components/BpmnViewer";
-import { styled } from "@mui/system";
+import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {
   const params = useParams();
   const PROCESS = gql`
     query SingleProcess {
       process(processKey: ${params.id}) {
-        processId
+        bpmnProcessId
         processKey
         version
         deploymentTime
@@ -22,10 +22,12 @@ export default function ProcessesPage() {
       }
     }
   `;
-  const { data } = useQuery(PROCESS);
+  const { data } = useQuery(PROCESS, {
+    pollInterval: queryPollIntervalMs,
+  });
   const {
     processKey,
-    processId,
+    bpmnProcessId,
     version,
     deploymentTime,
     bpmnResource,
@@ -34,8 +36,8 @@ export default function ProcessesPage() {
   const decodedBpmn = atob(data ? bpmnResource : "");
 
   return (
-    <ProcessPageContainer>
-      <ProcessContainer>
+    <div className="m-[40px]">
+      <div className="mb-[40px] flex">
         <Table
           orientation="vertical"
           header={[
@@ -45,11 +47,11 @@ export default function ProcessesPage() {
             "Deployment Time",
           ]}
           content={
-            data ? [[processKey, processId, version, deploymentTime]] : []
+            data ? [[processKey, bpmnProcessId, version, deploymentTime]] : []
           }
         />
         <BpmnViewer bpmnString={decodedBpmn} />
-      </ProcessContainer>
+      </div>
       <Table
         orientation="horizontal"
         header={["Instance Key", "Version", "Start Time"]}
@@ -64,21 +66,11 @@ export default function ProcessesPage() {
                   instanceKey: number;
                   status: string;
                   startTime: string;
-                }) => [instanceKey, status, startTime]
+                }) => [instanceKey, status, startTime],
               )
             : []
         }
       />
-    </ProcessPageContainer>
+    </div>
   );
 }
-
-const ProcessPageContainer = styled("div")`
-  margin: 40px;
-`;
-
-const ProcessContainer = styled(`div`)`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 40px;
-`;

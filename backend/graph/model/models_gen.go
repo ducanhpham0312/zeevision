@@ -2,21 +2,29 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
 type Instance struct {
-	BpmnLiveStatus string `json:"bpmnLiveStatus"`
-	BpmnResource   string `json:"bpmnResource"`
-	StartTime      string `json:"startTime"`
-	ProcessID      int64  `json:"processId"`
-	InstanceKey    int64  `json:"instanceKey"`
-	Version        int64  `json:"version"`
-	Status         string `json:"status"`
+	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
+	StartTime      string      `json:"startTime"`
+	EndTime        string      `json:"endTime"`
+	InstanceKey    int64       `json:"instanceKey"`
+	ProcessKey     int64       `json:"processKey"`
+	Version        int64       `json:"version"`
+	Status         Status      `json:"status"`
+	Variables      []*Variable `json:"variables"`
+	Process        *Process    `json:"process"`
 }
 
 type MessageSubscription struct {
 	CreatedAt   string `json:"createdAt"`
 	ElementID   int64  `json:"elementId"`
 	MessageName string `json:"messageName"`
-	Status      string `json:"status"`
+	Status      Status `json:"status"`
 }
 
 type Process struct {
@@ -24,10 +32,10 @@ type Process struct {
 	CompletedInstances   int64                  `json:"completedInstances"`
 	BpmnLiveStatus       string                 `json:"bpmnLiveStatus"`
 	BpmnResource         string                 `json:"bpmnResource"`
+	BpmnProcessID        string                 `json:"bpmnProcessId"`
 	DeploymentTime       string                 `json:"deploymentTime"`
 	Instances            []*Instance            `json:"instances"`
 	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
-	ProcessID            int64                  `json:"processId"`
 	ProcessKey           int64                  `json:"processKey"`
 	Timers               []*Timer               `json:"timers"`
 	Version              int64                  `json:"version"`
@@ -38,5 +46,53 @@ type Timer struct {
 	ProcessInstanceKey int64  `json:"processInstanceKey"`
 	Repetitions        string `json:"repetitions"`
 	StartTime          string `json:"startTime"`
-	Status             string `json:"status"`
+	Status             Status `json:"status"`
+}
+
+type Variable struct {
+	ElementID int64  `json:"elementId"`
+	Name      string `json:"name"`
+	Value     string `json:"value"`
+	Time      string `json:"time"`
+}
+
+type Status string
+
+const (
+	StatusActive    Status = "ACTIVE"
+	StatusCompleted Status = "COMPLETED"
+)
+
+var AllStatus = []Status{
+	StatusActive,
+	StatusCompleted,
+}
+
+func (e Status) IsValid() bool {
+	switch e {
+	case StatusActive, StatusCompleted:
+		return true
+	}
+	return false
+}
+
+func (e Status) String() string {
+	return string(e)
+}
+
+func (e *Status) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Status(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Status", str)
+	}
+	return nil
+}
+
+func (e Status) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
