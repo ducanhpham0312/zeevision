@@ -1,7 +1,7 @@
 import { Table } from "../components/Table";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { BpmnViewer } from "../components/BpmnViewer";
+import { BpmnViewer } from "../components/BpmnVisualization/BpmnVisualization";
 import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {

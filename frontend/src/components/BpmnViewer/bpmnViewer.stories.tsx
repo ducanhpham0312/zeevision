@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { BpmnViewer } from ".";
+import { BpmnViewer } from "../BpmnVisualization/BpmnVisualization";
 import { useEffect, useState } from "react";
 import bpmnUrl from "./bpmn/money-loan.bpmn";
 
