@@ -3,11 +3,20 @@ import { queryPollIntervalMs } from "../utils/constants";
 
 type Instance = {
   instanceKey: number;
-  bpmnProcessId: string;
+  process: Process;
   version: number;
   processKey: string;
   status: string;
   startTime: string;
+}
+
+type Process = {
+  processKey: number;
+  deploymentTime: string;
+  bpmnProcessId: string;
+  bpmnResource: string;
+  version: number;
+  instances: Instance[];
 }
 
 interface QueryInstanceReturnType {
@@ -18,7 +27,10 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
   query SingleInstance {
     instance(instanceKey: ${id}) {
       instanceKey
-      bpmnProcessId
+      process {
+        bpmnProcessId
+        bpmnResource
+      }
       version
       processKey
       status

@@ -9,6 +9,7 @@ import MessagesPage from "./pages/MessagesPage";
 import JobsPage from "./pages/JobsPage";
 import { Snackbar } from "./components/Snackbar";
 import SingleProcessPage from "./pages/SingleProcessPage";
+import SingleInstancePage from "./pages/SingleInstancePage";
 
 const Layout = () => (
   <>
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "instances",
         element: <InstancesPage />,
+      },
+      {
+        path: "instances/:id",
+        element: <SingleInstancePage />,
       },
       {
         path: "incidents",

@@ -1,6 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import { Table } from "../components/Table";
 import { queryPollIntervalMs } from "../utils/constants";
+import { NavLink } from "react-router-dom";
 
 export default function InstancesPage() {
   const INSTANCES = gql`
@@ -35,7 +36,7 @@ export default function InstancesPage() {
                 process: { bpmnProcessId: string };
                 status: string;
                 startTime: string;
-              }) => [instanceKey, bpmnProcessId, status, startTime],
+              }) => [<NavLink to={instanceKey.toString()}>{instanceKey}</NavLink>, bpmnProcessId, status, startTime],
             )
           : []
       }
