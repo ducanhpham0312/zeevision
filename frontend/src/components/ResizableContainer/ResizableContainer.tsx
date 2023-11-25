@@ -53,7 +53,7 @@ export function ResizableContainer({ direction, children }: ResizableProps) {
       minConstraints: [Infinity, 24],
       maxConstraints: [Infinity, innerHeight * 0.9],
       width: Infinity,
-      height: innerHeight * 0.3,
+      height: window.innerHeight * 0.5,
       resizeHandles: ["s"],
     };
   }
