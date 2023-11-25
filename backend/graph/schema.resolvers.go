@@ -11,6 +11,11 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/graph/model"
 )
 
+// Variables is the resolver for the variables field.
+func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance) ([]*model.Variable, error) {
+	panic(fmt.Errorf("not implemented: Variables - variables"))
+}
+
 // Process is the resolver for the process field.
 func (r *instanceResolver) Process(ctx context.Context, obj *model.Instance) (*model.Process, error) {
 	dbProcess, err := r.Fetcher.GetProcess(ctx, obj.ProcessKey)
