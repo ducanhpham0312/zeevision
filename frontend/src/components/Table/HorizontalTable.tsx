@@ -169,29 +169,27 @@ export function HorizontalTable({
       </tbody>
       <tfoot>
         <tr>
-          {content.length > rowsPerPage ? (
-            <StyledTablePagination
-              rowsPerPageOptions={[
-                ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
-                { label: "All", value: -1 },
-              ]}
-              colSpan={colSpan}
-              count={content.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              slotProps={{
-                select: {
-                  "aria-label": "rows per page",
-                },
-                actions: {
-                  showFirstButton: true,
-                  showLastButton: true,
-                },
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          ) : null}
+          <StyledTablePagination
+            rowsPerPageOptions={[
+              ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
+              { label: "All", value: -1 },
+            ]}
+            colSpan={colSpan}
+            count={content.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            slotProps={{
+              select: {
+                "aria-label": "rows per page",
+              },
+              actions: {
+                showFirstButton: true,
+                showLastButton: true,
+              },
+            }}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </tr>
       </tfoot>
     </>
