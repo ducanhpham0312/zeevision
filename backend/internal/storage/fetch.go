@@ -89,3 +89,14 @@ func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 
 	return processes, err
 }
+
+func (f *Fetcher) GetVariablesForInstance(ctx context.Context, instanceKey int64) ([]Variable, error) {
+	var variables []Variable
+	err := f.ContextDB(ctx).
+		Where(&Variable{ProcessInstanceKey: instanceKey}).
+		Order("time DESC").
+		Find(&variables).
+		Error
+
+	return variables, err
+}

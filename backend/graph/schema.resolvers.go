@@ -13,7 +13,12 @@ import (
 
 // Variables is the resolver for the variables field.
 func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance) ([]*model.Variable, error) {
-	panic(fmt.Errorf("not implemented: Variables - variables"))
+	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch variables: %w", err)
+	}
+
+	return model.Map(dbVariables, model.FromStorageVariable), nil
 }
 
 // Process is the resolver for the process field.
