@@ -22,7 +22,6 @@
     "@mui/base": "^5.0.0-beta.24",
     "@mui/icons-material": "^5.14.18",
     "@mui/system": "^5.14.18",
-    "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@react-spring/web": "^9.7.3",
     "@types/react-dropzone": "^5.1.0",
     "@types/react-resizable": "^3.0.7",
