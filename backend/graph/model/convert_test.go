@@ -46,10 +46,12 @@ func TestFromStorageInstance(t *testing.T) {
 				Version:              1,
 				Status:               "ACTIVE",
 				StartTime:            now,
+				EndTime:              now,
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
 				StartTime:      now.UTC().Format(time.RFC3339),
+				EndTime:        now.UTC().Format(time.RFC3339),
 				InstanceKey:    10,
 				ProcessKey:     1,
 				Version:        1,
@@ -64,10 +66,12 @@ func TestFromStorageInstance(t *testing.T) {
 				Version:              2,
 				Status:               "COMPLETED",
 				StartTime:            now,
+				EndTime:              now,
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
 				StartTime:      now.UTC().Format(time.RFC3339),
+				EndTime:        now.UTC().Format(time.RFC3339),
 				InstanceKey:    20,
 				ProcessKey:     2,
 				Version:        2,
