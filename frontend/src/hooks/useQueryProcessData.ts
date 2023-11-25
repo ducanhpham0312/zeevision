@@ -50,8 +50,6 @@ export function useQueryProcessData(id: string): QueryProcessDataReturnType {
   });
   const bpmnData = useQuery(SINGLE_PROCESS_BPMN_RESOURCE_QUERY(id));
 
-  console.log(bpmnData.data?.process?.bpmnResource);
-
   return {
     process: {
       ...processData.data?.process,

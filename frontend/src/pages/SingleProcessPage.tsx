@@ -2,6 +2,7 @@ import { Table } from "../components/Table";
 import { useParams } from "react-router-dom";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { useQueryProcessData } from "../hooks/useQueryProcessData";
+import { ResizableContainer } from "../components/ResizableContainer";
 
 export default function SingleProcessPage() {
   const params = useParams();
@@ -17,23 +18,25 @@ export default function SingleProcessPage() {
   } = process;
 
   return (
-    <div className="m-[40px]">
-      <div className="mb-[40px] flex h-[30vh]">
-        <div className="w-[30vw]">
-          <Table
-            orientation="vertical"
-            header={["Process Key", "Version", "Deployment Time"]}
-            content={process ? [[processKey, version, deploymentTime]] : []}
-          />
-        </div>
-        <div className="h-full w-full border border-black/10">
+    <div className="flex h-full w-full flex-col gap-3">
+      <ResizableContainer direction="vertical">
+        <div className="flex h-full">
+          <ResizableContainer direction="horizontal">
+            <div className="w-full pr-3">
+              <Table
+                orientation="vertical"
+                header={["Process Key", "Version", "Deployment Time"]}
+                content={process ? [[processKey, version, deploymentTime]] : []}
+              />
+            </div>
+          </ResizableContainer>
           <ResponsiveBpmnViewer
             navigated
-            classname="h-full w-full"
+            className="h-full flex-grow"
             bpmnString={bpmnResource}
           />
         </div>
-      </div>
+      </ResizableContainer>
       <Table
         orientation="horizontal"
         header={["Instance Key", "Version", "Start Time"]}

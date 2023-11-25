@@ -5,7 +5,6 @@ import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
 import { queryPollIntervalMs } from "../utils/constants";
-import { DropdownMenuDemo } from "../components/DropdownMenu/demo";
 
 export default function ProcessesPage() {
   const PROCESSES = gql`
@@ -55,7 +54,7 @@ export default function ProcessesPage() {
                 <Table
                   orientation="horizontal"
                   header={["Instance Key", "Version", "Start Time"]}
-                  optionElement={() => <DropdownMenuDemo />}
+                  optionElement={() => <></>}
                   content={
                     data.processes[idx].instances
                       ? data.processes[idx].instances.map(
