@@ -10,7 +10,7 @@ export default function SingleProcessPage() {
 
   const {
     processKey,
-    // bpmnProcessId,
+    bpmnProcessId,
     version,
     deploymentTime,
     bpmnResource,
@@ -25,8 +25,17 @@ export default function SingleProcessPage() {
             <div className="w-full pr-3">
               <Table
                 orientation="vertical"
-                header={["Process Key", "Version", "Deployment Time"]}
-                content={process ? [[processKey, version, deploymentTime]] : []}
+                header={[
+                  "Process Key",
+                  "Process Id",
+                  "Version",
+                  "Deployment Time",
+                ]}
+                content={
+                  process
+                    ? [[processKey, bpmnProcessId, version, deploymentTime]]
+                    : []
+                }
               />
             </div>
           </ResizableContainer>

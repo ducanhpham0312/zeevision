@@ -147,144 +147,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="p-3"
         >
           <p>
-            sixth-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            amp
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            integer
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984642
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667164
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            new-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            kmean
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            newValue
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984100
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667542
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            another-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            anotherVariable
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            string
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984432
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667333
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
             multi-instance-process
           </p>
         </td>
@@ -292,14 +154,27 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="p-3"
         >
           <p>
-            total
+            items
           </p>
         </td>
         <td
           class="p-3"
         >
           <p>
-            200
+            [
+  {
+    "id": 1,
+    "value": 10,
+    "inCart": 10,
+    "inStock": 20
+  },
+  {
+    "id": 2,
+    "value": 20,
+    "inCart": 2,
+    "inStock": 10
+  }
+]
           </p>
         </td>
         <td
@@ -384,27 +259,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="p-3"
         >
           <p>
-            items
+            total
           </p>
         </td>
         <td
           class="p-3"
         >
           <p>
-            [
-  {
-    "id": 1,
-    "value": 10,
-    "inCart": 10,
-    "inStock": 20
-  },
-  {
-    "id": 2,
-    "value": 20,
-    "inCart": 2,
-    "inStock": 10
-  }
-]
+            200
           </p>
         </td>
         <td
@@ -419,98 +281,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         >
           <p>
             1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            sixth-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            amp
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            integer
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984642
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667164
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            new-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            kmean
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            newValue
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984100
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667542
           </p>
         </td>
         <td
@@ -574,6 +344,203 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="p-3"
         >
           <p>
+            new-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            kmean
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            newValue
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984100
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667542
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            sixth-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            amp
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            integer
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984642
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667164
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            items
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            [
+  {
+    "id": 1,
+    "value": 10,
+    "inCart": 10,
+    "inStock": 20
+  },
+  {
+    "id": 2,
+    "value": 20,
+    "inCart": 2,
+    "inStock": 10
+  }
+]
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            isValid
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            true
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
             multi-instance-process
           </p>
         </td>
@@ -603,6 +570,52 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         >
           <p>
             1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            another-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            anotherVariable
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            string
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984432
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667333
           </p>
         </td>
         <td

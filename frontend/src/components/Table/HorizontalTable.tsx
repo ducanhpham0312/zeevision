@@ -26,7 +26,7 @@ export function HorizontalTable({
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortBy, setSortBy] = React.useState("");
-  const [sortOrder, setSortOrder] = React.useState("asc");
+  const [sortOrder, setSortOrder] = React.useState("desc");
   const [expandedRow, setExpandedRow] = React.useState<number | null>(null);
   const [sortedContent, setSortedContent] =
     React.useState<(string | number)[][]>(content);
