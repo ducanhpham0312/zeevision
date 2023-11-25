@@ -1,20 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
-type ProcessType = {
-  processKey: number;
-  deploymentTime: string;
-  bpmnResource: string;
-  version: number;
-  instances: Instance[];
-};
-
-type Instance = {
-  instanceKey: number;
-  status: string;
-  startTime: string;
-};
-
 interface QueryProcessDataReturnType {
   process: ProcessType;
 }

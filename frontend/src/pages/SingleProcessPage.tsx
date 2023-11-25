@@ -1,7 +1,7 @@
 import { Table } from "../components/Table";
 import { useParams } from "react-router-dom";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
-import { useQueryProcessData } from "../hooks/useQueryProcessData";
+import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
 import { ResizableContainer } from "../components/ResizableContainer";
 
 export default function SingleProcessPage() {

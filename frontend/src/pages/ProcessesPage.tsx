@@ -1,29 +1,12 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
-import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
-import { queryPollIntervalMs } from "../utils/constants";
+import { useQueryProcesses } from "../hooks/useQueryProcesses";
 
 export default function ProcessesPage() {
-  const PROCESSES = gql`
-    query Processes {
-      processes {
-        bpmnProcessId
-        processKey
-        deploymentTime
-        instances {
-          instanceKey
-          status
-          startTime
-        }
-      }
-    }
-  `;
-  const { data } = useQuery(PROCESSES, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { processes } = useQueryProcesses();
 
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const handleOpen = () => setIsPopUpOpen(true);
@@ -56,8 +39,8 @@ export default function ProcessesPage() {
                   header={["Instance Key", "Version", "Start Time"]}
                   optionElement={() => <></>}
                   content={
-                    data.processes[idx].instances
-                      ? data.processes[idx].instances.map(
+                    processes[idx].instances
+                      ? processes[idx].instances.map(
                           ({
                             instanceKey,
                             status,
@@ -75,8 +58,8 @@ export default function ProcessesPage() {
             </div>
           )}
           content={
-            data
-              ? data.processes.map(
+            processes
+              ? (processes.map(
                   ({
                     processKey,
                     bpmnProcessId,
@@ -90,7 +73,9 @@ export default function ProcessesPage() {
                     bpmnProcessId,
                     deploymentTime,
                   ],
-                )
+                  // the item <NavLink> causes type error
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ) as any)
               : []
           }
         />

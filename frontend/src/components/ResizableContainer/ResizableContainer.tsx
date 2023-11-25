@@ -7,10 +7,7 @@ interface ResizableProps {
   direction: "horizontal" | "vertical";
 }
 
-export const ResizableContainer: React.FC<ResizableProps> = ({
-  direction,
-  children,
-}) => {
+export function ResizableContainer({ direction, children }: ResizableProps) {
   let resizableProps: ResizableBoxProps;
   const [innerHeight, setInnerHeight] = useState(window.innerWidth);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -62,4 +59,4 @@ export const ResizableContainer: React.FC<ResizableProps> = ({
   }
 
   return <ResizableBox {...resizableProps}>{children}</ResizableBox>;
-};
+}
