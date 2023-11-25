@@ -7,7 +7,13 @@ export default function InstancesPage() {
   return (
     <Table
       orientation="horizontal"
-      header={["Instance Key", "BPMN Process ID", "Status", "Start Time"]}
+      header={[
+        "Instance Key",
+        "BPMN Process ID",
+        "Status",
+        "Version",
+        "Start Time",
+      ]}
       content={
         instances
           ? instances.map(
@@ -15,13 +21,9 @@ export default function InstancesPage() {
                 instanceKey,
                 process: { bpmnProcessId },
                 status,
+                version,
                 startTime,
-              }: {
-                instanceKey: number;
-                process: { bpmnProcessId: string };
-                status: string;
-                startTime: string;
-              }) => [instanceKey, bpmnProcessId, status, startTime],
+              }) => [instanceKey, bpmnProcessId, status, version, startTime],
             )
           : []
       }

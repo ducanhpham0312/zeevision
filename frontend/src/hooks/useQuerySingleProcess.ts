@@ -14,6 +14,7 @@ const SINGLE_PROCESS_QUERY = (id: string) => gql`
         deploymentTime
         bpmnResource
         instances {
+          version
           instanceKey
           status
           startTime

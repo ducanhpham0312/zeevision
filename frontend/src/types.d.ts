@@ -18,5 +18,6 @@ type Instance = {
   instanceKey: number;
   status: string;
   startTime: string;
+  version: string;
   process: ProcessType;
 };

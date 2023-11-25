@@ -39,20 +39,15 @@ export default function SingleProcessPage() {
       </ResizableContainer>
       <Table
         orientation="horizontal"
-        header={["Instance Key", "Version", "Start Time"]}
+        header={["Instance Key", "Status", "Version", "Start Time"]}
         content={
           instances
-            ? instances.map(
-                ({
-                  instanceKey,
-                  status,
-                  startTime,
-                }: {
-                  instanceKey: number;
-                  status: string;
-                  startTime: string;
-                }) => [instanceKey, status, startTime],
-              )
+            ? instances.map(({ instanceKey, version, status, startTime }) => [
+                instanceKey,
+                status,
+                version,
+                startTime,
+              ])
             : []
         }
       />

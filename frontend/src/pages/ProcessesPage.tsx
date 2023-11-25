@@ -36,20 +36,17 @@ export default function ProcessesPage() {
               <div>
                 <Table
                   orientation="horizontal"
-                  header={["Instance Key", "Version", "Start Time"]}
+                  header={["Instance Key", "Status", "Version", "Start Time"]}
                   optionElement={() => <></>}
                   content={
                     processes[idx].instances
                       ? processes[idx].instances.map(
-                          ({
+                          ({ instanceKey, status, version, startTime }) => [
                             instanceKey,
                             status,
+                            version,
                             startTime,
-                          }: {
-                            instanceKey: number;
-                            status: string;
-                            startTime: string;
-                          }) => [instanceKey, status, startTime],
+                          ],
                         )
                       : []
                   }
@@ -60,15 +57,7 @@ export default function ProcessesPage() {
           content={
             processes
               ? (processes.map(
-                  ({
-                    processKey,
-                    bpmnProcessId,
-                    deploymentTime,
-                  }: {
-                    processKey: number;
-                    bpmnProcessId: string;
-                    deploymentTime: string;
-                  }) => [
+                  ({ processKey, bpmnProcessId, deploymentTime }) => [
                     <NavLink to={processKey.toString()}>{processKey}</NavLink>,
                     bpmnProcessId,
                     deploymentTime,

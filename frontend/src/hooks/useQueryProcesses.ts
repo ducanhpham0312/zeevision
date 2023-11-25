@@ -12,6 +12,7 @@ const PROCESSES_QUERY = () => gql`
       processKey
       deploymentTime
       instances {
+        version
         instanceKey
         status
         startTime

@@ -13,6 +13,7 @@ const PROCESSES_QUERY = () => gql`
         bpmnProcessId
       }
       status
+      version
       startTime
     }
   }
