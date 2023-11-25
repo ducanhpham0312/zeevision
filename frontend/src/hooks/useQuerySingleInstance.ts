@@ -8,6 +8,7 @@ type Instance = {
   processKey: string;
   status: string;
   startTime: string;
+  endTime: string;
 }
 
 type Process = {
@@ -35,7 +36,7 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
       processKey
       status
       startTime
-      
+      endTime
     }
   }
 `

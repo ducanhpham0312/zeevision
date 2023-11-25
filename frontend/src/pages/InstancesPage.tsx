@@ -13,6 +13,7 @@ export default function InstancesPage() {
         }
         status
         startTime
+        endTime
       }
     }
   `;

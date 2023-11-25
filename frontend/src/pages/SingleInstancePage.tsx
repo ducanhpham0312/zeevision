@@ -12,7 +12,8 @@ export default function SingleInstancesPage() {
     version,
     processKey,
     status,
-    startTime
+    startTime,
+    endTime,
   } = instance;
   const bpmnProcessId = process ? process.bpmnProcessId : ""
   const bpmnResource = process ? process.bpmnResource : ""
@@ -27,10 +28,11 @@ export default function SingleInstancesPage() {
             "Version",
             "Process Key",
             "Status",
-            "Start Time"
+            "Start Time",
+            "End Time"
           ]}
           content={
-            instance ? [[instanceKey, bpmnProcessId, version, processKey, status, startTime]] : []
+            instance ? [[instanceKey, bpmnProcessId, version, processKey, status, startTime, endTime]] : []
           }
         />
         <BpmnViewer bpmnString={atob(bpmnResource)} />
