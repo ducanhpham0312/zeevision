@@ -33,11 +33,20 @@ type Process {
 type Instance {
   bpmnLiveStatus: String!
   startTime: DateTime!
+  endTime: DateTime!
   instanceKey: Int!
   processKey: Int!
   version: Int!
   status: Status!
+  variables: [Variable!]! @goField(forceResolver: true)
   process: Process! @goField(forceResolver: true)
+}
+
+type Variable {
+  elementId: Int!
+  name: String!
+  value: String!
+  time: DateTime!
 }
 
 type MessageSubscription {

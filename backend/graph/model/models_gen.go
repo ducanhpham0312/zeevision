@@ -9,13 +9,15 @@ import (
 )
 
 type Instance struct {
-	BpmnLiveStatus string   `json:"bpmnLiveStatus"`
-	StartTime      string   `json:"startTime"`
-	InstanceKey    int64    `json:"instanceKey"`
-	ProcessKey     int64    `json:"processKey"`
-	Version        int64    `json:"version"`
-	Status         Status   `json:"status"`
-	Process        *Process `json:"process"`
+	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
+	StartTime      string      `json:"startTime"`
+	EndTime        string      `json:"endTime"`
+	InstanceKey    int64       `json:"instanceKey"`
+	ProcessKey     int64       `json:"processKey"`
+	Version        int64       `json:"version"`
+	Status         Status      `json:"status"`
+	Variables      []*Variable `json:"variables"`
+	Process        *Process    `json:"process"`
 }
 
 type MessageSubscription struct {
@@ -45,6 +47,13 @@ type Timer struct {
 	Repetitions        string `json:"repetitions"`
 	StartTime          string `json:"startTime"`
 	Status             Status `json:"status"`
+}
+
+type Variable struct {
+	ElementID int64  `json:"elementId"`
+	Name      string `json:"name"`
+	Value     string `json:"value"`
+	Time      string `json:"time"`
 }
 
 type Status string

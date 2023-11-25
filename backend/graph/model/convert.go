@@ -35,7 +35,8 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
-		StartTime:      instance.StartTime.UTC().Format(time.RFC3339),
+		StartTime:      formatTime(instance.StartTime),
+		EndTime:        formatTime(instance.EndTime),
 		InstanceKey:    instance.ProcessInstanceKey,
 		ProcessKey:     instance.ProcessDefinitionKey,
 		Version:        instance.Version,
@@ -51,10 +52,23 @@ func FromStorageProcess(process storage.Process) *Process {
 		CompletedInstances: 0,  // TODO
 		BpmnLiveStatus:     "", // TODO
 		BpmnProcessID:      process.BpmnProcessID,
-		DeploymentTime:     process.DeploymentTime.UTC().Format(time.RFC3339),
+		DeploymentTime:     formatTime(process.DeploymentTime),
 		ProcessKey:         process.ProcessDefinitionKey,
 		Version:            process.Version,
 		// Instances, MessageSubscriptions, Timers, BpmnResource have their
 		// own resolvers and are not populated here.
 	}
+}
+
+func FromStorageVariable(variable storage.Variable) *Variable {
+	return &Variable{
+		ElementID: variable.ElementID,
+		Name:      variable.Name,
+		Value:     variable.Value,
+		Time:      formatTime(variable.Time),
+	}
+}
+
+func formatTime(t time.Time) string {
+	return t.UTC().Format(time.RFC3339)
 }
