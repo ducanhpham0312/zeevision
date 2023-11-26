@@ -41,7 +41,8 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 		ProcessKey:     instance.ProcessDefinitionKey,
 		Version:        instance.Version,
 		Status:         status,
-		// Process has its own resolver and is not populated here.
+		// Variables and Process have their own resolvers and are not populated
+		// here.
 	}
 }
 
@@ -60,6 +61,7 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage variable to GraphQL variable.
 func FromStorageVariable(variable storage.Variable) *Variable {
 	return &Variable{
 		ElementID: variable.ElementID,
@@ -69,6 +71,7 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 	}
 }
 
+// Convert time to RFC3339 format.
 func formatTime(t time.Time) string {
 	return t.UTC().Format(time.RFC3339)
 }
