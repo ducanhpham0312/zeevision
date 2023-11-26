@@ -1,6 +1,4 @@
 import { Table } from "../components/Table";
-import { queryPollIntervalMs } from "../utils/constants";
-import { NavLink } from "react-router-dom";
 import { useQueryInstances } from "../hooks/useQueryInstances";
 
 export default function InstancesPage() {
