@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
@@ -85,30 +86,33 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 		resources := record.Value.Resources
 		processes := record.Value.ProcessesMetadata
 
-		resourceMap := map[string]string{}
+		resourceMap := map[string][]byte{}
 		for _, resource := range resources {
-			resourceMap[resource.ResourceName] = string(resource.Resource)
+			resourceMap[resource.ResourceName] = resource.Resource
 		}
 
 		// Make storage for errors
 		var errs []error
 		for _, process := range processes {
-			processId := process.BpmnProcessID
-			processKey := process.ProcessDefinitionKey
+			bpmnProcessID := process.BpmnProcessID
+			processDefinitionKey := process.ProcessDefinitionKey
 			bpmnResource := resourceMap[process.ResourceName]
+			deploymentTime := time.UnixMilli(record.Timestamp)
 			version := process.Version
-			log.Printf("Deploying %s", bpmnResource)
+			log.Printf("Deploying %s", bpmnProcessID)
 			err := storer.ProcessDeployed(
-				processId,
-				processKey,
-				bpmnResource,
+				processDefinitionKey,
+				bpmnProcessID,
 				version,
+				deploymentTime,
+				bpmnResource,
 			)
 			if err != nil {
 				errs = append(errs, err)
+			} else {
+				log.Printf("Deployed process %d (%s)",
+					processDefinitionKey, bpmnProcessID)
 			}
-			log.Printf("Deployed process %d (%s)",
-				processKey, processId)
 		}
 
 		if errs != nil {
