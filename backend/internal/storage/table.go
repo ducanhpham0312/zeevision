@@ -28,9 +28,8 @@ type Process struct {
 
 // Variable model struct for the 'variables' database table.
 type Variable struct {
-	ElementID          int64     `gorm:"primarykey"`
-	ProcessInstanceKey int64     `gorm:"not null"`
-	Name               string    `gorm:"not null"`
+	ProcessInstanceKey int64     `gorm:"primarykey;autoIncrement:false"`
+	Name               string    `gorm:"primarykey"`
 	Value              string    `gorm:"not null"`
 	Time               time.Time `gorm:"not null"`
 }

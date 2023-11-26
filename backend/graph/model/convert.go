@@ -65,10 +65,9 @@ func FromStorageProcess(process storage.Process) *Process {
 // Convert storage variable to GraphQL variable.
 func FromStorageVariable(variable storage.Variable) *Variable {
 	return &Variable{
-		ElementID: variable.ElementID,
-		Name:      variable.Name,
-		Value:     variable.Value,
-		Time:      formatTime(variable.Time),
+		Name:  variable.Name,
+		Value: variable.Value,
+		Time:  formatTime(variable.Time),
 	}
 }
 

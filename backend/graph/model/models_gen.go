@@ -50,10 +50,9 @@ type Timer struct {
 }
 
 type Variable struct {
-	ElementID int64  `json:"elementId"`
-	Name      string `json:"name"`
-	Value     string `json:"value"`
-	Time      string `json:"time"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
+	Time  string `json:"time"`
 }
 
 type Status string

@@ -43,7 +43,6 @@ type Instance {
 }
 
 type Variable {
-  elementId: Int!
   name: String!
   value: String!
   time: DateTime!
