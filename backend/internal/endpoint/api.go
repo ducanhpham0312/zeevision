@@ -8,17 +8,20 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/ducanhpham0312/zeevision/backend/graph"
+	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 	"github.com/gorilla/websocket"
 )
 
 const (
 	QueryCacheSize     = 1000
 	PersistedQuerySize = 100
+
+	KeepAlivePingInterval = 5
 )
 
-func newAPIHandler() *qlhandler.Server {
+func newAPIHandler(fetcher *storage.Fetcher) *qlhandler.Server {
 	// Setup GraphQL schema options.
-	rootResolver := &graph.Resolver{}
+	rootResolver := &graph.Resolver{Fetcher: fetcher}
 	config := graph.Config{Resolvers: rootResolver}
 	schema := graph.NewExecutableSchema(config)
 

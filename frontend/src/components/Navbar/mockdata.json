@@ -1,0 +1,26 @@
+[
+  {
+    "name": "PROCESSES",
+    "path": "/processes"
+  },
+  {
+    "name": "INSTANCES",
+    "path": "/instances"
+  },
+  {
+    "name": "INCIDENTS",
+    "path": "/incidents"
+  },
+  {
+    "name": "JOBS",
+    "path": "/jobs"
+  },
+  {
+    "name": "MESSAGES",
+    "path": "/messages"
+  },
+  {
+    "name": "ERRORS",
+    "path": "/errors"
+  }
+]

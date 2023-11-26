@@ -2,13 +2,14 @@ import { Table } from "../components/Table";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { BpmnViewer } from "../components/BpmnViewer";
+import { queryPollIntervalMs } from "../utils/constants";
 
 export default function ProcessesPage() {
   const params = useParams();
   const PROCESS = gql`
     query SingleProcess {
       process(processKey: ${params.id}) {
-        processId
+        bpmnProcessId
         processKey
         version
         deploymentTime
@@ -21,10 +22,12 @@ export default function ProcessesPage() {
       }
     }
   `;
-  const { data } = useQuery(PROCESS);
+  const { data } = useQuery(PROCESS, {
+    pollInterval: queryPollIntervalMs,
+  });
   const {
     processKey,
-    processId,
+    bpmnProcessId,
     version,
     deploymentTime,
     bpmnResource,
@@ -44,7 +47,7 @@ export default function ProcessesPage() {
             "Deployment Time",
           ]}
           content={
-            data ? [[processKey, processId, version, deploymentTime]] : []
+            data ? [[processKey, bpmnProcessId, version, deploymentTime]] : []
           }
         />
         <BpmnViewer bpmnString={decodedBpmn} />

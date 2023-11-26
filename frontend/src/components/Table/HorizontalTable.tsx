@@ -73,44 +73,40 @@ export function HorizontalTable({ header, content }: HorizontalTableProps) {
               className="cursor-pointer p-3 text-left"
             >
               <div className="flex justify-between">
-                <p>{item}</p>
-                <span className="w-10 text-right">
+                <p>
+                  {item}
                   {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
-                </span>
+                </p>
               </div>
             </th>
           ))}
         </tr>
       </thead>
       <tbody aria-label="custom pagination table">
-        {(rowsPerPage > 0
-          ? sortedContent.slice(
-              page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage,
-            )
-          : sortedContent
-        ).map((row, rowIdx) => (
-          <tr
-            className={
-              "border-b border-black/10 " +
-              (rowIdx % 2 === 0
-                ? "hover:bg-second-accent/10"
-                : "bg-second-accent hover:bg-second-accent/20")
-            }
-            key={rowIdx}
-          >
-            {row.map((cell, index) => (
-              <td className="p-3" key={index}>
-                <pre>
-                  {typeof cell === "string" ? prettifyJson(cell) : cell}
-                </pre>
-              </td>
-            ))}
-          </tr>
-        ))}
+        {sortedContent
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((row, rowIdx) => (
+            <tr
+              className={
+                "border-b border-black/10 " +
+                (rowIdx % 2 === 0
+                  ? "hover:bg-second-accent/10"
+                  : "bg-second-accent hover:bg-second-accent/20")
+              }
+              key={rowIdx}
+            >
+              {row.map((cell, index) => (
+                <td className="p-3" key={index}>
+                  <pre>
+                    {typeof cell === "string" ? prettifyJson(cell) : cell}
+                  </pre>
+                </td>
+              ))}
+            </tr>
+          ))}
         {emptyRows > 0 && (
           <tr style={{ height: 41 * emptyRows }}>
-            <td colSpan={header.length} aria-hidden />
+            <td colSpan={header.length} />
           </tr>
         )}
       </tbody>

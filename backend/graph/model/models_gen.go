@@ -6,7 +6,7 @@ type Instance struct {
 	BpmnLiveStatus string `json:"bpmnLiveStatus"`
 	BpmnResource   string `json:"bpmnResource"`
 	StartTime      string `json:"startTime"`
-	ProcessID      int64  `json:"processId"`
+	BpmnProcessID  string `json:"bpmnProcessId"`
 	InstanceKey    int64  `json:"instanceKey"`
 	Version        int64  `json:"version"`
 	Status         string `json:"status"`
@@ -27,7 +27,7 @@ type Process struct {
 	DeploymentTime       string                 `json:"deploymentTime"`
 	Instances            []*Instance            `json:"instances"`
 	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
-	ProcessID            int64                  `json:"processId"`
+	BpmnProcessID        string                 `json:"bpmnProcessId"`
 	ProcessKey           int64                  `json:"processKey"`
 	Timers               []*Timer               `json:"timers"`
 	Version              int64                  `json:"version"`

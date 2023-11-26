@@ -31,28 +31,50 @@ func (r *processResolver) Timers(ctx context.Context, obj *model.Process) ([]*mo
 
 // Processes is the resolver for the processes field.
 func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error) {
-	return dummyProcesses, nil
+	dbProcesses, err := r.Fetcher.GetProcesses(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch processes: %w", err)
+	}
+
+	processes := make([]*model.Process, 0, len(dbProcesses))
+	for _, dbProcess := range dbProcesses {
+		processes = append(processes, &model.Process{
+			ProcessKey:    dbProcess.ProcessKey,
+			BpmnProcessID: dbProcess.BpmnProcessID,
+			BpmnResource:  dbProcess.BpmnResource,
+		})
+	}
+
+	return processes, nil
 }
 
 // Process is the resolver for the process field.
 func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.Process, error) {
-	for _, process := range dummyProcesses {
-		if process.ProcessKey == processKey {
-			return process, nil
-		}
+	dbProcess, err := r.Fetcher.GetProcess(ctx, processKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch process: %w", err)
 	}
 
-	return nil, fmt.Errorf("process with given key %d doesn't exist", processKey)
+	return &model.Process{
+		ProcessKey:    dbProcess.ProcessKey,
+		BpmnProcessID: dbProcess.BpmnProcessID,
+		BpmnResource:  dbProcess.BpmnResource,
+	}, nil
 }
 
 // Instances is the resolver for the instances field.
 func (r *queryResolver) Instances(ctx context.Context) ([]*model.Instance, error) {
-	panic(fmt.Errorf("not implemented: Instances - instances"))
+	return dummyInstances, nil
 }
 
 // Instance is the resolver for the instance field.
 func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model.Instance, error) {
-	panic(fmt.Errorf("not implemented: Instance - instance"))
+	for _, instance := range dummyInstances {
+		if instance.InstanceKey == instanceKey {
+			return instance, nil
+		}
+	}
+	return nil, fmt.Errorf("instance with given key %d doesn't exist", instanceKey)
 }
 
 // Process returns ProcessResolver implementation.

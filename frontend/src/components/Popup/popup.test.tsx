@@ -1,5 +1,5 @@
-import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { render, fireEvent, screen } from "@testing-library/react";
 import { Popup } from "./Popup";
 import { Button } from "../Button";
 import * as mockdata from "./mockdata.json";

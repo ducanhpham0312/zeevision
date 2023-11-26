@@ -1,20 +1,42 @@
-import { useState } from "react";
-import { Button } from "../components/Button";
-import { DeployProcessPopup } from "../components/DeployProcessPopup";
+import { gql, useQuery } from "@apollo/client";
+import { Table } from "../components/Table";
+import { queryPollIntervalMs } from "../utils/constants";
+
 export default function InstancesPage() {
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-  const handleOpen = () => setIsPopUpOpen(true);
-  const handleClose = () => setIsPopUpOpen(false);
+  const INSTANCES = gql`
+    query Instances {
+      instances {
+        instanceKey
+        bpmnProcessId
+        status
+        startTime
+      }
+    }
+  `;
+  const { data } = useQuery(INSTANCES, {
+    pollInterval: queryPollIntervalMs,
+  });
   return (
-    <>
-      <h1>InstancesPage</h1>
-      {/** Temporary test for open Modal */}
-      <Button onClick={handleOpen}>Deploy a Process</Button>
-      <DeployProcessPopup
-        isPopUpOpen={isPopUpOpen}
-        onOpenPopUp={handleOpen}
-        onClosePopUp={handleClose}
-      />
-    </>
+    <Table
+      orientation="horizontal"
+      header={["Instance Key", "BPMN Process ID", "Status", "Start Time"]}
+      content={
+        data
+          ? data.instances.map(
+              ({
+                instanceKey,
+                bpmnProcessId,
+                status,
+                startTime,
+              }: {
+                instanceKey: number;
+                bpmnProcessId: string;
+                status: string;
+                startTime: string;
+              }) => [instanceKey, bpmnProcessId, status, startTime],
+            )
+          : []
+      }
+    />
   );
 }
