@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"database/sql"
 	"encoding/base64"
 	"fmt"
 	"time"
@@ -83,7 +84,38 @@ func (r *Storer) ProcessInstanceCompleted(
 		Select("Status", "EndTime").
 		Updates(Instance{
 			Status:  "COMPLETED",
-			EndTime: endTime,
+			EndTime: sql.NullTime{
+				Time: endTime, 
+				Valid: true,
+			},
+		}).Error
+	if err != nil {
+		return fmt.Errorf("failed to update instance: %w", err)
+	}
+
+	return nil
+}
+
+func (r *Storer) ProcessInstanceTerminated(
+	processInstanceKey int64,
+	endTime time.Time,
+) error {
+	var instance Instance
+	err := r.db.
+		Where(&Instance{ProcessInstanceKey: processInstanceKey}).
+		First(&instance).Error
+	if err != nil {
+		return fmt.Errorf("failed to find process instance: %w", err)
+	}
+
+	err = r.db.Model(&instance).
+		Select("Status", "EndTime").
+		Updates(Instance{
+			Status:  "TERMINATED",
+			EndTime: sql.NullTime{
+				Time: endTime, 
+				Valid: true,
+			},
 		}).Error
 	if err != nil {
 		return fmt.Errorf("failed to update instance: %w", err)

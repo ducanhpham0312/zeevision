@@ -226,12 +226,15 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		}
 	case IntentElementTerminating:
 		if bpmnElementType == "PROCESS" {
-			log.Printf("Process instance completing: %d", processInstanceKey)
+			log.Printf("Process instance terminating: %d", processInstanceKey)
 		}
 	case IntentElementTerminated:
 		if bpmnElementType == "PROCESS" {
-			log.Printf("Process instance completed: %d", processInstanceKey)
-			// TODO we need a status for this
+			log.Printf("Process instance terminated: %d", processInstanceKey)
+			return storer.ProcessInstanceTerminated(
+				processInstanceKey,
+				time.UnixMilli(record.Timestamp),
+			)
 		}
 	default:
 		log.Printf("Unhandled intent for %v: %s",
