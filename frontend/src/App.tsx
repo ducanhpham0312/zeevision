@@ -14,7 +14,7 @@ const Layout = () => (
   <>
     <Navbar />
     <Snackbar />
-    <div style={{ marginTop: "70px" }}>
+    <div className="m-4 mt-[70px]">
       <Outlet />
     </div>
   </>

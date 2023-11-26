@@ -6,11 +6,13 @@ import (
 
 // Instance model struct for the 'instances' database table.
 type Instance struct {
-	ProcessInstanceKey   int64     `gorm:"primarykey"`
-	ProcessDefinitionKey int64     `gorm:"not null"`
-	Version              int64     `gorm:"not null"`
-	Status               string    `gorm:"not null"`
-	StartTime            time.Time `gorm:"not null"`
+	ProcessInstanceKey   int64      `gorm:"primarykey"`
+	ProcessDefinitionKey int64      `gorm:"not null"`
+	Version              int64      `gorm:"not null"`
+	Status               string     `gorm:"not null"`
+	StartTime            time.Time  `gorm:"not null"`
+	EndTime              time.Time  `gorm:"not null"`
+	Variables            []Variable `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 }
 
 // Process model struct for the 'processes' database table.
@@ -21,6 +23,15 @@ type Process struct {
 	DeploymentTime       time.Time    `gorm:"not null"`
 	BpmnResource         BpmnResource `gorm:"foreignKey:BpmnProcessID;references:BpmnProcessID"`
 	Instances            []Instance   `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
+}
+
+// Variable model struct for the 'variables' database table.
+type Variable struct {
+	ElementID          int64     `gorm:"primarykey"`
+	ProcessInstanceKey int64     `gorm:"not null"`
+	Name               string    `gorm:"not null"`
+	Value              string    `gorm:"not null"`
+	Time               time.Time `gorm:"not null"`
 }
 
 // BpmnResource model struct for the 'bpmn_resources' database table.

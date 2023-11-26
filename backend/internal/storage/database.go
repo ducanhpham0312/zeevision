@@ -12,6 +12,7 @@ import (
 var migrations = []any{
 	&Process{},
 	&Instance{},
+	&Variable{},
 	&BpmnResource{},
 }
 

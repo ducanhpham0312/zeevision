@@ -61,7 +61,7 @@ export function useDragDrop(): UseDragDropReturnType {
       );
       window.document.documentElement.removeEventListener("drop", handleDrop);
     };
-  });
+  }, []);
 
   return { dragging, file };
 }
