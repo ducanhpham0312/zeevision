@@ -28,7 +28,7 @@ export interface TableProps {
 export function Table({ orientation, ...props }: TableProps) {
   if (props.header.length === 0) return null;
   return (
-    <table className="w-full border-collapse rounded">
+    <table className="w-full border-collapse rounded bg-white">
       {orientation === "horizontal" ? (
         <HorizontalTable {...props} />
       ) : (

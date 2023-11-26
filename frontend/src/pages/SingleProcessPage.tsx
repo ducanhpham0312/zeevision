@@ -18,7 +18,7 @@ export default function SingleProcessPage() {
   } = process;
 
   return (
-    <div className="flex h-full w-full flex-col gap-3">
+    <div className="flex h-full w-full flex-col">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
@@ -47,20 +47,22 @@ export default function SingleProcessPage() {
           />
         </div>
       </ResizableContainer>
-      <Table
-        orientation="horizontal"
-        header={["Instance Key", "Status", "Version", "Start Time"]}
-        content={
-          instances
-            ? instances.map(({ instanceKey, version, status, startTime }) => [
-                instanceKey,
-                status,
-                version,
-                startTime,
-              ])
-            : []
-        }
-      />
+      <div className="z-50 bg-white pt-[20px]">
+        <Table
+          orientation="horizontal"
+          header={["Instance Key", "Status", "Version", "Start Time"]}
+          content={
+            instances
+              ? instances.map(({ instanceKey, version, status, startTime }) => [
+                  instanceKey,
+                  status,
+                  version,
+                  startTime,
+                ])
+              : []
+          }
+        />
+      </div>
     </div>
   );
 }
