@@ -33,7 +33,7 @@ type Process {
 type Instance {
   bpmnLiveStatus: String!
   startTime: DateTime!
-  endTime: DateTime!
+  endTime: DateTime
   instanceKey: Int!
   processKey: Int!
   version: Int!

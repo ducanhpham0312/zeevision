@@ -711,14 +711,11 @@ func (ec *executionContext) _Instance_endTime(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+	return ec.marshalODateTime2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Instance_endTime(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4343,9 +4340,6 @@ func (ec *executionContext) _Instance(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "endTime":
 			out.Values[i] = ec._Instance_endTime(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "instanceKey":
 			out.Values[i] = ec._Instance_instanceKey(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5919,6 +5913,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalODateTime2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODateTime2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalString(*v)
 	return res
 }
 

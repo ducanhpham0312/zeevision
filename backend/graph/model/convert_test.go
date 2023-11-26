@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"testing"
 	"time"
 
@@ -32,6 +33,7 @@ func TestFromStorageBpmnResource(t *testing.T) {
 
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
+	nowFormatted := now.UTC().Format(time.RFC3339)
 
 	tests := []struct {
 		name            string
@@ -46,12 +48,12 @@ func TestFromStorageInstance(t *testing.T) {
 				Version:              1,
 				Status:               "ACTIVE",
 				StartTime:            now,
-				EndTime:              now,
+				EndTime:              sql.NullTime{},
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
-				StartTime:      now.UTC().Format(time.RFC3339),
-				EndTime:        now.UTC().Format(time.RFC3339),
+				StartTime:      nowFormatted,
+				EndTime:        nil,
 				InstanceKey:    10,
 				ProcessKey:     1,
 				Version:        1,
@@ -66,12 +68,12 @@ func TestFromStorageInstance(t *testing.T) {
 				Version:              2,
 				Status:               "COMPLETED",
 				StartTime:            now,
-				EndTime:              now,
+				EndTime:              sql.NullTime{Time: now, Valid: true},
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
-				StartTime:      now.UTC().Format(time.RFC3339),
-				EndTime:        now.UTC().Format(time.RFC3339),
+				StartTime:      nowFormatted,
+				EndTime:        &nowFormatted,
 				InstanceKey:    20,
 				ProcessKey:     2,
 				Version:        2,

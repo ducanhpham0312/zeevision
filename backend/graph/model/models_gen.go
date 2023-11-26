@@ -11,7 +11,7 @@ import (
 type Instance struct {
 	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
 	StartTime      string      `json:"startTime"`
-	EndTime        string      `json:"endTime"`
+	EndTime        *string     `json:"endTime,omitempty"`
 	InstanceKey    int64       `json:"instanceKey"`
 	ProcessKey     int64       `json:"processKey"`
 	Version        int64       `json:"version"`

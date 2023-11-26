@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -36,7 +37,7 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
 		StartTime:      formatTime(instance.StartTime),
-		EndTime:        formatTime(instance.EndTime),
+		EndTime:        formatNullTime(instance.EndTime),
 		InstanceKey:    instance.ProcessInstanceKey,
 		ProcessKey:     instance.ProcessDefinitionKey,
 		Version:        instance.Version,
@@ -74,4 +75,14 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 // Convert time to RFC3339 format.
 func formatTime(t time.Time) string {
 	return t.UTC().Format(time.RFC3339)
+}
+
+// Convert nullable time to RFC3339 format. Null times are converted to nil.
+func formatNullTime(nt sql.NullTime) *string {
+	if !nt.Valid {
+		return nil
+	}
+
+	t := formatTime(nt.Time)
+	return &t
 }
