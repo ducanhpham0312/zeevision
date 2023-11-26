@@ -26,14 +26,11 @@ export function NewInstancePopup({
   const [variablesObject, setVariablesObject] = useState({});
 
   useEffect(() => {
-    setVariablesObject(() => {
-      try {
-        return JSON.parse(variablesJsonString);
-      } catch (e) {
-        return undefined;
-      }
-    });
-  }, [variablesJsonString]);
+    if (!isPopUpOpen) {
+      setVariablesJsonString("{\n\t\n}");
+      setVariablesObject({});
+    }
+  }, [isPopUpOpen]);
 
   const handlePrettify = () => {
     if (!variablesObject) {
@@ -41,6 +38,17 @@ export function NewInstancePopup({
     }
 
     setVariablesJsonString(JSON.stringify(variablesObject, null, 2));
+  };
+
+  const handleChange = (value: string) => {
+    setVariablesJsonString(value);
+    setVariablesObject(() => {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return undefined;
+      }
+    });
   };
 
   return (
@@ -66,7 +74,7 @@ export function NewInstancePopup({
               mode="json"
               theme="tomorrow"
               value={variablesJsonString}
-              onChange={(value) => setVariablesJsonString(value)}
+              onChange={handleChange}
               fontSize={14}
               showPrintMargin={false}
               showGutter={true}
