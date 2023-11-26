@@ -52,7 +52,9 @@ export default function SingleProcessPage() {
         content={
           instances
             ? instances.map(({ instanceKey, version, status, startTime }) => [
-                <NavLink to={`/instances/${instanceKey.toString()}`}>{instanceKey}</NavLink>,
+                <NavLink to={`/instances/${instanceKey.toString()}`}>
+                  {instanceKey}
+                </NavLink>,
                 status,
                 version,
                 startTime,

@@ -42,7 +42,11 @@ export default function ProcessesPage() {
                     processes[idx].instances
                       ? processes[idx].instances.map(
                           ({ instanceKey, status, version, startTime }) => [
-                            <NavLink to={`/instances/${instanceKey.toString()}`}>{instanceKey}</NavLink>,
+                            <NavLink
+                              to={`/instances/${instanceKey.toString()}`}
+                            >
+                              {instanceKey}
+                            </NavLink>,
                             status,
                             version,
                             startTime,
