@@ -78,7 +78,7 @@ export function DeployProcessPopup({
             <div className="w-full">
               {bpmnString ? (
                 <ResponsiveBpmnViewer
-                  classname="py-1 h-[300px]"
+                  className="h-[300px] py-1"
                   bpmnString={bpmnString}
                   navigated={true}
                 />

@@ -1,77 +1,74 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
-import { useUIStore } from "../contexts/useUIStore";
-import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
-import { queryPollIntervalMs } from "../utils/constants";
+import { useQueryProcesses } from "../hooks/useQueryProcesses";
 
 export default function ProcessesPage() {
-  const PROCESSES = gql`
-    query Processes {
-      processes {
-        bpmnProcessId
-        processKey
-        deploymentTime
-      }
-    }
-  `;
-  const { data } = useQuery(PROCESSES, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { processes } = useQueryProcesses();
 
-  const { setSnackbarContent } = useUIStore();
-
-  const handleClick = (type: "success" | "error") => {
-    setSnackbarContent({
-      title: "This is a test",
-      message: "Everything was sent to the desired address.",
-      type,
-    });
-  };
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const handleOpen = () => setIsPopUpOpen(true);
   const handleClose = () => setIsPopUpOpen(false);
 
   return (
     <>
-      <h1>ProcessesPage</h1>
-      <Button variant="primary" onClick={() => handleClick("success")}>
-        Test success snackbar
-      </Button>
-      <Button variant="secondary" onClick={() => handleClick("error")}>
-        Test error snackbar
-      </Button>
-      <Button onClick={handleOpen}>Deploy a Process</Button>
       <DeployProcessPopup
         isPopUpOpen={isPopUpOpen}
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
       />
-      <Table
-        header={["Process Key", "Process ID", "Deployment Time"]}
-        orientation="horizontal"
-        content={
-          data
-            ? data.processes.map(
-                ({
-                  processKey,
-                  bpmnProcessId,
-                  deploymentTime,
-                }: {
-                  processKey: number;
-                  bpmnProcessId: string;
-                  deploymentTime: string;
-                }) => [
-                  <NavLink to={processKey.toString()}>{processKey}</NavLink>,
-                  bpmnProcessId,
-                  deploymentTime,
-                ],
-              )
-            : []
-        }
-      />
+      <div className="flex flex-col gap-10">
+        <div className="flex items-center justify-between">
+          <h1>PROCESSES</h1>
+          <Button onClick={handleOpen} variant="secondary">
+            Deploy a Process
+          </Button>
+        </div>
+        <Table
+          alterRowColor
+          header={["Process Key", "Process ID", "Deployment Time"]}
+          orientation="horizontal"
+          expandElement={(idx: number) => (
+            <div className="flex flex-col gap-4 p-4">
+              <p>Process Details:</p>
+              <div>
+                <Table
+                  orientation="horizontal"
+                  header={["Instance Key", "Status", "Version", "Start Time"]}
+                  optionElement={() => <></>}
+                  content={
+                    processes[idx].instances
+                      ? processes[idx].instances.map(
+                          ({ instanceKey, status, version, startTime }) => [
+                            instanceKey,
+                            status,
+                            version,
+                            startTime,
+                          ],
+                        )
+                      : []
+                  }
+                />
+              </div>
+            </div>
+          )}
+          content={
+            processes
+              ? (processes.map(
+                  ({ processKey, bpmnProcessId, deploymentTime }) => [
+                    <NavLink to={processKey.toString()}>{processKey}</NavLink>,
+                    bpmnProcessId,
+                    deploymentTime,
+                  ],
+                  // the item <NavLink> causes type error
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ) as any)
+              : []
+          }
+        />
+      </div>
     </>
   );
 }
