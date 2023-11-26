@@ -127,7 +127,8 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 				// TODO: don't necessarily log every message like this
 				select {
 				case msgChannel <- msg.Value:
-					log.Printf("Consumed message offset %d\n", msg.Offset)
+					log.Printf("[%s/%d] Consumed message offset %d\n",
+						topic, partition, msg.Offset)
 					// log.Printf("value: %s\n", string(msg.Value))
 				case <-closeChannel:
 					// Also listen to closeChannel here to

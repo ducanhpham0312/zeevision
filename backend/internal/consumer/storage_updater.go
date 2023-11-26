@@ -66,8 +66,16 @@ readLoop:
 					log.Printf("Failed to handle deployment: %v", err)
 					continue readLoop
 				}
+			case ValueTypeProcess:
+				err = u.handleProcess(&untypedRecord)
+				if err != nil {
+					log.Printf("Failed to handle process: %v", err)
+					continue readLoop
+				}
+
 			default:
-				log.Printf("Unhandled record: %v", untypedRecord)
+				log.Printf("Unhandled record: %v (intent: %v)",
+					untypedRecord.ValueType, untypedRecord.Intent)
 			}
 		}
 	}
@@ -122,6 +130,22 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 
 		// We'll also get IntentFullyDistributed once it's distributed to all
 		// zeebe partitions but I'm not sure that's useful information to us
+	}
+
+	// If we get here we did nothing or missed all err returns so handling
+	// succeeded
+	return nil
+}
+
+func (u *storageUpdater) handleProcess(untypedRecord *UntypedRecord) error {
+	record, err := WithTypedValue[ProcessValue](*untypedRecord)
+	if err != nil {
+		return fmt.Errorf("failed to cast: %w", err)
+	}
+
+	switch record.Intent {
+	case IntentCreated:
+		fmt.Printf("Record: %v", record)
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
