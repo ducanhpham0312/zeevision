@@ -29,4 +29,4 @@ type VariableType = {
   name: string;
   value: string;
   time: string;
-}
+};

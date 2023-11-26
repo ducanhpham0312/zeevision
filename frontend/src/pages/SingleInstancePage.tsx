@@ -15,32 +15,44 @@ export default function SingleInstancesPage() {
     status,
     startTime,
     endTime,
-    variables
+    variables,
   } = instance;
-  const bpmnProcessId = process ? process.bpmnProcessId : ""
-  const bpmnResource = process ? process.bpmnResource : ""
+  const bpmnProcessId = process ? process.bpmnProcessId : "";
+  const bpmnResource = process ? process.bpmnResource : "";
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
-          <div className="w-full pr-3">
-            <Table
-              orientation="vertical"
-              header={[
-                "Instance Key",
-                "BPMN Process ID",
-                "Version",
-                "Process Key",
-                "Status",
-                "Start Time",
-                "End Time",
-              ]}
-              content={
-                instance ? [[instanceKey, bpmnProcessId, version, processKey, status, startTime, endTime]] : []
-              }
-            />
-          </div>
+            <div className="w-full pr-3">
+              <Table
+                orientation="vertical"
+                header={[
+                  "Instance Key",
+                  "BPMN Process ID",
+                  "Version",
+                  "Process Key",
+                  "Status",
+                  "Start Time",
+                  "End Time",
+                ]}
+                content={
+                  instance
+                    ? [
+                        [
+                          instanceKey,
+                          bpmnProcessId,
+                          version,
+                          processKey,
+                          status,
+                          startTime,
+                          endTime,
+                        ],
+                      ]
+                    : []
+                }
+              />
+            </div>
           </ResizableContainer>
           <ResponsiveBpmnViewer
             navigated
@@ -54,14 +66,10 @@ export default function SingleInstancesPage() {
         header={["Variable Name", "Variable value", "Time"]}
         content={
           variables
-            ? variables.map(({ name, value, time }) => [
-                name,
-                value,
-                time,
-            ])
+            ? variables.map(({ name, value, time }) => [name, value, time])
             : []
         }
       />
     </div>
-  )
+  );
 }

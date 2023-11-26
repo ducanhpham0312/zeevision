@@ -2,7 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
 interface QueryInstanceReturnType {
-  instance: Instance
+  instance: Instance;
 }
 
 const SINGLE_INSTANCE_QUERY = (id: string) => gql`
@@ -25,9 +25,9 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
       }
     }
   }
-`
+`;
 
-// TODO after issue #126: query for instance's bpmnResource. 
+// TODO after issue #126: query for instance's bpmnResource.
 
 export function useQuerySingleInstance(id: string): QueryInstanceReturnType {
   const instanceData = useQuery(SINGLE_INSTANCE_QUERY(id), {
