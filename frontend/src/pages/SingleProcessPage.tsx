@@ -40,8 +40,9 @@ export default function SingleProcessPage() {
             </div>
           </ResizableContainer>
           <ResponsiveBpmnViewer
+            control
             navigated
-            className="h-full flex-grow"
+            className="ml-2 h-full flex-grow"
             bpmnString={bpmnResource}
           />
         </div>
