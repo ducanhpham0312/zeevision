@@ -42,12 +42,12 @@ export default function SingleProcessPage() {
           <ResponsiveBpmnViewer
             control
             navigated
-            className="ml-2 h-full flex-grow"
+            className="ml-3 h-full flex-grow"
             bpmnString={bpmnResource}
           />
         </div>
       </ResizableContainer>
-      <div className="z-50 bg-white pt-[20px]">
+      <div className="z-50 bg-white pt-5">
         <Table
           orientation="horizontal"
           header={["Instance Key", "Status", "Version", "Start Time"]}
