@@ -4,6 +4,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-json";
 import { useEffect, useState } from "react";
 import InfoIcon from "@mui/icons-material/Info";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 
 interface NewInstancePopupProps {
   /**
@@ -21,18 +22,26 @@ export function NewInstancePopup({
   isPopUpOpen,
   onClosePopUp,
 }: NewInstancePopupProps) {
-  const [variableJson, setVariableJson] = useState("{\n\t\n}");
-  const [variableObject, setVariableObject] = useState({});
+  const [variablesJsonString, setVariablesJsonString] = useState("{\n\t\n}");
+  const [variablesObject, setVariablesObject] = useState({});
 
   useEffect(() => {
-    setVariableObject(() => {
+    setVariablesObject(() => {
       try {
-        return JSON.parse(variableJson);
+        return JSON.parse(variablesJsonString);
       } catch (e) {
         return undefined;
       }
     });
-  }, [variableJson]);
+  }, [variablesJsonString]);
+
+  const handlePrettify = () => {
+    if (!variablesObject) {
+      return;
+    }
+
+    setVariablesJsonString(JSON.stringify(variablesObject, null, 2));
+  };
 
   return (
     <Popup
@@ -44,10 +53,10 @@ export function NewInstancePopup({
       <PopupContent>
         <div className="flex flex-col gap-2">
           <p>Select a Process:</p>
-          <p>Instance variables:</p>
+          <p>Instance variabless:</p>
           <div
             className={`relative w-full border-2 ${
-              !variableObject ? "border-red-500" : "border-white"
+              !variablesObject ? "border-red-500" : "border-black/10"
             }`}
           >
             <AceEditor
@@ -56,8 +65,8 @@ export function NewInstancePopup({
               placeholder="Enter the instance variables in JSON"
               mode="json"
               theme="tomorrow"
-              value={variableJson}
-              onChange={(value) => setVariableJson(value)}
+              value={variablesJsonString}
+              onChange={(value) => setVariablesJsonString(value)}
               fontSize={14}
               showPrintMargin={false}
               showGutter={true}
@@ -70,8 +79,15 @@ export function NewInstancePopup({
                 tabSize: 2,
               }}
             />
+            <Button
+              variant="secondary"
+              className="absolute right-2 top-2 transition hover:scale-110"
+              onClick={handlePrettify}
+            >
+              <CleaningServicesIcon sx={{ fontSize: "20px" }} />
+            </Button>
           </div>
-          {!variableObject ? (
+          {!variablesObject ? (
             <div className="flex items-center gap-3 text-red-500">
               <InfoIcon sx={{ fontSize: "20px" }} />
               <p>Invalid JSON</p>
