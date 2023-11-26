@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
 
@@ -17,16 +18,21 @@ export interface TableProps {
    * or one column in vertical orientation
    */
   content: (string | number)[][];
+
+  expandElement?: (idx: number) => ReactNode;
+  optionElement?: (idx: number) => ReactNode;
+
+  alterRowColor?: boolean;
 }
 
-export function Table({ orientation, header, content }: TableProps) {
-  if (header.length === 0) return null;
+export function Table({ orientation, ...props }: TableProps) {
+  if (props.header.length === 0) return null;
   return (
-    <table className="w-full border-collapse rounded border border-black/10">
+    <table className="w-full border-collapse rounded">
       {orientation === "horizontal" ? (
-        <HorizontalTable header={header} content={content} />
+        <HorizontalTable {...props} />
       ) : (
-        <VerticalTable header={header} content={content} />
+        <VerticalTable {...props} />
       )}
     </table>
   );

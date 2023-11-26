@@ -93,13 +93,13 @@ export function BpmnViewer({
 }
 
 export function ResponsiveBpmnViewer({
-  classname,
+  className,
   ...props
-}: BpmnViewerProps & { classname?: string }) {
+}: BpmnViewerProps & { className?: string }) {
   const [squareRef, { width, height }] = useElementSize();
 
   return (
-    <div ref={squareRef} className={classname}>
+    <div ref={squareRef} className={className}>
       <BpmnViewer width={width} height={height} {...props} />
     </div>
   );

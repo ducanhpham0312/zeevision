@@ -1,30 +1,13 @@
 import { Table } from "../components/Table";
-import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { BpmnViewer } from "../components/BpmnViewer";
-import { queryPollIntervalMs } from "../utils/constants";
+import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
+import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
+import { ResizableContainer } from "../components/ResizableContainer";
 
-export default function ProcessesPage() {
+export default function SingleProcessPage() {
   const params = useParams();
-  const PROCESS = gql`
-    query SingleProcess {
-      process(processKey: ${params.id}) {
-        bpmnProcessId
-        processKey
-        version
-        deploymentTime
-        bpmnResource
-        instances {
-          instanceKey
-          status
-          startTime
-        }
-      }
-    }
-  `;
-  const { data } = useQuery(PROCESS, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { process } = useQueryProcessData(params.id || "");
+
   const {
     processKey,
     bpmnProcessId,
@@ -32,42 +15,48 @@ export default function ProcessesPage() {
     deploymentTime,
     bpmnResource,
     instances,
-  } = data ? data.process : [];
-  const decodedBpmn = atob(data ? bpmnResource : "");
+  } = process;
 
   return (
-    <div className="m-[40px]">
-      <div className="mb-[40px] flex">
-        <Table
-          orientation="vertical"
-          header={[
-            "Process Key",
-            "BPMN Process ID",
-            "Version",
-            "Deployment Time",
-          ]}
-          content={
-            data ? [[processKey, bpmnProcessId, version, deploymentTime]] : []
-          }
-        />
-        <BpmnViewer bpmnString={decodedBpmn} />
-      </div>
+    <div className="flex h-full w-full flex-col gap-3">
+      <ResizableContainer direction="vertical">
+        <div className="flex h-full">
+          <ResizableContainer direction="horizontal">
+            <div className="w-full pr-3">
+              <Table
+                orientation="vertical"
+                header={[
+                  "Process Key",
+                  "BPMN Process ID",
+                  "Version",
+                  "Deployment Time",
+                ]}
+                content={
+                  process
+                    ? [[processKey, bpmnProcessId, version, deploymentTime]]
+                    : []
+                }
+              />
+            </div>
+          </ResizableContainer>
+          <ResponsiveBpmnViewer
+            navigated
+            className="h-full flex-grow"
+            bpmnString={bpmnResource}
+          />
+        </div>
+      </ResizableContainer>
       <Table
         orientation="horizontal"
-        header={["Instance Key", "Version", "Start Time"]}
+        header={["Instance Key", "Status", "Version", "Start Time"]}
         content={
           instances
-            ? instances.map(
-                ({
-                  instanceKey,
-                  status,
-                  startTime,
-                }: {
-                  instanceKey: number;
-                  status: string;
-                  startTime: string;
-                }) => [instanceKey, status, startTime],
-              )
+            ? instances.map(({ instanceKey, version, status, startTime }) => [
+                instanceKey,
+                status,
+                version,
+                startTime,
+              ])
             : []
         }
       />

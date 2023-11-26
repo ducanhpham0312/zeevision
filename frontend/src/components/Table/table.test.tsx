@@ -2,7 +2,9 @@ import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Table } from ".";
 import * as mockdata from "./mockdata.json";
-const { headers: verticalHeader, content: verticalContent } = mockdata.vertical;
+
+const { headers: verticalHeaders, content: verticalContent } =
+  mockdata.vertical;
 
 const { headers: horizontalHeaders, content: horizontalContent } =
   mockdata.horizontal;
@@ -14,7 +16,7 @@ describe("VerticalTable Component", () => {
     const { asFragment } = render(
       <Table
         orientation={verticalOrientation}
-        header={verticalHeader}
+        header={verticalHeaders}
         content={verticalContent}
       />,
     );
@@ -25,7 +27,7 @@ describe("VerticalTable Component", () => {
     const { container } = render(
       <Table
         orientation={verticalOrientation}
-        header={verticalHeader}
+        header={verticalHeaders}
         content={[]}
       />,
     );
@@ -58,7 +60,7 @@ describe("HorizontalTable Component", () => {
     expect(getAllByText("multi-instance-process").length).toEqual(6);
   });
 
-  it("renders header and pagination when the content is empty", () => {
+  it("renders header, empty row and pagination when the content is empty", () => {
     const component = render(
       <Table
         orientation={horizontalOrientation}
@@ -67,7 +69,7 @@ describe("HorizontalTable Component", () => {
       />,
     );
     expect(component.getByRole("table")).toBeInTheDocument();
-    expect(component.getAllByRole("row").length).toEqual(2);
+    expect(component.getAllByRole("row").length).toEqual(3);
     expect(component.getAllByRole("button")[0]).toBeInTheDocument();
   });
 
@@ -87,7 +89,8 @@ describe("HorizontalTable Component", () => {
       />,
     );
     fireEvent.click(getByText("Time created"));
-    expect(getByText("Time created ▲")).toBeInTheDocument();
+    expect(getByText("Time created")).toBeInTheDocument();
+    expect(getByText("▲")).toBeInTheDocument();
 
     const html = document.body.innerHTML;
     const later = html.search("1696667333");
@@ -104,8 +107,9 @@ describe("HorizontalTable Component", () => {
       />,
     );
     fireEvent.click(getByText("Time created"));
-    fireEvent.click(getByText("Time created ▲"));
-    expect(getByText("Time created ▼")).toBeInTheDocument();
+    fireEvent.click(getByText("Time created"));
+    expect(getByText("Time created")).toBeInTheDocument();
+    expect(getByText("▼")).toBeInTheDocument();
 
     const html = document.body.innerHTML;
     const later = html.search("1696667333");
