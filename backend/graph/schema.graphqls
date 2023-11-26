@@ -66,6 +66,7 @@ type Timer {
 enum Status {
   ACTIVE
   COMPLETED
+  TERMINATED
 }
 
 # The `DateTime` scalar type represents a date and time following the

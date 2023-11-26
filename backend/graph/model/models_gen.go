@@ -58,18 +58,20 @@ type Variable struct {
 type Status string
 
 const (
-	StatusActive    Status = "ACTIVE"
-	StatusCompleted Status = "COMPLETED"
+	StatusActive     Status = "ACTIVE"
+	StatusCompleted  Status = "COMPLETED"
+	StatusTerminated Status = "TERMINATED"
 )
 
 var AllStatus = []Status{
 	StatusActive,
 	StatusCompleted,
+	StatusTerminated,
 }
 
 func (e Status) IsValid() bool {
 	switch e {
-	case StatusActive, StatusCompleted:
+	case StatusActive, StatusCompleted, StatusTerminated:
 		return true
 	}
 	return false
