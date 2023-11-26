@@ -183,3 +183,23 @@ func TestFromStorageProcess(t *testing.T) {
 		})
 	}
 }
+
+func TestFromStorageVariable(t *testing.T) {
+	now := time.Now()
+
+	storageVariable := storage.Variable{
+		ProcessInstanceKey: 10,
+		Name:               "variable-name",
+		Value:              "variable-value",
+		Time:               now,
+	}
+	expected := &Variable{
+		Name:  "variable-name",
+		Value: "variable-value",
+		Time:  now.UTC().Format(time.RFC3339),
+	}
+
+	actual := FromStorageVariable(storageVariable)
+
+	assert.Equal(t, expected, actual)
+}
