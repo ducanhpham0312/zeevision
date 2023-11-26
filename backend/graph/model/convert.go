@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -36,12 +37,13 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
 		StartTime:      formatTime(instance.StartTime),
-		EndTime:        formatTime(instance.EndTime),
+		EndTime:        formatNullTime(instance.EndTime),
 		InstanceKey:    instance.ProcessInstanceKey,
 		ProcessKey:     instance.ProcessDefinitionKey,
 		Version:        instance.Version,
 		Status:         status,
-		// Process has its own resolver and is not populated here.
+		// Variables and Process have their own resolvers and are not populated
+		// here.
 	}
 }
 
@@ -60,15 +62,26 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage variable to GraphQL variable.
 func FromStorageVariable(variable storage.Variable) *Variable {
 	return &Variable{
-		ElementID: variable.ElementID,
-		Name:      variable.Name,
-		Value:     variable.Value,
-		Time:      formatTime(variable.Time),
+		Name:  variable.Name,
+		Value: variable.Value,
+		Time:  formatTime(variable.Time),
 	}
 }
 
+// Convert time to RFC3339 format.
 func formatTime(t time.Time) string {
 	return t.UTC().Format(time.RFC3339)
+}
+
+// Convert nullable time to RFC3339 format. Null times are converted to nil.
+func formatNullTime(nt sql.NullTime) *string {
+	if !nt.Valid {
+		return nil
+	}
+
+	t := formatTime(nt.Time)
+	return &t
 }

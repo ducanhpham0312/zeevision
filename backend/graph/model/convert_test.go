@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"testing"
 	"time"
 
@@ -32,6 +33,7 @@ func TestFromStorageBpmnResource(t *testing.T) {
 
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
+	nowFormatted := now.UTC().Format(time.RFC3339)
 
 	tests := []struct {
 		name            string
@@ -46,12 +48,12 @@ func TestFromStorageInstance(t *testing.T) {
 				Version:              1,
 				Status:               "ACTIVE",
 				StartTime:            now,
-				EndTime:              now,
+				EndTime:              sql.NullTime{},
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
-				StartTime:      now.UTC().Format(time.RFC3339),
-				EndTime:        now.UTC().Format(time.RFC3339),
+				StartTime:      nowFormatted,
+				EndTime:        nil,
 				InstanceKey:    10,
 				ProcessKey:     1,
 				Version:        1,
@@ -66,12 +68,12 @@ func TestFromStorageInstance(t *testing.T) {
 				Version:              2,
 				Status:               "COMPLETED",
 				StartTime:            now,
-				EndTime:              now,
+				EndTime:              sql.NullTime{Time: now, Valid: true},
 			},
 			expected: &Instance{
 				BpmnLiveStatus: "", // TODO
-				StartTime:      now.UTC().Format(time.RFC3339),
-				EndTime:        now.UTC().Format(time.RFC3339),
+				StartTime:      nowFormatted,
+				EndTime:        &nowFormatted,
 				InstanceKey:    20,
 				ProcessKey:     2,
 				Version:        2,
@@ -89,7 +91,55 @@ func TestFromStorageInstance(t *testing.T) {
 	}
 }
 
-func TestInvalidStatus(t *testing.T) {
+func TestStatus(t *testing.T) {
+	tests := []struct {
+		name        string
+		status      any
+		expectedErr string
+		expected    Status
+	}{
+		{
+			name:     "Active",
+			status:   "ACTIVE",
+			expected: StatusActive,
+		},
+		{
+			name:     "Completed",
+			status:   "COMPLETED",
+			expected: StatusCompleted,
+		},
+		{
+			name:     "Terminated",
+			status:   "TERMINATED",
+			expected: StatusTerminated,
+		},
+		{
+			name:        "Invalid status",
+			status:      "INVALID_STATUS",
+			expectedErr: "INVALID_STATUS is not a valid Status",
+		},
+		{
+			name:        "Invalid type",
+			status:      1,
+			expectedErr: "enums must be strings",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var actual Status
+			err := actual.UnmarshalGQL(test.status)
+			if test.expectedErr != "" {
+				assert.EqualError(t, err, test.expectedErr)
+				return
+			}
+
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
+
+func TestStorageInstanceConversionPanic(t *testing.T) {
 	defer func() {
 		if r := recover(); r == nil {
 			assert.Fail(t, "expected panic")
@@ -97,7 +147,7 @@ func TestInvalidStatus(t *testing.T) {
 	}()
 
 	storageInstance := storage.Instance{
-		Status: "InvalidStatus",
+		Status: "INVALID_STATUS",
 	}
 
 	// Should panic.
@@ -180,4 +230,24 @@ func TestFromStorageProcess(t *testing.T) {
 			assert.Equal(t, test.expected, actual)
 		})
 	}
+}
+
+func TestFromStorageVariable(t *testing.T) {
+	now := time.Now()
+
+	storageVariable := storage.Variable{
+		ProcessInstanceKey: 10,
+		Name:               "variable-name",
+		Value:              "variable-value",
+		Time:               now,
+	}
+	expected := &Variable{
+		Name:  "variable-name",
+		Value: "variable-value",
+		Time:  now.UTC().Format(time.RFC3339),
+	}
+
+	actual := FromStorageVariable(storageVariable)
+
+	assert.Equal(t, expected, actual)
 }
