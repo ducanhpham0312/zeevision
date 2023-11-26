@@ -100,9 +100,9 @@ func (r *Storer) VariableCreated(
 ) error {
 	err := r.db.Create(&Variable{
 		ProcessInstanceKey: processInstanceKey,
-		Name: name,
-		Value: value,
-		Time: time,
+		Name:               name,
+		Value:              value,
+		Time:               time,
 	}).Error
 	if err != nil {
 		return fmt.Errorf("failed to create variable: %w", err)
@@ -121,7 +121,7 @@ func (r *Storer) VariableUpdated(
 	err := r.db.
 		Where(&Variable{
 			ProcessInstanceKey: processInstanceKey,
-			Name: name,
+			Name:               name,
 		}).
 		First(&variable).Error
 	if err != nil {
@@ -132,7 +132,7 @@ func (r *Storer) VariableUpdated(
 		Select("Value", "Time").
 		Updates(&Variable{
 			Value: value,
-			Time: time,
+			Time:  time,
 		}).Error
 	if err != nil {
 		return fmt.Errorf("failed to save variable: %w", err)

@@ -30,13 +30,15 @@ func newDatabaseUpdater(storer *storage.Storer, msgChannel msgChannelType, close
 	}
 
 	// launch a database handler goroutine
-	// TODO This is very temporary - perhaps we should instead have specialised
-	// per-topic goroutines..?
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		result.storageUpdaterLoop()
-	}()
+	// Have a pool of five so we can (hopefully) avoid data races by retrying
+	poolSize := 5
+	for i := 0; i < poolSize; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			result.storageUpdaterLoop()
+		}()
+	}
 
 	return result
 }
@@ -119,6 +121,7 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 			deploymentTime := time.UnixMilli(record.Timestamp)
 			version := process.Version
 			log.Printf("Deploying %s", bpmnProcessID)
+
 			err := storer.ProcessDeployed(
 				processDefinitionKey,
 				bpmnProcessID,
@@ -159,6 +162,7 @@ func (u *storageUpdater) handleProcess(untypedRecord *UntypedRecord) error {
 
 	processDefinitionKey := record.Value.ProcessDefinitionKey
 	bpmnProcessID := record.Value.BpmnProcessID
+
 	switch record.Intent {
 	case IntentCreated:
 		// I think these should already be handled in deploy?
@@ -193,17 +197,6 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	bpmnElementType := record.Value.BpmnElementType
 	version := record.Value.Version
 
-	// log.Printf("intent %v; process id %s, instance key %d, definition key %d, element id %s, event type %s, parent instance key %d, parent element instance key %d, element type %v",
-	// 	record.Intent,
-	// 	bpmnProcessID,
-	// 	processInstanceKey,
-	// 	processDefinitionKey,
-	// 	elementID,
-	// 	bpmnEventType,
-	// 	parentProcessInstanceKey,
-	// 	parentElementInstanceKey,
-	// 	bpmnElementType,
-	// )
 	switch record.Intent {
 	case IntentElementActivating:
 		if bpmnElementType == "PROCESS" {
@@ -263,19 +256,32 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 	value := record.Value.Value
 	switch record.Intent {
 	case IntentCreated:
-		// I think these should already be handled in deploy?
-		// Log them here anyway in case that's *not* always the case
 		log.Printf("Variable created: %s = %s (instance %d)",
 			name, value, processInstanceKey)
-		return storer.VariableCreated(
-			processInstanceKey,
-			name,
-			value,
-			time.UnixMilli(record.Timestamp),
-		)
+		// Retry five times with a delay of 100 milliseconds until we succesfully create the variable
+		retryDelay := 100 * time.Millisecond
+		retryCount := 5
+		for i := 0; i < retryCount; i++ {
+			err := storer.VariableCreated(
+				processInstanceKey,
+				name,
+				value,
+				time.UnixMilli(record.Timestamp),
+			)
+			if err != nil {
+				time.Sleep(retryDelay)
+				log.Printf("Failed to create variable %s, retrying: %v",
+					name, err)
+			} else {
+				log.Printf("Variable succesfully created: %s",
+					name)
+				return nil
+			}
+		}
+		// err should not be nil here but it doesn't matter if we
+		// succeed and fall through
+		return err
 	case IntentUpdated:
-		// I think these should already be handled in deploy?
-		// Log them here anyway in case that's *not* always the case
 		log.Printf("Variable updated: %s = %s (instance %d)",
 			name, value, processInstanceKey)
 		return storer.VariableUpdated(
