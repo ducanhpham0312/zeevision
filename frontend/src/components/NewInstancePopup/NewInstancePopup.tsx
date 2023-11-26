@@ -28,10 +28,12 @@ export function NewInstancePopup({
     >
       <PopupContent>
         <div className="flex flex-col gap-2">
+          <p>Select a Process:</p>
           <p>Instance variables:</p>
           <div className="w-full">
             <AceEditor
-              width="full"
+              width="100%"
+              height={"400px"}
               placeholder="Enter the instance variables in JSON"
               mode="json"
               theme="tomorrow"
@@ -55,7 +57,7 @@ export function NewInstancePopup({
         <Button variant="secondary" onClick={onClosePopUp}>
           Cancel
         </Button>
-        <Button variant="primary">Deploy process</Button>
+        <Button variant="primary">Create Instance</Button>
       </PopupAction>
     </Popup>
   );
