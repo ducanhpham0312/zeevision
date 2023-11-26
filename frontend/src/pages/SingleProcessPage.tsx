@@ -27,7 +27,7 @@ export default function SingleProcessPage() {
                 orientation="vertical"
                 header={[
                   "Process Key",
-                  "Process Id",
+                  "BPMN Process ID",
                   "Version",
                   "Deployment Time",
                 ]}
