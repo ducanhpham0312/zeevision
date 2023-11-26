@@ -261,6 +261,72 @@ func TestProcessQuery(t *testing.T) {
 	}
 }
 
+func TestVariablesForInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	expectedVariables := []Variable{
+		{
+			ProcessInstanceKey: 10,
+			Name:               "proc-1-name-1",
+			Value:              "proc-1-value-1",
+		},
+		{
+			ProcessInstanceKey: 10,
+			Name:               "proc-1-name-2",
+			Value:              "proc-1-value-2",
+		},
+		{
+			ProcessInstanceKey: 20,
+			Name:               "proc-2-name-1",
+			Value:              "proc-2-value-1",
+		},
+	}
+	err := db.Create(expectedVariables).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		variables   []Variable
+	}{
+		{
+			name:        "instance with two variables",
+			instanceKey: expectedVariables[0].ProcessInstanceKey,
+			variables:   expectedVariables[:2],
+		},
+		{
+			name:        "instance with one variable",
+			instanceKey: expectedVariables[2].ProcessInstanceKey,
+			variables:   expectedVariables[2:],
+		},
+		{
+			name:        "instance with no variables",
+			instanceKey: 30,
+			variables:   []Variable{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			variables, err := fetcher.GetVariablesForInstance(context.Background(), test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, variables, len(test.variables))
+			for i := range variables {
+				assert.Equal(t, test.variables[i], variables[i])
+			}
+		})
+	}
+}
+
 func TestCancelQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {

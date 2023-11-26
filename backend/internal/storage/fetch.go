@@ -24,6 +24,7 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 	return f.db.WithContext(ctx)
 }
 
+// Gets a BPMN resource by its process ID.
 func (f *Fetcher) GetBpmnResource(ctx context.Context, bpmnProcessID string) (BpmnResource, error) {
 	var bpmnResource BpmnResource
 	err := f.ContextDB(ctx).
@@ -90,6 +91,7 @@ func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 	return processes, err
 }
 
+// Gets all variables for an instance.
 func (f *Fetcher) GetVariablesForInstance(ctx context.Context, instanceKey int64) ([]Variable, error) {
 	var variables []Variable
 	err := f.ContextDB(ctx).

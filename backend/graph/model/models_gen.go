@@ -11,7 +11,7 @@ import (
 type Instance struct {
 	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
 	StartTime      string      `json:"startTime"`
-	EndTime        string      `json:"endTime"`
+	EndTime        *string     `json:"endTime,omitempty"`
 	InstanceKey    int64       `json:"instanceKey"`
 	ProcessKey     int64       `json:"processKey"`
 	Version        int64       `json:"version"`
@@ -50,27 +50,28 @@ type Timer struct {
 }
 
 type Variable struct {
-	ElementID int64  `json:"elementId"`
-	Name      string `json:"name"`
-	Value     string `json:"value"`
-	Time      string `json:"time"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
+	Time  string `json:"time"`
 }
 
 type Status string
 
 const (
-	StatusActive    Status = "ACTIVE"
-	StatusCompleted Status = "COMPLETED"
+	StatusActive     Status = "ACTIVE"
+	StatusCompleted  Status = "COMPLETED"
+	StatusTerminated Status = "TERMINATED"
 )
 
 var AllStatus = []Status{
 	StatusActive,
 	StatusCompleted,
+	StatusTerminated,
 }
 
 func (e Status) IsValid() bool {
 	switch e {
-	case StatusActive, StatusCompleted:
+	case StatusActive, StatusCompleted, StatusTerminated:
 		return true
 	}
 	return false

@@ -1,17 +1,18 @@
 package storage
 
 import (
+	"database/sql"
 	"time"
 )
 
 // Instance model struct for the 'instances' database table.
 type Instance struct {
-	ProcessInstanceKey   int64      `gorm:"primarykey"`
-	ProcessDefinitionKey int64      `gorm:"not null"`
-	Version              int64      `gorm:"not null"`
-	Status               string     `gorm:"not null"`
-	StartTime            time.Time  `gorm:"not null"`
-	EndTime              time.Time  `gorm:"not null"`
+	ProcessInstanceKey   int64     `gorm:"primarykey"`
+	ProcessDefinitionKey int64     `gorm:"not null"`
+	Version              int64     `gorm:"not null"`
+	Status               string    `gorm:"not null"`
+	StartTime            time.Time `gorm:"not null"`
+	EndTime              sql.NullTime
 	Variables            []Variable `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 }
 
@@ -27,9 +28,8 @@ type Process struct {
 
 // Variable model struct for the 'variables' database table.
 type Variable struct {
-	ElementID          int64     `gorm:"primarykey"`
-	ProcessInstanceKey int64     `gorm:"not null"`
-	Name               string    `gorm:"not null"`
+	ProcessInstanceKey int64     `gorm:"primarykey;autoIncrement:false"`
+	Name               string    `gorm:"primarykey"`
 	Value              string    `gorm:"not null"`
 	Time               time.Time `gorm:"not null"`
 }
