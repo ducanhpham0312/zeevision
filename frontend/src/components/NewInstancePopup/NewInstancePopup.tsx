@@ -2,6 +2,8 @@ import { Popup, PopupAction, PopupContent } from "../Popup";
 import { Button } from "../Button";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-json";
+import { useEffect, useState } from "react";
+import InfoIcon from "@mui/icons-material/Info";
 
 interface NewInstancePopupProps {
   /**
@@ -19,6 +21,19 @@ export function NewInstancePopup({
   isPopUpOpen,
   onClosePopUp,
 }: NewInstancePopupProps) {
+  const [variableJson, setVariableJson] = useState("{\n\t\n}");
+  const [variableObject, setVariableObject] = useState({});
+
+  useEffect(() => {
+    setVariableObject(() => {
+      try {
+        return JSON.parse(variableJson);
+      } catch (e) {
+        return undefined;
+      }
+    });
+  }, [variableJson]);
+
   return (
     <Popup
       open={isPopUpOpen}
@@ -30,14 +45,19 @@ export function NewInstancePopup({
         <div className="flex flex-col gap-2">
           <p>Select a Process:</p>
           <p>Instance variables:</p>
-          <div className="w-full">
+          <div
+            className={`relative w-full border-2 ${
+              !variableObject ? "border-red-500" : "border-white"
+            }`}
+          >
             <AceEditor
               width="100%"
-              height={"400px"}
+              height={"350px"}
               placeholder="Enter the instance variables in JSON"
               mode="json"
               theme="tomorrow"
-              value={"{\n\t\n}"}
+              value={variableJson}
+              onChange={(value) => setVariableJson(value)}
               fontSize={14}
               showPrintMargin={false}
               showGutter={true}
@@ -51,6 +71,12 @@ export function NewInstancePopup({
               }}
             />
           </div>
+          {!variableObject ? (
+            <div className="flex items-center gap-3 text-red-500">
+              <InfoIcon sx={{ fontSize: "20px" }} />
+              <p>Invalid JSON</p>
+            </div>
+          ) : null}
         </div>
       </PopupContent>
       <PopupAction>
