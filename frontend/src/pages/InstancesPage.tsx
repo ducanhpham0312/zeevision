@@ -1,43 +1,30 @@
-import { gql, useQuery } from "@apollo/client";
 import { Table } from "../components/Table";
 import { queryPollIntervalMs } from "../utils/constants";
 import { NavLink } from "react-router-dom";
+import { useQueryInstances } from "../hooks/useQueryInstances";
 
 export default function InstancesPage() {
-  const INSTANCES = gql`
-    query Instances {
-      instances {
-        instanceKey
-        process {
-          bpmnProcessId
-        }
-        status
-        startTime
-        endTime
-      }
-    }
-  `;
-  const { data } = useQuery(INSTANCES, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { instances } = useQueryInstances();
   return (
     <Table
       orientation="horizontal"
-      header={["Instance Key", "BPMN Process ID", "Status", "Start Time"]}
+      header={[
+        "Instance Key",
+        "BPMN Process ID",
+        "Status",
+        "Version",
+        "Start Time",
+      ]}
       content={
-        data
-          ? data.instances.map(
+        instances
+          ? instances.map(
               ({
                 instanceKey,
                 process: { bpmnProcessId },
                 status,
+                version,
                 startTime,
-              }: {
-                instanceKey: string;
-                process: { bpmnProcessId: string };
-                status: string;
-                startTime: string;
-              }) => [<NavLink to={instanceKey.toString()}>{instanceKey}</NavLink>, bpmnProcessId, status, startTime],
+              }) => [instanceKey, bpmnProcessId, status, version, startTime],
             )
           : []
       }
