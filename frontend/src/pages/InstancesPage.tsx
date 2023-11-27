@@ -25,7 +25,6 @@ export default function InstancesPage() {
                 startTime,
               }) => [
                 <NavLink to={instanceKey.toString()}>{instanceKey}</NavLink>,
-                instanceKey,
                 bpmnProcessId,
                 status,
                 version,

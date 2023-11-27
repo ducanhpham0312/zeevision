@@ -9,16 +9,15 @@ export default function SingleInstancesPage() {
   const { instance } = useQuerySingleInstance(params.id || "");
   const {
     instanceKey,
-    process,
     version,
     processKey,
     status,
     startTime,
     endTime,
+    bpmnResource,
+    bpmnProcessId,
     variables,
   } = instance;
-  const bpmnProcessId = process ? process.bpmnProcessId : "";
-  const bpmnResource = process ? process.bpmnResource : "";
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <ResizableContainer direction="vertical">
@@ -57,7 +56,7 @@ export default function SingleInstancesPage() {
           <ResponsiveBpmnViewer
             navigated
             className="h-full flex-grow"
-            bpmnString={atob(bpmnResource)}
+            bpmnString={bpmnResource}
           />
         </div>
       </ResizableContainer>

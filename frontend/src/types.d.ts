@@ -22,6 +22,8 @@ type Instance = {
   endTime: string;
   version: string;
   process: ProcessType;
+  bpmnResource: string;
+  bpmnProcessId: string;
   variables: VariableType[];
 };
 
