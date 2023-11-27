@@ -6,6 +6,7 @@
   - [GUI database management](#gui-database-management)
     - [Environment variables](#environment-variables)
     - [Set up and access step-by-step](#set-up-and-access-step-by-step)
+    - [Filling database with data](#filling-database-with-data)
   - [Architecture](#architecture)
   - [Directory structure](#directory-structure)
   - [Development guidelines](#development-guidelines)
@@ -82,6 +83,7 @@ With `pgadmin`, you can perform query, visualise data, utilize dashboards, etc w
 Defined in [docker-compose.yml](../docker-compose.yml)
 
 ### Set up and access step-by-step
+
 1.  After backend is running, open login page through [`localhost:5050`](http://localhost:5050)
 2. Log in with `PGADMIN_EMAIL` and `PGADMIN_PASSWORD`
 3. In *Quick Links* box, choose **Add New Server**, then it will pop up *Register-Server* modal 
@@ -92,7 +94,11 @@ Defined in [docker-compose.yml](../docker-compose.yml)
    - put `POSTGRES_PASSWORD` into **Password** field
 6. Choose **Save**
 
-After this you should see *Servers* on the right menu
+After this you should see *Servers* on the right menu.
+
+### Filling database with data
+
+You can use [`fill_db.sql`](test/data/fill_db.sql) to fill the database with some data. You can open the *Query Tool* for the database, paste the contents of the file there, and execute it. You can also use the *Query Tool* to execute any other SQL queries you want.
 
 ## Architecture
 
