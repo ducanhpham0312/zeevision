@@ -44,7 +44,7 @@ export function useQuerySingleInstance(id: string): QueryInstanceReturnType {
     instance: {
       ...instanceData.data?.instance,
       bpmnResource: atob(bpmnData.data?.instance?.process?.bpmnResource || ""),
-      bpmnProcessId: bpmnData.data?.instance?.process.bpmnProcessId || ""
+      bpmnProcessId: bpmnData.data?.instance?.process.bpmnProcessId || "",
     },
   };
 }
