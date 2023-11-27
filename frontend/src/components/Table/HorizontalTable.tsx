@@ -10,7 +10,7 @@ import { ExpandRow } from "./ExpandRow";
 
 export interface HorizontalTableProps {
   header: string[];
-  content: (string | number)[][];
+  content: (string | number | React.ReactNode)[][];
   alterRowColor?: boolean;
   expandElement?: (idx: number) => React.ReactNode;
   optionElement?: (idx: number) => React.ReactNode;
@@ -29,17 +29,17 @@ export function HorizontalTable({
   const [sortOrder, setSortOrder] = React.useState("desc");
   const [expandedRow, setExpandedRow] = React.useState<number | null>(null);
   const [sortedContent, setSortedContent] =
-    React.useState<(string | number)[][]>(content);
+    React.useState<(string | number | React.ReactNode)[][]>(content);
 
   const sortContent = React.useCallback(
     (
-      content: (string | number)[][],
+      content: (string | number | React.ReactNode)[][],
       column: string,
       order: string,
-    ): (string | number)[][] => {
+    ): (string | number | React.ReactNode)[][] => {
       return content.slice().sort((a, b) => {
         const comparison =
-          a[header.indexOf(column)] > b[header.indexOf(column)] ? 1 : -1;
+          a[header.indexOf(column)]! > b[header.indexOf(column)]! ? 1 : -1;
         return order === "desc" ? comparison * -1 : comparison;
       });
     },

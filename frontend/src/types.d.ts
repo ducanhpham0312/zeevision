@@ -16,8 +16,19 @@ type ProcessType = {
 // name colision, cannot name this to InstanceType
 type Instance = {
   instanceKey: number;
+  processKey: string;
   status: string;
   startTime: string;
+  endTime: string;
   version: string;
   process: ProcessType;
+  bpmnResource: string;
+  bpmnProcessId: string;
+  variables: VariableType[];
+};
+
+type VariableType = {
+  name: string;
+  value: string;
+  time: string;
 };

@@ -42,7 +42,11 @@ export default function ProcessesPage() {
                     processes[idx].instances
                       ? processes[idx].instances.map(
                           ({ instanceKey, status, version, startTime }) => [
-                            instanceKey,
+                            <NavLink
+                              to={`/instances/${instanceKey.toString()}`}
+                            >
+                              {instanceKey}
+                            </NavLink>,
                             status,
                             version,
                             startTime,
@@ -56,15 +60,13 @@ export default function ProcessesPage() {
           )}
           content={
             processes
-              ? (processes.map(
+              ? processes.map(
                   ({ processKey, bpmnProcessId, deploymentTime }) => [
                     <NavLink to={processKey.toString()}>{processKey}</NavLink>,
                     bpmnProcessId,
                     deploymentTime,
                   ],
-                  // the item <NavLink> causes type error
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ) as any)
+                )
               : []
           }
         />

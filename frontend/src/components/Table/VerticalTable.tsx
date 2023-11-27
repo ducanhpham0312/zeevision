@@ -1,6 +1,8 @@
+import { ReactNode } from "react";
+
 export interface VerticalTableProps {
   header: string[];
-  content: (string | number)[][];
+  content: (string | number | ReactNode)[][];
 }
 
 export function VerticalTable({ header, content }: VerticalTableProps) {

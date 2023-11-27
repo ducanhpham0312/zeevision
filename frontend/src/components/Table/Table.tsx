@@ -17,7 +17,7 @@ export interface TableProps {
    * List of all content of the table. Each list member represents one row in horizontal
    * or one column in vertical orientation
    */
-  content: (string | number)[][];
+  content: (string | number | ReactNode)[][];
 
   expandElement?: (idx: number) => ReactNode;
   optionElement?: (idx: number) => ReactNode;
@@ -28,7 +28,7 @@ export interface TableProps {
 export function Table({ orientation, ...props }: TableProps) {
   if (props.header.length === 0) return null;
   return (
-    <table className="w-full border-collapse rounded">
+    <table className="w-full border-collapse rounded bg-white">
       {orientation === "horizontal" ? (
         <HorizontalTable {...props} />
       ) : (
