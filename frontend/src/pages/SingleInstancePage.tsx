@@ -62,7 +62,7 @@ export default function SingleInstancesPage() {
       </ResizableContainer>
       <Table
         orientation="horizontal"
-        header={["Variable Name", "Variable value", "Time"]}
+        header={["Variable Name", "Variable Value", "Time"]}
         content={
           variables
             ? variables.map(({ name, value, time }) => [name, value, time])
