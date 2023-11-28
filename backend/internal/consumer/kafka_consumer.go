@@ -151,7 +151,9 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 func (consumer *Consumer) Close() error {
 	// Close the partitionconsumers (they will simply log any errors when
 	// closing; it's hard to retry that)
-	consumer.closeChannel <- struct{}{}
+	// Sending a message to closeChannel would just close *one* goroutine -
+	// closing it will make all goroutines read a nil from it instead.
+	close(consumer.closeChannel)
 	consumer.wg.Wait()
 
 	err := consumer.consumer.Close()
