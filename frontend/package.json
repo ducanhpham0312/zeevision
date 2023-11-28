@@ -28,7 +28,7 @@
     "@types/react-dropzone": "^5.1.0",
     "@types/react-resizable": "^3.0.7",
     "@types/react-router-dom": "^5.3.3",
-    "bpmn-js": "^15.2.0",
+    "bpmn-js": "^15.2.2",
     "graphql": "^16.8.1",
     "lucide-react": "^0.293.0",
     "react": "^18.2.0",
