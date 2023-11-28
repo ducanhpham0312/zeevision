@@ -9,19 +9,59 @@ import (
 	"gorm.io/gorm"
 )
 
+type Storer interface {
+	ProcessDeployed(
+		processDefinitionKey int64,
+		bpmnProcessID string,
+		version int64,
+		deploymentTime time.Time,
+		bpmnResourceRaw []byte,
+	) error
+
+	ProcessInstanceActivated(
+		processInstanceKey int64,
+		processDefinitionKey int64,
+		version int64,
+		startTime time.Time,
+	) error
+
+	ProcessInstanceCompleted(
+		processInstanceKey int64,
+		endTime time.Time,
+	) error
+
+	ProcessInstanceTerminated(
+		processInstanceKey int64,
+		endTime time.Time,
+	) error
+
+	VariableCreated(
+		processInstanceKey int64,
+		name string,
+		value string,
+		time time.Time,
+	) error
+
+	VariableUpdated(
+		processInstanceKey int64,
+		name string,
+		value string,
+		time time.Time,
+	) error
+}
+
 // TODO: use context for queries where reasonable
 
-// TODO more useful name
-type Storer struct {
+type databaseStorer struct {
 	db *gorm.DB
 }
 
-func NewStorer(db *gorm.DB) *Storer {
-	return &Storer{db}
+func NewStorer(db *gorm.DB) Storer {
+	return &databaseStorer{db}
 }
 
 // call this for each processesMetadata
-func (r *Storer) ProcessDeployed(
+func (r *databaseStorer) ProcessDeployed(
 	processDefinitionKey int64,
 	bpmnProcessID string,
 	version int64,
@@ -47,7 +87,7 @@ func (r *Storer) ProcessDeployed(
 	return nil
 }
 
-func (r *Storer) ProcessInstanceActivated(
+func (r *databaseStorer) ProcessInstanceActivated(
 	processInstanceKey int64,
 	processDefinitionKey int64,
 	version int64,
@@ -68,7 +108,7 @@ func (r *Storer) ProcessInstanceActivated(
 	return nil
 }
 
-func (r *Storer) ProcessInstanceCompleted(
+func (r *databaseStorer) ProcessInstanceCompleted(
 	processInstanceKey int64,
 	endTime time.Time,
 ) error {
@@ -83,9 +123,9 @@ func (r *Storer) ProcessInstanceCompleted(
 	err = r.db.Model(&instance).
 		Select("Status", "EndTime").
 		Updates(Instance{
-			Status:  "COMPLETED",
+			Status: "COMPLETED",
 			EndTime: sql.NullTime{
-				Time: endTime, 
+				Time:  endTime,
 				Valid: true,
 			},
 		}).Error
@@ -96,7 +136,7 @@ func (r *Storer) ProcessInstanceCompleted(
 	return nil
 }
 
-func (r *Storer) ProcessInstanceTerminated(
+func (r *databaseStorer) ProcessInstanceTerminated(
 	processInstanceKey int64,
 	endTime time.Time,
 ) error {
@@ -111,9 +151,9 @@ func (r *Storer) ProcessInstanceTerminated(
 	err = r.db.Model(&instance).
 		Select("Status", "EndTime").
 		Updates(Instance{
-			Status:  "TERMINATED",
+			Status: "TERMINATED",
 			EndTime: sql.NullTime{
-				Time: endTime, 
+				Time:  endTime,
 				Valid: true,
 			},
 		}).Error
@@ -124,7 +164,7 @@ func (r *Storer) ProcessInstanceTerminated(
 	return nil
 }
 
-func (r *Storer) VariableCreated(
+func (r *databaseStorer) VariableCreated(
 	processInstanceKey int64,
 	name string,
 	value string,
@@ -143,7 +183,7 @@ func (r *Storer) VariableCreated(
 	return nil
 }
 
-func (r *Storer) VariableUpdated(
+func (r *databaseStorer) VariableUpdated(
 	processInstanceKey int64,
 	name string,
 	value string,

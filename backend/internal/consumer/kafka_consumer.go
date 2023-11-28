@@ -38,7 +38,7 @@ type Consumer struct {
 	wg *sync.WaitGroup
 }
 
-func NewConsumer(storer *storage.Storer, brokers []string, maxRetries int, retryDelay time.Duration) (*Consumer, error) {
+func NewConsumer(storer storage.Storer, brokers []string, maxRetries int, retryDelay time.Duration) (*Consumer, error) {
 	// wrap newConsumer with retry handling
 	var err error
 	for attempt := 1; attempt <= maxRetries; attempt++ {
@@ -51,7 +51,7 @@ func NewConsumer(storer *storage.Storer, brokers []string, maxRetries int, retry
 	return nil, fmt.Errorf("maximum number of retries reached: %w", err)
 }
 
-func newConsumer(storer *storage.Storer, brokers []string) (*Consumer, error) {
+func newConsumer(storer storage.Storer, brokers []string) (*Consumer, error) {
 	config := sarama.NewConfig()
 
 	consumer, err := sarama.NewConsumer(brokers, config)

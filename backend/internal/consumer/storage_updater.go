@@ -12,7 +12,7 @@ import (
 )
 
 type storageUpdater struct {
-	storer *storage.Storer
+	storer storage.Storer
 
 	msgChannel   msgChannelType
 	closeChannel signalChannelType
@@ -20,7 +20,7 @@ type storageUpdater struct {
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer *storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
 	result := &storageUpdater{
 		storer: storer,
 
