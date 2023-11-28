@@ -77,7 +77,7 @@
     "headers": [
       "Element ID",
       "Variable name",
-      "Variable value",
+      "Variable Value",
       "Flow Scope Key",
       "Time created",
       "Option"

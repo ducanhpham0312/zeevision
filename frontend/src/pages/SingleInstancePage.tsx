@@ -1,22 +1,23 @@
 import { Table } from "../components/Table";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useQuerySingleInstance } from "../hooks/useQuerySingleInstance";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
-import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
 import { ResizableContainer } from "../components/ResizableContainer";
 
-export default function SingleProcessPage() {
+export default function SingleInstancesPage() {
   const params = useParams();
-  const { process } = useQueryProcessData(params.id || "");
-
+  const { instance } = useQuerySingleInstance(params.id || "");
   const {
-    processKey,
-    bpmnProcessId,
+    instanceKey,
     version,
-    deploymentTime,
+    processKey,
+    status,
+    startTime,
+    endTime,
     bpmnResource,
-    instances,
-  } = process;
-
+    bpmnProcessId,
+    variables,
+  } = instance;
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <ResizableContainer direction="vertical">
@@ -26,14 +27,27 @@ export default function SingleProcessPage() {
               <Table
                 orientation="vertical"
                 header={[
-                  "Process Key",
+                  "Instance Key",
                   "BPMN Process ID",
                   "Version",
-                  "Deployment Time",
+                  "Process Key",
+                  "Status",
+                  "Start Time",
+                  "End Time",
                 ]}
                 content={
-                  process
-                    ? [[processKey, bpmnProcessId, version, deploymentTime]]
+                  instance
+                    ? [
+                        [
+                          instanceKey,
+                          bpmnProcessId,
+                          version,
+                          processKey,
+                          status,
+                          startTime,
+                          endTime,
+                        ],
+                      ]
                     : []
                 }
               />
@@ -48,17 +62,10 @@ export default function SingleProcessPage() {
       </ResizableContainer>
       <Table
         orientation="horizontal"
-        header={["Instance Key", "Status", "Version", "Start Time"]}
+        header={["Variable Name", "Variable Value", "Time"]}
         content={
-          instances
-            ? instances.map(({ instanceKey, version, status, startTime }) => [
-                <NavLink to={`/instances/${instanceKey.toString()}`}>
-                  {instanceKey}
-                </NavLink>,
-                status,
-                version,
-                startTime,
-              ])
+          variables
+            ? variables.map(({ name, value, time }) => [name, value, time])
             : []
         }
       />
