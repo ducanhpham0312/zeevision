@@ -16,6 +16,11 @@ VALUES(11, 'a', '1', '2023-11-27T02:05:00Z');
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'b', '2', '2023-11-27T02:22:00Z');
 
+INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
+VALUES(11, 'some-element-1', 100, 'big-job', 4, 'big-boy-1', 'WORKING', '2023-11-27T02:23:00Z');
+INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
+VALUES(11, 'some-element-2', 101, 'big-job', 2, 'big-boy-1', 'WORKING', '2023-11-27T02:24:00Z');
+
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(12, 'foo', 'bar', '2023-11-27T02:30:00Z');
 INSERT INTO variables(process_instance_key, name, value, time)
