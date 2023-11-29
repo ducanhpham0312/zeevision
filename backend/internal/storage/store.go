@@ -196,7 +196,7 @@ func (r *databaseStorer) VariableUpdated(
 		}).
 		First(&variable).Error
 	if err != nil {
-		return fmt.Errorf("failed to find process instance: %w", err)
+		return fmt.Errorf("failed to find variable: %w", err)
 	}
 
 	err = r.db.Model(&variable).
