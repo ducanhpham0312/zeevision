@@ -73,7 +73,7 @@ readLoop:
 func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 	var err error
 
-	switch untypedRecord.ValueType {
+	switch untypedRecord.ValueType { // nolint:exhaustive
 	case ValueTypeDeployment:
 		err = u.handleDeployment(untypedRecord)
 		if err != nil {
@@ -109,7 +109,7 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 		return fmt.Errorf("failed to cast: %w", err)
 	}
 
-	switch record.Intent {
+	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
 		resources := record.Value.Resources
 		processes := record.Value.ProcessesMetadata
@@ -170,7 +170,7 @@ func (u *storageUpdater) handleProcess(untypedRecord *UntypedRecord) error {
 	processDefinitionKey := record.Value.ProcessDefinitionKey
 	bpmnProcessID := record.Value.BpmnProcessID
 
-	switch record.Intent {
+	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
 		// I think these should already be handled in deploy?
 		// Log them here anyway in case that's *not* always the case
@@ -204,7 +204,7 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	bpmnElementType := record.Value.BpmnElementType
 	version := record.Value.Version
 
-	switch record.Intent {
+	switch record.Intent { // nolint:exhaustive
 	case IntentElementActivating:
 		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance activating: %d", processInstanceKey)
@@ -264,12 +264,13 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 	processInstanceKey := record.Value.ProcessInstanceKey
 	name := record.Value.Name
 	value := record.Value.Value
-	switch record.Intent {
+	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
 		log.Printf("Variable created: %s = %s (instance %d)",
 			name, value, processInstanceKey)
-		// Retry five times with a delay of 100 milliseconds until we succesfully create the variable
-		retryDelay := 100 * time.Millisecond
+		// Retry five times with a delay of 100 milliseconds until we successfully create the variable
+		// TODO: move the magic numbers elsewhere
+		retryDelay := 100 * time.Millisecond  // nolint:gomnd
 		retryCount := 5
 		// create err outside the loop so we can return it later
 		var err error
@@ -285,7 +286,7 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 				log.Printf("Failed to create variable %s, retrying: %v",
 					name, err)
 			} else {
-				log.Printf("Variable succesfully created: %s",
+				log.Printf("Variable successfully created: %s",
 					name)
 				return nil
 			}

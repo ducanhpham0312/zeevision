@@ -55,19 +55,26 @@ func (s *fixedErrStorer) VariableUpdated(int64, string, string, time.Time) error
 	return s.err
 }
 
-// Test creating and closing database updater succesfully.
+// Test creating and closing database updater successfully.
 func TestNewDatabaseUpdater(t *testing.T) {
 	var wg sync.WaitGroup
 	storer := &fixedErrStorer{map[string]bool{}, nil}
 	msgChannel := make(msgChannelType)
 	closeChannel := make(signalChannelType)
 
-	_ = newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
-	// close closeChannel to make reads from it succeed (and return nil)
-	close(closeChannel)
-	wg.Wait()
-	// This test will *hang* if it fails due to not succesfully closing all
-	// the goroutines!
+	updater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
+	defer func() {
+		// close closeChannel to make reads from it succeed (and return
+		// nil)
+		close(closeChannel)
+		wg.Wait()
+		// Note that this test will *hang* if it fails due to not
+		// successfully closing all the goroutines!
+	}()
+
+	if updater == nil {
+		t.Errorf("Updater was nil")
+	}
 }
 
 type testRecord struct {
