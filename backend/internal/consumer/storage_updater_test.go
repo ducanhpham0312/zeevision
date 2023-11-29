@@ -3,6 +3,7 @@ package consumer
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"sync"
 	"testing"
 	"time"
@@ -156,7 +157,7 @@ func newVariableTestRecord(
 	}
 }
 
-var testError = errors.New("testError")
+var errTest = errors.New("errTest")
 var testData = []*testRecord{
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivating",
@@ -174,7 +175,7 @@ var testData = []*testRecord{
 		"ProcessInstanceElementActivatedError",
 		IntentElementActivated,
 		"ProcessInstanceActivated",
-		testError,
+		errTest,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompleting",
@@ -192,7 +193,7 @@ var testData = []*testRecord{
 		"ProcessInstanceElementCompletedError",
 		IntentElementCompleted,
 		"ProcessInstanceCompleted",
-		testError,
+		errTest,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminating",
@@ -210,7 +211,7 @@ var testData = []*testRecord{
 		"ProcessInstanceElementTerminatedError",
 		IntentElementTerminated,
 		"ProcessInstanceTerminated",
-		testError,
+		errTest,
 	),
 
 	newVariableTestRecord(
@@ -223,7 +224,7 @@ var testData = []*testRecord{
 		"VariableCreatedError",
 		IntentCreated,
 		"VariableCreated",
-		testError,
+		errTest,
 	),
 	newVariableTestRecord(
 		"VariableUpdated",
@@ -235,7 +236,7 @@ var testData = []*testRecord{
 		"VariableUpdatedError",
 		IntentUpdated,
 		"VariableUpdated",
-		testError,
+		errTest,
 	),
 }
 
@@ -248,7 +249,7 @@ func TestStoring(t *testing.T) {
 	updater := &storageUpdater{
 		storer: storer,
 
-		msgChannel: nil,
+		msgChannel:   nil,
 		closeChannel: nil,
 
 		wg: nil,
@@ -290,4 +291,87 @@ func TestStoring(t *testing.T) {
 		})
 
 	}
+}
+
+type countdownErrStorer struct {
+	count int
+}
+
+func newCountdownErrStorer(count int) *countdownErrStorer {
+	return &countdownErrStorer{
+		count: count,
+	}
+}
+
+func (s *countdownErrStorer) countdown() error {
+	if s.count > 0 {
+		s.count -= 1
+		return errTest
+	}
+	// Once we've finished the count, return nil every time
+	return nil
+}
+
+func (s *countdownErrStorer) ProcessDeployed(int64, string, int64, time.Time, []byte) error {
+	return s.countdown()
+}
+
+func (s *countdownErrStorer) ProcessInstanceActivated(int64, int64, int64, time.Time) error {
+	return s.countdown()
+}
+
+func (s *countdownErrStorer) ProcessInstanceCompleted(int64, time.Time) error {
+	return s.countdown()
+}
+
+func (s *countdownErrStorer) ProcessInstanceTerminated(int64, time.Time) error {
+	return s.countdown()
+}
+
+func (s *countdownErrStorer) VariableCreated(int64, string, string, time.Time) error {
+	return s.countdown()
+}
+
+func (s *countdownErrStorer) VariableUpdated(int64, string, string, time.Time) error {
+	return s.countdown()
+}
+
+// Test that retry functions when trying to create variable.
+func TestVariableRetry(t *testing.T) {
+	storer := newCountdownErrStorer(4)
+
+	updater := &storageUpdater{
+		storer: storer,
+
+		msgChannel:   nil,
+		closeChannel: nil,
+
+		wg: nil,
+	}
+
+	r := newVariableTestRecord(
+		"VariableCreated",
+		IntentCreated,
+		"VariableCreated",
+		nil,
+	)
+
+	max_tries := maxCreateAttempts
+	for count := 0; count < max_tries; count++ {
+		t.Run(fmt.Sprintf("%d tries", count), func(t *testing.T) {
+			storer.count = count
+			err := updater.handlingDispatch(r.record)
+			if err != nil {
+				t.Errorf("Errored out despite low retry count")
+			}
+		})
+	}
+
+	t.Run("Exceed max retries", func(t *testing.T) {
+		storer.count = max_tries
+		err := updater.handlingDispatch(r.record)
+		if err == nil {
+			t.Errorf("Failed to error out despite max retries exceeded")
+		}
+	})
 }

@@ -11,6 +11,14 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
 
+const (
+	// Maximum attempts to try creating eg. a variable when it might be
+	// failing due to the instance not existing yet (race handling
+	// nigh-simultaneous incoming records)
+	maxCreateAttempts  = 5
+	createAttemptDelay = 100 * time.Millisecond // nolint:gomnd
+)
+
 type storageUpdater struct {
 	storer storage.Storer
 
@@ -269,9 +277,8 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 		log.Printf("Variable created: %s = %s (instance %d)",
 			name, value, processInstanceKey)
 		// Retry five times with a delay of 100 milliseconds until we successfully create the variable
-		// TODO: move the magic numbers elsewhere
-		retryDelay := 100 * time.Millisecond  // nolint:gomnd
-		retryCount := 5
+		retryDelay := createAttemptDelay
+		retryCount := maxCreateAttempts
 		// create err outside the loop so we can return it later
 		var err error
 		for i := 0; i < retryCount; i++ {
