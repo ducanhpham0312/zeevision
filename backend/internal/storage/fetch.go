@@ -91,6 +91,7 @@ func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 	return processes, err
 }
 
+// Gets all jobs for an instance.
 func (f *Fetcher) GetJobsForInstance(ctx context.Context, instanceKey int64) ([]Job, error) {
 	var jobs []Job
 	err := f.ContextDB(ctx).
