@@ -305,7 +305,7 @@ func newCountdownErrStorer(count int) *countdownErrStorer {
 
 func (s *countdownErrStorer) countdown() error {
 	if s.count > 0 {
-		s.count -= 1
+		s.count--
 		return errTest
 	}
 	// Once we've finished the count, return nil every time
