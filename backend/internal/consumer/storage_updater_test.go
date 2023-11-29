@@ -456,8 +456,8 @@ func TestVariableRetry(t *testing.T) {
 		nil,
 	)
 
-	max_tries := maxCreateAttempts
-	for count := 0; count < max_tries; count++ {
+	maxTries := maxCreateAttempts
+	for count := 0; count < maxTries; count++ {
 		t.Run(fmt.Sprintf("%d tries", count), func(t *testing.T) {
 			storer.count = count
 			err := updater.handlingDispatch(r.record)
@@ -468,7 +468,7 @@ func TestVariableRetry(t *testing.T) {
 	}
 
 	t.Run("Exceed max retries", func(t *testing.T) {
-		storer.count = max_tries
+		storer.count = maxTries
 		err := updater.handlingDispatch(r.record)
 		if err == nil {
 			t.Errorf("Failed to error out despite max retries exceeded")
