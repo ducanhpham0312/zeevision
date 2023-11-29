@@ -82,6 +82,8 @@ func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 	var err error
 
 	switch untypedRecord.ValueType { // nolint:exhaustive
+	case "":
+		return fmt.Errorf("zero-value value type in record")
 	case ValueTypeDeployment:
 		err = u.handleDeployment(untypedRecord)
 		if err != nil {

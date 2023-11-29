@@ -56,28 +56,6 @@ func (s *fixedErrStorer) VariableUpdated(int64, string, string, time.Time) error
 	return s.err
 }
 
-// Test creating and closing database updater successfully.
-func TestNewDatabaseUpdater(t *testing.T) {
-	var wg sync.WaitGroup
-	storer := &fixedErrStorer{map[string]bool{}, nil}
-	msgChannel := make(msgChannelType)
-	closeChannel := make(signalChannelType)
-
-	updater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
-	defer func() {
-		// close closeChannel to make reads from it succeed (and return
-		// nil)
-		close(closeChannel)
-		wg.Wait()
-		// Note that this test will *hang* if it fails due to not
-		// successfully closing all the goroutines!
-	}()
-
-	if updater == nil {
-		t.Errorf("Updater was nil")
-	}
-}
-
 type testRecord struct {
 	name    string
 	record  *UntypedRecord
@@ -340,6 +318,38 @@ var testData = []*testRecord{
 	),
 }
 
+// Test creating and closing database updater successfully and processing a record.
+func TestDatabaseUpdater(t *testing.T) {
+	var wg sync.WaitGroup
+	storer := newFixedErrStorer(nil)
+	msgChannel := make(msgChannelType)
+	closeChannel := make(signalChannelType)
+
+	updater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
+	defer func() {
+		// close closeChannel to make reads from it succeed (and return
+		// nil)
+		close(closeChannel)
+		wg.Wait()
+		// Note that this test will *hang* if it fails due to not
+		// successfully closing all the goroutines!
+	}()
+
+	t.Run("UpdaterCreated", func(t *testing.T) {
+		if updater == nil {
+			t.Errorf("Updater was nil")
+		}
+	})
+
+	// Handle a record. We can't, really, see the results of the code path
+	// we're exercising here, but we can exercise the path regardless.
+	// Perhaps later we'll create a way to test this..?
+	// Put in an empty JSON record - this is invalid and will cause an
+	// error in handling, but errors in handling should not crash or
+	// anything.
+	msgChannel <- []byte(`{}`)
+}
+
 // Automatically test that handlers hit all their intended storer functions.
 func TestStoring(t *testing.T) {
 	storer := newFixedErrStorer(nil)
@@ -521,5 +531,23 @@ func TestMissingDeploymentResource(t *testing.T) {
 	err := updater.handlingDispatch(untypedRecord)
 	if err == nil {
 		t.Errorf("Didn't error despite missing resource")
+	}
+}
+
+func TestDispatchInvalidRecord(t *testing.T) {
+	storer := newFixedErrStorer(nil)
+	updater := &storageUpdater{
+		storer: storer,
+
+		msgChannel:   nil,
+		closeChannel: nil,
+
+		wg: nil,
+	}
+
+	// Pass in a zero-value record; this should fail
+	err := updater.handlingDispatch(&UntypedRecord{})
+	if err == nil {
+		t.Errorf("Didn't error despite zero-value record")
 	}
 }
