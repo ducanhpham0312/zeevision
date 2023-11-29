@@ -130,9 +130,16 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 		// Make storage for errors
 		var errs []error
 		for _, process := range processes {
+			bpmnResource, ok := resourceMap[process.ResourceName]
+			if !ok {
+				err := fmt.Errorf("resource not in map: %s",
+					process.ResourceName)
+				errs = append(errs, err)
+				continue
+			}
+
 			bpmnProcessID := process.BpmnProcessID
 			processDefinitionKey := process.ProcessDefinitionKey
-			bpmnResource := resourceMap[process.ResourceName]
 			deploymentTime := time.UnixMilli(record.Timestamp)
 			version := process.Version
 			log.Printf("Deploying %s", bpmnProcessID)

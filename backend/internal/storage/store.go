@@ -93,7 +93,6 @@ func (r *databaseStorer) ProcessInstanceActivated(
 	version int64,
 	startTime time.Time,
 ) error {
-	// TODO set EndTime to NULL perhaps?
 	err := r.db.Create(&Instance{
 		ProcessInstanceKey:   processInstanceKey,
 		ProcessDefinitionKey: processDefinitionKey,

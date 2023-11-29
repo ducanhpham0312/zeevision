@@ -85,6 +85,87 @@ type testRecord struct {
 	err     error
 }
 
+func newDeploymentTestRecord(
+	name string,
+	intent Intent,
+	touched string,
+	err error,
+) *testRecord {
+	return &testRecord{
+		name,
+		&UntypedRecord{
+			PartitionID: 1,
+			Value: json.RawMessage(`{
+				"resources": [
+					{
+						"resource": "Cg==",
+						"resourceName": "test-id"
+					}
+				],
+				"processesMetadata": [
+					{
+						"bpmnProcessID": "test-id",
+						"version": 1,
+						"processDefinitionKey": 2,
+						"resourceName": "test-id",
+						"checksum": "Cg==",
+						"duplicate": false
+					}
+				],
+				"decisionRequirementsMetadata": [],
+				"decisionsMetadata": []
+			}`),
+			RejectionType:        RejectionTypeNullVal,
+			RejectionReason:      "",
+			SourceRecordPosition: 4,
+			Key:                  5,
+			Timestamp:            time.Now().UnixMilli(),
+			Position:             6,
+			ValueType:            ValueTypeDeployment,
+			Intent:               intent,
+			RecordType:           RecordTypeEvent,
+			BrokerVersion:        "1.2.3",
+		},
+		touched,
+		err,
+	}
+}
+
+func newProcessTestRecord(
+	name string,
+	intent Intent,
+	touched string,
+	err error,
+) *testRecord {
+	return &testRecord{
+		name,
+		&UntypedRecord{
+			PartitionID: 1,
+			Value: json.RawMessage(`{
+				"bpmnProcessId": "test-id",
+				"version": 1,
+				"processDefinitionKey": 1,
+				"resourceName": "test-id",
+				"checksum": "Cg==",
+				"resource": "Cg=="
+			}`),
+			RejectionType:        RejectionTypeNullVal,
+			RejectionReason:      "",
+			SourceRecordPosition: 4,
+			Key:                  5,
+			Timestamp:            time.Now().UnixMilli(),
+			Position:             6,
+			ValueType:            ValueTypeProcess,
+			Intent:               intent,
+			RecordType:           RecordTypeEvent,
+			BrokerVersion:        "1.2.3",
+		},
+		touched,
+		err,
+	}
+}
+
+
 func newProcessInstanceTestRecord(
 	name string,
 	intent Intent,
@@ -159,6 +240,26 @@ func newVariableTestRecord(
 
 var errTest = errors.New("errTest")
 var testData = []*testRecord{
+	newDeploymentTestRecord(
+		"DeploymentCreated",
+		IntentCreated,
+		"ProcessDeployed",
+		nil,
+	),
+	newDeploymentTestRecord(
+		"DeploymentCreatedError",
+		IntentCreated,
+		"ProcessDeployed",
+		errTest,
+	),
+
+	newProcessTestRecord(
+		"ProcessCreated",
+		IntentCreated,
+		"",
+		nil,
+	),
+
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivating",
 		IntentElementActivating,
