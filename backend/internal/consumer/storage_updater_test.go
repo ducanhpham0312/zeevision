@@ -377,7 +377,7 @@ func TestStoring(t *testing.T) {
 			// database updater at the end and fail that way)
 			err := updater.handlingDispatch(r.record)
 
-			if (r.err == nil) {
+			if r.err == nil {
 				assert.NoError(t, err)
 			} else {
 				assert.ErrorContains(t, err, r.err.Error())
@@ -392,7 +392,7 @@ func TestStoring(t *testing.T) {
 
 			for key, value := range storer.touched {
 				// Fail if we hit the wrong updater function
-				if (key != r.touched) {
+				if key != r.touched {
 					assert.False(t, value)
 				}
 			}
