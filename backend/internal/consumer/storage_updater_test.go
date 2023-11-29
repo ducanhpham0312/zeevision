@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+// TODO convert to testify
+
 type fixedErrStorer struct {
 	touched map[string]bool
 	err     error
