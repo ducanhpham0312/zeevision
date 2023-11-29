@@ -165,7 +165,6 @@ func newProcessTestRecord(
 	}
 }
 
-
 func newProcessInstanceTestRecord(
 	name string,
 	intent Intent,
@@ -475,4 +474,52 @@ func TestVariableRetry(t *testing.T) {
 			t.Errorf("Failed to error out despite max retries exceeded")
 		}
 	})
+}
+
+func TestMissingDeploymentResource(t *testing.T) {
+	storer := newFixedErrStorer(nil)
+	updater := &storageUpdater{
+		storer: storer,
+
+		msgChannel:   nil,
+		closeChannel: nil,
+
+		wg: nil,
+	}
+
+	// Create a record that's otherwise processible but is missing
+	// resources
+	untypedRecord := &UntypedRecord{
+		PartitionID: 1,
+		Value: json.RawMessage(`{
+			"resources": [],
+			"processesMetadata": [
+				{
+					"bpmnProcessID": "test-id",
+					"version": 1,
+					"processDefinitionKey": 2,
+					"resourceName": "test-id",
+					"checksum": "Cg==",
+					"duplicate": false
+				}
+			],
+			"decisionRequirementsMetadata": [],
+			"decisionsMetadata": []
+		}`),
+		RejectionType:        RejectionTypeNullVal,
+		RejectionReason:      "",
+		SourceRecordPosition: 4,
+		Key:                  5,
+		Timestamp:            time.Now().UnixMilli(),
+		Position:             6,
+		ValueType:            ValueTypeDeployment,
+		Intent:               IntentCreated,
+		RecordType:           RecordTypeEvent,
+		BrokerVersion:        "1.2.3",
+	}
+
+	err := updater.handlingDispatch(untypedRecord)
+	if err == nil {
+		t.Errorf("Didn't error despite missing resource")
+	}
 }
