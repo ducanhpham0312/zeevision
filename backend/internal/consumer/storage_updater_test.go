@@ -7,9 +7,9 @@ import (
 	"sync"
 	"testing"
 	"time"
-)
 
-// TODO convert to testify
+	"github.com/stretchr/testify/assert"
+)
 
 type fixedErrStorer struct {
 	touched map[string]bool
@@ -338,9 +338,7 @@ func TestDatabaseUpdater(t *testing.T) {
 	}()
 
 	t.Run("UpdaterCreated", func(t *testing.T) {
-		if updater == nil {
-			t.Errorf("Updater was nil")
-		}
+		assert.NotNil(t, updater)
 	})
 
 	// Handle a record. We can't, really, see the results of the code path
@@ -379,25 +377,23 @@ func TestStoring(t *testing.T) {
 			// database updater at the end and fail that way)
 			err := updater.handlingDispatch(r.record)
 
-			if (r.err == nil) && (err != nil) {
-				t.Errorf("Unexpected handler error: %v", err)
-			} else if (r.err != nil) && (err == nil) {
-				t.Errorf("Expected error but got nil")
+			if (r.err == nil) {
+				assert.NoError(t, err)
+			} else {
+				assert.ErrorContains(t, err, r.err.Error())
 			}
 
 			if r.touched != "" {
 				// The value will be the zero value (bool) if
 				// the key doesn't exist so this will work
 				// without the ok check
-				if !storer.touched[r.touched] {
-					t.Errorf("Didn't touch %v", r.touched)
-				}
+				assert.True(t, storer.touched[r.touched])
 			}
 
 			for key, value := range storer.touched {
 				// Fail if we hit the wrong updater function
-				if (key != r.touched) && value {
-					t.Errorf("Touched %v", key)
+				if (key != r.touched) {
+					assert.False(t, value)
 				}
 			}
 		})
@@ -473,18 +469,14 @@ func TestVariableRetry(t *testing.T) {
 		t.Run(fmt.Sprintf("%d tries", count), func(t *testing.T) {
 			storer.count = count
 			err := updater.handlingDispatch(r.record)
-			if err != nil {
-				t.Errorf("Errored out despite low retry count")
-			}
+			assert.NoError(t, err)
 		})
 	}
 
-	t.Run("Exceed max retries", func(t *testing.T) {
+	t.Run("exceed max retries", func(t *testing.T) {
 		storer.count = maxTries
 		err := updater.handlingDispatch(r.record)
-		if err == nil {
-			t.Errorf("Failed to error out despite max retries exceeded")
-		}
+		assert.ErrorContains(t, err, "failed to handle variable")
 	})
 }
 
@@ -530,10 +522,9 @@ func TestMissingDeploymentResource(t *testing.T) {
 		BrokerVersion:        "1.2.3",
 	}
 
+	// There should be an error now
 	err := updater.handlingDispatch(untypedRecord)
-	if err == nil {
-		t.Errorf("Didn't error despite missing resource")
-	}
+	assert.ErrorContains(t, err, "resource not in map")
 }
 
 func TestDispatchInvalidRecord(t *testing.T) {
@@ -549,7 +540,5 @@ func TestDispatchInvalidRecord(t *testing.T) {
 
 	// Pass in a zero-value record; this should fail
 	err := updater.handlingDispatch(&UntypedRecord{})
-	if err == nil {
-		t.Errorf("Didn't error despite zero-value record")
-	}
+	assert.ErrorContains(t, err, "zero-value value type in record")
 }
