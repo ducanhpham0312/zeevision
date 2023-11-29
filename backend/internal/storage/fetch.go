@@ -91,6 +91,17 @@ func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 	return processes, err
 }
 
+func (f *Fetcher) GetJobsForInstance(ctx context.Context, instanceKey int64) ([]Job, error) {
+	var jobs []Job
+	err := f.ContextDB(ctx).
+		Where(&Job{ProcessInstanceKey: instanceKey}).
+		Order("time DESC").
+		Find(&jobs).
+		Error
+
+	return jobs, err
+}
+
 // Gets all variables for an instance.
 func (f *Fetcher) GetVariablesForInstance(ctx context.Context, instanceKey int64) ([]Variable, error) {
 	var variables []Variable

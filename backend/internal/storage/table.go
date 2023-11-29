@@ -5,6 +5,15 @@ import (
 	"time"
 )
 
+// List of migrations to be run on database during initialization.
+var TableMigrations = []any{
+	&Process{},
+	&Instance{},
+	&Job{},
+	&Variable{},
+	&BpmnResource{},
+}
+
 // Instance model struct for the 'instances' database table.
 type Instance struct {
 	ProcessInstanceKey   int64     `gorm:"primarykey"`
@@ -13,6 +22,7 @@ type Instance struct {
 	Status               string    `gorm:"not null"`
 	StartTime            time.Time `gorm:"not null"`
 	EndTime              sql.NullTime
+	Jobs                 []Job      `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 	Variables            []Variable `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 }
 
@@ -24,6 +34,18 @@ type Process struct {
 	DeploymentTime       time.Time    `gorm:"not null"`
 	BpmnResource         BpmnResource `gorm:"foreignKey:BpmnProcessID;references:BpmnProcessID"`
 	Instances            []Instance   `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
+}
+
+// Job model struct for the 'jobs' database table.
+type Job struct {
+	Key                int64     `gorm:"primarykey"`
+	ElementID          string    `gorm:"not null"`
+	ProcessInstanceKey int64     `gorm:"not null"`
+	Type               string    `gorm:"not null"`
+	Retries            int64     `gorm:"not null"`
+	Worker             string    `gorm:"not null"`
+	State              string    `gorm:"not null"`
+	Time               time.Time `gorm:"not null"`
 }
 
 // Variable model struct for the 'variables' database table.

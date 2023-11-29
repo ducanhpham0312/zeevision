@@ -38,8 +38,19 @@ type Instance {
   processKey: Int!
   version: Int!
   status: Status!
+  jobs: [Job!]! @goField(forceResolver: true)
   variables: [Variable!]! @goField(forceResolver: true)
   process: Process! @goField(forceResolver: true)
+}
+
+type Job {
+  elementId: String!
+  key: Int!
+  type: String!
+  retries: Int!
+  worker: String!
+  state: String!
+  time: DateTime!
 }
 
 type Variable {
