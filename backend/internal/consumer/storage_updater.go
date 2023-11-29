@@ -61,37 +61,44 @@ readLoop:
 				continue readLoop
 			}
 
-			switch untypedRecord.ValueType {
-			case ValueTypeDeployment:
-				err = u.handleDeployment(&untypedRecord)
-				if err != nil {
-					log.Printf("Failed to handle deployment: %v", err)
-					continue readLoop
-				}
-			case ValueTypeProcess:
-				err = u.handleProcess(&untypedRecord)
-				if err != nil {
-					log.Printf("Failed to handle process: %v", err)
-					continue readLoop
-				}
-			case ValueTypeProcessInstance:
-				err = u.handleProcessInstance(&untypedRecord)
-				if err != nil {
-					log.Printf("Failed to handle process instance: %v", err)
-					continue readLoop
-				}
-			case ValueTypeVariable:
-				err = u.handleVariable(&untypedRecord)
-				if err != nil {
-					log.Printf("Failed to handle variable: %v", err)
-					continue readLoop
-				}
-			default:
-				log.Printf("Unhandled record: %v (intent: %v)",
-					untypedRecord.ValueType, untypedRecord.Intent)
+			err = u.handlingDispatch(&untypedRecord)
+			if err != nil {
+				log.Printf("Handling failed: %v", err)
+				continue readLoop
 			}
 		}
 	}
+}
+
+func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
+	var err error
+
+	switch untypedRecord.ValueType {
+	case ValueTypeDeployment:
+		err = u.handleDeployment(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle deployment: %w", err)
+		}
+	case ValueTypeProcess:
+		err = u.handleProcess(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle process: %w", err)
+		}
+	case ValueTypeProcessInstance:
+		err = u.handleProcessInstance(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle process instance: %w", err)
+		}
+	case ValueTypeVariable:
+		err = u.handleVariable(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle variable: %w", err)
+		}
+	default:
+		log.Printf("Unhandled record: %v (intent: %v)",
+			untypedRecord.ValueType, untypedRecord.Intent)
+	}
+	return nil
 }
 
 func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
@@ -199,11 +206,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 
 	switch record.Intent {
 	case IntentElementActivating:
-		if bpmnElementType == "PROCESS" {
+		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance activating: %d", processInstanceKey)
 		}
 	case IntentElementActivated:
-		if bpmnElementType == "PROCESS" {
+		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance activated: %d", processInstanceKey)
 			return storer.ProcessInstanceActivated(
 				processInstanceKey,
@@ -213,11 +220,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 			)
 		}
 	case IntentElementCompleting:
-		if bpmnElementType == "PROCESS" {
+		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance completing: %d", processInstanceKey)
 		}
 	case IntentElementCompleted:
-		if bpmnElementType == "PROCESS" {
+		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance completed: %d", processInstanceKey)
 			return storer.ProcessInstanceCompleted(
 				processInstanceKey,
@@ -225,11 +232,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 			)
 		}
 	case IntentElementTerminating:
-		if bpmnElementType == "PROCESS" {
+		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance terminating: %d", processInstanceKey)
 		}
 	case IntentElementTerminated:
-		if bpmnElementType == "PROCESS" {
+		if bpmnElementType == BpmnElementTypeProcess {
 			log.Printf("Process instance terminated: %d", processInstanceKey)
 			return storer.ProcessInstanceTerminated(
 				processInstanceKey,
@@ -264,8 +271,10 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 		// Retry five times with a delay of 100 milliseconds until we succesfully create the variable
 		retryDelay := 100 * time.Millisecond
 		retryCount := 5
+		// create err outside the loop so we can return it later
+		var err error
 		for i := 0; i < retryCount; i++ {
-			err := storer.VariableCreated(
+			err = storer.VariableCreated(
 				processInstanceKey,
 				name,
 				value,
