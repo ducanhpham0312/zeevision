@@ -13,6 +13,9 @@ import (
 type msgChannelType = chan []byte
 type signalChannelType = chan struct{}
 
+type listenOnlyMsgChannel = <-chan []byte
+type listenOnlySignalChannel = <-chan struct{}
+
 // TODO: we need a method of reconnecting when the connection drops. I'm not
 // entirely sure how to *detect* this, except perhaps by adding a condition
 // variable of some kind to the Consumer object where, upon seeing it, a
@@ -59,10 +62,9 @@ func newConsumer(storer storage.Storer, brokers []string) (*Consumer, error) {
 		return nil, err
 	}
 
-	// TODO: buffer channel sufficiently so we don't *usually* end up
-	// dropping anything or blocking too much?
-	// Depending on what the storage API looks like the channel might not
-	// be needed in the end (could be wrapped by a storage call)
+	// The optimal buffer size is an open question; it could be as low as 0
+	// if we're okay yielding the consumer goroutine whenever we get to
+	// that point
 	bufSize := 10
 	msgChannel := make(msgChannelType, bufSize)
 
@@ -129,7 +131,6 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 				case msgChannel <- msg.Value:
 					log.Printf("[%s/%d] Consumed message offset %d\n",
 						topic, partition, msg.Offset)
-					// log.Printf("value: %s\n", string(msg.Value))
 				case <-closeChannel:
 					// Also listen to closeChannel here to
 					// avoid dropping values on the floor

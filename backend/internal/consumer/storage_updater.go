@@ -16,14 +16,15 @@ const (
 	// failing due to the instance not existing yet (race handling
 	// nigh-simultaneous incoming records)
 	maxCreateAttempts  = 5
-	createAttemptDelay = 100 * time.Millisecond // nolint:gomnd
+	createAttemptDelay = 100 * time.Millisecond
 )
 
+// Intermediary object that handles communication between consumers and storage.
 type storageUpdater struct {
 	storer storage.Storer
 
-	msgChannel   msgChannelType
-	closeChannel signalChannelType
+	msgChannel   listenOnlyMsgChannel
+	closeChannel listenOnlySignalChannel
 
 	wg *sync.WaitGroup
 }
@@ -161,7 +162,7 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 			}
 		}
 
-		if errs != nil {
+		if len(errs) != 0 {
 			err := fmt.Errorf("failed some deploys: %w", errors.Join(errs...))
 			return err
 		}
@@ -211,16 +212,14 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		return fmt.Errorf("failed to cast: %w", err)
 	}
 
-	// bpmnProcessID := record.Value.BpmnProcessID
 	processInstanceKey := record.Value.ProcessInstanceKey
 	processDefinitionKey := record.Value.ProcessDefinitionKey
-	// elementID := record.Value.ElementID
-	// bpmnEventType := record.Value.BpmnEventType
-	// parentProcessInstanceKey := record.Value.ParentProcessInstanceKey
-	// parentElementInstanceKey := record.Value.ParentElementInstanceKey
 	bpmnElementType := record.Value.BpmnElementType
 	version := record.Value.Version
 
+	// Once we handle further element types it may be desirable to dispatch
+	// them further based on either intent or element type, depending on
+	// which one seems more reasonable.
 	switch record.Intent { // nolint:exhaustive
 	case IntentElementActivating:
 		if bpmnElementType == BpmnElementTypeProcess {
