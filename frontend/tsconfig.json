@@ -19,8 +19,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["jest"]
+    "types": ["jest", "cypress", "node"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "cypress/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

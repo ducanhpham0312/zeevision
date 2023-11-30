@@ -1,5 +1,5 @@
 import { Table } from "../components/Table";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
 import { ResizableContainer } from "../components/ResizableContainer";
@@ -54,7 +54,9 @@ export default function SingleProcessPage() {
           content={
             instances
               ? instances.map(({ instanceKey, version, status, startTime }) => [
-                  instanceKey,
+                  <NavLink to={`/instances/${instanceKey.toString()}`}>
+                    {instanceKey}
+                  </NavLink>,
                   status,
                   version,
                   startTime,

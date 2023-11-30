@@ -1,9 +1,9 @@
+import { NavLink } from "react-router-dom";
 import { Table } from "../components/Table";
 import { useQueryInstances } from "../hooks/useQueryInstances";
 
 export default function InstancesPage() {
   const { instances } = useQueryInstances();
-
   return (
     <Table
       orientation="horizontal"
@@ -23,7 +23,13 @@ export default function InstancesPage() {
                 status,
                 version,
                 startTime,
-              }) => [instanceKey, bpmnProcessId, status, version, startTime],
+              }) => [
+                <NavLink to={instanceKey.toString()}>{instanceKey}</NavLink>,
+                bpmnProcessId,
+                status,
+                version,
+                startTime,
+              ],
             )
           : []
       }
