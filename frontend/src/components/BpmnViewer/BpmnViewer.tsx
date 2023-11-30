@@ -51,12 +51,12 @@ export function BpmnViewer({
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
           width: width,
-          height: height
+          height: height,
         })
-        : new Viewer({
+      : new Viewer({
           container: containerRef.current as HTMLDivElement,
           width: width,
-          height: height
+          height: height,
         });
 
     async function openDiagram(xmlString: string) {
@@ -79,7 +79,7 @@ export function BpmnViewer({
       return;
     }
     const canvas = modeler.get("canvas") as {
-      viewbox(): { inner: ViewBoxInner, outer: ViewBoxOuter };
+      viewbox(): { inner: ViewBoxInner; outer: ViewBoxOuter };
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
 
@@ -98,7 +98,7 @@ export function BpmnViewer({
       ref={containerRef}
       style={{ userSelect: "none", width: "100%", height: "100%" }}
       id="canvas"
-      data-testid="canvas"  
+      data-testid="canvas"
     />
   );
 }

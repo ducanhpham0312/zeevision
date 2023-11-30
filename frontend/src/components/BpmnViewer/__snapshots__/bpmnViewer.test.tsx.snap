@@ -9,13 +9,3 @@ exports[`BpmnViewer Component correctly render the snapshot 1`] = `
   />
 </DocumentFragment>
 `;
-
-exports[`BpmnViewer Component should match the snapshot 1`] = `
-<DocumentFragment>
-  <div
-    data-testid="canvas"
-    id="canvas"
-    style="user-select: none; width: 100%; height: 100%;"
-  />
-</DocumentFragment>
-`;

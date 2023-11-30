@@ -25,7 +25,8 @@ const LoadedBpmnViewer = () => {
     fetch(bpmnUrl)
       .then((res) => res.text())
       .then((bpmn) => {
-        setBpmnXml(bpmn)});
+        setBpmnXml(bpmn);
+      });
   }, []);
 
   return (
@@ -36,8 +37,7 @@ const LoadedBpmnViewer = () => {
         justifyContent: "center",
       }}
     >
-      {bpmnXml &&
-      <BpmnViewer width={1200} height={500} bpmnString={bpmnXml} />}
+      {bpmnXml && <BpmnViewer width={1200} height={500} bpmnString={bpmnXml} />}
     </div>
   );
 };
