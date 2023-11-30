@@ -3,8 +3,9 @@ import { render, waitFor } from "@testing-library/react";
 import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
 import { BpmnViewer } from "./BpmnViewer";
 import Viewer from "bpmn-js/lib/Viewer";
+import * as mockdata from "./mockdata.json";
 
-// Mock class constructor
+// Mock class constructor for NavigatedViewer
 jest.mock("bpmn-js/lib/NavigatedViewer", () => {
   return {
     __esModule: true, // ESModule compatibility
@@ -22,6 +23,7 @@ jest.mock("bpmn-js/lib/NavigatedViewer", () => {
   };
 });
 
+// Mock class constructor for Viewer
 jest.mock("bpmn-js/lib/Viewer", () => {
   return {
     __esModule: true, // ESModule compatibility
@@ -41,21 +43,14 @@ jest.mock("bpmn-js/lib/Viewer", () => {
 
 describe("BpmnViewer Component", () => {
   it("correctly render the snapshot", () => {
-    const bpmnString = "some-bpmn-xml-string";
-    const { asFragment } = render(
-      <BpmnViewer bpmnString={bpmnString} navigated={true} />,
-    );
+    const { asFragment } = render(<BpmnViewer {...mockdata.primary} />);
 
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders and initializes bpmn-js viewer", async () => {
-    const bpmnString = "some-bpmn-xml-string";
-
     // Render the component
-    const { getByTestId } = render(
-      <BpmnViewer bpmnString={bpmnString} navigated={true} />,
-    );
+    const { getByTestId } = render(<BpmnViewer {...mockdata.primary} />);
 
     await waitFor(() => {
       expect(getByTestId("canvas")).toBeInTheDocument();
@@ -63,8 +58,7 @@ describe("BpmnViewer Component", () => {
   });
 
   it("uses NavigatedViewer when navigated prop is true", async () => {
-    const bpmnString = "some-bpmn-xml-string";
-    render(<BpmnViewer bpmnString={bpmnString} navigated={true} />);
+    render(<BpmnViewer {...mockdata.primary} />);
 
     await waitFor(() => {
       expect(NavigatedViewer).toHaveBeenCalled();
@@ -72,8 +66,7 @@ describe("BpmnViewer Component", () => {
   });
 
   it("uses Viewer when navigated prop is false", async () => {
-    const bpmnString = "some-bpmn-xml-string";
-    render(<BpmnViewer bpmnString={bpmnString} navigated={false} />);
+    render(<BpmnViewer {...mockdata.secondary} />);
 
     await waitFor(() => {
       expect(Viewer).toHaveBeenCalled();
