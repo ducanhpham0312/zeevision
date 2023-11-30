@@ -11,6 +11,16 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/graph/model"
 )
 
+// Jobs is the resolver for the jobs field.
+func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance) ([]*model.Job, error) {
+	dbJobs, err := r.Fetcher.GetJobsForInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
+	}
+
+	return model.Map(dbJobs, model.FromStorageJob), nil
+}
+
 // Variables is the resolver for the variables field.
 func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance) ([]*model.Variable, error) {
 	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx, obj.InstanceKey)

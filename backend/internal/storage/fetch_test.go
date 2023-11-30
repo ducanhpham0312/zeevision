@@ -261,6 +261,84 @@ func TestProcessQuery(t *testing.T) {
 	}
 }
 
+func TestJobsForInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	expectedJobs := []Job{
+		{
+			ElementID:          "element-1",
+			Key:                1,
+			Type:               "type-1",
+			Retries:            1,
+			Worker:             "worker-1",
+			State:              "state-1",
+			ProcessInstanceKey: 10,
+		},
+		{
+			ElementID:          "element-2",
+			Key:                2,
+			Type:               "type-2",
+			Retries:            2,
+			Worker:             "worker-2",
+			State:              "state-2",
+			ProcessInstanceKey: 10,
+		},
+		{
+			ElementID:          "element-3",
+			Key:                3,
+			Type:               "type-3",
+			Retries:            3,
+			Worker:             "worker-3",
+			State:              "state-3",
+			ProcessInstanceKey: 20,
+		},
+	}
+	err := db.Create(expectedJobs).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		jobs        []Job
+	}{
+		{
+			name:        "instance with two jobs",
+			instanceKey: 10,
+			jobs:        expectedJobs[0:2],
+		},
+		{
+			name:        "instance with one job",
+			instanceKey: 20,
+			jobs:        expectedJobs[2:3],
+		},
+		{
+			name:        "instance with no jobs",
+			instanceKey: 40,
+			jobs:        []Job{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			jobs, err := fetcher.GetJobsForInstance(context.Background(), test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, jobs, len(test.jobs))
+			for i := range jobs {
+				assert.Equal(t, test.jobs[i], jobs[i])
+			}
+		})
+	}
+}
+
 func TestVariablesForInstanceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {

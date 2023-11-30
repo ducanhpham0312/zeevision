@@ -16,8 +16,19 @@ type Instance struct {
 	ProcessKey     int64       `json:"processKey"`
 	Version        int64       `json:"version"`
 	Status         Status      `json:"status"`
+	Jobs           []*Job      `json:"jobs"`
 	Variables      []*Variable `json:"variables"`
 	Process        *Process    `json:"process"`
+}
+
+type Job struct {
+	ElementID string `json:"elementId"`
+	Key       int64  `json:"key"`
+	Type      string `json:"type"`
+	Retries   int64  `json:"retries"`
+	Worker    string `json:"worker"`
+	State     string `json:"state"`
+	Time      string `json:"time"`
 }
 
 type MessageSubscription struct {

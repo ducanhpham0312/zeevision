@@ -232,6 +232,34 @@ func TestFromStorageProcess(t *testing.T) {
 	}
 }
 
+func TestFromStorageJob(t *testing.T) {
+	now := time.Now()
+
+	storageJob := storage.Job{
+		ElementID:          "element-id",
+		Key:                10,
+		Type:               "type",
+		Retries:            3,
+		Worker:             "worker",
+		State:              "state",
+		Time:               now,
+		ProcessInstanceKey: 100,
+	}
+	expected := &Job{
+		ElementID: "element-id",
+		Key:       10,
+		Type:      "type",
+		Retries:   3,
+		Worker:    "worker",
+		State:     "state",
+		Time:      now.UTC().Format(time.RFC3339),
+	}
+
+	actual := FromStorageJob(storageJob)
+
+	assert.Equal(t, expected, actual)
+}
+
 func TestFromStorageVariable(t *testing.T) {
 	now := time.Now()
 
