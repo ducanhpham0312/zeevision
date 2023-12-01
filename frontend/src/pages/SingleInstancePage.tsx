@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import { useQuerySingleInstance } from "../hooks/useQuerySingleInstance";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { ResizableContainer } from "../components/ResizableContainer";
+import { Tabs } from "@mui/base/Tabs";
+import { TabsList } from "@mui/base/TabsList";
+import { TabPanel } from "@mui/base/TabPanel";
+import { Tab } from "@mui/base/Tab";
 
 export default function SingleInstancesPage() {
   const params = useParams();
@@ -17,6 +21,7 @@ export default function SingleInstancesPage() {
     bpmnResource,
     bpmnProcessId,
     variables,
+    jobs,
   } = instance;
   return (
     <div className="flex h-full w-full flex-col gap-3">
@@ -60,15 +65,51 @@ export default function SingleInstancesPage() {
           />
         </div>
       </ResizableContainer>
-      <Table
-        orientation="horizontal"
-        header={["Variable Name", "Variable Value", "Time"]}
-        content={
-          variables
-            ? variables.map(({ name, value, time }) => [name, value, time])
-            : []
-        }
-      />
+      <Tabs defaultValue={"variables"} className="bg-white">
+        <TabsList className="grid w-full grid-cols-2 border-2 rounded-lg">
+          <Tab value={"variables"} className={`w-full py-5 px-12 m-1 rounded-md hover:bg-second-accent focus:bg-second-accent/100`}>Variables</Tab>
+          <Tab value={"jobs"} className={`w-full py-5 px-12 m-1 rounded-md hover:bg-second-accent focus:bg-second-accent/100`}>Jobs</Tab>
+        </TabsList>
+        <TabPanel value={"variables"}>
+          <VariablesTable variables={variables} />
+        </TabPanel>
+        <TabPanel value={"jobs"}>
+          <JobsTable jobs={jobs}/>
+        </TabPanel>
+      </Tabs>
     </div>
+  );
+}
+interface VariableListProps {
+  variables: VariableType[];
+}
+function VariablesTable({ variables }: VariableListProps) {
+  return (
+    <Table
+      orientation="horizontal"
+      header={["Variable Name", "Variable Value", "Time"]}
+      content={
+        variables && variables.length > 0
+          ? variables.map(({ name, value, time }) => [name, value, time])
+          : []
+      }
+    />
+  );
+}
+
+interface JobListProps {
+  jobs: JobType[];
+}
+function JobsTable({ jobs }: JobListProps) {
+  return (
+    <Table
+      orientation="horizontal"
+      header={["Element ID", "Job Key", "Job Type", "Retries", "Job Worker", "State", "Time"]}
+      content={
+        jobs
+          ? jobs.map(({ elementId, key, type, retries, worker, state, time }) => [elementId, key, type, retries, worker, state, time])
+          : []
+      }
+    />
   );
 }
