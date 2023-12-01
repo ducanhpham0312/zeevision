@@ -27,14 +27,19 @@ export interface TableProps {
   className?: string;
 }
 
-export function Table({ orientation, className, ...props }: TableProps) {
+export function Table({
+  orientation,
+  className,
+  alterRowColor = true,
+  ...props
+}: TableProps) {
   if (props.header.length === 0) return null;
   return (
     <table
       className={twMerge("w-full border-collapse rounded bg-white", className)}
     >
       {orientation === "horizontal" ? (
-        <HorizontalTable {...props} />
+        <HorizontalTable alterRowColor={alterRowColor} {...props} />
       ) : (
         <VerticalTable {...props} />
       )}

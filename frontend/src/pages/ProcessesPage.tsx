@@ -27,7 +27,6 @@ export default function ProcessesPage() {
           </Button>
         </div>
         <Table
-          alterRowColor
           header={["Process Key", "Process ID", "Deployment Time"]}
           orientation="horizontal"
           expandElement={(idx: number) => (
@@ -35,6 +34,7 @@ export default function ProcessesPage() {
               <p>Process Details:</p>
               <div>
                 <Table
+                  alterRowColor={false}
                   orientation="horizontal"
                   header={["Instance Key", "Status", "Version", "Start Time"]}
                   optionElement={() => <></>}
