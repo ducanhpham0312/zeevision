@@ -61,6 +61,7 @@ var expectedJobs = []Job{
 		ProcessInstanceKey: 20,
 	},
 }
+
 func TestBpmnResourceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {
