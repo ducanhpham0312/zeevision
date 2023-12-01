@@ -253,6 +253,7 @@ func TestFromStorageJob(t *testing.T) {
 		Worker:    "worker",
 		State:     "state",
 		Time:      now.UTC().Format(time.RFC3339),
+		InstanceKey: 100,
 	}
 
 	actual := FromStorageJob(storageJob)
