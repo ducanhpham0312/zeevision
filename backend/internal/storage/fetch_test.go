@@ -424,7 +424,7 @@ func TestIncidentsForInstanceQuery(t *testing.T) {
 		incidents   []Incident
 	}{
 		{
-			name:        "instance with one incidents",
+			name:        "instance with one incident",
 			instanceKey: 10,
 			incidents:   expectedIncidents[:1],
 		},
