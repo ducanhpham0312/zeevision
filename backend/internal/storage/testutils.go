@@ -1,4 +1,4 @@
-package testutils
+package storage
 
 import (
 	"testing"
@@ -13,26 +13,36 @@ import (
 //
 // NOTE: You shouldn't use more than one test database at a time,
 // since the underlying database is shared. So no `t.Parallel()`.
-func NewTestDB(t *testing.T) *TestDB {
+func newTestDB(t *testing.T) *testDB {
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
 	assert.NoError(t, err)
 
 	tx := db.Begin()
 
-	return &TestDB{db: tx}
+	return &testDB{db: tx}
+}
+
+// Creates new test database with processes table.
+func newMigratedTestDB(t *testing.T) *testDB {
+	testDb := newTestDB(t)
+
+	err := AutoMigrate(testDb.DB())
+	assert.NoError(t, err)
+
+	return testDb
 }
 
 // Rolls back to empty state.
-func (d *TestDB) Rollback() error {
+func (d *testDB) Rollback() error {
 	return d.db.Rollback().Error
 }
 
 // Returns database object.
-func (d *TestDB) DB() *gorm.DB {
+func (d *testDB) DB() *gorm.DB {
 	return d.db
 }
 
 // In-memory test database using sqlite.
-type TestDB struct {
+type testDB struct {
 	db *gorm.DB
 }

@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ducanhpham0312/zeevision/backend/internal/testutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +23,7 @@ func TestNewDsn(t *testing.T) {
 }
 
 func TestFillDatabase(t *testing.T) {
-	testDb := testutils.NewTestDB(t)
+	testDb := newTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()

@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ducanhpham0312/zeevision/backend/internal/testutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -340,14 +339,4 @@ func TestCancelQuery(t *testing.T) {
 
 	_, err := fetcher.GetProcesses(ctx)
 	assert.EqualError(t, err, "context canceled")
-}
-
-// Creates new test database with processes table.
-func newMigratedTestDB(t *testing.T) *testutils.TestDB {
-	testDb := testutils.NewTestDB(t)
-
-	err := AutoMigrate(testDb.DB())
-	assert.NoError(t, err)
-
-	return testDb
 }
