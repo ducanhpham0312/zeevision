@@ -13,12 +13,22 @@ import (
 
 // Instance is the resolver for the instance field.
 func (r *incidentResolver) Instance(ctx context.Context, obj *model.Incident) (*model.Instance, error) {
-	panic(fmt.Errorf("not implemented: Instance - instance"))
+	dbInstance, err := r.Fetcher.GetInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch instance: %w", err)
+	}
+
+	return model.FromStorageInstance(dbInstance), nil
 }
 
 // Incidents is the resolver for the incidents field.
 func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance) ([]*model.Incident, error) {
-	panic(fmt.Errorf("not implemented: Incidents - incidents"))
+	dbIncidents, err := r.Fetcher.GetIncidentsForInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
+	}
+
+	return model.Map(dbIncidents, model.FromStorageIncident), nil
 }
 
 // Jobs is the resolver for the jobs field.
@@ -123,7 +133,12 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 
 // Incidents is the resolver for the incidents field.
 func (r *queryResolver) Incidents(ctx context.Context) ([]*model.Incident, error) {
-	panic(fmt.Errorf("not implemented: Incidents - incidents"))
+	dbIncidents, err := r.Fetcher.GetIncidents(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
+	}
+
+	return model.Map(dbIncidents, model.FromStorageIncident), nil
 }
 
 // Jobs is the resolver for the jobs field.

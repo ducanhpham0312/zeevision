@@ -9,7 +9,8 @@ import (
 )
 
 type Incident struct {
-	Key          int64     `json:"key"`
+	IncidentKey  int64     `json:"incidentKey"`
+	InstanceKey  int64     `json:"instanceKey"`
 	ElementID    string    `json:"elementId"`
 	ErrorType    string    `json:"errorType"`
 	ErrorMessage string    `json:"errorMessage"`

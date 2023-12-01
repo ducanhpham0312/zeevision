@@ -45,7 +45,8 @@ type Instance {
 }
 
 type Incident {
-  key: Int!
+  incidentKey: Int!
+  instanceKey: Int!
   elementId: String!
   errorType: String!
   errorMessage: String!

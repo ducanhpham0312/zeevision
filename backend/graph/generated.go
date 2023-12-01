@@ -54,8 +54,9 @@ type ComplexityRoot struct {
 		ElementID    func(childComplexity int) int
 		ErrorMessage func(childComplexity int) int
 		ErrorType    func(childComplexity int) int
+		IncidentKey  func(childComplexity int) int
 		Instance     func(childComplexity int) int
-		Key          func(childComplexity int) int
+		InstanceKey  func(childComplexity int) int
 		State        func(childComplexity int) int
 		Time         func(childComplexity int) int
 	}
@@ -180,6 +181,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Incident.ErrorType(childComplexity), true
 
+	case "Incident.incidentKey":
+		if e.complexity.Incident.IncidentKey == nil {
+			break
+		}
+
+		return e.complexity.Incident.IncidentKey(childComplexity), true
+
 	case "Incident.instance":
 		if e.complexity.Incident.Instance == nil {
 			break
@@ -187,12 +195,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Incident.Instance(childComplexity), true
 
-	case "Incident.key":
-		if e.complexity.Incident.Key == nil {
+	case "Incident.instanceKey":
+		if e.complexity.Incident.InstanceKey == nil {
 			break
 		}
 
-		return e.complexity.Incident.Key(childComplexity), true
+		return e.complexity.Incident.InstanceKey(childComplexity), true
 
 	case "Incident.state":
 		if e.complexity.Incident.State == nil {
@@ -675,8 +683,8 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Incident_key(ctx context.Context, field graphql.CollectedField, obj *model.Incident) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Incident_key(ctx, field)
+func (ec *executionContext) _Incident_incidentKey(ctx context.Context, field graphql.CollectedField, obj *model.Incident) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Incident_incidentKey(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -689,7 +697,7 @@ func (ec *executionContext) _Incident_key(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Key, nil
+		return obj.IncidentKey, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -706,7 +714,51 @@ func (ec *executionContext) _Incident_key(ctx context.Context, field graphql.Col
 	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Incident_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Incident_incidentKey(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Incident",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Incident_instanceKey(ctx context.Context, field graphql.CollectedField, obj *model.Incident) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Incident_instanceKey(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InstanceKey, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Incident_instanceKey(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Incident",
 		Field:      field,
@@ -1351,8 +1403,10 @@ func (ec *executionContext) fieldContext_Instance_incidents(ctx context.Context,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "key":
-				return ec.fieldContext_Incident_key(ctx, field)
+			case "incidentKey":
+				return ec.fieldContext_Incident_incidentKey(ctx, field)
+			case "instanceKey":
+				return ec.fieldContext_Incident_instanceKey(ctx, field)
 			case "elementId":
 				return ec.fieldContext_Incident_elementId(ctx, field)
 			case "errorType":
@@ -2711,8 +2765,10 @@ func (ec *executionContext) fieldContext_Query_incidents(ctx context.Context, fi
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "key":
-				return ec.fieldContext_Incident_key(ctx, field)
+			case "incidentKey":
+				return ec.fieldContext_Incident_incidentKey(ctx, field)
+			case "instanceKey":
+				return ec.fieldContext_Incident_instanceKey(ctx, field)
 			case "elementId":
 				return ec.fieldContext_Incident_elementId(ctx, field)
 			case "errorType":
@@ -4849,8 +4905,13 @@ func (ec *executionContext) _Incident(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Incident")
-		case "key":
-			out.Values[i] = ec._Incident_key(ctx, field, obj)
+		case "incidentKey":
+			out.Values[i] = ec._Incident_incidentKey(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "instanceKey":
+			out.Values[i] = ec._Incident_instanceKey(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
