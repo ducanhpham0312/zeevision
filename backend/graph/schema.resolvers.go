@@ -71,16 +71,6 @@ func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]
 	return model.Map(dbInstances, model.FromStorageInstance), nil
 }
 
-// MessageSubscriptions is the resolver for the messageSubscriptions field.
-func (r *processResolver) MessageSubscriptions(ctx context.Context, obj *model.Process) ([]*model.MessageSubscription, error) {
-	return []*model.MessageSubscription{}, nil
-}
-
-// Timers is the resolver for the timers field.
-func (r *processResolver) Timers(ctx context.Context, obj *model.Process) ([]*model.Timer, error) {
-	return []*model.Timer{}, nil
-}
-
 // Processes is the resolver for the processes field.
 func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error) {
 	dbProcesses, err := r.Fetcher.GetProcesses(ctx)

@@ -25,9 +25,7 @@ type Process {
   bpmnProcessId: String!
   deploymentTime: DateTime!
   instances: [Instance!]! @goField(forceResolver: true)
-  messageSubscriptions: [MessageSubscription!]! @goField(forceResolver: true)
   processKey: Int!
-  timers: [Timer!]! @goField(forceResolver: true)
   version: Int!
 }
 
@@ -60,21 +58,6 @@ type Variable {
   name: String!
   value: String!
   time: DateTime!
-}
-
-type MessageSubscription {
-  createdAt: DateTime!
-  elementId: Int!
-  messageName: String!
-  status: Status!
-}
-
-type Timer {
-  dueDate: DateTime!
-  processInstanceKey: Int!
-  repetitions: String!
-  startTime: DateTime!
-  status: Status!
 }
 
 enum Status {
