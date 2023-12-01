@@ -114,6 +114,29 @@ func (f *Fetcher) GetJobsForInstance(ctx context.Context, instanceKey int64) ([]
 	return jobs, err
 }
 
+// Gets all incidents.
+func (f *Fetcher) GetIncidents(ctx context.Context) ([]Incident, error) {
+	var incidents []Incident
+	err := f.ContextDB(ctx).
+		Order("time DESC").
+		Find(&incidents).
+		Error
+
+	return incidents, err
+}
+
+// Gets all incidents for an instance.
+func (f *Fetcher) GetIncidentsForInstance(ctx context.Context, instanceKey int64) ([]Incident, error) {
+	var incidents []Incident
+	err := f.ContextDB(ctx).
+		Where(&Incident{ProcessInstanceKey: instanceKey}).
+		Order("time DESC").
+		Find(&incidents).
+		Error
+
+	return incidents, err
+}
+
 // Gets all variables for an instance.
 func (f *Fetcher) GetVariablesForInstance(ctx context.Context, instanceKey int64) ([]Variable, error) {
 	var variables []Variable

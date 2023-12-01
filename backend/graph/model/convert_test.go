@@ -232,6 +232,33 @@ func TestFromStorageProcess(t *testing.T) {
 	}
 }
 
+func TestFromStrorageIncident(t *testing.T) {
+	now := time.Now()
+
+	storageIncident := storage.Incident{
+		Key:                10,
+		ProcessInstanceKey: 100,
+		ElementID:          "element-id",
+		ErrorType:          "error-type",
+		ErrorMessage:       "error-message",
+		State:              "state",
+		Time:               now,
+	}
+	expected := &Incident{
+		IncidentKey:  10,
+		InstanceKey:  100,
+		ElementID:    "element-id",
+		ErrorType:    "error-type",
+		ErrorMessage: "error-message",
+		State:        "state",
+		Time:         now.UTC().Format(time.RFC3339),
+	}
+
+	actual := FromStorageIncident(storageIncident)
+
+	assert.Equal(t, expected, actual)
+}
+
 func TestFromStorageJob(t *testing.T) {
 	now := time.Now()
 

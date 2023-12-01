@@ -14,6 +14,7 @@ type Query {
   process(processKey: Int!): Process
   instances: [Instance!]!
   instance(instanceKey: Int!): Instance
+  incidents: [Incident!]!
   jobs: [Job!]!
 }
 
@@ -37,9 +38,21 @@ type Instance {
   processKey: Int!
   version: Int!
   status: Status!
+  incidents: [Incident!]! @goField(forceResolver: true)
   jobs: [Job!]! @goField(forceResolver: true)
   variables: [Variable!]! @goField(forceResolver: true)
   process: Process! @goField(forceResolver: true)
+}
+
+type Incident {
+  incidentKey: Int!
+  instanceKey: Int!
+  elementId: String!
+  errorType: String!
+  errorMessage: String!
+  state: String!
+  time: DateTime!
+  instance: Instance! @goField(forceResolver: true)
 }
 
 type Job {

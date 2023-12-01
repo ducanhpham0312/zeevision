@@ -11,6 +11,26 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/graph/model"
 )
 
+// Instance is the resolver for the instance field.
+func (r *incidentResolver) Instance(ctx context.Context, obj *model.Incident) (*model.Instance, error) {
+	dbInstance, err := r.Fetcher.GetInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch instance: %w", err)
+	}
+
+	return model.FromStorageInstance(dbInstance), nil
+}
+
+// Incidents is the resolver for the incidents field.
+func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance) ([]*model.Incident, error) {
+	dbIncidents, err := r.Fetcher.GetIncidentsForInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
+	}
+
+	return model.Map(dbIncidents, model.FromStorageIncident), nil
+}
+
 // Jobs is the resolver for the jobs field.
 func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance) ([]*model.Job, error) {
 	dbJobs, err := r.Fetcher.GetJobsForInstance(ctx, obj.InstanceKey)
@@ -111,6 +131,16 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 	return model.FromStorageInstance(dbInstance), nil
 }
 
+// Incidents is the resolver for the incidents field.
+func (r *queryResolver) Incidents(ctx context.Context) ([]*model.Incident, error) {
+	dbIncidents, err := r.Fetcher.GetIncidents(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
+	}
+
+	return model.Map(dbIncidents, model.FromStorageIncident), nil
+}
+
 // Jobs is the resolver for the jobs field.
 func (r *queryResolver) Jobs(ctx context.Context) ([]*model.Job, error) {
 	dbJobs, err := r.Fetcher.GetJobs(ctx)
@@ -120,6 +150,9 @@ func (r *queryResolver) Jobs(ctx context.Context) ([]*model.Job, error) {
 
 	return model.Map(dbJobs, model.FromStorageJob), nil
 }
+
+// Incident returns IncidentResolver implementation.
+func (r *Resolver) Incident() IncidentResolver { return &incidentResolver{r} }
 
 // Instance returns InstanceResolver implementation.
 func (r *Resolver) Instance() InstanceResolver { return &instanceResolver{r} }
@@ -133,6 +166,7 @@ func (r *Resolver) Process() ProcessResolver { return &processResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type incidentResolver struct{ *Resolver }
 type instanceResolver struct{ *Resolver }
 type jobResolver struct{ *Resolver }
 type processResolver struct{ *Resolver }

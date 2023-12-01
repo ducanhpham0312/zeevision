@@ -9,6 +9,7 @@ import (
 var TableMigrations = []any{
 	&Process{},
 	&Instance{},
+	&Incident{},
 	&Job{},
 	&Variable{},
 	&BpmnResource{},
@@ -22,6 +23,7 @@ type Instance struct {
 	Status               string    `gorm:"not null"`
 	StartTime            time.Time `gorm:"not null"`
 	EndTime              sql.NullTime
+	Incidents            []Incident `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 	Jobs                 []Job      `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 	Variables            []Variable `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 }
@@ -34,6 +36,16 @@ type Process struct {
 	DeploymentTime       time.Time    `gorm:"not null"`
 	BpmnResource         BpmnResource `gorm:"foreignKey:BpmnProcessID;references:BpmnProcessID"`
 	Instances            []Instance   `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
+}
+
+type Incident struct {
+	Key                int64     `gorm:"primarykey"`
+	ProcessInstanceKey int64     `gorm:"not null"`
+	ElementID          string    `gorm:"not null"`
+	ErrorType          string    `gorm:"not null"`
+	ErrorMessage       string    `gorm:"not null"`
+	State              string    `gorm:"not null"`
+	Time               time.Time `gorm:"not null"`
 }
 
 // Job model struct for the 'jobs' database table.

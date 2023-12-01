@@ -16,6 +16,26 @@ VALUES(11, 'a', '1', '2023-11-27T02:05:00Z');
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'b', '2', '2023-11-27T02:22:00Z');
 
+INSERT INTO incidents(process_instance_key, element_id, key, error_type, error_message, state, time)
+VALUES(11, 'some-element-1', 100, 'ERROR', 'panic: runtime error: index out of range [4] with length 4
+
+goroutine 1 [running]:
+main.validateInput(0xc00001e1e0, 0x4, 0x4, 0x0, 0x0)
+    /path/to/validate.go:29 +0x1a2
+main.processData(0xc00001e1e0, 0x4, 0x4, 0x0)
+    /path/to/process.go:56 +0xef
+main.aggregateData(0x1139ba0, 0xc000010030, 0x3, 0x3)
+    /path/to/aggregate.go:42 +0x9c
+main.loadData(0x1139ba0, 0x1185b40, 0x1)
+    /path/to/load.go:37 +0x5a
+main.setupEnvironment()
+    /path/to/setup.go:24 +0x87
+main.init.0()
+    /path/to/main.go:18 +0x29
+', 'OPEN', '2023-11-27T02:23:00Z');
+INSERT INTO incidents(process_instance_key, element_id, key, error_type, error_message, state, time)
+VALUES(11, 'some-element-2', 101, 'ERROR', 'Thing not work', 'RESOLVED', '2023-11-27T02:24:00Z');
+
 INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
 VALUES(11, 'some-element-1', 100, 'big-job', 4, 'big-boy-1', 'WORKING', '2023-11-27T02:23:00Z');
 INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
@@ -32,6 +52,44 @@ INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, s
 VALUES(12, 'some-element-12', 200, 'small-job', 10, 'big-boy-1', 'WORKING', '2023-11-27T02:23:00Z');
 INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
 VALUES(12, 'some-element-22', 201, 'tiny-job', 2, 'big-boy-1', 'WORKING', '2023-11-27T02:24:00Z');
+
+INSERT INTO incidents(process_instance_key, element_id, key, error_type, error_message, state, time)
+VALUES(12, 'some-element-3', 102, 'ERROR', 'panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x10d3c7b]
+
+goroutine 1 [running]:
+main.computeStatistics(0x0)
+    /path/to/statistics.go:87 +0x3b
+main.validateInput(0x0)
+    /path/to/validate.go:29 +0x1a2
+main.preprocessData(0x0)
+    /path/to/preprocess.go:73 +0xbf
+main.processData(0x0)
+    /path/to/process.go:56 +0xef
+main.aggregateData(0x1139ba0, 0x0, 0x0, 0x0)
+    /path/to/aggregate.go:42 +0x9c
+main.loadData(0x1139ba0, 0x0)
+    /path/to/load.go:37 +0x5a
+main.setupEnvironment()
+    /path/to/setup.go:24 +0x87
+main.initConfig()
+    /path/to/config.go:58 +0x104
+main.checkDependencies()
+    /path/to/dependencies.go:15 +0x79
+main.initializeLogger()
+    /path/to/logger.go:28 +0x45
+main.connectToDatabase(0x113f2c0, 0x0)
+    /path/to/database.go:19 +0x9f
+main.verifyUserCredentials(0x0, 0x0)
+    /path/to/authentication.go:34 +0x153
+main.sessionStart(0x1138be0, 0x0, 0x0)
+    /path/to/session.go:21 +0x8a
+main.init.1()
+    /path/to/main.go:26 +0x34
+main.init.0()
+    /path/to/main.go:18 +0x29
+', 'OPEN', '2023-11-27T02:33:00Z');
+
 --------------------------------------------------------------------------------------------------------------
 
 INSERT INTO processes(process_definition_key, bpmn_process_id, version, deployment_time)
