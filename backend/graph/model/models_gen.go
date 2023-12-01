@@ -33,33 +33,16 @@ type Job struct {
 	Instance    *Instance `json:"instance"`
 }
 
-type MessageSubscription struct {
-	CreatedAt   string `json:"createdAt"`
-	ElementID   int64  `json:"elementId"`
-	MessageName string `json:"messageName"`
-	Status      Status `json:"status"`
-}
-
 type Process struct {
-	ActiveInstances      int64                  `json:"activeInstances"`
-	CompletedInstances   int64                  `json:"completedInstances"`
-	BpmnLiveStatus       string                 `json:"bpmnLiveStatus"`
-	BpmnResource         string                 `json:"bpmnResource"`
-	BpmnProcessID        string                 `json:"bpmnProcessId"`
-	DeploymentTime       string                 `json:"deploymentTime"`
-	Instances            []*Instance            `json:"instances"`
-	MessageSubscriptions []*MessageSubscription `json:"messageSubscriptions"`
-	ProcessKey           int64                  `json:"processKey"`
-	Timers               []*Timer               `json:"timers"`
-	Version              int64                  `json:"version"`
-}
-
-type Timer struct {
-	DueDate            string `json:"dueDate"`
-	ProcessInstanceKey int64  `json:"processInstanceKey"`
-	Repetitions        string `json:"repetitions"`
-	StartTime          string `json:"startTime"`
-	Status             Status `json:"status"`
+	ActiveInstances    int64       `json:"activeInstances"`
+	CompletedInstances int64       `json:"completedInstances"`
+	BpmnLiveStatus     string      `json:"bpmnLiveStatus"`
+	BpmnResource       string      `json:"bpmnResource"`
+	BpmnProcessID      string      `json:"bpmnProcessId"`
+	DeploymentTime     string      `json:"deploymentTime"`
+	Instances          []*Instance `json:"instances"`
+	ProcessKey         int64       `json:"processKey"`
+	Version            int64       `json:"version"`
 }
 
 type Variable struct {
