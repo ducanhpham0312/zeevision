@@ -25,10 +25,10 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 }
 
 // Gets a BPMN resource by its process ID.
-func (f *Fetcher) GetBpmnResource(ctx context.Context, bpmnProcessID string) (BpmnResource, error) {
+func (f *Fetcher) GetBpmnResource(ctx context.Context, processDefKey int64) (BpmnResource, error) {
 	var bpmnResource BpmnResource
 	err := f.ContextDB(ctx).
-		Where(&BpmnResource{BpmnProcessID: bpmnProcessID}).
+		Where(&BpmnResource{ProcessDefinitionKey: processDefKey}).
 		First(&bpmnResource).
 		Error
 

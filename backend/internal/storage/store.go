@@ -69,8 +69,8 @@ func (r *databaseStorer) ProcessDeployed(
 	bpmnResourceRaw []byte,
 ) error {
 	bpmnResource := BpmnResource{
-		BpmnProcessID: bpmnProcessID,
-		BpmnFile:      base64.StdEncoding.EncodeToString(bpmnResourceRaw),
+		ProcessDefinitionKey: processDefinitionKey,
+		BpmnFile:             base64.StdEncoding.EncodeToString(bpmnResourceRaw),
 	}
 
 	err := r.db.Create(&Process{

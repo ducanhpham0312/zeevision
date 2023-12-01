@@ -43,7 +43,7 @@ func (r *instanceResolver) Process(ctx context.Context, obj *model.Instance) (*m
 
 // BpmnResource is the resolver for the bpmnResource field.
 func (r *processResolver) BpmnResource(ctx context.Context, obj *model.Process) (string, error) {
-	dbBpmnResource, err := r.Fetcher.GetBpmnResource(ctx, obj.BpmnProcessID)
+	dbBpmnResource, err := r.Fetcher.GetBpmnResource(ctx, obj.ProcessKey)
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch bpmn resource: %w", err)
 	}

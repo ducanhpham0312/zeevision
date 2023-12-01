@@ -20,17 +20,6 @@ func TestMap(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestFromStorageBpmnResource(t *testing.T) {
-	storageResource := storage.BpmnResource{
-		BpmnProcessID: "main-loop",
-		BpmnFile:      "test",
-	}
-	expected := "test"
-
-	actual := FromStorageBpmnResource(storageResource)
-	assert.Equal(t, expected, actual)
-}
-
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
 	nowFormatted := now.UTC().Format(time.RFC3339)
@@ -171,8 +160,8 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "main-loop",
 				// BpmnResource should not transfer to model.Instance.
 				BpmnResource: storage.BpmnResource{
-					BpmnProcessID: "main-loop",
-					BpmnFile:      "test",
+					ProcessDefinitionKey: 1,
+					BpmnFile:             "test",
 				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{
@@ -204,8 +193,8 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "main-loop",
 				// BpmnResource should not transfer to model.Instance.
 				BpmnResource: storage.BpmnResource{
-					BpmnProcessID: "main-loop",
-					BpmnFile:      "test",
+					ProcessDefinitionKey: 2,
+					BpmnFile:             "test",
 				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{},

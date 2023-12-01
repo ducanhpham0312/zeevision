@@ -41,8 +41,8 @@ func TestBpmnResourceQuery(t *testing.T) {
 	db := testDb.DB()
 
 	expectedBpmnResource := BpmnResource{
-		BpmnProcessID: "main-loop",
-		BpmnFile:      "test",
+		ProcessDefinitionKey: 1,
+		BpmnFile:             "test",
 	}
 	err := db.Create(&expectedBpmnResource).Error
 	assert.NoError(t, err)
@@ -51,16 +51,16 @@ func TestBpmnResourceQuery(t *testing.T) {
 
 	tests := []struct {
 		name          string
-		bpmnProcessID string
+		processDefKey int64
 		expectedErr   string
 	}{
 		{
 			name:          "existing bpmn resource",
-			bpmnProcessID: expectedBpmnResource.BpmnProcessID,
+			processDefKey: expectedBpmnResource.ProcessDefinitionKey,
 		},
 		{
 			name:          "non-existent bpmn resource",
-			bpmnProcessID: "non-existent",
+			processDefKey: 123,
 			expectedErr:   "record not found",
 		},
 	}
@@ -69,7 +69,7 @@ func TestBpmnResourceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			bpmnResource, err := fetcher.GetBpmnResource(context.Background(), test.bpmnProcessID)
+			bpmnResource, err := fetcher.GetBpmnResource(context.Background(), test.processDefKey)
 
 			if test.expectedErr != "" {
 				assert.EqualError(t, err, test.expectedErr)

@@ -29,10 +29,10 @@ type Instance struct {
 // Process model struct for the 'processes' database table.
 type Process struct {
 	ProcessDefinitionKey int64        `gorm:"primarykey"`
-	BpmnProcessID        string       `gorm:"unique;not null"`
+	BpmnProcessID        string       `gorm:"not null"`
 	Version              int64        `gorm:"not null"`
 	DeploymentTime       time.Time    `gorm:"not null"`
-	BpmnResource         BpmnResource `gorm:"foreignKey:BpmnProcessID;references:BpmnProcessID"`
+	BpmnResource         BpmnResource `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
 	Instances            []Instance   `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
 }
 
@@ -61,7 +61,7 @@ type Variable struct {
 // This table is used to store the BPMN XML files which are relatively large
 // in size. The XML files are stored in the database as a base64 encoded string.
 type BpmnResource struct {
-	BpmnProcessID string `gorm:"primarykey"`
+	ProcessDefinitionKey int64 `gorm:"primarykey;autoIncrement:false"`
 	// A base64 encoded string of the BPMN XML file.
 	BpmnFile string `gorm:"not null"`
 }
