@@ -91,12 +91,13 @@ export function BpmnViewer({
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
     const { inner } = canvas.viewbox();
+    console.log(canvas);
 
     const center = {
       x: inner.x + inner.width / 2,
       y: inner.y + inner.height / 2,
     };
-
+    console.log(center);
     // zoom to fit full viewport
     canvas.zoom("fit-viewport", center);
   }, [modeler]);

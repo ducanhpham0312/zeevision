@@ -19,7 +19,9 @@ export function ExpandRow({ children, isIn, colSpan }: ExpandRowProps) {
           {isIn ? (
             <tr className="border border-t-0 border-black/10">
               <td colSpan={colSpan}>
-                <animated.div style={style}>{children}</animated.div>
+                <animated.div style={{ overflow: "auto", ...style }}>
+                  {children}
+                </animated.div>
               </td>
             </tr>
           ) : null}

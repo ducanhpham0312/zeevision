@@ -19,7 +19,7 @@ export default function ProcessesPage() {
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
       />
-      <div className="flex flex-col gap-10">
+      <div className="flex h-full flex-col gap-10 overflow-auto">
         <div className="flex items-center justify-between">
           <h1>PROCESSES</h1>
           <Button onClick={handleOpen} variant="secondary">
