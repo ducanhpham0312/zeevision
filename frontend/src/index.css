@@ -6,6 +6,10 @@
   h1 {
     @apply text-3xl font-bold;
   }
+  a {
+    text-decoration: underline dashed grey;
+    text-underline-offset: 3px;
+  }
 }
 
 .highlight:not(.djs-connection) .djs-visual > :nth-child(1) {

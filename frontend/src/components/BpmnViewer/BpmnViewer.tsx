@@ -115,7 +115,7 @@ export function BpmnViewer({
       return;
     }
     handleResetView();
-  }, [width, height, modeler, handleResetView]);
+  }, [width, height, handleResetView]);
 
   return (
     <div
