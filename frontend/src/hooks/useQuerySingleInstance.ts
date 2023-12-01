@@ -29,7 +29,7 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
         time
       }
       incidents {
-        key
+        incidentKey
         elementId
         errorType
         errorMessage

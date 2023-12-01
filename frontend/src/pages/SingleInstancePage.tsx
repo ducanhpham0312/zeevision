@@ -73,7 +73,7 @@ export default function SingleInstancesPage() {
         </div>
       </ResizableContainer>
       <Tabs defaultValue={"Variables"} className="bg-white">
-        <TabsList className="mb-5 mt-10 grid w-full grid-cols-2 rounded-xl border-2">
+        <TabsList className="mb-5 mt-10 grid w-full grid-cols-3 rounded-xl border-2">
           {tabsData.map((tab, index) => (
             <Tab
               key={index}
@@ -103,7 +103,11 @@ function VariablesTable({ variables }: VariableListProps) {
       header={["Variable Name", "Variable Value", "Time"]}
       content={
         variables && variables.length > 0
-          ? variables.map(({ name, value, time }) => [name, value, time])
+          ? variables.map(({ name, value, time }) => [
+              name,
+              <pre>{value}</pre>,
+              time,
+            ])
           : []
       }
     />
@@ -145,7 +149,6 @@ function JobsTable({ jobs }: JobListProps) {
   );
 }
 
-
 interface IncidentListProps {
   incidents: IncidentType[];
 }
@@ -158,16 +161,22 @@ function IncidentsTable({ incidents }: IncidentListProps) {
         "Incident Key",
         "Error Type",
         "Retries",
-        "Job Worker",
         "State",
         "Time",
       ]}
       content={
         incidents
           ? incidents.map(
-              ({ elementId, key, errorType, errorMessage, state, time }) => [
+              ({
                 elementId,
-                key,
+                incidentKey,
+                errorType,
+                errorMessage,
+                state,
+                time,
+              }) => [
+                elementId,
+                incidentKey,
                 errorType,
                 <pre>{errorMessage}</pre>,
                 state,

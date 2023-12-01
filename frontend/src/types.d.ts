@@ -47,11 +47,11 @@ type JobType = {
 };
 
 type IncidentType = {
-  key: number;
+  incidentKey: number;
   elementId: string;
   instanceKey: number;
   errorType: string;
   errorMessage: string;
   state: string;
   time: string;
-}
+};

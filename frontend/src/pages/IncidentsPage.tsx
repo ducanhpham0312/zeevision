@@ -8,21 +8,15 @@ export default function IncidentsPage() {
   return (
     <Table
       orientation="horizontal"
-      header={[
-        "Instance Key",
-        "Incident Key",
-        "Element ID",
-        "State",
-        "Time",
-      ]}
+      header={["Instance Key", "Incident Key", "Element ID", "State", "Time"]}
       content={
         incidents
           ? incidents.map(
-              ({ instanceKey, key, elementId, state, time }) => [
+              ({ instanceKey, incidentKey, elementId, state, time }) => [
                 <NavLink to={`/instances/${instanceKey.toString()}`}>
                   <Button variant="secondary">{instanceKey}</Button>
                 </NavLink>,
-                key,
+                incidentKey,
                 elementId,
                 state,
                 time,
