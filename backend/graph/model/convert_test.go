@@ -246,13 +246,13 @@ func TestFromStorageJob(t *testing.T) {
 		ProcessInstanceKey: 100,
 	}
 	expected := &Job{
-		ElementID: "element-id",
-		Key:       10,
-		Type:      "type",
-		Retries:   3,
-		Worker:    "worker",
-		State:     "state",
-		Time:      now.UTC().Format(time.RFC3339),
+		ElementID:   "element-id",
+		Key:         10,
+		Type:        "type",
+		Retries:     3,
+		Worker:      "worker",
+		State:       "state",
+		Time:        now.UTC().Format(time.RFC3339),
 		InstanceKey: 100,
 	}
 
