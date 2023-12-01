@@ -116,9 +116,7 @@ export function HorizontalTable({
                 >
                   {row.map((cell, index) => (
                     <td className="p-3" key={index}>
-                      <p>
-                        {typeof cell === "string" ? prettifyJson(cell) : cell}
-                      </p>
+                      {cell}
                     </td>
                   ))}
                   {expandElement ? (
@@ -194,15 +192,6 @@ export function HorizontalTable({
       </tfoot>
     </>
   );
-}
-
-function prettifyJson(str: string) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return str;
-  }
-  return JSON.stringify(JSON.parse(str), null, 2);
 }
 
 const StyledTablePagination = styled(TablePagination)`
