@@ -22,11 +22,13 @@ export default function SingleInstancesPage() {
     bpmnProcessId,
     variables,
     jobs,
+    incidents,
   } = instance;
 
   const tabsData = [
     { label: "Variables", content: <VariablesTable variables={variables} /> },
     { label: "Jobs", content: <JobsTable jobs={jobs} /> },
+    { label: "Incidents", content: <IncidentsTable incidents={incidents} /> },
   ];
   return (
     <div className="flex h-full w-full flex-col gap-3">
@@ -133,6 +135,41 @@ function JobsTable({ jobs }: JobListProps) {
                 type,
                 retries,
                 worker,
+                state,
+                time,
+              ],
+            )
+          : []
+      }
+    />
+  );
+}
+
+
+interface IncidentListProps {
+  incidents: IncidentType[];
+}
+function IncidentsTable({ incidents }: IncidentListProps) {
+  return (
+    <Table
+      orientation="horizontal"
+      header={[
+        "Element ID",
+        "Incident Key",
+        "Error Type",
+        "Retries",
+        "Job Worker",
+        "State",
+        "Time",
+      ]}
+      content={
+        incidents
+          ? incidents.map(
+              ({ elementId, key, errorType, errorMessage, state, time }) => [
+                elementId,
+                key,
+                errorType,
+                <pre>{errorMessage}</pre>,
                 state,
                 time,
               ],

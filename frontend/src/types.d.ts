@@ -26,6 +26,7 @@ type Instance = {
   bpmnProcessId: string;
   variables: VariableType[];
   jobs: JobType[];
+  incidents: IncidentType[];
 };
 
 type VariableType = {
@@ -44,3 +45,13 @@ type JobType = {
   state: string;
   time: string;
 };
+
+type IncidentType = {
+  key: number;
+  elementId: string;
+  instanceKey: number;
+  errorType: string;
+  errorMessage: string;
+  state: string;
+  time: string;
+}
