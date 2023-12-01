@@ -62,6 +62,7 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage incident to GraphQL incident.
 func FromStorageIncident(incident storage.Incident) *Incident {
 	return &Incident{
 		IncidentKey:  incident.Key,
