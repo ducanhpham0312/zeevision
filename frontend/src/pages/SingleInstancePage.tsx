@@ -66,15 +66,25 @@ export default function SingleInstancesPage() {
         </div>
       </ResizableContainer>
       <Tabs defaultValue={"variables"} className="bg-white">
-        <TabsList className="grid w-full grid-cols-2 border-2 rounded-lg">
-          <Tab value={"variables"} className={`w-full py-5 px-12 m-1 rounded-md hover:bg-second-accent focus:bg-second-accent/100`}>Variables</Tab>
-          <Tab value={"jobs"} className={`w-full py-5 px-12 m-1 rounded-md hover:bg-second-accent focus:bg-second-accent/100`}>Jobs</Tab>
+        <TabsList className="grid w-full grid-cols-2 rounded-lg border-2">
+          <Tab
+            value={"variables"}
+            className={`m-1 w-full rounded-md px-12 py-5 hover:bg-second-accent focus:bg-second-accent/100`}
+          >
+            Variables
+          </Tab>
+          <Tab
+            value={"jobs"}
+            className={`m-1 w-full rounded-md px-12 py-5 hover:bg-second-accent focus:bg-second-accent/100`}
+          >
+            Jobs
+          </Tab>
         </TabsList>
         <TabPanel value={"variables"}>
           <VariablesTable variables={variables} />
         </TabPanel>
         <TabPanel value={"jobs"}>
-          <JobsTable jobs={jobs}/>
+          <JobsTable jobs={jobs} />
         </TabPanel>
       </Tabs>
     </div>
@@ -104,10 +114,28 @@ function JobsTable({ jobs }: JobListProps) {
   return (
     <Table
       orientation="horizontal"
-      header={["Element ID", "Job Key", "Job Type", "Retries", "Job Worker", "State", "Time"]}
+      header={[
+        "Element ID",
+        "Job Key",
+        "Job Type",
+        "Retries",
+        "Job Worker",
+        "State",
+        "Time",
+      ]}
       content={
         jobs
-          ? jobs.map(({ elementId, key, type, retries, worker, state, time }) => [elementId, key, type, retries, worker, state, time])
+          ? jobs.map(
+              ({ elementId, key, type, retries, worker, state, time }) => [
+                elementId,
+                key,
+                type,
+                retries,
+                worker,
+                state,
+                time,
+              ],
+            )
           : []
       }
     />
