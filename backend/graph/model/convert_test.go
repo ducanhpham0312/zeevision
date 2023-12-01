@@ -22,8 +22,8 @@ func TestMap(t *testing.T) {
 
 func TestFromStorageBpmnResource(t *testing.T) {
 	storageResource := storage.BpmnResource{
-		BpmnProcessID: "main-loop",
-		BpmnFile:      "test",
+		ProcessDefinitionKey: 1,
+		BpmnFile:             "test",
 	}
 	expected := "test"
 
@@ -171,8 +171,8 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "main-loop",
 				// BpmnResource should not transfer to model.Instance.
 				BpmnResource: storage.BpmnResource{
-					BpmnProcessID: "main-loop",
-					BpmnFile:      "test",
+					ProcessDefinitionKey: 1,
+					BpmnFile:             "test",
 				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{
@@ -204,8 +204,8 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "main-loop",
 				// BpmnResource should not transfer to model.Instance.
 				BpmnResource: storage.BpmnResource{
-					BpmnProcessID: "main-loop",
-					BpmnFile:      "test",
+					ProcessDefinitionKey: 2,
+					BpmnFile:             "test",
 				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{},

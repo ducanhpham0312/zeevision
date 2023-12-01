@@ -10,8 +10,8 @@ import (
 
 // Shared for multiple tests
 var expectedBpmnResource = BpmnResource{
-	BpmnProcessID: "test-id",
-	BpmnFile:      "Cg==",
+	ProcessDefinitionKey: 1,
+	BpmnFile:             "Cg==",
 }
 
 // Equal to the encoded form
