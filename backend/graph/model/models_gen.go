@@ -8,6 +8,16 @@ import (
 	"strconv"
 )
 
+type Incident struct {
+	Key          int64     `json:"key"`
+	ElementID    string    `json:"elementId"`
+	ErrorType    string    `json:"errorType"`
+	ErrorMessage string    `json:"errorMessage"`
+	State        string    `json:"state"`
+	Time         string    `json:"time"`
+	Instance     *Instance `json:"instance"`
+}
+
 type Instance struct {
 	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
 	StartTime      string      `json:"startTime"`
@@ -16,6 +26,7 @@ type Instance struct {
 	ProcessKey     int64       `json:"processKey"`
 	Version        int64       `json:"version"`
 	Status         Status      `json:"status"`
+	Incidents      []*Incident `json:"incidents"`
 	Jobs           []*Job      `json:"jobs"`
 	Variables      []*Variable `json:"variables"`
 	Process        *Process    `json:"process"`
