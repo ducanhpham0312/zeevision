@@ -19,56 +19,62 @@ export default function SingleInstancesPage() {
     variables,
   } = instance;
   return (
-    <div className="flex h-full w-full flex-col gap-3">
+    <div className="flex h-full w-full flex-col">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
-            <div className="w-full pr-3">
-              <Table
-                orientation="vertical"
-                header={[
-                  "Instance Key",
-                  "BPMN Process ID",
-                  "Version",
-                  "Process Key",
-                  "Status",
-                  "Start Time",
-                  "End Time",
-                ]}
-                content={
-                  instance
-                    ? [
-                        [
-                          instanceKey,
-                          bpmnProcessId,
-                          version,
-                          processKey,
-                          status,
-                          startTime,
-                          endTime,
-                        ],
-                      ]
-                    : []
-                }
-              />
+            <div className="w-full overflow-hidden">
+              <div className="min-w-[400px] pr-3">
+                <Table
+                  orientation="vertical"
+                  header={[
+                    "Instance Key",
+                    "BPMN Process ID",
+                    "Version",
+                    "Process Key",
+                    "Status",
+                    "Start Time",
+                    "End Time",
+                  ]}
+                  content={
+                    instance
+                      ? [
+                          [
+                            instanceKey,
+                            bpmnProcessId,
+                            version,
+                            processKey,
+                            status,
+                            startTime,
+                            endTime,
+                          ],
+                        ]
+                      : []
+                  }
+                />
+              </div>
             </div>
           </ResizableContainer>
           <ResponsiveBpmnViewer
+            control
             navigated
-            className="h-full flex-grow"
+            className="h-full flex-grow overflow-hidden"
             bpmnString={bpmnResource}
           />
         </div>
       </ResizableContainer>
-      <Table
-        orientation="horizontal"
-        header={["Variable Name", "Variable Value", "Time"]}
-        content={
-          variables
-            ? variables.map(({ name, value, time }) => [name, value, time])
-            : []
-        }
-      />
+      <div className="relative flex-grow overflow-auto">
+        <Table
+          className="absolute mt-5"
+          orientation="horizontal"
+          header={["Variable Name", "Variable Value", "Time"]}
+          content={
+            variables
+              ? variables.map(({ name, value, time }) => [name, value, time])
+              : []
+          }
+        />
+      </div>
     </div>
   );
 }

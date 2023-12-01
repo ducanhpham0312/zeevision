@@ -93,7 +93,7 @@ export function HorizontalTable({
                 <div className="relative flex justify-between pr-5">
                   <p>{item}</p>
                   <div className="absolute right-0">
-                    {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
+                    {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : "  "}
                   </div>
                 </div>
               </Button>
@@ -144,10 +144,7 @@ export function HorizontalTable({
                   ) : null}
                 </tr>
                 {expandElement ? (
-                  <ExpandRow
-                    isIn={expandedRow === rowIdx}
-                    colSpan={header.length + 1}
-                  >
+                  <ExpandRow isIn={expandedRow === rowIdx} colSpan={colSpan}>
                     {expandElement(rowIdx)}
                   </ExpandRow>
                 ) : null}

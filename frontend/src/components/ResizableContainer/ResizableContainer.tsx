@@ -38,7 +38,7 @@ export function ResizableContainer({ direction, children }: ResizableProps) {
   if (direction === "horizontal") {
     resizableProps = {
       className: "resize-horizontal",
-      minConstraints: [innerWidth * 0.2, Infinity],
+      minConstraints: [10, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
       width,
       height: Infinity,
@@ -50,13 +50,15 @@ export function ResizableContainer({ direction, children }: ResizableProps) {
   } else {
     resizableProps = {
       className: "resize-vertical",
-      minConstraints: [Infinity, 24],
+      minConstraints: [Infinity, 0],
       maxConstraints: [Infinity, innerHeight * 0.9],
       width: Infinity,
       height: window.innerHeight * 0.5,
       resizeHandles: ["s"],
     };
   }
+
+  console.log(resizableProps);
 
   return <ResizableBox {...resizableProps}>{children}</ResizableBox>;
 }

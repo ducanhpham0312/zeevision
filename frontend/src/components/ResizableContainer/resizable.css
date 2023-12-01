@@ -10,9 +10,18 @@
   background-color: #bfd6ff55;
 }
 
+.react-resizable-handle:active {
+  background-color: #002cff90;
+}
+
 .resize-horizontal {
   display: flex;
   flex-direction: row;
+  position: relative;
+}
+
+.resize-vertical {
+  position: relative;
 }
 
 .react-resizable-handle-s {
