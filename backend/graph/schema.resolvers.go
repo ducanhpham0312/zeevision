@@ -41,6 +41,16 @@ func (r *instanceResolver) Process(ctx context.Context, obj *model.Instance) (*m
 	return model.FromStorageProcess(dbProcess), nil
 }
 
+// Instance is the resolver for the instance field.
+func (r *jobResolver) Instance(ctx context.Context, obj *model.Job) (*model.Instance, error) {
+	dbInstance, err := r.Fetcher.GetInstance(ctx, obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch instance: %w", err)
+	}
+
+	return model.FromStorageInstance(dbInstance), nil
+}
+
 // BpmnResource is the resolver for the bpmnResource field.
 func (r *processResolver) BpmnResource(ctx context.Context, obj *model.Process) (string, error) {
 	dbBpmnResource, err := r.Fetcher.GetBpmnResource(ctx, obj.BpmnProcessID)
@@ -111,8 +121,21 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 	return model.FromStorageInstance(dbInstance), nil
 }
 
+// Jobs is the resolver for the jobs field.
+func (r *queryResolver) Jobs(ctx context.Context) ([]*model.Job, error) {
+	dbJobs, err := r.Fetcher.GetJobs(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
+	}
+
+	return model.Map(dbJobs, model.FromStorageJob), nil
+}
+
 // Instance returns InstanceResolver implementation.
 func (r *Resolver) Instance() InstanceResolver { return &instanceResolver{r} }
+
+// Job returns JobResolver implementation.
+func (r *Resolver) Job() JobResolver { return &jobResolver{r} }
 
 // Process returns ProcessResolver implementation.
 func (r *Resolver) Process() ProcessResolver { return &processResolver{r} }
@@ -121,5 +144,6 @@ func (r *Resolver) Process() ProcessResolver { return &processResolver{r} }
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type instanceResolver struct{ *Resolver }
+type jobResolver struct{ *Resolver }
 type processResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

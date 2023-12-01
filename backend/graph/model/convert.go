@@ -65,13 +65,14 @@ func FromStorageProcess(process storage.Process) *Process {
 // Convert storage job to GraphQL job.
 func FromStorageJob(job storage.Job) *Job {
 	return &Job{
-		ElementID: job.ElementID,
-		Key:       job.Key,
-		Type:      job.Type,
-		Retries:   job.Retries,
-		Worker:    job.Worker,
-		State:     job.State,
-		Time:      formatTime(job.Time),
+		ElementID:   job.ElementID,
+		InstanceKey: job.ProcessInstanceKey,
+		Key:         job.Key,
+		Type:        job.Type,
+		Retries:     job.Retries,
+		Worker:      job.Worker,
+		State:       job.State,
+		Time:        formatTime(job.Time),
 	}
 }
 

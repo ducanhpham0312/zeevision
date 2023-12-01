@@ -32,6 +32,35 @@ var expectedProcesses = []Process{
 		Instances:            []Instance{},
 	},
 }
+var expectedJobs = []Job{
+	{
+		ElementID:          "element-1",
+		Key:                1,
+		Type:               "type-1",
+		Retries:            1,
+		Worker:             "worker-1",
+		State:              "state-1",
+		ProcessInstanceKey: 10,
+	},
+	{
+		ElementID:          "element-2",
+		Key:                2,
+		Type:               "type-2",
+		Retries:            2,
+		Worker:             "worker-2",
+		State:              "state-2",
+		ProcessInstanceKey: 10,
+	},
+	{
+		ElementID:          "element-3",
+		Key:                3,
+		Type:               "type-3",
+		Retries:            3,
+		Worker:             "worker-3",
+		State:              "state-3",
+		ProcessInstanceKey: 20,
+	},
+}
 
 func TestBpmnResourceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
@@ -260,6 +289,27 @@ func TestProcessQuery(t *testing.T) {
 	}
 }
 
+func TestJobsQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedJobs).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	jobs, err := fetcher.GetJobs(context.Background())
+	assert.NoError(t, err)
+
+	assert.Len(t, jobs, 3)
+	for i := range jobs {
+		assert.Equal(t, expectedJobs[i], jobs[i])
+	}
+}
+
 func TestJobsForInstanceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {
@@ -267,35 +317,6 @@ func TestJobsForInstanceQuery(t *testing.T) {
 	}()
 	db := testDb.DB()
 
-	expectedJobs := []Job{
-		{
-			ElementID:          "element-1",
-			Key:                1,
-			Type:               "type-1",
-			Retries:            1,
-			Worker:             "worker-1",
-			State:              "state-1",
-			ProcessInstanceKey: 10,
-		},
-		{
-			ElementID:          "element-2",
-			Key:                2,
-			Type:               "type-2",
-			Retries:            2,
-			Worker:             "worker-2",
-			State:              "state-2",
-			ProcessInstanceKey: 10,
-		},
-		{
-			ElementID:          "element-3",
-			Key:                3,
-			Type:               "type-3",
-			Retries:            3,
-			Worker:             "worker-3",
-			State:              "state-3",
-			ProcessInstanceKey: 20,
-		},
-	}
 	err := db.Create(expectedJobs).Error
 	assert.NoError(t, err)
 

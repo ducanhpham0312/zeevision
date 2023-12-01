@@ -22,13 +22,15 @@ type Instance struct {
 }
 
 type Job struct {
-	ElementID string `json:"elementId"`
-	Key       int64  `json:"key"`
-	Type      string `json:"type"`
-	Retries   int64  `json:"retries"`
-	Worker    string `json:"worker"`
-	State     string `json:"state"`
-	Time      string `json:"time"`
+	ElementID   string    `json:"elementId"`
+	InstanceKey int64     `json:"instanceKey"`
+	Key         int64     `json:"key"`
+	Type        string    `json:"type"`
+	Retries     int64     `json:"retries"`
+	Worker      string    `json:"worker"`
+	State       string    `json:"state"`
+	Time        string    `json:"time"`
+	Instance    *Instance `json:"instance"`
 }
 
 type MessageSubscription struct {

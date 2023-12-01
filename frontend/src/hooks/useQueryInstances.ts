@@ -1,11 +1,11 @@
 import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
-interface QueryProcessesReturnType {
+interface QueryInstancesReturnType {
   instances: Instance[];
 }
 
-const PROCESSES_QUERY = () => gql`
+const INSTANCES_QUERY = () => gql`
   query Instances {
     instances {
       instanceKey
@@ -19,8 +19,8 @@ const PROCESSES_QUERY = () => gql`
   }
 `;
 
-export function useQueryInstances(): QueryProcessesReturnType {
-  const instancesData = useQuery(PROCESSES_QUERY(), {
+export function useQueryInstances(): QueryInstancesReturnType {
+  const instancesData = useQuery(INSTANCES_QUERY(), {
     pollInterval: queryPollIntervalMs,
   });
 
