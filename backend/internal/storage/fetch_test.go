@@ -62,6 +62,33 @@ var expectedJobs = []Job{
 	},
 }
 
+var expectedIncidents = []Incident{
+	{
+		Key:                1,
+		ProcessInstanceKey: 10,
+		ElementID:          "element-1",
+		ErrorType:          "error-type-1",
+		ErrorMessage:       "error-message-1",
+		State:              "state-1",
+	},
+	{
+		Key:                2,
+		ProcessInstanceKey: 20,
+		ElementID:          "element-2",
+		ErrorType:          "error-type-2",
+		ErrorMessage:       "error-message-2",
+		State:              "state-2",
+	},
+	{
+		Key:                3,
+		ProcessInstanceKey: 20,
+		ElementID:          "element-3",
+		ErrorType:          "error-type-3",
+		ErrorMessage:       "error-message-3",
+		State:              "state-3",
+	},
+}
+
 func TestBpmnResourceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {
@@ -354,6 +381,75 @@ func TestJobsForInstanceQuery(t *testing.T) {
 			assert.Len(t, jobs, len(test.jobs))
 			for i := range jobs {
 				assert.Equal(t, test.jobs[i], jobs[i])
+			}
+		})
+	}
+}
+
+func TestIncidentsQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	fetcher := NewFetcher(db)
+
+	err := db.Create(expectedIncidents).Error
+	assert.NoError(t, err)
+
+	incidents, err := fetcher.GetIncidents(context.Background())
+	assert.NoError(t, err)
+
+	assert.Len(t, incidents, len(expectedIncidents))
+	for i := range incidents {
+		assert.Equal(t, expectedIncidents[i], incidents[i])
+	}
+}
+
+func TestIncidentsForInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+
+	fetcher := NewFetcher(testDb.DB())
+
+	err := testDb.DB().Create(expectedIncidents).Error
+	assert.NoError(t, err)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		incidents   []Incident
+	}{
+		{
+			name:        "instance with one incidents",
+			instanceKey: 10,
+			incidents:   expectedIncidents[:1],
+		},
+		{
+			name:        "instance with two incidents",
+			instanceKey: 20,
+			incidents:   expectedIncidents[1:3],
+		},
+		{
+			name:        "instance with no incidents",
+			instanceKey: 30,
+			incidents:   []Incident{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			incidents, err := fetcher.GetIncidentsForInstance(context.Background(), test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, incidents, len(test.incidents))
+			for i := range incidents {
+				assert.Equal(t, test.incidents[i], incidents[i])
 			}
 		})
 	}
