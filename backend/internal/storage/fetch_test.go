@@ -288,6 +288,7 @@ func TestProcessQuery(t *testing.T) {
 		})
 	}
 }
+
 func TestJobsQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {
@@ -308,6 +309,7 @@ func TestJobsQuery(t *testing.T) {
 		assert.Equal(t, expectedJobs[i], jobs[i])
 	}
 }
+
 func TestJobsForInstanceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {

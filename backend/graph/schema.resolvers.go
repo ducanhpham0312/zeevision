@@ -125,7 +125,7 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 func (r *queryResolver) Jobs(ctx context.Context) ([]*model.Job, error) {
 	dbJobs, err := r.Fetcher.GetJobs(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to fetch instances: %w", err)
+		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
 	}
 
 	return model.Map(dbJobs, model.FromStorageJob), nil
