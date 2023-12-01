@@ -14,6 +14,7 @@ type Query {
   process(processKey: Int!): Process
   instances: [Instance!]!
   instance(instanceKey: Int!): Instance
+  jobs: [Job!]!
 }
 
 type Process {
@@ -45,12 +46,14 @@ type Instance {
 
 type Job {
   elementId: String!
+  instanceKey: Int!
   key: Int!
   type: String!
   retries: Int!
   worker: String!
   state: String!
   time: DateTime!
+  instance: Instance! @goField(forceResolver: true)
 }
 
 type Variable {

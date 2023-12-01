@@ -66,6 +66,7 @@ func FromStorageProcess(process storage.Process) *Process {
 func FromStorageJob(job storage.Job) *Job {
 	return &Job{
 		ElementID: job.ElementID,
+		InstanceKey: job.ProcessInstanceKey,
 		Key:       job.Key,
 		Type:      job.Type,
 		Retries:   job.Retries,
