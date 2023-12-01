@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
+import { FilterType } from "./DataFilter";
 
 export interface TableProps {
   /**
@@ -23,17 +24,18 @@ export interface TableProps {
   optionElement?: (idx: number) => ReactNode;
 
   alterRowColor?: boolean;
+  filterConfig?: Record<string, FilterType>;
 }
 
 export function Table({ orientation, ...props }: TableProps) {
   if (props.header.length === 0) return null;
   return (
-    <table className="w-full border-collapse rounded bg-white">
+    <>
       {orientation === "horizontal" ? (
         <HorizontalTable {...props} />
       ) : (
         <VerticalTable {...props} />
       )}
-    </table>
+    </>
   );
 }

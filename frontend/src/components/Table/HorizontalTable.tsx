@@ -7,11 +7,13 @@ import {
 import { Button } from "../Button";
 import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
+import { DataFilter, FilterType } from "./DataFilter";
 
 export interface HorizontalTableProps {
   header: string[];
   content: (string | number | React.ReactNode)[][];
   alterRowColor?: boolean;
+  filterConfig?: Record<string, FilterType>;
   expandElement?: (idx: number) => React.ReactNode;
   optionElement?: (idx: number) => React.ReactNode;
 }
@@ -20,6 +22,7 @@ export function HorizontalTable({
   header,
   content,
   alterRowColor,
+  filterConfig,
   expandElement,
   optionElement,
 }: HorizontalTableProps) {
@@ -79,120 +82,124 @@ export function HorizontalTable({
   const colSpan =
     expandElement || optionElement ? header.length + 1 : header.length;
 
+  console.log(filterConfig);
   return (
-    <>
-      <thead className="border-b-2 border-accent font-bold text-text">
-        <tr>
-          {header.map((item) => (
-            <th key={item} className="cursor-pointer py-1 text-left">
-              <Button
-                fullWidth
-                className="text-left"
-                onClick={() => handleSort(item)}
-              >
-                <div className="flex justify-between">
-                  <p>{item}</p>
-                  {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
-                </div>
-              </Button>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody aria-label="custom pagination table">
-        {sortedContent
-          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          .map((row, rowIdx) => {
-            return (
-              <>
-                <tr
-                  className={
-                    "border-b border-black/10 " +
-                    (alterRowColor && rowIdx % 2 === 0
-                      ? "bg-second-accent hover:bg-second-accent/20"
-                      : "hover:bg-second-accent/10")
-                  }
-                  key={rowIdx}
-                >
-                  {row.map((cell, index) => (
-                    <td className="p-3" key={index}>
-                      <p>
-                        {typeof cell === "string" ? prettifyJson(cell) : cell}
-                      </p>
-                    </td>
-                  ))}
-                  {expandElement ? (
-                    <td className="flex h-[55px] items-center justify-center p-0">
-                      <Button
-                        onClick={() =>
-                          setExpandedRow((prev) =>
-                            prev === rowIdx ? null : rowIdx,
-                          )
-                        }
-                      >
-                        {expandedRow === rowIdx ? <Minus /> : <Plus />}
-                      </Button>
-                    </td>
-                  ) : null}
-
-                  {optionElement ? (
-                    <td className="mt-1 flex justify-center">
-                      {optionElement(rowIdx)}
-                    </td>
-                  ) : null}
-                </tr>
-                {expandElement ? (
-                  <ExpandRow
-                    isIn={expandedRow === rowIdx}
-                    colSpan={header.length + 1}
-                  >
-                    {expandElement(rowIdx)}
-                  </ExpandRow>
-                ) : null}
-              </>
-            );
-          })}
-        {content.length === 0 ? (
+    <div>
+      {filterConfig ? <DataFilter filterConfig={filterConfig} /> : null}
+      <table className="relative w-full border-collapse rounded bg-white">
+        <thead className="border-b-2 border-accent font-bold text-text">
           <tr>
-            <td colSpan={colSpan}>
-              <div className="flex h-20 w-full items-center justify-center border border-black/10">
-                <p>No data to display.</p>
-              </div>
-            </td>
+            {header.map((item) => (
+              <th key={item} className="cursor-pointer py-1 text-left">
+                <Button
+                  fullWidth
+                  className="text-left"
+                  onClick={() => handleSort(item)}
+                >
+                  <div className="flex justify-between">
+                    <p>{item}</p>
+                    {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
+                  </div>
+                </Button>
+              </th>
+            ))}
           </tr>
-        ) : null}
-        {emptyRows > 0 && (
-          <tr style={{ height: 41 * emptyRows }}>
-            <td colSpan={colSpan} />
+        </thead>
+        <tbody aria-label="custom pagination table">
+          {sortedContent
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, rowIdx) => {
+              return (
+                <>
+                  <tr
+                    className={
+                      "border-b border-black/10 " +
+                      (alterRowColor && rowIdx % 2 === 0
+                        ? "bg-second-accent hover:bg-second-accent/20"
+                        : "hover:bg-second-accent/10")
+                    }
+                    key={rowIdx}
+                  >
+                    {row.map((cell, index) => (
+                      <td className="p-3" key={index}>
+                        <p>
+                          {typeof cell === "string" ? prettifyJson(cell) : cell}
+                        </p>
+                      </td>
+                    ))}
+                    {expandElement ? (
+                      <td className="flex h-[55px] items-center justify-center p-0">
+                        <Button
+                          onClick={() =>
+                            setExpandedRow((prev) =>
+                              prev === rowIdx ? null : rowIdx,
+                            )
+                          }
+                        >
+                          {expandedRow === rowIdx ? <Minus /> : <Plus />}
+                        </Button>
+                      </td>
+                    ) : null}
+
+                    {optionElement ? (
+                      <td className="mt-1 flex justify-center">
+                        {optionElement(rowIdx)}
+                      </td>
+                    ) : null}
+                  </tr>
+                  {expandElement ? (
+                    <ExpandRow
+                      isIn={expandedRow === rowIdx}
+                      colSpan={header.length + 1}
+                    >
+                      {expandElement(rowIdx)}
+                    </ExpandRow>
+                  ) : null}
+                </>
+              );
+            })}
+          {content.length === 0 ? (
+            <tr>
+              <td colSpan={colSpan}>
+                <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                  <p>No data to display.</p>
+                </div>
+              </td>
+            </tr>
+          ) : null}
+          {emptyRows > 0 && (
+            <tr style={{ height: 41 * emptyRows }}>
+              <td colSpan={colSpan} />
+            </tr>
+          )}
+        </tbody>
+        <tfoot>
+          <tr>
+            <StyledTablePagination
+              rowsPerPageOptions={[
+                ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
+                { label: "All", value: -1 },
+              ]}
+              colSpan={colSpan}
+              count={content.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              slotProps={{
+                select: {
+                  "aria-label": "rows per page",
+                },
+                actions: {
+                  showFirstButton: true,
+                  showLastButton: true,
+                },
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </tr>
-        )}
-      </tbody>
-      <tfoot>
-        <tr>
-          <StyledTablePagination
-            rowsPerPageOptions={[
-              ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
-              { label: "All", value: -1 },
-            ]}
-            colSpan={colSpan}
-            count={content.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            slotProps={{
-              select: {
-                "aria-label": "rows per page",
-              },
-              actions: {
-                showFirstButton: true,
-                showLastButton: true,
-              },
-            }}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </tr>
-      </tfoot>
-    </>
+        </tfoot>
+      </table>
+    </div>
   );
 }
 
