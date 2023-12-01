@@ -20,6 +20,17 @@ func TestMap(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func TestFromStorageBpmnResource(t *testing.T) {
+	storageResource := storage.BpmnResource{
+		ProcessDefinitionKey: 1,
+		BpmnFile:             "test",
+	}
+	expected := "test"
+
+	actual := FromStorageBpmnResource(storageResource)
+	assert.Equal(t, expected, actual)
+}
+
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
 	nowFormatted := now.UTC().Format(time.RFC3339)
