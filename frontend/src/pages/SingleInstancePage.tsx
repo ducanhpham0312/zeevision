@@ -23,6 +23,11 @@ export default function SingleInstancesPage() {
     variables,
     jobs,
   } = instance;
+
+  const tabsData = [
+    { label: "Variables", content: <VariablesTable variables={variables} /> },
+    { label: "Jobs", content: <JobsTable jobs={jobs} /> },
+  ];
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <ResizableContainer direction="vertical">
@@ -65,27 +70,23 @@ export default function SingleInstancesPage() {
           />
         </div>
       </ResizableContainer>
-      <Tabs defaultValue={"variables"} className="bg-white">
-        <TabsList className="grid w-full grid-cols-2 rounded-lg border-2">
-          <Tab
-            value={"variables"}
-            className={`m-1 w-full rounded-md px-12 py-5 hover:bg-second-accent focus:bg-second-accent/100`}
-          >
-            Variables
-          </Tab>
-          <Tab
-            value={"jobs"}
-            className={`m-1 w-full rounded-md px-12 py-5 hover:bg-second-accent focus:bg-second-accent/100`}
-          >
-            Jobs
-          </Tab>
+      <Tabs defaultValue={"Variables"} className="bg-white">
+        <TabsList className="mb-5 mt-10 grid w-full grid-cols-2 rounded-xl border-2">
+          {tabsData.map((tab, index) => (
+            <Tab
+              key={index}
+              value={tab.label}
+              className={`m-1 rounded-xl py-2 hover:bg-second-accent focus:bg-second-accent/100`}
+            >
+              {tab.label}
+            </Tab>
+          ))}
         </TabsList>
-        <TabPanel value={"variables"}>
-          <VariablesTable variables={variables} />
-        </TabPanel>
-        <TabPanel value={"jobs"}>
-          <JobsTable jobs={jobs} />
-        </TabPanel>
+        {tabsData.map((tab, index) => (
+          <TabPanel key={index} value={tab.label}>
+            {tab.content}
+          </TabPanel>
+        ))}
       </Tabs>
     </div>
   );
