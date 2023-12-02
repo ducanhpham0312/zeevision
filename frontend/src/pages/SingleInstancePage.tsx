@@ -53,7 +53,7 @@ export default function SingleInstancesPage() {
                           instanceKey,
                           bpmnProcessId,
                           version,
-                          <NavLink to={processKey.toString()}>
+                          <NavLink to={`/processes/${processKey}`}>
                             <Button variant="secondary">{processKey}</Button>
                           </NavLink>,
                           status,
