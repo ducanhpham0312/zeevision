@@ -134,14 +134,17 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
 
                           return (
                             <DropdownMenuItem
+                              onPointerLeave={(e) => e.preventDefault()}
+                              onPointerMove={(e) => e.preventDefault()}
                               onClick={handleToggleFilter(column, name)}
                               key={name}
+                              className="flex flex-col gap-3"
                             >
                               <div className="group flex w-full items-center gap-2">
                                 <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
                                   <div
                                     className={twMerge(
-                                      "h-full w-full rounded-full transition group-hover:bg-gray-500",
+                                      "h-full w-full rounded-full transition group-hover:bg-gray-300",
                                       thisFilterState.active
                                         ? "bg-accent group-hover:bg-accent"
                                         : "",
@@ -150,6 +153,17 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                                 </div>
                                 <p>{name}</p>
                               </div>
+                              {thisFilterState.active ? (
+                                <div
+                                  className="w-full"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <Input
+                                    placeholder="Enter query value here"
+                                    className="w-full"
+                                  />
+                                </div>
+                              ) : null}
                             </DropdownMenuItem>
                           );
                         },
