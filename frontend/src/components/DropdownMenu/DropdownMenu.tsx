@@ -27,7 +27,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={twMerge(
-      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-hover data-[state=open]:bg-hover",
+      "flex cursor-default select-none items-center rounded px-2.5 py-2 text-sm outline-none focus:bg-hover data-[state=open]:bg-hover",
       inset && "pl-8",
       className,
     )}
@@ -83,7 +83,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={twMerge(
-      "focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "focus:text-accent-foreground relative flex cursor-pointer select-none items-center rounded px-2.5 py-2 text-sm outline-none transition-colors focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       inset && "pl-8",
       className,
     )}
@@ -99,7 +99,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={twMerge(
-      "focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm py-2 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
     checked={checked}
@@ -123,7 +123,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={twMerge(
-      "focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm py-2 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
     {...props}
@@ -147,7 +147,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={twMerge(
-      "px-2 py-1.5 text-sm font-semibold",
+      "rounded px-2.5 py-2 text-sm font-semibold",
       inset && "pl-8",
       className,
     )}
@@ -162,7 +162,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={twMerge("bg-muted -mx-1 my-1 h-px", className)}
+    className={twMerge("-mx-1 my-1 h-px bg-[grey]/40", className)}
     {...props}
   />
 ));

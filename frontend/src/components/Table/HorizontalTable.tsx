@@ -81,8 +81,7 @@ export function HorizontalTable({
 
   const colSpan =
     expandElement || optionElement ? header.length + 1 : header.length;
-
-  console.log(filterConfig);
+    
   return (
     <div>
       {filterConfig ? <DataFilter filterConfig={filterConfig} /> : null}

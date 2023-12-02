@@ -29,7 +29,9 @@ export default function ProcessesPage() {
         <Table
           alterRowColor
           filterConfig={{
-            "Process Key": "text",
+            "Process Key": "string",
+            "Process ID": "string",
+            "Deployment Time": "time",
           }}
           header={["Process Key", "Process ID", "Deployment Time"]}
           orientation="horizontal"
