@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ducanhpham0312/zeevision/backend/internal/testutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -33,6 +32,62 @@ var expectedProcesses = []Process{
 		Instances:            []Instance{},
 	},
 }
+var expectedJobs = []Job{
+	{
+		ElementID:          "element-1",
+		Key:                1,
+		Type:               "type-1",
+		Retries:            1,
+		Worker:             "worker-1",
+		State:              "state-1",
+		ProcessInstanceKey: 10,
+	},
+	{
+		ElementID:          "element-2",
+		Key:                2,
+		Type:               "type-2",
+		Retries:            2,
+		Worker:             "worker-2",
+		State:              "state-2",
+		ProcessInstanceKey: 10,
+	},
+	{
+		ElementID:          "element-3",
+		Key:                3,
+		Type:               "type-3",
+		Retries:            3,
+		Worker:             "worker-3",
+		State:              "state-3",
+		ProcessInstanceKey: 20,
+	},
+}
+
+var expectedIncidents = []Incident{
+	{
+		Key:                1,
+		ProcessInstanceKey: 10,
+		ElementID:          "element-1",
+		ErrorType:          "error-type-1",
+		ErrorMessage:       "error-message-1",
+		State:              "state-1",
+	},
+	{
+		Key:                2,
+		ProcessInstanceKey: 20,
+		ElementID:          "element-2",
+		ErrorType:          "error-type-2",
+		ErrorMessage:       "error-message-2",
+		State:              "state-2",
+	},
+	{
+		Key:                3,
+		ProcessInstanceKey: 20,
+		ElementID:          "element-3",
+		ErrorType:          "error-type-3",
+		ErrorMessage:       "error-message-3",
+		State:              "state-3",
+	},
+}
 
 func TestBpmnResourceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
@@ -42,8 +97,8 @@ func TestBpmnResourceQuery(t *testing.T) {
 	db := testDb.DB()
 
 	expectedBpmnResource := BpmnResource{
-		BpmnProcessID: "main-loop",
-		BpmnFile:      "test",
+		ProcessDefinitionKey: 1,
+		BpmnFile:             "test",
 	}
 	err := db.Create(&expectedBpmnResource).Error
 	assert.NoError(t, err)
@@ -52,16 +107,16 @@ func TestBpmnResourceQuery(t *testing.T) {
 
 	tests := []struct {
 		name          string
-		bpmnProcessID string
+		processDefKey int64
 		expectedErr   string
 	}{
 		{
 			name:          "existing bpmn resource",
-			bpmnProcessID: expectedBpmnResource.BpmnProcessID,
+			processDefKey: expectedBpmnResource.ProcessDefinitionKey,
 		},
 		{
 			name:          "non-existent bpmn resource",
-			bpmnProcessID: "non-existent",
+			processDefKey: 123,
 			expectedErr:   "record not found",
 		},
 	}
@@ -70,7 +125,7 @@ func TestBpmnResourceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			bpmnResource, err := fetcher.GetBpmnResource(context.Background(), test.bpmnProcessID)
+			bpmnResource, err := fetcher.GetBpmnResource(context.Background(), test.processDefKey)
 
 			if test.expectedErr != "" {
 				assert.EqualError(t, err, test.expectedErr)
@@ -261,6 +316,145 @@ func TestProcessQuery(t *testing.T) {
 	}
 }
 
+func TestJobsQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedJobs).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	jobs, err := fetcher.GetJobs(context.Background())
+	assert.NoError(t, err)
+
+	assert.Len(t, jobs, 3)
+	for i := range jobs {
+		assert.Equal(t, expectedJobs[i], jobs[i])
+	}
+}
+
+func TestJobsForInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedJobs).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		jobs        []Job
+	}{
+		{
+			name:        "instance with two jobs",
+			instanceKey: 10,
+			jobs:        expectedJobs[0:2],
+		},
+		{
+			name:        "instance with one job",
+			instanceKey: 20,
+			jobs:        expectedJobs[2:3],
+		},
+		{
+			name:        "instance with no jobs",
+			instanceKey: 40,
+			jobs:        []Job{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			jobs, err := fetcher.GetJobsForInstance(context.Background(), test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, jobs, len(test.jobs))
+			for i := range jobs {
+				assert.Equal(t, test.jobs[i], jobs[i])
+			}
+		})
+	}
+}
+
+func TestIncidentsQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	fetcher := NewFetcher(db)
+
+	err := db.Create(expectedIncidents).Error
+	assert.NoError(t, err)
+
+	incidents, err := fetcher.GetIncidents(context.Background())
+	assert.NoError(t, err)
+
+	assert.Len(t, incidents, len(expectedIncidents))
+	for i := range incidents {
+		assert.Equal(t, expectedIncidents[i], incidents[i])
+	}
+}
+
+func TestIncidentsForInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+
+	fetcher := NewFetcher(testDb.DB())
+
+	err := testDb.DB().Create(expectedIncidents).Error
+	assert.NoError(t, err)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		incidents   []Incident
+	}{
+		{
+			name:        "instance with one incident",
+			instanceKey: 10,
+			incidents:   expectedIncidents[:1],
+		},
+		{
+			name:        "instance with two incidents",
+			instanceKey: 20,
+			incidents:   expectedIncidents[1:3],
+		},
+		{
+			name:        "instance with no incidents",
+			instanceKey: 30,
+			incidents:   []Incident{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			incidents, err := fetcher.GetIncidentsForInstance(context.Background(), test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, incidents, len(test.incidents))
+			for i := range incidents {
+				assert.Equal(t, test.incidents[i], incidents[i])
+			}
+		})
+	}
+}
+
 func TestVariablesForInstanceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {
@@ -340,14 +534,4 @@ func TestCancelQuery(t *testing.T) {
 
 	_, err := fetcher.GetProcesses(ctx)
 	assert.EqualError(t, err, "context canceled")
-}
-
-// Creates new test database with processes table.
-func newMigratedTestDB(t *testing.T) *testutils.TestDB {
-	testDb := testutils.NewTestDB(t)
-
-	err := AutoMigrate(testDb.DB())
-	assert.NoError(t, err)
-
-	return testDb
 }

@@ -25,10 +25,10 @@ func (f *Fetcher) ContextDB(ctx context.Context) *gorm.DB {
 }
 
 // Gets a BPMN resource by its process ID.
-func (f *Fetcher) GetBpmnResource(ctx context.Context, bpmnProcessID string) (BpmnResource, error) {
+func (f *Fetcher) GetBpmnResource(ctx context.Context, processDefKey int64) (BpmnResource, error) {
 	var bpmnResource BpmnResource
 	err := f.ContextDB(ctx).
-		Where(&BpmnResource{BpmnProcessID: bpmnProcessID}).
+		Where(&BpmnResource{ProcessDefinitionKey: processDefKey}).
 		First(&bpmnResource).
 		Error
 
@@ -89,6 +89,52 @@ func (f *Fetcher) GetProcesses(ctx context.Context) ([]Process, error) {
 		Error
 
 	return processes, err
+}
+
+// Gets all jobs
+func (f *Fetcher) GetJobs(ctx context.Context) ([]Job, error) {
+	var jobs []Job
+	err := f.ContextDB(ctx).
+		Order("time DESC").
+		Find(&jobs).
+		Error
+
+	return jobs, err
+}
+
+// Gets all jobs for an instance.
+func (f *Fetcher) GetJobsForInstance(ctx context.Context, instanceKey int64) ([]Job, error) {
+	var jobs []Job
+	err := f.ContextDB(ctx).
+		Where(&Job{ProcessInstanceKey: instanceKey}).
+		Order("time DESC").
+		Find(&jobs).
+		Error
+
+	return jobs, err
+}
+
+// Gets all incidents.
+func (f *Fetcher) GetIncidents(ctx context.Context) ([]Incident, error) {
+	var incidents []Incident
+	err := f.ContextDB(ctx).
+		Order("time DESC").
+		Find(&incidents).
+		Error
+
+	return incidents, err
+}
+
+// Gets all incidents for an instance.
+func (f *Fetcher) GetIncidentsForInstance(ctx context.Context, instanceKey int64) ([]Incident, error) {
+	var incidents []Incident
+	err := f.ContextDB(ctx).
+		Where(&Incident{ProcessInstanceKey: instanceKey}).
+		Order("time DESC").
+		Find(&incidents).
+		Error
+
+	return incidents, err
 }
 
 // Gets all variables for an instance.

@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ducanhpham0312/zeevision/backend/internal/testutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +23,7 @@ func TestNewDsn(t *testing.T) {
 }
 
 func TestFillDatabase(t *testing.T) {
-	testDb := testutils.NewTestDB(t)
+	testDb := newTestDB(t)
 	defer func() {
 		assert.NoError(t, testDb.Rollback())
 	}()
@@ -44,10 +43,10 @@ func TestFillDatabase(t *testing.T) {
 
 	// Validate database content with smoke test.
 
-	t.Run("contains 4 processes", func(t *testing.T) {
+	t.Run("contains 5 processes", func(t *testing.T) {
 		var processes []Process
 		db.Find(&processes)
-		assert.Len(t, processes, 4)
+		assert.Len(t, processes, 5)
 	})
 
 	t.Run("contains specific process", func(t *testing.T) {

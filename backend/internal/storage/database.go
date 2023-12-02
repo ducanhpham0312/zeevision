@@ -8,14 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// List of migrations to be run on database during initialization.
-var migrations = []any{
-	&Process{},
-	&Instance{},
-	&Variable{},
-	&BpmnResource{},
-}
-
 // Configuration to connect to database.
 type DsnConfig struct {
 	// Username used to log in to the database.
@@ -58,7 +50,7 @@ func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*
 
 // Migrate all tables in database automatically.
 func AutoMigrate(db *gorm.DB) error {
-	if err := db.AutoMigrate(migrations...); err != nil {
+	if err := db.AutoMigrate(TableMigrations...); err != nil {
 		return fmt.Errorf("failed to migrate tables: %w", err)
 	}
 

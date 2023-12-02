@@ -27,7 +27,8 @@ export default function ProcessesPage() {
           </Button>
         </div>
         <Table
-          header={["Process Key", "Process ID", "Deployment Time"]}
+          alterRowColor
+          header={["Process Key", "Process ID", "Version", "Deployment Time"]}
           orientation="horizontal"
           expandElement={(idx: number) => (
             <div className="flex flex-col gap-4 p-4">
@@ -61,9 +62,10 @@ export default function ProcessesPage() {
           content={
             processes
               ? processes.map(
-                  ({ processKey, bpmnProcessId, deploymentTime }) => [
+                  ({ processKey, bpmnProcessId, version, deploymentTime }) => [
                     <NavLink to={processKey.toString()}>{processKey}</NavLink>,
                     bpmnProcessId,
+                    version,
                     deploymentTime,
                   ],
                 )
