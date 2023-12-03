@@ -43,10 +43,10 @@ func TestFillDatabase(t *testing.T) {
 
 	// Validate database content with smoke test.
 
-	t.Run("contains 4 processes", func(t *testing.T) {
+	t.Run("contains 5 processes", func(t *testing.T) {
 		var processes []Process
 		db.Find(&processes)
-		assert.Len(t, processes, 4)
+		assert.Len(t, processes, 5)
 	})
 
 	t.Run("contains specific process", func(t *testing.T) {

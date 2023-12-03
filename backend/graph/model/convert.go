@@ -62,16 +62,31 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage incident to GraphQL incident.
+func FromStorageIncident(incident storage.Incident) *Incident {
+	return &Incident{
+		IncidentKey:  incident.Key,
+		InstanceKey:  incident.ProcessInstanceKey,
+		ElementID:    incident.ElementID,
+		ErrorType:    incident.ErrorType,
+		ErrorMessage: incident.ErrorMessage,
+		State:        incident.State,
+		Time:         formatTime(incident.Time),
+		// Instance is populated by the Instance resolver.
+	}
+}
+
 // Convert storage job to GraphQL job.
 func FromStorageJob(job storage.Job) *Job {
 	return &Job{
-		ElementID: job.ElementID,
-		Key:       job.Key,
-		Type:      job.Type,
-		Retries:   job.Retries,
-		Worker:    job.Worker,
-		State:     job.State,
-		Time:      formatTime(job.Time),
+		ElementID:   job.ElementID,
+		InstanceKey: job.ProcessInstanceKey,
+		Key:         job.Key,
+		Type:        job.Type,
+		Retries:     job.Retries,
+		Worker:      job.Worker,
+		State:       job.State,
+		Time:        formatTime(job.Time),
 	}
 }
 

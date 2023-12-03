@@ -25,10 +25,22 @@ type Instance = {
   bpmnResource: string;
   bpmnProcessId: string;
   variables: VariableType[];
+  jobs: JobType[];
 };
 
 type VariableType = {
   name: string;
   value: string;
+  time: string;
+};
+
+type JobType = {
+  key: number;
+  elementId: string;
+  instanceKey: number;
+  type: string;
+  retries: number;
+  worker: string;
+  state: string;
   time: string;
 };

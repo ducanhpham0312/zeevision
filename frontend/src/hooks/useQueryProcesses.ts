@@ -10,6 +10,7 @@ const PROCESSES_QUERY = () => gql`
     processes {
       bpmnProcessId
       processKey
+      version
       deploymentTime
       instances {
         version

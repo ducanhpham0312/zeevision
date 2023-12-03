@@ -22,8 +22,8 @@ func TestMap(t *testing.T) {
 
 func TestFromStorageBpmnResource(t *testing.T) {
 	storageResource := storage.BpmnResource{
-		BpmnProcessID: "main-loop",
-		BpmnFile:      "test",
+		ProcessDefinitionKey: 1,
+		BpmnFile:             "test",
 	}
 	expected := "test"
 
@@ -171,8 +171,8 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "main-loop",
 				// BpmnResource should not transfer to model.Instance.
 				BpmnResource: storage.BpmnResource{
-					BpmnProcessID: "main-loop",
-					BpmnFile:      "test",
+					ProcessDefinitionKey: 1,
+					BpmnFile:             "test",
 				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{
@@ -204,8 +204,8 @@ func TestFromStorageProcess(t *testing.T) {
 				BpmnProcessID:        "main-loop",
 				// BpmnResource should not transfer to model.Instance.
 				BpmnResource: storage.BpmnResource{
-					BpmnProcessID: "main-loop",
-					BpmnFile:      "test",
+					ProcessDefinitionKey: 2,
+					BpmnFile:             "test",
 				},
 				// Instances should not transfer to model.Instance.
 				Instances: []storage.Instance{},
@@ -232,6 +232,33 @@ func TestFromStorageProcess(t *testing.T) {
 	}
 }
 
+func TestFromStrorageIncident(t *testing.T) {
+	now := time.Now()
+
+	storageIncident := storage.Incident{
+		Key:                10,
+		ProcessInstanceKey: 100,
+		ElementID:          "element-id",
+		ErrorType:          "error-type",
+		ErrorMessage:       "error-message",
+		State:              "state",
+		Time:               now,
+	}
+	expected := &Incident{
+		IncidentKey:  10,
+		InstanceKey:  100,
+		ElementID:    "element-id",
+		ErrorType:    "error-type",
+		ErrorMessage: "error-message",
+		State:        "state",
+		Time:         now.UTC().Format(time.RFC3339),
+	}
+
+	actual := FromStorageIncident(storageIncident)
+
+	assert.Equal(t, expected, actual)
+}
+
 func TestFromStorageJob(t *testing.T) {
 	now := time.Now()
 
@@ -246,13 +273,14 @@ func TestFromStorageJob(t *testing.T) {
 		ProcessInstanceKey: 100,
 	}
 	expected := &Job{
-		ElementID: "element-id",
-		Key:       10,
-		Type:      "type",
-		Retries:   3,
-		Worker:    "worker",
-		State:     "state",
-		Time:      now.UTC().Format(time.RFC3339),
+		ElementID:   "element-id",
+		Key:         10,
+		Type:        "type",
+		Retries:     3,
+		Worker:      "worker",
+		State:       "state",
+		Time:        now.UTC().Format(time.RFC3339),
+		InstanceKey: 100,
 	}
 
 	actual := FromStorageJob(storageJob)

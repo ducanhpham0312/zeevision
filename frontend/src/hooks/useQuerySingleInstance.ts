@@ -1,7 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
-interface QueryInstanceReturnType {
+export interface QueryInstanceReturnType {
   instance: Instance;
 }
 
@@ -17,6 +17,15 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
       variables {
         name
         value
+        time
+      }
+      jobs {
+        elementId
+        key
+        type
+        retries
+        worker
+        state
         time
       }
     }
