@@ -40,7 +40,7 @@ func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeC
 
 	// launch a database handler goroutine
 	// Have a pool of five so we can (hopefully) avoid data races by retrying
-	poolSize := 5
+	poolSize := 20
 	for i := 0; i < poolSize; i++ {
 		wg.Add(1)
 		go func() {
@@ -104,6 +104,11 @@ func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 		err = u.handleVariable(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle variable: %w", err)
+		}
+	case ValueTypeIncident:
+		err = u.handleIncident(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle incident: %w", err)
 		}
 	default:
 		log.Printf("Unhandled record: %v (intent: %v)",
@@ -284,31 +289,12 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 	case IntentCreated:
 		log.Printf("Variable created: %s = %s (instance %d)",
 			name, value, processInstanceKey)
-		// Retry five times with a delay of 100 milliseconds until we successfully create the variable
-		retryDelay := createAttemptDelay
-		retryCount := maxCreateAttempts
-		// create err outside the loop so we can return it later
-		var err error
-		for i := 0; i < retryCount; i++ {
-			err = storer.VariableCreated(
-				processInstanceKey,
-				name,
-				value,
-				time.UnixMilli(record.Timestamp),
-			)
-			if err != nil {
-				time.Sleep(retryDelay)
-				log.Printf("Failed to create variable %s, retrying: %v",
-					name, err)
-			} else {
-				log.Printf("Variable successfully created: %s",
-					name)
-				return nil
-			}
-		}
-		// err should not be nil here but it doesn't matter if we
-		// succeed and fall through
-		return err
+		return storer.VariableCreated(
+			processInstanceKey,
+			name,
+			value,
+			time.UnixMilli(record.Timestamp),
+		)
 	case IntentUpdated:
 		log.Printf("Variable updated: %s = %s (instance %d)",
 			name, value, processInstanceKey)
@@ -326,4 +312,43 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 	// If we get here we did nothing or missed all err returns so handling
 	// succeeded
 	return nil
+}
+
+func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
+	storer := u.storer
+
+	record, err := WithTypedValue[IncidentValue](*untypedRecord)
+	if err != nil {
+		return fmt.Errorf("failed to cast: %w", err)
+	}
+
+	key := record.Key
+	processInstanceKey := record.Value.ProcessInstanceKey
+	elementID := record.Value.ElementID
+	errorType := record.Value.ErrorType
+	errorMessage := record.Value.ErrorMessage
+	time := time.UnixMilli(record.Timestamp)
+
+	switch record.Intent {
+	case IntentCreated:
+		return storer.IncidentCreated(
+			key,
+			processInstanceKey,
+			elementID,
+			errorType,
+			errorMessage,
+			time,
+		)
+	case IntentResolved:
+		return storer.IncidentResolved(
+			key,
+			time,
+		)
+	default:
+		log.Printf("Unhandled intent for %v: %s",
+			record.ValueType, record.Intent)
+	}
+
+	return nil
+
 }

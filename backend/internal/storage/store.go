@@ -48,6 +48,20 @@ type Storer interface {
 		value string,
 		time time.Time,
 	) error
+
+	IncidentCreated(
+		key int64,
+		processInstanceKey int64,
+		elementID string,
+		errorType string,
+		errorMessage string,
+		time time.Time,
+	) error
+
+	IncidentResolved(
+		key int64,
+		time time.Time,
+	) error
 }
 
 // TODO: use context for queries where reasonable
@@ -207,6 +221,59 @@ func (r *databaseStorer) VariableUpdated(
 		}).Error
 	if err != nil {
 		return fmt.Errorf("failed to save variable: %w", err)
+	}
+
+	return nil
+}
+
+// Store a newly created incident in the database.
+func (r *databaseStorer) IncidentCreated(
+	key int64,
+	processInstanceKey int64,
+	elementID string,
+	errorType string,
+	errorMessage string,
+	time time.Time,
+) error {
+	err := r.db.Create(&Incident{
+		Key:                key,
+		ProcessInstanceKey: processInstanceKey,
+		ElementID:          elementID,
+		ErrorType:          errorType,
+		ErrorMessage:       errorMessage,
+		State:              "CREATED",
+		Time:               time,
+	}).Error
+	if err != nil {
+		return fmt.Errorf("failed to create incident: %w", err)
+	}
+
+	return nil
+}
+
+// Handle incident being resolved.
+func (r *databaseStorer) IncidentResolved(
+	key int64,
+	time time.Time,
+) error {
+	var incident Incident
+	err := r.db.
+		Where(&Incident{
+			Key: key,
+		}).
+		First(&incident).Error
+	if err != nil {
+		return fmt.Errorf("failed to find incident: %w", err)
+	}
+
+	err = r.db.Model(&incident).
+		Select("State", "Time").
+		Updates(&Incident{
+			State: "RESOLVED",
+			Time:  time,
+		}).Error
+	if err != nil {
+		return fmt.Errorf("failed to save incident: %w", err)
 	}
 
 	return nil
