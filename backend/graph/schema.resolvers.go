@@ -22,33 +22,42 @@ func (r *incidentResolver) Instance(ctx context.Context, obj *model.Incident) (*
 }
 
 // Incidents is the resolver for the incidents field.
-func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Incident, error) {
+func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedIncidents, error) {
 	dbIncidents, err := r.Fetcher.GetIncidentsForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
 	}
 
-	return model.Map(dbIncidents, model.FromStorageIncident), nil
+	return &model.PaginatedIncidents{
+		Items:      model.Map(dbIncidents.Items, model.FromStorageIncident),
+		TotalCount: dbIncidents.TotalCount,
+	}, nil
 }
 
 // Jobs is the resolver for the jobs field.
-func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Job, error) {
+func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedJobs, error) {
 	dbJobs, err := r.Fetcher.GetJobsForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
 	}
 
-	return model.Map(dbJobs, model.FromStorageJob), nil
+	return &model.PaginatedJobs{
+		Items:      model.Map(dbJobs.Items, model.FromStorageJob),
+		TotalCount: dbJobs.TotalCount,
+	}, nil
 }
 
 // Variables is the resolver for the variables field.
-func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Variable, error) {
+func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedVariables, error) {
 	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch variables: %w", err)
 	}
 
-	return model.Map(dbVariables, model.FromStorageVariable), nil
+	return &model.PaginatedVariables{
+		Items:      model.Map(dbVariables.Items, model.FromStorageVariable),
+		TotalCount: dbVariables.TotalCount,
+	}, nil
 }
 
 // Process is the resolver for the process field.
@@ -82,23 +91,29 @@ func (r *processResolver) BpmnResource(ctx context.Context, obj *model.Process) 
 }
 
 // Instances is the resolver for the instances field.
-func (r *processResolver) Instances(ctx context.Context, obj *model.Process, pagination *model.Pagination) ([]*model.Instance, error) {
+func (r *processResolver) Instances(ctx context.Context, obj *model.Process, pagination *model.Pagination) (*model.PaginatedInstances, error) {
 	dbInstances, err := r.Fetcher.GetInstancesForProcess(ctx, model.ToStoragePagination(pagination), obj.ProcessKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch instances: %w", err)
 	}
 
-	return model.Map(dbInstances, model.FromStorageInstance), nil
+	return &model.PaginatedInstances{
+		Items:      model.Map(dbInstances.Items, model.FromStorageInstance),
+		TotalCount: dbInstances.TotalCount,
+	}, nil
 }
 
 // Processes is the resolver for the processes field.
-func (r *queryResolver) Processes(ctx context.Context, pagination *model.Pagination) ([]*model.Process, error) {
+func (r *queryResolver) Processes(ctx context.Context, pagination *model.Pagination) (*model.PaginatedProcesses, error) {
 	dbProcesses, err := r.Fetcher.GetProcesses(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch processes: %w", err)
 	}
 
-	return model.Map(dbProcesses, model.FromStorageProcess), nil
+	return &model.PaginatedProcesses{
+		Items:      model.Map(dbProcesses.Items, model.FromStorageProcess),
+		TotalCount: dbProcesses.TotalCount,
+	}, nil
 }
 
 // Process is the resolver for the process field.
@@ -112,13 +127,16 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 }
 
 // Instances is the resolver for the instances field.
-func (r *queryResolver) Instances(ctx context.Context, pagination *model.Pagination) ([]*model.Instance, error) {
+func (r *queryResolver) Instances(ctx context.Context, pagination *model.Pagination) (*model.PaginatedInstances, error) {
 	dbInstances, err := r.Fetcher.GetInstances(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch instances: %w", err)
 	}
 
-	return model.Map(dbInstances, model.FromStorageInstance), nil
+	return &model.PaginatedInstances{
+		Items:      model.Map(dbInstances.Items, model.FromStorageInstance),
+		TotalCount: dbInstances.TotalCount,
+	}, nil
 }
 
 // Instance is the resolver for the instance field.
@@ -132,23 +150,29 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 }
 
 // Incidents is the resolver for the incidents field.
-func (r *queryResolver) Incidents(ctx context.Context, pagination *model.Pagination) ([]*model.Incident, error) {
+func (r *queryResolver) Incidents(ctx context.Context, pagination *model.Pagination) (*model.PaginatedIncidents, error) {
 	dbIncidents, err := r.Fetcher.GetIncidents(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
 	}
 
-	return model.Map(dbIncidents, model.FromStorageIncident), nil
+	return &model.PaginatedIncidents{
+		Items:      model.Map(dbIncidents.Items, model.FromStorageIncident),
+		TotalCount: dbIncidents.TotalCount,
+	}, nil
 }
 
 // Jobs is the resolver for the jobs field.
-func (r *queryResolver) Jobs(ctx context.Context, pagination *model.Pagination) ([]*model.Job, error) {
+func (r *queryResolver) Jobs(ctx context.Context, pagination *model.Pagination) (*model.PaginatedJobs, error) {
 	dbJobs, err := r.Fetcher.GetJobs(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
 	}
 
-	return model.Map(dbJobs, model.FromStorageJob), nil
+	return &model.PaginatedJobs{
+		Items:      model.Map(dbJobs.Items, model.FromStorageJob),
+		TotalCount: dbJobs.TotalCount,
+	}, nil
 }
 
 // Incident returns IncidentResolver implementation.

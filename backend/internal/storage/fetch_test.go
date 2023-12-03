@@ -199,9 +199,9 @@ func TestInstancesQuery(t *testing.T) {
 	instances, err := fetcher.GetInstances(context.Background(), nil)
 	assert.NoError(t, err)
 
-	assert.Len(t, instances, 2)
-	for i := range instances {
-		assert.Equal(t, expectedInstances[i], instances[i])
+	assert.Len(t, instances.Items, 2)
+	for i := range instances.Items {
+		assert.Equal(t, expectedInstances[i], instances.Items[i])
 	}
 }
 
@@ -241,9 +241,9 @@ func TestInstancesForProcessQuery(t *testing.T) {
 			instances, err := fetcher.GetInstancesForProcess(context.Background(), nil, test.processDefKey)
 			assert.NoError(t, err)
 
-			assert.Len(t, instances, len(test.instances))
-			for i := range instances {
-				assert.Equal(t, test.instances[i], instances[i])
+			assert.Len(t, instances.Items, len(test.instances))
+			for i := range instances.Items {
+				assert.Equal(t, test.instances[i], instances.Items[i])
 			}
 		})
 	}
@@ -264,9 +264,9 @@ func TestProcessesQuery(t *testing.T) {
 	processes, err := fetcher.GetProcesses(context.Background(), nil)
 	assert.NoError(t, err)
 
-	assert.Len(t, processes, 2)
-	for i := range processes {
-		assert.Equal(t, expectedProcesses[i].ProcessDefinitionKey, processes[i].ProcessDefinitionKey)
+	assert.Len(t, processes.Items, 2)
+	for i := range processes.Items {
+		assert.Equal(t, expectedProcesses[i].ProcessDefinitionKey, processes.Items[i].ProcessDefinitionKey)
 	}
 }
 
@@ -331,9 +331,9 @@ func TestJobsQuery(t *testing.T) {
 	jobs, err := fetcher.GetJobs(context.Background(), nil)
 	assert.NoError(t, err)
 
-	assert.Len(t, jobs, 3)
-	for i := range jobs {
-		assert.Equal(t, expectedJobs[i], jobs[i])
+	assert.Len(t, jobs.Items, 3)
+	for i := range jobs.Items {
+		assert.Equal(t, expectedJobs[i], jobs.Items[i])
 	}
 }
 
@@ -378,9 +378,9 @@ func TestJobsForInstanceQuery(t *testing.T) {
 			jobs, err := fetcher.GetJobsForInstance(context.Background(), nil, test.instanceKey)
 			assert.NoError(t, err)
 
-			assert.Len(t, jobs, len(test.jobs))
-			for i := range jobs {
-				assert.Equal(t, test.jobs[i], jobs[i])
+			assert.Len(t, jobs.Items, len(test.jobs))
+			for i := range jobs.Items {
+				assert.Equal(t, test.jobs[i], jobs.Items[i])
 			}
 		})
 	}
@@ -401,9 +401,9 @@ func TestIncidentsQuery(t *testing.T) {
 	incidents, err := fetcher.GetIncidents(context.Background(), nil)
 	assert.NoError(t, err)
 
-	assert.Len(t, incidents, len(expectedIncidents))
-	for i := range incidents {
-		assert.Equal(t, expectedIncidents[i], incidents[i])
+	assert.Len(t, incidents.Items, len(expectedIncidents))
+	for i := range incidents.Items {
+		assert.Equal(t, expectedIncidents[i], incidents.Items[i])
 	}
 }
 
@@ -447,9 +447,9 @@ func TestIncidentsForInstanceQuery(t *testing.T) {
 			incidents, err := fetcher.GetIncidentsForInstance(context.Background(), nil, test.instanceKey)
 			assert.NoError(t, err)
 
-			assert.Len(t, incidents, len(test.incidents))
-			for i := range incidents {
-				assert.Equal(t, test.incidents[i], incidents[i])
+			assert.Len(t, incidents.Items, len(test.incidents))
+			for i := range incidents.Items {
+				assert.Equal(t, test.incidents[i], incidents.Items[i])
 			}
 		})
 	}
@@ -513,9 +513,9 @@ func TestVariablesForInstanceQuery(t *testing.T) {
 			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, test.instanceKey)
 			assert.NoError(t, err)
 
-			assert.Len(t, variables, len(test.variables))
-			for i := range variables {
-				assert.Equal(t, test.variables[i], variables[i])
+			assert.Len(t, variables.Items, len(test.variables))
+			for i := range variables.Items {
+				assert.Equal(t, test.variables[i], variables.Items[i])
 			}
 		})
 	}
