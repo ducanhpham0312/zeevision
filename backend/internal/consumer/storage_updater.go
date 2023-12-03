@@ -11,14 +11,6 @@ import (
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
 )
 
-const (
-	// Maximum attempts to try creating eg. a variable when it might be
-	// failing due to the instance not existing yet (race handling
-	// nigh-simultaneous incoming records)
-	maxCreateAttempts  = 5
-	createAttemptDelay = 100 * time.Millisecond
-)
-
 // Intermediary object that handles communication between consumers and storage.
 type storageUpdater struct {
 	storer storage.Storer
@@ -329,8 +321,10 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 	errorMessage := record.Value.ErrorMessage
 	time := time.UnixMilli(record.Timestamp)
 
-	switch record.Intent {
+	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
+		log.Printf("Incident created: %s (instance %d)",
+			errorType, processInstanceKey)
 		return storer.IncidentCreated(
 			key,
 			processInstanceKey,
@@ -340,6 +334,8 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 			time,
 		)
 	case IntentResolved:
+		log.Printf("Incident resolved: %s (instance %d)",
+			errorType, processInstanceKey)
 		return storer.IncidentResolved(
 			key,
 			time,
