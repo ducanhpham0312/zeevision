@@ -58,7 +58,5 @@ export function ResizableContainer({ direction, children }: ResizableProps) {
     };
   }
 
-  console.log(resizableProps);
-
   return <ResizableBox {...resizableProps}>{children}</ResizableBox>;
 }
