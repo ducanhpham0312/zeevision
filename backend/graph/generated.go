@@ -64,14 +64,14 @@ type ComplexityRoot struct {
 	Instance struct {
 		BpmnLiveStatus func(childComplexity int) int
 		EndTime        func(childComplexity int) int
-		Incidents      func(childComplexity int) int
+		Incidents      func(childComplexity int, pagination *model.Pagination) int
 		InstanceKey    func(childComplexity int) int
-		Jobs           func(childComplexity int) int
+		Jobs           func(childComplexity int, pagination *model.Pagination) int
 		Process        func(childComplexity int) int
 		ProcessKey     func(childComplexity int) int
 		StartTime      func(childComplexity int) int
 		Status         func(childComplexity int) int
-		Variables      func(childComplexity int) int
+		Variables      func(childComplexity int, pagination *model.Pagination) int
 		Version        func(childComplexity int) int
 	}
 
@@ -94,18 +94,18 @@ type ComplexityRoot struct {
 		BpmnResource       func(childComplexity int) int
 		CompletedInstances func(childComplexity int) int
 		DeploymentTime     func(childComplexity int) int
-		Instances          func(childComplexity int) int
+		Instances          func(childComplexity int, pagination *model.Pagination) int
 		ProcessKey         func(childComplexity int) int
 		Version            func(childComplexity int) int
 	}
 
 	Query struct {
-		Incidents func(childComplexity int) int
+		Incidents func(childComplexity int, pagination *model.Pagination) int
 		Instance  func(childComplexity int, instanceKey int64) int
-		Instances func(childComplexity int) int
-		Jobs      func(childComplexity int) int
+		Instances func(childComplexity int, pagination *model.Pagination) int
+		Jobs      func(childComplexity int, pagination *model.Pagination) int
 		Process   func(childComplexity int, processKey int64) int
-		Processes func(childComplexity int) int
+		Processes func(childComplexity int, pagination *model.Pagination) int
 	}
 
 	Variable struct {
@@ -119,9 +119,9 @@ type IncidentResolver interface {
 	Instance(ctx context.Context, obj *model.Incident) (*model.Instance, error)
 }
 type InstanceResolver interface {
-	Incidents(ctx context.Context, obj *model.Instance) ([]*model.Incident, error)
-	Jobs(ctx context.Context, obj *model.Instance) ([]*model.Job, error)
-	Variables(ctx context.Context, obj *model.Instance) ([]*model.Variable, error)
+	Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Incident, error)
+	Jobs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Job, error)
+	Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Variable, error)
 	Process(ctx context.Context, obj *model.Instance) (*model.Process, error)
 }
 type JobResolver interface {
@@ -130,15 +130,15 @@ type JobResolver interface {
 type ProcessResolver interface {
 	BpmnResource(ctx context.Context, obj *model.Process) (string, error)
 
-	Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error)
+	Instances(ctx context.Context, obj *model.Process, pagination *model.Pagination) ([]*model.Instance, error)
 }
 type QueryResolver interface {
-	Processes(ctx context.Context) ([]*model.Process, error)
+	Processes(ctx context.Context, pagination *model.Pagination) ([]*model.Process, error)
 	Process(ctx context.Context, processKey int64) (*model.Process, error)
-	Instances(ctx context.Context) ([]*model.Instance, error)
+	Instances(ctx context.Context, pagination *model.Pagination) ([]*model.Instance, error)
 	Instance(ctx context.Context, instanceKey int64) (*model.Instance, error)
-	Incidents(ctx context.Context) ([]*model.Incident, error)
-	Jobs(ctx context.Context) ([]*model.Job, error)
+	Incidents(ctx context.Context, pagination *model.Pagination) ([]*model.Incident, error)
+	Jobs(ctx context.Context, pagination *model.Pagination) ([]*model.Job, error)
 }
 
 type executableSchema struct {
@@ -235,7 +235,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Instance.Incidents(childComplexity), true
+		args, err := ec.field_Instance_incidents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.Incidents(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Instance.instanceKey":
 		if e.complexity.Instance.InstanceKey == nil {
@@ -249,7 +254,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Instance.Jobs(childComplexity), true
+		args, err := ec.field_Instance_jobs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.Jobs(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Instance.process":
 		if e.complexity.Instance.Process == nil {
@@ -284,7 +294,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Instance.Variables(childComplexity), true
+		args, err := ec.field_Instance_variables_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.Variables(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Instance.version":
 		if e.complexity.Instance.Version == nil {
@@ -403,7 +418,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Process.Instances(childComplexity), true
+		args, err := ec.field_Process_instances_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Process.Instances(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Process.processKey":
 		if e.complexity.Process.ProcessKey == nil {
@@ -424,7 +444,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Incidents(childComplexity), true
+		args, err := ec.field_Query_incidents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Incidents(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Query.instance":
 		if e.complexity.Query.Instance == nil {
@@ -443,14 +468,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Instances(childComplexity), true
+		args, err := ec.field_Query_instances_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Instances(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Query.jobs":
 		if e.complexity.Query.Jobs == nil {
 			break
 		}
 
-		return e.complexity.Query.Jobs(childComplexity), true
+		args, err := ec.field_Query_jobs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Jobs(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Query.process":
 		if e.complexity.Query.Process == nil {
@@ -469,7 +504,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Processes(childComplexity), true
+		args, err := ec.field_Query_processes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Processes(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Variable.name":
 		if e.complexity.Variable.Name == nil {
@@ -499,7 +539,9 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap()
+	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputPagination,
+	)
 	first := true
 
 	switch rc.Operation.Operation {
@@ -600,6 +642,66 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Instance_incidents_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Instance_jobs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Instance_variables_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Process_instances_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -612,6 +714,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_incidents_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
 	return args, nil
 }
 
@@ -630,6 +747,36 @@ func (ec *executionContext) field_Query_instance_args(ctx context.Context, rawAr
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_instances_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_jobs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_process_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -642,6 +789,21 @@ func (ec *executionContext) field_Query_process_args(ctx context.Context, rawArg
 		}
 	}
 	args["processKey"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_processes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
 	return args, nil
 }
 
@@ -1378,7 +1540,7 @@ func (ec *executionContext) _Instance_incidents(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Incidents(rctx, obj)
+		return ec.resolvers.Instance().Incidents(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1423,6 +1585,17 @@ func (ec *executionContext) fieldContext_Instance_incidents(ctx context.Context,
 			return nil, fmt.Errorf("no field named %q was found under type Incident", field.Name)
 		},
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_incidents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
 	return fc, nil
 }
 
@@ -1440,7 +1613,7 @@ func (ec *executionContext) _Instance_jobs(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Jobs(rctx, obj)
+		return ec.resolvers.Instance().Jobs(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1487,6 +1660,17 @@ func (ec *executionContext) fieldContext_Instance_jobs(ctx context.Context, fiel
 			return nil, fmt.Errorf("no field named %q was found under type Job", field.Name)
 		},
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_jobs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
 	return fc, nil
 }
 
@@ -1504,7 +1688,7 @@ func (ec *executionContext) _Instance_variables(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Variables(rctx, obj)
+		return ec.resolvers.Instance().Variables(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1538,6 +1722,17 @@ func (ec *executionContext) fieldContext_Instance_variables(ctx context.Context,
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Variable", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_variables_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2304,7 +2499,7 @@ func (ec *executionContext) _Process_instances(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Process().Instances(rctx, obj)
+		return ec.resolvers.Process().Instances(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2354,6 +2549,17 @@ func (ec *executionContext) fieldContext_Process_instances(ctx context.Context, 
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Process_instances_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2460,7 +2666,7 @@ func (ec *executionContext) _Query_processes(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Processes(rctx)
+		return ec.resolvers.Query().Processes(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2506,6 +2712,17 @@ func (ec *executionContext) fieldContext_Query_processes(ctx context.Context, fi
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Process", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_processes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2596,7 +2813,7 @@ func (ec *executionContext) _Query_instances(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Instances(rctx)
+		return ec.resolvers.Query().Instances(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2646,6 +2863,17 @@ func (ec *executionContext) fieldContext_Query_instances(ctx context.Context, fi
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_instances_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2740,7 +2968,7 @@ func (ec *executionContext) _Query_incidents(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Incidents(rctx)
+		return ec.resolvers.Query().Incidents(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2785,6 +3013,17 @@ func (ec *executionContext) fieldContext_Query_incidents(ctx context.Context, fi
 			return nil, fmt.Errorf("no field named %q was found under type Incident", field.Name)
 		},
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_incidents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
 	return fc, nil
 }
 
@@ -2802,7 +3041,7 @@ func (ec *executionContext) _Query_jobs(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Jobs(rctx)
+		return ec.resolvers.Query().Jobs(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2848,6 +3087,17 @@ func (ec *executionContext) fieldContext_Query_jobs(ctx context.Context, field g
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Job", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_jobs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -4886,6 +5136,44 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputPagination(ctx context.Context, obj interface{}) (model.Pagination, error) {
+	var it model.Pagination
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"offset", "limit"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "offset":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+			data, err := ec.unmarshalNInt2int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Offset = data
+		case "limit":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+			data, err := ec.unmarshalNInt2int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Limit = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -6659,6 +6947,14 @@ func (ec *executionContext) marshalOInstance2ᚖgithubᚗcomᚋducanhpham0312ᚋ
 		return graphql.Null
 	}
 	return ec._Instance(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx context.Context, v interface{}) (*model.Pagination, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputPagination(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOProcess2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcess(ctx context.Context, sel ast.SelectionSet, v *model.Process) graphql.Marshaler {

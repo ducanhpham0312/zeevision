@@ -22,8 +22,8 @@ func (r *incidentResolver) Instance(ctx context.Context, obj *model.Incident) (*
 }
 
 // Incidents is the resolver for the incidents field.
-func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance) ([]*model.Incident, error) {
-	dbIncidents, err := r.Fetcher.GetIncidentsForInstance(ctx, obj.InstanceKey)
+func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Incident, error) {
+	dbIncidents, err := r.Fetcher.GetIncidentsForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
 	}
@@ -32,8 +32,8 @@ func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance) (
 }
 
 // Jobs is the resolver for the jobs field.
-func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance) ([]*model.Job, error) {
-	dbJobs, err := r.Fetcher.GetJobsForInstance(ctx, obj.InstanceKey)
+func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Job, error) {
+	dbJobs, err := r.Fetcher.GetJobsForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
 	}
@@ -42,8 +42,8 @@ func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance) ([]*mo
 }
 
 // Variables is the resolver for the variables field.
-func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance) ([]*model.Variable, error) {
-	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx, obj.InstanceKey)
+func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination) ([]*model.Variable, error) {
+	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch variables: %w", err)
 	}
@@ -82,8 +82,8 @@ func (r *processResolver) BpmnResource(ctx context.Context, obj *model.Process) 
 }
 
 // Instances is the resolver for the instances field.
-func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error) {
-	dbInstances, err := r.Fetcher.GetInstancesForProcess(ctx, obj.ProcessKey)
+func (r *processResolver) Instances(ctx context.Context, obj *model.Process, pagination *model.Pagination) ([]*model.Instance, error) {
+	dbInstances, err := r.Fetcher.GetInstancesForProcess(ctx, model.ToStoragePagination(pagination), obj.ProcessKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch instances: %w", err)
 	}
@@ -92,8 +92,8 @@ func (r *processResolver) Instances(ctx context.Context, obj *model.Process) ([]
 }
 
 // Processes is the resolver for the processes field.
-func (r *queryResolver) Processes(ctx context.Context) ([]*model.Process, error) {
-	dbProcesses, err := r.Fetcher.GetProcesses(ctx)
+func (r *queryResolver) Processes(ctx context.Context, pagination *model.Pagination) ([]*model.Process, error) {
+	dbProcesses, err := r.Fetcher.GetProcesses(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch processes: %w", err)
 	}
@@ -112,8 +112,8 @@ func (r *queryResolver) Process(ctx context.Context, processKey int64) (*model.P
 }
 
 // Instances is the resolver for the instances field.
-func (r *queryResolver) Instances(ctx context.Context) ([]*model.Instance, error) {
-	dbInstances, err := r.Fetcher.GetInstances(ctx)
+func (r *queryResolver) Instances(ctx context.Context, pagination *model.Pagination) ([]*model.Instance, error) {
+	dbInstances, err := r.Fetcher.GetInstances(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch instances: %w", err)
 	}
@@ -132,8 +132,8 @@ func (r *queryResolver) Instance(ctx context.Context, instanceKey int64) (*model
 }
 
 // Incidents is the resolver for the incidents field.
-func (r *queryResolver) Incidents(ctx context.Context) ([]*model.Incident, error) {
-	dbIncidents, err := r.Fetcher.GetIncidents(ctx)
+func (r *queryResolver) Incidents(ctx context.Context, pagination *model.Pagination) ([]*model.Incident, error) {
+	dbIncidents, err := r.Fetcher.GetIncidents(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch incidents: %w", err)
 	}
@@ -142,8 +142,8 @@ func (r *queryResolver) Incidents(ctx context.Context) ([]*model.Incident, error
 }
 
 // Jobs is the resolver for the jobs field.
-func (r *queryResolver) Jobs(ctx context.Context) ([]*model.Job, error) {
-	dbJobs, err := r.Fetcher.GetJobs(ctx)
+func (r *queryResolver) Jobs(ctx context.Context, pagination *model.Pagination) ([]*model.Job, error) {
+	dbJobs, err := r.Fetcher.GetJobs(ctx, model.ToStoragePagination(pagination))
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch jobs: %w", err)
 	}

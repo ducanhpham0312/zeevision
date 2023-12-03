@@ -45,6 +45,11 @@ type Job struct {
 	Instance    *Instance `json:"instance"`
 }
 
+type Pagination struct {
+	Offset int64 `json:"offset"`
+	Limit  int64 `json:"limit"`
+}
+
 type Process struct {
 	ActiveInstances    int64       `json:"activeInstances"`
 	CompletedInstances int64       `json:"completedInstances"`

@@ -196,7 +196,7 @@ func TestInstancesQuery(t *testing.T) {
 
 	fetcher := NewFetcher(db)
 
-	instances, err := fetcher.GetInstances(context.Background())
+	instances, err := fetcher.GetInstances(context.Background(), nil)
 	assert.NoError(t, err)
 
 	assert.Len(t, instances, 2)
@@ -238,7 +238,7 @@ func TestInstancesForProcessQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			instances, err := fetcher.GetInstancesForProcess(context.Background(), test.processDefKey)
+			instances, err := fetcher.GetInstancesForProcess(context.Background(), nil, test.processDefKey)
 			assert.NoError(t, err)
 
 			assert.Len(t, instances, len(test.instances))
@@ -261,7 +261,7 @@ func TestProcessesQuery(t *testing.T) {
 
 	fetcher := NewFetcher(db)
 
-	processes, err := fetcher.GetProcesses(context.Background())
+	processes, err := fetcher.GetProcesses(context.Background(), nil)
 	assert.NoError(t, err)
 
 	assert.Len(t, processes, 2)
@@ -328,7 +328,7 @@ func TestJobsQuery(t *testing.T) {
 
 	fetcher := NewFetcher(db)
 
-	jobs, err := fetcher.GetJobs(context.Background())
+	jobs, err := fetcher.GetJobs(context.Background(), nil)
 	assert.NoError(t, err)
 
 	assert.Len(t, jobs, 3)
@@ -375,7 +375,7 @@ func TestJobsForInstanceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			jobs, err := fetcher.GetJobsForInstance(context.Background(), test.instanceKey)
+			jobs, err := fetcher.GetJobsForInstance(context.Background(), nil, test.instanceKey)
 			assert.NoError(t, err)
 
 			assert.Len(t, jobs, len(test.jobs))
@@ -398,7 +398,7 @@ func TestIncidentsQuery(t *testing.T) {
 	err := db.Create(expectedIncidents).Error
 	assert.NoError(t, err)
 
-	incidents, err := fetcher.GetIncidents(context.Background())
+	incidents, err := fetcher.GetIncidents(context.Background(), nil)
 	assert.NoError(t, err)
 
 	assert.Len(t, incidents, len(expectedIncidents))
@@ -444,7 +444,7 @@ func TestIncidentsForInstanceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			incidents, err := fetcher.GetIncidentsForInstance(context.Background(), test.instanceKey)
+			incidents, err := fetcher.GetIncidentsForInstance(context.Background(), nil, test.instanceKey)
 			assert.NoError(t, err)
 
 			assert.Len(t, incidents, len(test.incidents))
@@ -510,7 +510,7 @@ func TestVariablesForInstanceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			variables, err := fetcher.GetVariablesForInstance(context.Background(), test.instanceKey)
+			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, test.instanceKey)
 			assert.NoError(t, err)
 
 			assert.Len(t, variables, len(test.variables))
@@ -532,6 +532,6 @@ func TestCancelQuery(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	_, err := fetcher.GetProcesses(ctx)
+	_, err := fetcher.GetProcesses(ctx, nil)
 	assert.EqualError(t, err, "context canceled")
 }

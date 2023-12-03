@@ -10,12 +10,17 @@ directive @goField(
 
 # Root level query type.
 type Query {
-  processes: [Process!]!
+  processes(pagination: Pagination): [Process!]!
   process(processKey: Int!): Process
-  instances: [Instance!]!
+  instances(pagination: Pagination): [Instance!]!
   instance(instanceKey: Int!): Instance
-  incidents: [Incident!]!
-  jobs: [Job!]!
+  incidents(pagination: Pagination): [Incident!]!
+  jobs(pagination: Pagination): [Job!]!
+}
+
+input Pagination {
+  offset: Int!
+  limit: Int!
 }
 
 type Process {
@@ -25,7 +30,7 @@ type Process {
   bpmnResource: String! @goField(forceResolver: true)
   bpmnProcessId: String!
   deploymentTime: DateTime!
-  instances: [Instance!]! @goField(forceResolver: true)
+  instances(pagination: Pagination): [Instance!]! @goField(forceResolver: true)
   processKey: Int!
   version: Int!
 }
@@ -38,9 +43,9 @@ type Instance {
   processKey: Int!
   version: Int!
   status: Status!
-  incidents: [Incident!]! @goField(forceResolver: true)
-  jobs: [Job!]! @goField(forceResolver: true)
-  variables: [Variable!]! @goField(forceResolver: true)
+  incidents(pagination: Pagination): [Incident!]! @goField(forceResolver: true)
+  jobs(pagination: Pagination): [Job!]! @goField(forceResolver: true)
+  variables(pagination: Pagination): [Variable!]! @goField(forceResolver: true)
   process: Process! @goField(forceResolver: true)
 }
 
