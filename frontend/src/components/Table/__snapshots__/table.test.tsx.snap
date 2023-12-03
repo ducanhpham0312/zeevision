@@ -2,166 +2,167 @@
 
 exports[`HorizontalTable Component renders correctly 1`] = `
 <DocumentFragment>
-  <table
-    class="w-full border-collapse rounded bg-white"
-  >
-    <thead
-      class="border-b-2 border-accent font-bold text-text"
+  <div>
+    <table
+      class="relative w-full border-collapse rounded bg-white"
     >
-      <tr>
-        <th
-          class="cursor-pointer py-1 text-left"
-        >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
-          >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
-            <span>
-              <div
-                class="flex justify-between"
-              >
-                <p>
-                  Element ID
-                </p>
-              </div>
-            </span>
-          </button>
-        </th>
-        <th
-          class="cursor-pointer py-1 text-left"
-        >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
-          >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
-            <span>
-              <div
-                class="flex justify-between"
-              >
-                <p>
-                  Variable name
-                </p>
-              </div>
-            </span>
-          </button>
-        </th>
-        <th
-          class="cursor-pointer py-1 text-left"
-        >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
-          >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
-            <span>
-              <div
-                class="flex justify-between"
-              >
-                <p>
-                  Variable Value
-                </p>
-              </div>
-            </span>
-          </button>
-        </th>
-        <th
-          class="cursor-pointer py-1 text-left"
-        >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
-          >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
-            <span>
-              <div
-                class="flex justify-between"
-              >
-                <p>
-                  Flow Scope Key
-                </p>
-              </div>
-            </span>
-          </button>
-        </th>
-        <th
-          class="cursor-pointer py-1 text-left"
-        >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
-          >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
-            <span>
-              <div
-                class="flex justify-between"
-              >
-                <p>
-                  Time created
-                </p>
-              </div>
-            </span>
-          </button>
-        </th>
-        <th
-          class="cursor-pointer py-1 text-left"
-        >
-          <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
-          >
-            <div
-              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
-              style="height: 0px;"
-            />
-            <span>
-              <div
-                class="flex justify-between"
-              >
-                <p>
-                  Option
-                </p>
-              </div>
-            </span>
-          </button>
-        </th>
-      </tr>
-    </thead>
-    <tbody
-      aria-label="custom pagination table"
-    >
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+      <thead
+        class="border-b-2 border-accent font-bold text-text"
       >
-        <td
-          class="p-3"
+        <tr>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="flex justify-between"
+                >
+                  <p>
+                    Element ID
+                  </p>
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="flex justify-between"
+                >
+                  <p>
+                    Variable name
+                  </p>
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="flex justify-between"
+                >
+                  <p>
+                    Variable Value
+                  </p>
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="flex justify-between"
+                >
+                  <p>
+                    Flow Scope Key
+                  </p>
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="flex justify-between"
+                >
+                  <p>
+                    Time created
+                  </p>
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="flex justify-between"
+                >
+                  <p>
+                    Option
+                  </p>
+                </div>
+              </span>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        aria-label="custom pagination table"
+      >
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            items
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            [
+          <td
+            class="p-3"
+          >
+            <p>
+              multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              items
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              [
   {
     "id": 1,
     "value": 10,
@@ -175,282 +176,282 @@ exports[`HorizontalTable Component renders correctly 1`] = `
     "inStock": 10
   }
 ]
-          </p>
-        </td>
-        <td
-          class="p-3"
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984108
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667765
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              isValid
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              true
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984108
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667765
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              total
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              200
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984108
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667765
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              another-multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              anotherVariable
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              string
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984432
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667333
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              new-multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              kmean
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              newValue
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984100
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667542
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            isValid
-          </p>
-        </td>
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              sixth-multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              amp
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              integer
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984642
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667164
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            true
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            total
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            200
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            another-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            anotherVariable
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            string
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984432
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667333
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            new-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            kmean
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            newValue
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984100
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667542
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            sixth-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            amp
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            integer
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984642
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667164
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            items
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            [
+          <td
+            class="p-3"
+          >
+            <p>
+              multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              items
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              [
   {
     "id": 1,
     "value": 10,
@@ -464,291 +465,292 @@ exports[`HorizontalTable Component renders correctly 1`] = `
     "inStock": 10
   }
 ]
-          </p>
-        </td>
-        <td
-          class="p-3"
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984108
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667765
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              isValid
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              true
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984108
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667765
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
+          <td
+            class="p-3"
+          >
+            <p>
+              multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              total
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              200
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984108
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667765
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
         >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            isValid
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            true
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            total
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            200
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            another-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            anotherVariable
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            string
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984432
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667333
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td
-          class="MuiTablePagination-root css-7ugj6v"
-          colspan="6"
-        >
-          <div
-            class="MuiTablePagination-toolbar"
+          <td
+            class="p-3"
+          >
+            <p>
+              another-multi-instance-process
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              anotherVariable
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              string
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              2251799813984432
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              1696667333
+            </p>
+          </td>
+          <td
+            class="p-3"
+          >
+            <p>
+              Show History
+            </p>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td
+            class="MuiTablePagination-root css-7ugj6v"
+            colspan="6"
           >
             <div
-              class="MuiTablePagination-spacer"
-            />
-            <p
-              class="MuiTablePagination-selectLabel"
-              id=":r1:"
+              class="MuiTablePagination-toolbar"
             >
-              Rows per page:
-            </p>
-            <select
-              aria-label="rows per page"
-              aria-labelledby=":r1: :r0:"
-              class="MuiTablePagination-select"
-              id=":r0:"
-            >
-              <option
-                class="MuiTablePagination-menuItem"
-                value="5"
+              <div
+                class="MuiTablePagination-spacer"
+              />
+              <p
+                class="MuiTablePagination-selectLabel"
+                id=":r1:"
               >
-                5
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="10"
+                Rows per page:
+              </p>
+              <select
+                aria-label="rows per page"
+                aria-labelledby=":r1: :r0:"
+                class="MuiTablePagination-select"
+                id=":r0:"
               >
-                10
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="15"
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="5"
+                >
+                  5
+                </option>
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="10"
+                >
+                  10
+                </option>
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="15"
+                >
+                  15
+                </option>
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="20"
+                >
+                  20
+                </option>
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="25"
+                >
+                  25
+                </option>
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="30"
+                >
+                  30
+                </option>
+                <option
+                  class="MuiTablePagination-menuItem"
+                  value="-1"
+                >
+                  All
+                </option>
+              </select>
+              <p
+                class="MuiTablePagination-displayedRows"
               >
-                15
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="20"
+                1–10 of 12
+              </p>
+              <div
+                class="MuiTablePagination-actions"
               >
-                20
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="25"
-              >
-                25
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="30"
-              >
-                30
-              </option>
-              <option
-                class="MuiTablePagination-menuItem"
-                value="-1"
-              >
-                All
-              </option>
-            </select>
-            <p
-              class="MuiTablePagination-displayedRows"
-            >
-              1–10 of 12
-            </p>
-            <div
-              class="MuiTablePagination-actions"
-            >
-              <button
-                aria-label="Go to first page"
-                disabled=""
-                title="Go to first page"
-              >
-                <span>
-                  |⇽
-                </span>
-              </button>
-              <button
-                aria-label="Go to previous page"
-                disabled=""
-                title="Go to previous page"
-              >
-                <span>
-                  ⇽
-                </span>
-              </button>
-              <button
-                aria-label="Go to next page"
-                title="Go to next page"
-              >
-                <span>
-                  ⇾
-                </span>
-              </button>
-              <button
-                aria-label="Go to last page"
-                title="Go to last page"
-              >
-                <span>
-                  ⇾|
-                </span>
-              </button>
+                <button
+                  aria-label="Go to first page"
+                  disabled=""
+                  title="Go to first page"
+                >
+                  <span>
+                    |⇽
+                  </span>
+                </button>
+                <button
+                  aria-label="Go to previous page"
+                  disabled=""
+                  title="Go to previous page"
+                >
+                  <span>
+                    ⇽
+                  </span>
+                </button>
+                <button
+                  aria-label="Go to next page"
+                  title="Go to next page"
+                >
+                  <span>
+                    ⇾
+                  </span>
+                </button>
+                <button
+                  aria-label="Go to last page"
+                  title="Go to last page"
+                >
+                  <span>
+                    ⇾|
+                  </span>
+                </button>
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </DocumentFragment>
 `;
 
 exports[`VerticalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
-    class="w-full border-collapse rounded bg-white"
+    class="relative w-full border-collapse rounded bg-white"
   >
     <tbody>
       <tr

@@ -31,7 +31,7 @@ describe("VerticalTable Component", () => {
         content={[]}
       />,
     );
-    expect(container.firstChild).toBeEmptyDOMElement();
+    expect(container).toBeEmptyDOMElement();
   });
 });
 

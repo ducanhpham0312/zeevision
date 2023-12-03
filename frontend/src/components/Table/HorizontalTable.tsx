@@ -110,7 +110,7 @@ export function HorizontalTable({
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, rowIdx) => {
               return (
-                <>
+                <React.Fragment key={rowIdx}>
                   <tr
                     className={
                       "border-b border-black/10 " +
@@ -118,7 +118,7 @@ export function HorizontalTable({
                         ? "bg-second-accent hover:bg-second-accent/20"
                         : "hover:bg-second-accent/10")
                     }
-                    key={rowIdx}
+                    // key={rowIdx}
                   >
                     {row.map((cell, index) => (
                       <td className="p-3" key={index}>
@@ -155,7 +155,7 @@ export function HorizontalTable({
                       {expandElement(rowIdx)}
                     </ExpandRow>
                   ) : null}
-                </>
+                </React.Fragment>
               );
             })}
           {content.length === 0 ? (

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Input } from "../Input";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { Button } from "../Button";
@@ -26,7 +24,7 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
           <DropdownMenuTrigger>
             <Button variant="secondary">Add Filter {<FilterAltIcon />}</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" className="w-56 ml-10">
+          <DropdownMenuContent side="bottom" className="ml-10 w-56">
             <DropdownMenuLabel>Choose a column</DropdownMenuLabel>
             {Object.keys(filterConfig).map((column) => (
               <DropdownMenuItem>
