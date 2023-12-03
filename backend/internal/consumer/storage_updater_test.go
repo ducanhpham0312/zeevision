@@ -472,57 +472,6 @@ func TestStoring(t *testing.T) {
 	}
 }
 
-type countdownErrStorer struct {
-	count int
-}
-
-func newCountdownErrStorer(count int) *countdownErrStorer {
-	return &countdownErrStorer{
-		count: count,
-	}
-}
-
-func (s *countdownErrStorer) countdown() error {
-	if s.count > 0 {
-		s.count--
-		return errTest
-	}
-	// Once we've finished the count, return nil every time
-	return nil
-}
-
-func (s *countdownErrStorer) ProcessDeployed(int64, string, int64, time.Time, []byte) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) ProcessInstanceActivated(int64, int64, int64, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) ProcessInstanceCompleted(int64, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) ProcessInstanceTerminated(int64, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) VariableCreated(int64, string, string, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) VariableUpdated(int64, string, string, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) IncidentCreated(int64, int64, string, string, string, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) IncidentResolved(int64, time.Time) error {
-	return s.countdown()
-}
-
 func TestMissingDeploymentResource(t *testing.T) {
 	storer := newFixedErrStorer(nil)
 	updater := &storageUpdater{
