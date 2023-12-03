@@ -15,7 +15,7 @@ import (
 // since the underlying database is shared. So no `t.Parallel()`.
 func newTestDB(t *testing.T) *testDB {
 	db, err := gorm.Open(
-		sqlite.Open("file::memory:?cache=shared"), 
+		sqlite.Open("file::memory:?cache=shared"),
 		createGormConfig(),
 	)
 	assert.NoError(t, err)
