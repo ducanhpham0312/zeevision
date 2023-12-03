@@ -1,4 +1,13 @@
-import * as React from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  ReactNode,
+  ReactElement,
+  isValidElement,
+  MouseEvent,
+  ChangeEvent,
+} from "react";
 import { styled } from "@mui/system";
 import {
   TablePagination,
@@ -10,10 +19,10 @@ import { ExpandRow } from "./ExpandRow";
 
 export interface HorizontalTableProps {
   header: string[];
-  content: (string | number | React.ReactNode)[][];
+  content: (string | number | ReactNode)[][];
   alterRowColor?: boolean;
-  expandElement?: (idx: number) => React.ReactNode;
-  optionElement?: (idx: number) => React.ReactNode;
+  expandElement?: (idx: number) => ReactNode;
+  optionElement?: (idx: number) => ReactNode;
 }
 
 export function HorizontalTable({
@@ -23,29 +32,37 @@ export function HorizontalTable({
   expandElement,
   optionElement,
 }: HorizontalTableProps) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [sortBy, setSortBy] = React.useState("");
-  const [sortOrder, setSortOrder] = React.useState("desc");
-  const [expandedRow, setExpandedRow] = React.useState<number | null>(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [sortedContent, setSortedContent] =
-    React.useState<(string | number | React.ReactNode)[][]>(content);
+    useState<(string | number | ReactNode)[][]>(content);
 
-  const sortContent = React.useCallback(
+  const sortContent = useCallback(
     (
-      content: (string | number | React.ReactNode)[][],
+      content: (string | number | ReactNode)[][],
       column: string,
       order: string,
-    ): (string | number | React.ReactNode)[][] => {
-      return content.slice().sort((a, b) => {
-        const comparison =
-          a[header.indexOf(column)]! > b[header.indexOf(column)]! ? 1 : -1;
+    ): (string | number | ReactNode)[][] => {
+      return [...content].sort((a, b) => {
+        let comparison = 0;
+        const columnIndex = header.indexOf(column);
+        if (isValidElement(a[columnIndex])) {
+          const aToCompare = a[columnIndex] as ReactElement;
+          const bToCompare = b[columnIndex] as ReactElement;
+          comparison =
+            aToCompare.props.children > bToCompare.props.children ? 1 : -1;
+        } else {
+          comparison = a[columnIndex]! > b[columnIndex]! ? 1 : -1;
+        }
         return order === "desc" ? comparison * -1 : comparison;
       });
     },
     [header],
   );
-  React.useEffect(() => {
+  useEffect(() => {
     // Sort the content when sortBy or sortOrder changes
     const sortedData = sortContent(content, sortBy, sortOrder);
     setSortedContent(sortedData);
@@ -63,14 +80,14 @@ export function HorizontalTable({
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - content.length) : 0;
 
   const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
