@@ -126,48 +126,46 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                   </DropdownMenuSubTrigger>
                   <DropdownMenuPortal>
                     <DropdownMenuSubContent className="mr-[13px] w-[300px]">
-                      {columnFilterOptions[filterType].map(
-                        ({ name, filterFunc, queryInputNameList }) => {
-                          const thisFilterState = filterState[column][name];
+                      {columnFilterOptions[filterType].map(({ name }) => {
+                        const thisFilterState = filterState[column][name];
 
-                          console.log(thisFilterState);
+                        console.log(thisFilterState);
 
-                          return (
-                            <DropdownMenuItem
-                              onPointerLeave={(e) => e.preventDefault()}
-                              onPointerMove={(e) => e.preventDefault()}
-                              onClick={handleToggleFilter(column, name)}
-                              key={name}
-                              className="flex flex-col gap-3"
-                            >
-                              <div className="group flex w-full items-center gap-2">
-                                <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
-                                  <div
-                                    className={twMerge(
-                                      "h-full w-full rounded-full transition group-hover:bg-gray-300",
-                                      thisFilterState.active
-                                        ? "bg-accent group-hover:bg-accent"
-                                        : "",
-                                    )}
-                                  />
-                                </div>
-                                <p>{name}</p>
-                              </div>
-                              {thisFilterState.active ? (
+                        return (
+                          <DropdownMenuItem
+                            onPointerLeave={(e) => e.preventDefault()}
+                            onPointerMove={(e) => e.preventDefault()}
+                            onClick={handleToggleFilter(column, name)}
+                            key={name}
+                            className="flex flex-col gap-3"
+                          >
+                            <div className="group flex w-full items-center gap-2">
+                              <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
                                 <div
+                                  className={twMerge(
+                                    "h-full w-full rounded-full transition group-hover:bg-gray-300",
+                                    thisFilterState.active
+                                      ? "bg-accent group-hover:bg-accent"
+                                      : "",
+                                  )}
+                                />
+                              </div>
+                              <p>{name}</p>
+                            </div>
+                            {thisFilterState.active ? (
+                              <div
+                                className="w-full"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Input
+                                  placeholder="Enter query value here"
                                   className="w-full"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <Input
-                                    placeholder="Enter query value here"
-                                    className="w-full"
-                                  />
-                                </div>
-                              ) : null}
-                            </DropdownMenuItem>
-                          );
-                        },
-                      )}
+                                />
+                              </div>
+                            ) : null}
+                          </DropdownMenuItem>
+                        );
+                      })}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="text-error">
                         <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
