@@ -19,12 +19,12 @@ export default function SingleProcessPage() {
   } = process;
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col gap-3">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
             <div className="w-full overflow-hidden">
-              <div className="min-w-[400px] pr-3">
+              <div className="min-w-[350px] pr-3">
                 <Table
                   orientation="vertical"
                   header={[
@@ -50,23 +50,29 @@ export default function SingleProcessPage() {
           />
         </div>
       </ResizableContainer>
-      <Table
-        alterRowColor
-        orientation="horizontal"
-        header={["Instance Key", "Status", "Version", "Start Time"]}
-        content={
-          instances
-            ? instances.map(({ instanceKey, version, status, startTime }) => [
-                <NavLink to={`/instances/${instanceKey.toString()}`}>
-                  <Button variant="secondary">{instanceKey}</Button>
-                </NavLink>,
-                status,
-                version,
-                startTime,
-              ])
-            : []
-        }
-      />
+      <div className="relative flex-grow overflow-auto">
+        <div className="absolute h-full w-full">
+          <Table
+            alterRowColor
+            orientation="horizontal"
+            header={["Instance Key", "Status", "Version", "Start Time"]}
+            content={
+              instances
+                ? instances.map(
+                    ({ instanceKey, version, status, startTime }) => [
+                      <NavLink to={`/instances/${instanceKey.toString()}`}>
+                        <Button variant="secondary">{instanceKey}</Button>
+                      </NavLink>,
+                      status,
+                      version,
+                      startTime,
+                    ],
+                  )
+                : []
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 }
