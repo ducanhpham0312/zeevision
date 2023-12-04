@@ -1,13 +1,13 @@
 package main
 
 import (
-	"log"
 	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/consumer"
 	"github.com/ducanhpham0312/zeevision/backend/internal/endpoint"
 	"github.com/ducanhpham0312/zeevision/backend/internal/environment"
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
+	"go.uber.org/zap"
 )
 
 const (
@@ -20,6 +20,8 @@ const (
 
 // Entry point for the application.
 func main() {
+	zap.L().Info("Starting ...")
+
 	dsnConfig := storage.DsnConfig{
 		User:         environment.DatabaseUser(),
 		Password:     environment.DatabasePassword(),
@@ -31,12 +33,13 @@ func main() {
 	// Connect to database with retry
 	db, err := storage.ConnectDb(dsnConfig, DBConnectionRetries, DBConnectionRetryDelay)
 	if err != nil {
-		panic(err)
+		zap.L().Panic("Failed connecting to database", zap.Error(err))
 	}
+	zap.L().Info("Successfully connect to database")
 
 	err = storage.AutoMigrate(db)
 	if err != nil {
-		panic(err)
+		zap.L().Panic("Failed migrating tables in database", zap.Error(err))
 	}
 
 	// Create fetcher for fetching data from database.
@@ -50,8 +53,10 @@ func main() {
 	brokers := []string{kafkaAddr}
 	kafkaConsumer, err := consumer.NewConsumer(storer, brokers, ConsumerRetries, ConsumerRetryDelay)
 	if err != nil {
-		panic(err)
+		zap.L().Panic("Failed connecting to Kafka", zap.Strings("brokers", brokers), zap.Error(err))
 	}
+	zap.L().Info("Successfully connect to Kafka", zap.Strings("brokers", brokers))
+
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually
 	defer kafkaConsumer.Close()
@@ -83,16 +88,16 @@ func main() {
 		err = kafkaConsumer.ConsumeTopic(0, topic)
 		if err != nil {
 			// TODO: error handling
-			panic(err)
+			zap.L().Panic("Failed consuming", zap.String("topic", topic), zap.Error(err))
 		}
 	}
 
 	server, err := endpoint.NewFromEnv(fetcher)
 	if err != nil {
-		log.Fatal(err)
+		zap.L().Fatal("Failed creating a new endpoint from environment variables")
 	}
 
 	if err := server.Run(); err != nil {
-		log.Fatal(err)
+		zap.L().Fatal("Errors happens when trying to run server")
 	}
 }
