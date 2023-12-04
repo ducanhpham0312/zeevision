@@ -15,7 +15,10 @@ var TableMigrations = []any{
 	&BpmnResource{},
 }
 
-type HasTableName interface {
+// Interface for models that have a table name. Implementing this interface
+// changes the table's name in GORM and allows it to be queried by generic
+// functions.
+type Tabler interface {
 	TableName() string
 }
 

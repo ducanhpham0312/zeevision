@@ -163,7 +163,7 @@ func (f *Fetcher) GetVariablesForInstance(ctx context.Context, pagination *Pagin
 // does the actual result fetching, but it is not allowed to apply any
 // filtering scopes so that the total count still reflects the total number
 // of results.
-func paginatedFetch[T HasTableName](
+func paginatedFetch[T Tabler](
 	ctx context.Context,
 	fetcher *Fetcher,
 	pagination *Pagination,
