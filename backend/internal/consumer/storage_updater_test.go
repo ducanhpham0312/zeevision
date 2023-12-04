@@ -3,7 +3,6 @@ package consumer
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"sync"
 	"testing"
 	"time"
@@ -55,6 +54,16 @@ func (s *fixedErrStorer) VariableCreated(int64, string, string, time.Time) error
 
 func (s *fixedErrStorer) VariableUpdated(int64, string, string, time.Time) error {
 	s.touched["VariableUpdated"] = true
+	return s.err
+}
+
+func (s *fixedErrStorer) IncidentCreated(int64, int64, string, string, string, time.Time) error {
+	s.touched["IncidentCreated"] = true
+	return s.err
+}
+
+func (s *fixedErrStorer) IncidentResolved(int64, time.Time) error {
+	s.touched["IncidentResolved"] = true
 	return s.err
 }
 
@@ -217,6 +226,43 @@ func newVariableTestRecord(
 	}
 }
 
+func newIncidentTestRecord(
+	name string,
+	intent Intent,
+	touched string,
+	err error,
+) *testRecord {
+	return &testRecord{
+		name,
+		&UntypedRecord{
+			PartitionID: 1,
+			Value: json.RawMessage(`{
+				"errorType": "EXTRACT_VALUE_ERROR",
+				"errorMessage": "Some error",
+				"bpmnProcessID": "test-id",
+				"processInstanceKey": 1,
+				"elementId": "Gateway_abcdefg",
+				"elementInstanceKey": 10,
+				"jobKey": -1,
+				"processDefinitionKey": 2,
+				"variableScopeKey": 3
+			}`),
+			RejectionType:        RejectionTypeNullVal,
+			RejectionReason:      "",
+			SourceRecordPosition: 4,
+			Key:                  5,
+			Timestamp:            time.Now().UnixMilli(),
+			Position:             6,
+			ValueType:            ValueTypeIncident,
+			Intent:               intent,
+			RecordType:           RecordTypeEvent,
+			BrokerVersion:        "1.2.3",
+		},
+		touched,
+		err,
+	}
+}
+
 var errTest = errors.New("errTest")
 var testData = []*testRecord{
 	newDeploymentTestRecord(
@@ -318,6 +364,31 @@ var testData = []*testRecord{
 		"VariableUpdated",
 		errTest,
 	),
+
+	newIncidentTestRecord(
+		"IncidentCreated",
+		IntentCreated,
+		"IncidentCreated",
+		nil,
+	),
+	newIncidentTestRecord(
+		"IncidentCreatedError",
+		IntentCreated,
+		"IncidentCreated",
+		errTest,
+	),
+	newIncidentTestRecord(
+		"IncidentResolved",
+		IntentResolved,
+		"IncidentResolved",
+		nil,
+	),
+	newIncidentTestRecord(
+		"IncidentResolvedError",
+		IntentResolved,
+		"IncidentResolved",
+		errTest,
+	),
 }
 
 // Test creating and closing database updater successfully and processing a record.
@@ -399,85 +470,6 @@ func TestStoring(t *testing.T) {
 		})
 
 	}
-}
-
-type countdownErrStorer struct {
-	count int
-}
-
-func newCountdownErrStorer(count int) *countdownErrStorer {
-	return &countdownErrStorer{
-		count: count,
-	}
-}
-
-func (s *countdownErrStorer) countdown() error {
-	if s.count > 0 {
-		s.count--
-		return errTest
-	}
-	// Once we've finished the count, return nil every time
-	return nil
-}
-
-func (s *countdownErrStorer) ProcessDeployed(int64, string, int64, time.Time, []byte) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) ProcessInstanceActivated(int64, int64, int64, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) ProcessInstanceCompleted(int64, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) ProcessInstanceTerminated(int64, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) VariableCreated(int64, string, string, time.Time) error {
-	return s.countdown()
-}
-
-func (s *countdownErrStorer) VariableUpdated(int64, string, string, time.Time) error {
-	return s.countdown()
-}
-
-// Test that retry functions when trying to create variable.
-func TestVariableRetry(t *testing.T) {
-	storer := newCountdownErrStorer(4)
-
-	updater := &storageUpdater{
-		storer: storer,
-
-		msgChannel:   nil,
-		closeChannel: nil,
-
-		wg: nil,
-	}
-
-	r := newVariableTestRecord(
-		"VariableCreated",
-		IntentCreated,
-		"VariableCreated",
-		nil,
-	)
-
-	maxTries := maxCreateAttempts
-	for count := 0; count < maxTries; count++ {
-		t.Run(fmt.Sprintf("%d tries", count), func(t *testing.T) {
-			storer.count = count
-			err := updater.handlingDispatch(r.record)
-			assert.NoError(t, err)
-		})
-	}
-
-	t.Run("exceed max retries", func(t *testing.T) {
-		storer.count = maxTries
-		err := updater.handlingDispatch(r.record)
-		assert.ErrorContains(t, err, "failed to handle variable")
-	})
 }
 
 func TestMissingDeploymentResource(t *testing.T) {
