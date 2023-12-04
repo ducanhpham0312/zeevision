@@ -31,6 +31,17 @@ func (config *DsnConfig) String() string {
 	return dsn
 }
 
+func createGormConfig() *gorm.Config {
+	// Create config that disables foreign key constraint auto-creation on
+	// migration. We need this to avoid those constraints being hit when we
+	// get incidents or variables coming in before the corresponding
+	// instances do. This means that we'll possibly lose out on performance
+	// advantages, but it's worth it to avoid the retry issue
+	return &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	}
+}
+
 // Connect to database by DsnConfig.
 func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*gorm.DB, error) {
 	dsn := dsnConfig.String()
@@ -39,7 +50,7 @@ func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*
 	var err error
 
 	for attempt := 1; attempt <= maxRetries; attempt++ {
-		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		db, err = gorm.Open(postgres.Open(dsn), createGormConfig())
 		if err == nil {
 			return db, nil
 		}
