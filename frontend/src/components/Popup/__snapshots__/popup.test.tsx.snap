@@ -47,7 +47,7 @@ exports[`Popup Component renders correctly when open 1`] = `
             Test Title
           </p>
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
