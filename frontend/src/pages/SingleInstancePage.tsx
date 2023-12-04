@@ -1,5 +1,5 @@
 import { Table } from "../components/Table";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useQuerySingleInstance } from "../hooks/useQuerySingleInstance";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { ResizableContainer } from "../components/ResizableContainer";
@@ -7,6 +7,7 @@ import { Tabs } from "@mui/base/Tabs";
 import { TabsList } from "@mui/base/TabsList";
 import { TabPanel } from "@mui/base/TabPanel";
 import { Tab } from "@mui/base/Tab";
+import { Button } from "../components/Button";
 
 export default function SingleInstancesPage() {
   const params = useParams();
@@ -52,7 +53,9 @@ export default function SingleInstancesPage() {
                           instanceKey,
                           bpmnProcessId,
                           version,
-                          processKey,
+                          <NavLink to={`/processes/${processKey}`}>
+                            <Button variant="secondary">{processKey}</Button>
+                          </NavLink>,
                           status,
                           startTime,
                           endTime,
@@ -97,6 +100,7 @@ interface VariableListProps {
 function VariablesTable({ variables }: VariableListProps) {
   return (
     <Table
+      alterRowColor
       orientation="horizontal"
       header={["Variable Name", "Variable Value", "Time"]}
       content={
@@ -114,6 +118,7 @@ interface JobListProps {
 function JobsTable({ jobs }: JobListProps) {
   return (
     <Table
+      alterRowColor
       orientation="horizontal"
       header={[
         "Element ID",
