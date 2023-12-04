@@ -40,7 +40,7 @@ func (f *Fetcher) contextDB(ctx context.Context) *gorm.DB {
 // Returns a new fetcher with pagination scope applied to the database object.
 // Pagination is ignored if nil.
 func (f *Fetcher) paginated(pagination *Pagination) *Fetcher {
-	return f.scope(func(db *gorm.DB) *gorm.DB {
+	return f.scopes(func(db *gorm.DB) *gorm.DB {
 		if pagination != nil {
 			return db.Limit(pagination.Limit).Offset(pagination.Offset)
 		}
@@ -48,9 +48,9 @@ func (f *Fetcher) paginated(pagination *Pagination) *Fetcher {
 	})
 }
 
-// Returns a new fetcher with a scope applied to the database object.
-func (f *Fetcher) scope(fn func(db *gorm.DB) *gorm.DB) *Fetcher {
-	return &Fetcher{db: fn(f.db)}
+// Returns a new fetcher with a scopes applied to the database object.
+func (f *Fetcher) scopes(fn ...func(db *gorm.DB) *gorm.DB) *Fetcher {
+	return &Fetcher{db: f.db.Scopes(fn...)}
 }
 
 // Returns the total number of rows in a table. Fetcher can be scoped to
@@ -89,44 +89,16 @@ func (f *Fetcher) GetInstance(ctx context.Context, instanceKey int64) (Instance,
 
 // Gets all instances for all processes.
 func (f *Fetcher) GetInstances(ctx context.Context, pagination *Pagination) (Paginated[Instance], error) {
-	var instances Paginated[Instance]
-
-	totalCount, err := f.tableTotalCount(ctx, "instances")
-	if err != nil || totalCount == 0 {
-		return Paginated[Instance]{}, err
-	}
-	instances.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("start_time DESC").
-		Find(&instances.Items).
-		Error
-
-	return instances, err
+	return paginatedFetch[Instance](ctx, f, pagination, func(db *gorm.DB, instances *[]Instance) *gorm.DB {
+		return db.Order("start_time DESC").Find(instances)
+	})
 }
 
 // Gets all instances for a process based on its definition key.
 func (f *Fetcher) GetInstancesForProcess(ctx context.Context, pagination *Pagination, processDefKey int64) (Paginated[Instance], error) {
-	f = f.scope(func(db *gorm.DB) *gorm.DB {
+	return f.scopes(func(db *gorm.DB) *gorm.DB {
 		return db.Where(&Instance{ProcessDefinitionKey: processDefKey})
-	})
-
-	var instances Paginated[Instance]
-
-	totalCount, err := f.tableTotalCount(ctx, "instances")
-	if err != nil || totalCount == 0 {
-		return Paginated[Instance]{}, err
-	}
-	instances.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("start_time DESC").
-		Find(&instances.Items).
-		Error
-
-	return instances, err
+	}).GetInstances(ctx, pagination)
 }
 
 // Gets a process by its key.
@@ -142,126 +114,71 @@ func (f *Fetcher) GetProcess(ctx context.Context, processDefKey int64) (Process,
 
 // Gets all processes.
 func (f *Fetcher) GetProcesses(ctx context.Context, pagination *Pagination) (Paginated[Process], error) {
-	var processes Paginated[Process]
-
-	totalCount, err := f.tableTotalCount(ctx, "processes")
-	if err != nil || totalCount == 0 {
-		return Paginated[Process]{}, err
-	}
-	processes.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("deployment_time DESC").
-		Find(&processes.Items).
-		Error
-
-	return processes, err
+	return paginatedFetch[Process](ctx, f, pagination, func(db *gorm.DB, processes *[]Process) *gorm.DB {
+		return db.Order("deployment_time DESC").Find(processes)
+	})
 }
 
-// Gets all jobs
+// Gets all jobs.
 func (f *Fetcher) GetJobs(ctx context.Context, pagination *Pagination) (Paginated[Job], error) {
-	var jobs Paginated[Job]
-
-	totalCount, err := f.tableTotalCount(ctx, "jobs")
-	if err != nil || totalCount == 0 {
-		return Paginated[Job]{}, err
-	}
-	jobs.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("time DESC").
-		Find(&jobs.Items).
-		Error
-
-	return jobs, err
+	return paginatedFetch[Job](ctx, f, pagination, func(db *gorm.DB, jobs *[]Job) *gorm.DB {
+		return db.Order("time DESC").Find(jobs)
+	})
 }
 
 // Gets all jobs for an instance.
 func (f *Fetcher) GetJobsForInstance(ctx context.Context, pagination *Pagination, instanceKey int64) (Paginated[Job], error) {
-	f = f.scope(func(db *gorm.DB) *gorm.DB {
+	return f.scopes(func(db *gorm.DB) *gorm.DB {
 		return db.Where(&Job{ProcessInstanceKey: instanceKey})
-	})
-
-	var jobs Paginated[Job]
-
-	totalCount, err := f.tableTotalCount(ctx, "jobs")
-	if err != nil || totalCount == 0 {
-		return Paginated[Job]{}, err
-	}
-	jobs.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("time DESC").
-		Find(&jobs.Items).
-		Error
-
-	return jobs, err
+	}).GetJobs(ctx, pagination)
 }
 
 // Gets all incidents.
 func (f *Fetcher) GetIncidents(ctx context.Context, pagination *Pagination) (Paginated[Incident], error) {
-	var incidents Paginated[Incident]
-
-	totalCount, err := f.tableTotalCount(ctx, "incidents")
-	if err != nil || totalCount == 0 {
-		return Paginated[Incident]{}, err
-	}
-	incidents.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("time DESC").
-		Find(&incidents.Items).
-		Error
-
-	return incidents, err
+	return paginatedFetch[Incident](ctx, f, pagination, func(db *gorm.DB, incidents *[]Incident) *gorm.DB {
+		return db.Order("time DESC").Find(incidents)
+	})
 }
 
 // Gets all incidents for an instance.
 func (f *Fetcher) GetIncidentsForInstance(ctx context.Context, pagination *Pagination, instanceKey int64) (Paginated[Incident], error) {
-	f = f.scope(func(db *gorm.DB) *gorm.DB {
+	return f.scopes(func(db *gorm.DB) *gorm.DB {
 		return db.Where(&Incident{ProcessInstanceKey: instanceKey})
-	})
-
-	var incidents Paginated[Incident]
-
-	totalCount, err := f.tableTotalCount(ctx, "incidents")
-	if err != nil || totalCount == 0 {
-		return Paginated[Incident]{}, err
-	}
-	incidents.TotalCount = totalCount
-
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("time DESC").
-		Find(&incidents.Items).
-		Error
-
-	return incidents, err
+	}).GetIncidents(ctx, pagination)
 }
 
 // Gets all variables for an instance.
 func (f *Fetcher) GetVariablesForInstance(ctx context.Context, pagination *Pagination, instanceKey int64) (Paginated[Variable], error) {
-	f = f.scope(func(db *gorm.DB) *gorm.DB {
+	return paginatedFetch[Variable](ctx, f.scopes(func(db *gorm.DB) *gorm.DB {
 		return db.Where(&Variable{ProcessInstanceKey: instanceKey})
+	}), pagination, func(db *gorm.DB, variables *[]Variable) *gorm.DB {
+		return db.Order("time DESC").Find(variables)
 	})
+}
 
-	var variables Paginated[Variable]
+// Fetches paginated results from the database.
+//
+// `fetcher` should be a Fetcher with the filtering scope already applied to
+// limit the number of results. `non_filtering` should be a function that
+// does the actual result fetching, but it is not allowed to apply any
+// filtering scopes so that the total count still reflects the total number
+// of results.
+func paginatedFetch[T HasTableName](
+	ctx context.Context,
+	fetcher *Fetcher,
+	pagination *Pagination,
+	non_filtering func(*gorm.DB, *[]T) *gorm.DB,
+) (Paginated[T], error) {
+	var paginated Paginated[T]
 
-	totalCount, err := f.tableTotalCount(ctx, "variables")
+	var dummy T
+	totalCount, err := fetcher.tableTotalCount(ctx, dummy.TableName())
 	if err != nil || totalCount == 0 {
-		return Paginated[Variable]{}, err
+		return paginated, err
 	}
-	variables.TotalCount = totalCount
+	paginated.TotalCount = totalCount
 
-	err = f.paginated(pagination).
-		contextDB(ctx).
-		Order("time DESC").
-		Find(&variables.Items).
-		Error
+	err = non_filtering(fetcher.paginated(pagination).contextDB(ctx), &paginated.Items).Error
 
-	return variables, err
+	return paginated, err
 }

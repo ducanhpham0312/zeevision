@@ -15,6 +15,10 @@ var TableMigrations = []any{
 	&BpmnResource{},
 }
 
+type HasTableName interface {
+	TableName() string
+}
+
 // Instance model struct for the 'instances' database table.
 type Instance struct {
 	ProcessInstanceKey   int64     `gorm:"primarykey"`
@@ -28,6 +32,10 @@ type Instance struct {
 	Variables            []Variable `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 }
 
+func (Instance) TableName() string {
+	return "instances"
+}
+
 // Process model struct for the 'processes' database table.
 type Process struct {
 	ProcessDefinitionKey int64        `gorm:"primarykey"`
@@ -38,6 +46,10 @@ type Process struct {
 	Instances            []Instance   `gorm:"foreignKey:ProcessDefinitionKey;references:ProcessDefinitionKey"`
 }
 
+func (Process) TableName() string {
+	return "processes"
+}
+
 type Incident struct {
 	Key                int64     `gorm:"primarykey"`
 	ProcessInstanceKey int64     `gorm:"not null"`
@@ -46,6 +58,10 @@ type Incident struct {
 	ErrorMessage       string    `gorm:"not null"`
 	State              string    `gorm:"not null"`
 	Time               time.Time `gorm:"not null"`
+}
+
+func (Incident) TableName() string {
+	return "incidents"
 }
 
 // Job model struct for the 'jobs' database table.
@@ -60,12 +76,20 @@ type Job struct {
 	Time               time.Time `gorm:"not null"`
 }
 
+func (Job) TableName() string {
+	return "jobs"
+}
+
 // Variable model struct for the 'variables' database table.
 type Variable struct {
 	ProcessInstanceKey int64     `gorm:"primarykey;autoIncrement:false"`
 	Name               string    `gorm:"primarykey"`
 	Value              string    `gorm:"not null"`
 	Time               time.Time `gorm:"not null"`
+}
+
+func (Variable) TableName() string {
+	return "variables"
 }
 
 // BpmnResource model struct for the 'bpmn_resources' database table.
@@ -76,4 +100,8 @@ type BpmnResource struct {
 	ProcessDefinitionKey int64 `gorm:"primarykey;autoIncrement:false"`
 	// A base64 encoded string of the BPMN XML file.
 	BpmnFile string `gorm:"not null"`
+}
+
+func (BpmnResource) TableName() string {
+	return "bpmn_resources"
 }
