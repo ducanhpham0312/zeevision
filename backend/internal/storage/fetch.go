@@ -159,7 +159,7 @@ func (f *Fetcher) GetVariablesForInstance(ctx context.Context, pagination *Pagin
 // Fetches paginated results from the database.
 //
 // `fetcher` should be a Fetcher with the filtering scope already applied to
-// limit the number of results. `non_filtering` should be a function that
+// limit the number of results. `nonFilteringFetch` should be a function that
 // does the actual result fetching, but it is not allowed to apply any
 // filtering scopes so that the total count still reflects the total number
 // of results.
@@ -167,7 +167,7 @@ func paginatedFetch[T Tabler](
 	ctx context.Context,
 	fetcher *Fetcher,
 	pagination *Pagination,
-	non_filtering func(*gorm.DB, *[]T) *gorm.DB,
+	nonFilteringFetch func(*gorm.DB, *[]T) *gorm.DB,
 ) (Paginated[T], error) {
 	var paginated Paginated[T]
 
@@ -178,7 +178,7 @@ func paginatedFetch[T Tabler](
 	}
 	paginated.TotalCount = totalCount
 
-	err = non_filtering(fetcher.paginated(pagination).contextDB(ctx), &paginated.Items).Error
+	err = nonFilteringFetch(fetcher.paginated(pagination).contextDB(ctx), &paginated.Items).Error
 
 	return paginated, err
 }
