@@ -1346,9 +1346,9 @@ func (ec *executionContext) _Instance_status(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Status)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNStatus2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐStatus(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Instance_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1358,7 +1358,7 @@ func (ec *executionContext) fieldContext_Instance_status(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Status does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -6278,16 +6278,6 @@ func (ec *executionContext) marshalNProcess2ᚖgithubᚗcomᚋducanhpham0312ᚋz
 		return graphql.Null
 	}
 	return ec._Process(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNStatus2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐStatus(ctx context.Context, v interface{}) (model.Status, error) {
-	var res model.Status
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNStatus2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐStatus(ctx context.Context, sel ast.SelectionSet, v model.Status) graphql.Marshaler {
-	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
