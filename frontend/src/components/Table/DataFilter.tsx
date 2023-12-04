@@ -62,15 +62,58 @@ const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
       },
     },
   ],
-  time: [],
-  value: [],
+  time: [
+    {
+      name: "before",
+      queryInputNameList: ["before"],
+      filterFunc: (input: string, queryString: string) => {
+        return queryString === input;
+      },
+    },
+    {
+      name: "after",
+      queryInputNameList: ["after"],
+      filterFunc: (input: string, queryString: string) => {
+        return queryString !== input;
+      },
+    },
+    {
+      name: "is between",
+      queryInputNameList: ["is-between-first", "is-between-second"],
+      filterFunc: (input: string, queryString: string) => {
+        return queryString !== input;
+      },
+    },
+  ],
+  value: [
+    {
+      name: "is",
+      queryInputNameList: ["is"],
+      filterFunc: (input: string, queryString: string) => {
+        return queryString === input;
+      },
+    },
+    {
+      name: "is not",
+      queryInputNameList: ["is-not"],
+      filterFunc: (input: string, queryString: string) => {
+        return queryString !== input;
+      },
+    },
+    {
+      name: "is between",
+      queryInputNameList: ["is-between-first", "is-between-second"],
+      filterFunc: (input: string, queryString: string) => {
+        return queryString !== input;
+      },
+    },
+  ],
 };
 
 export function DataFilter({ filterConfig }: DataFilterProps) {
   const [filterState, setFilterState] = useState(
-    Object.keys(filterConfig).reduce(
-      (a, column) => {
-        const type = filterConfig[column];
+    Object.entries(filterConfig).reduce(
+      (a, [column, type]) => {
         a[column] = columnFilterOptions[type].reduce(
           (a, filterOption) => {
             a[filterOption.name] = {
@@ -98,19 +141,23 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
   const handleToggleFilter =
     (column: string, filterName: string) => (e: React.MouseEvent) => {
       e.preventDefault();
+      e.stopPropagation();
       setFilterState((prev) => {
         prev[column][filterName].active = !prev[column][filterName].active;
         return { ...prev };
       });
     };
 
-  console.log(filterState);
-
   return (
     <div className="mb-1 flex w-full gap-2">
       <Input className="flex-grow" placeholder="Search by name" />
       <div>
-        <DropdownMenu>
+        <DropdownMenu
+          onOpenChange={(open) => {
+            // use this to set active = false for empty filters
+            console.log(open);
+          }}
+        >
           <DropdownMenuTrigger>
             <Button variant="secondary">Filter {<FilterAltIcon />}</Button>
           </DropdownMenuTrigger>
@@ -128,16 +175,13 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                     <DropdownMenuSubContent className="mr-[13px] w-[300px]">
                       {columnFilterOptions[filterType].map(({ name }) => {
                         const thisFilterState = filterState[column][name];
-
-                        console.log(thisFilterState);
-
                         return (
                           <DropdownMenuItem
                             onPointerLeave={(e) => e.preventDefault()}
                             onPointerMove={(e) => e.preventDefault()}
                             onClick={handleToggleFilter(column, name)}
                             key={name}
-                            className="flex flex-col gap-3"
+                            className="flex flex-col gap-3 hover:bg-hover"
                           >
                             <div className="group flex w-full items-center gap-2">
                               <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
@@ -157,6 +201,9 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                                 className="w-full"
                                 onClick={(e) => e.stopPropagation()}
                               >
+                                {
+                                  columnFilterOptions[thisFilterState.]
+                                }
                                 <Input
                                   placeholder="Enter query value here"
                                   className="w-full"

@@ -28,6 +28,12 @@ export default function ProcessesPage() {
         </div>
         <Table
           alterRowColor
+          filterConfig={{
+            "Process Key": "string",
+            "Process ID": "string",
+            Version: "value",
+            "Deployment Time": "time",
+          }}
           header={["Process Key", "Process ID", "Version", "Deployment Time"]}
           orientation="horizontal"
           expandElement={(idx: number) => (
