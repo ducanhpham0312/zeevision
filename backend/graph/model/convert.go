@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
@@ -28,12 +27,6 @@ func FromStorageBpmnResource(bpmnResource storage.BpmnResource) string {
 
 // Convert storage instance to GraphQL instance.
 func FromStorageInstance(instance storage.Instance) *Instance {
-	var status Status
-	if err := status.UnmarshalGQL(instance.Status); err != nil {
-		// Panic will be caught by the GraphQL server as internal server error.
-		panic(fmt.Errorf("unmarshal storage instance: %w", err))
-	}
-
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
 		StartTime:      formatTime(instance.StartTime),
@@ -41,7 +34,7 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 		InstanceKey:    instance.ProcessInstanceKey,
 		ProcessKey:     instance.ProcessDefinitionKey,
 		Version:        instance.Version,
-		Status:         status,
+		Status:         instance.Status,
 		// Variables and Process have their own resolvers and are not populated
 		// here.
 	}
