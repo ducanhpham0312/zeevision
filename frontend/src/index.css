@@ -7,8 +7,7 @@
     @apply text-3xl font-bold;
   }
   a {
-    text-decoration: underline dashed grey;
-    text-underline-offset: 3px;
+    @apply underline decoration-accent decoration-dashed underline-offset-4;
   }
 }
 
