@@ -53,7 +53,7 @@ type Instance {
   instanceKey: Int!
   processKey: Int!
   version: Int!
-  status: Status!
+  status: String!
   incidents(pagination: Pagination): PaginatedIncidents!
     @goField(forceResolver: true)
   jobs(pagination: Pagination): PaginatedJobs! @goField(forceResolver: true)
@@ -104,12 +104,6 @@ type Variable {
   name: String!
   value: String!
   time: DateTime!
-}
-
-enum Status {
-  ACTIVE
-  COMPLETED
-  TERMINATED
 }
 
 # The `DateTime` scalar type represents a date and time following the

@@ -44,6 +44,33 @@ var expectedVariable = Variable{
 	Time:               time.Unix(1701235496, 0),
 }
 
+var expectedVariableUpdated = Variable{
+	ProcessInstanceKey: expectedVariable.ProcessInstanceKey,
+	Name:               expectedVariable.Name,
+	Value:              "testValueUpdated",
+	Time:               time.Unix(1701235498, 0),
+}
+
+var expectedIncident = Incident{
+	Key:                10,
+	ProcessInstanceKey: expectedInstance.ProcessInstanceKey,
+	ElementID:          "Gateway_abcde",
+	ErrorType:          "EXTRACT_VALUE_ERROR",
+	ErrorMessage:       "Some message",
+	State:              "CREATED",
+	Time:               time.Unix(1701235496, 0),
+}
+
+var expectedIncidentResolved = Incident{
+	Key:                expectedIncident.Key,
+	ProcessInstanceKey: expectedIncident.ProcessInstanceKey,
+	ElementID:          expectedIncident.ElementID,
+	ErrorType:          expectedIncident.ErrorType,
+	ErrorMessage:       expectedIncident.ErrorMessage,
+	State:              "RESOLVED",
+	Time:               time.Unix(1701235497, 0),
+}
+
 func TestProcessDeployed(t *testing.T) {
 	// helper defined in fetch_test.go
 	testDb := newMigratedTestDB(t)
@@ -96,18 +123,8 @@ func TestProcessInstanceActivated(t *testing.T) {
 	db := testDb.DB()
 	storer := NewStorer(db)
 
-	// Deploy process so we don't fail activating instance
-	err := storer.ProcessDeployed(
-		expectedProcess.ProcessDefinitionKey,
-		expectedProcess.BpmnProcessID,
-		expectedProcess.Version,
-		expectedProcess.DeploymentTime,
-		bpmnResourceRaw,
-	)
-	assert.NoError(t, err)
-
 	t.Run("activate instance", func(t *testing.T) {
-		err = storer.ProcessInstanceActivated(
+		err := storer.ProcessInstanceActivated(
 			expectedInstance.ProcessInstanceKey,
 			expectedInstance.ProcessDefinitionKey,
 			expectedInstance.Version,
@@ -118,7 +135,7 @@ func TestProcessInstanceActivated(t *testing.T) {
 
 	t.Run("activate duplicate instance", func(t *testing.T) {
 		// duplicate should fail again
-		err = storer.ProcessInstanceActivated(
+		err := storer.ProcessInstanceActivated(
 			expectedInstance.ProcessInstanceKey,
 			expectedInstance.ProcessDefinitionKey,
 			expectedInstance.Version,
@@ -129,7 +146,7 @@ func TestProcessInstanceActivated(t *testing.T) {
 
 	t.Run("no such process", func(t *testing.T) {
 		// Use invalid process definition key
-		err = storer.ProcessInstanceActivated(
+		err := storer.ProcessInstanceActivated(
 			expectedInstance.ProcessInstanceKey,
 			expectedInstance.ProcessDefinitionKey+1,
 			expectedInstance.Version,
@@ -159,18 +176,8 @@ func TestProcessInstanceCompleted(t *testing.T) {
 	db := testDb.DB()
 	storer := NewStorer(db)
 
-	// Deploy process so we don't fail activating instance
-	err := storer.ProcessDeployed(
-		expectedProcess.ProcessDefinitionKey,
-		expectedProcess.BpmnProcessID,
-		expectedProcess.Version,
-		expectedProcess.DeploymentTime,
-		bpmnResourceRaw,
-	)
-	assert.NoError(t, err)
-
 	// Activate instance
-	err = storer.ProcessInstanceActivated(
+	err := storer.ProcessInstanceActivated(
 		expectedInstance.ProcessInstanceKey,
 		expectedInstance.ProcessDefinitionKey,
 		expectedInstance.Version,
@@ -179,7 +186,7 @@ func TestProcessInstanceCompleted(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("complete instance", func(t *testing.T) {
-		err = storer.ProcessInstanceCompleted(
+		err := storer.ProcessInstanceCompleted(
 			expectedInstance.ProcessInstanceKey,
 			expectedInstance.EndTime.Time,
 		)
@@ -188,7 +195,7 @@ func TestProcessInstanceCompleted(t *testing.T) {
 
 	t.Run("no such instance", func(t *testing.T) {
 		// Use invalid process instance key
-		err = storer.ProcessInstanceCompleted(
+		err := storer.ProcessInstanceCompleted(
 			expectedInstance.ProcessInstanceKey+1,
 			expectedInstance.EndTime.Time,
 		)
@@ -215,18 +222,8 @@ func TestProcessInstanceTerminated(t *testing.T) {
 	db := testDb.DB()
 	storer := NewStorer(db)
 
-	// Deploy process so we don't fail activating instance
-	err := storer.ProcessDeployed(
-		expectedProcess.ProcessDefinitionKey,
-		expectedProcess.BpmnProcessID,
-		expectedProcess.Version,
-		expectedProcess.DeploymentTime,
-		bpmnResourceRaw,
-	)
-	assert.NoError(t, err)
-
 	// Activate instance
-	err = storer.ProcessInstanceActivated(
+	err := storer.ProcessInstanceActivated(
 		expectedInstance.ProcessInstanceKey,
 		expectedInstance.ProcessDefinitionKey,
 		expectedInstance.Version,
@@ -235,7 +232,7 @@ func TestProcessInstanceTerminated(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("terminate instance", func(t *testing.T) {
-		err = storer.ProcessInstanceTerminated(
+		err := storer.ProcessInstanceTerminated(
 			expectedInstance.ProcessInstanceKey,
 			expectedInstance.EndTime.Time,
 		)
@@ -244,7 +241,7 @@ func TestProcessInstanceTerminated(t *testing.T) {
 
 	t.Run("no such instance", func(t *testing.T) {
 		// Use invalid process instance key
-		err = storer.ProcessInstanceTerminated(
+		err := storer.ProcessInstanceTerminated(
 			expectedInstance.ProcessInstanceKey+1,
 			expectedInstance.EndTime.Time,
 		)
@@ -271,27 +268,8 @@ func TestVariableCreated(t *testing.T) {
 	db := testDb.DB()
 	storer := NewStorer(db)
 
-	// Deploy process so we don't fail activating instance
-	err := storer.ProcessDeployed(
-		expectedProcess.ProcessDefinitionKey,
-		expectedProcess.BpmnProcessID,
-		expectedProcess.Version,
-		expectedProcess.DeploymentTime,
-		bpmnResourceRaw,
-	)
-	assert.NoError(t, err)
-
-	// Activate instance so we can create variable
-	err = storer.ProcessInstanceActivated(
-		expectedInstance.ProcessInstanceKey,
-		expectedInstance.ProcessDefinitionKey,
-		expectedInstance.Version,
-		expectedInstance.StartTime,
-	)
-	assert.NoError(t, err)
-
 	t.Run("create variable", func(t *testing.T) {
-		err = storer.VariableCreated(
+		err := storer.VariableCreated(
 			expectedVariable.ProcessInstanceKey,
 			expectedVariable.Name,
 			expectedVariable.Value,
@@ -301,7 +279,7 @@ func TestVariableCreated(t *testing.T) {
 	})
 
 	t.Run("create duplicate", func(t *testing.T) {
-		err = storer.VariableCreated(
+		err := storer.VariableCreated(
 			expectedVariable.ProcessInstanceKey,
 			expectedVariable.Name,
 			expectedVariable.Value,
@@ -330,27 +308,8 @@ func TestVariableUpdated(t *testing.T) {
 	db := testDb.DB()
 	storer := NewStorer(db)
 
-	// Deploy process so we don't fail activating instance
-	err := storer.ProcessDeployed(
-		expectedProcess.ProcessDefinitionKey,
-		expectedProcess.BpmnProcessID,
-		expectedProcess.Version,
-		expectedProcess.DeploymentTime,
-		bpmnResourceRaw,
-	)
-	assert.NoError(t, err)
-
-	// Activate instance so we can create variable
-	err = storer.ProcessInstanceActivated(
-		expectedInstance.ProcessInstanceKey,
-		expectedInstance.ProcessDefinitionKey,
-		expectedInstance.Version,
-		expectedInstance.StartTime,
-	)
-	assert.NoError(t, err)
-
 	// Create variable so we can update it
-	err = storer.VariableCreated(
+	err := storer.VariableCreated(
 		expectedVariable.ProcessInstanceKey,
 		expectedVariable.Name,
 		expectedVariable.Value,
@@ -358,15 +317,8 @@ func TestVariableUpdated(t *testing.T) {
 	)
 	assert.NoError(t, err)
 
-	expectedVariableUpdated := Variable{
-		ProcessInstanceKey: expectedVariable.ProcessInstanceKey,
-		Name:               expectedVariable.Name,
-		Value:              "testValueUpdated",
-		Time:               time.Unix(1701235498, 0),
-	}
-
 	t.Run("update variable", func(t *testing.T) {
-		err = storer.VariableUpdated(
+		err := storer.VariableUpdated(
 			expectedVariableUpdated.ProcessInstanceKey,
 			expectedVariableUpdated.Name,
 			expectedVariableUpdated.Value,
@@ -376,7 +328,7 @@ func TestVariableUpdated(t *testing.T) {
 	})
 
 	t.Run("no such variable", func(t *testing.T) {
-		err = storer.VariableUpdated(
+		err := storer.VariableUpdated(
 			expectedVariableUpdated.ProcessInstanceKey,
 			"invalidTestName",
 			expectedVariableUpdated.Value,
@@ -394,5 +346,100 @@ func TestVariableUpdated(t *testing.T) {
 		assert.Equal(t, expectedVariableUpdated.Name, variable.Name)
 		assert.Equal(t, expectedVariableUpdated.Value, variable.Value)
 		assert.Equal(t, expectedVariableUpdated.Time.UTC(), variable.Time.UTC())
+	})
+}
+
+func TestIncidentCreated(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+	storer := NewStorer(db)
+
+	t.Run("create incident", func(t *testing.T) {
+		err := storer.IncidentCreated(
+			expectedIncident.Key,
+			expectedIncident.ProcessInstanceKey,
+			expectedIncident.ElementID,
+			expectedIncident.ErrorType,
+			expectedIncident.ErrorMessage,
+			expectedIncident.Time,
+		)
+		assert.NoError(t, err)
+	})
+
+	t.Run("create duplicate", func(t *testing.T) {
+		err := storer.IncidentCreated(
+			expectedIncident.Key,
+			expectedIncident.ProcessInstanceKey,
+			expectedIncident.ElementID,
+			expectedIncident.ErrorType,
+			expectedIncident.ErrorMessage,
+			expectedIncident.Time,
+		)
+		assert.ErrorContains(t, err, "failed to create incident")
+	})
+
+	t.Run("ensure equal value", func(t *testing.T) {
+		var incident Incident
+		err := db.First(&incident).Error
+		assert.NoError(t, err)
+
+		assert.Equal(t, expectedIncident.Key, incident.Key)
+		assert.Equal(t, expectedIncident.ProcessInstanceKey, incident.ProcessInstanceKey)
+		assert.Equal(t, expectedIncident.ElementID, incident.ElementID)
+		assert.Equal(t, expectedIncident.ErrorType, incident.ErrorType)
+		assert.Equal(t, expectedIncident.ErrorMessage, incident.ErrorMessage)
+		assert.Equal(t, expectedIncident.Time.UTC(), incident.Time.UTC())
+	})
+}
+
+func TestIncidentResolved(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+	storer := NewStorer(db)
+
+	// Create incident to resolve it
+	err := storer.IncidentCreated(
+		expectedIncident.Key,
+		expectedIncident.ProcessInstanceKey,
+		expectedIncident.ElementID,
+		expectedIncident.ErrorType,
+		expectedIncident.ErrorMessage,
+		expectedIncident.Time,
+	)
+	assert.NoError(t, err)
+
+	t.Run("resolve incident", func(t *testing.T) {
+		err := storer.IncidentResolved(
+			expectedIncidentResolved.Key,
+			expectedIncidentResolved.Time,
+		)
+		assert.NoError(t, err)
+	})
+
+	t.Run("no such incident", func(t *testing.T) {
+		err := storer.IncidentResolved(
+			expectedIncidentResolved.Key+1,
+			expectedIncidentResolved.Time,
+		)
+		assert.ErrorContains(t, err, "failed to find incident")
+	})
+
+	t.Run("ensure equal value", func(t *testing.T) {
+		var incident Incident
+		err := db.First(&incident).Error
+		assert.NoError(t, err)
+
+		assert.Equal(t, expectedIncidentResolved.Key, incident.Key)
+		assert.Equal(t, expectedIncidentResolved.ProcessInstanceKey, incident.ProcessInstanceKey)
+		assert.Equal(t, expectedIncidentResolved.ElementID, incident.ElementID)
+		assert.Equal(t, expectedIncidentResolved.ErrorType, incident.ErrorType)
+		assert.Equal(t, expectedIncidentResolved.ErrorMessage, incident.ErrorMessage)
+		assert.Equal(t, expectedIncidentResolved.Time.UTC(), incident.Time.UTC())
 	})
 }
