@@ -45,7 +45,7 @@ export default function ProcessesPage() {
                             <NavLink
                               to={`/instances/${instanceKey.toString()}`}
                             >
-                              {instanceKey}
+                              <Button variant="secondary">{instanceKey}</Button>
                             </NavLink>,
                             status,
                             version,
@@ -62,7 +62,9 @@ export default function ProcessesPage() {
             processes
               ? processes.map(
                   ({ processKey, bpmnProcessId, version, deploymentTime }) => [
-                    <NavLink to={processKey.toString()}>{processKey}</NavLink>,
+                    <NavLink to={processKey.toString()}>
+                      <Button variant="secondary">{processKey}</Button>
+                    </NavLink>,
                     bpmnProcessId,
                     version,
                     deploymentTime,

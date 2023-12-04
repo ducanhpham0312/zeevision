@@ -3,6 +3,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
 import { ResizableContainer } from "../components/ResizableContainer";
+import { Button } from "../components/Button";
 
 export default function SingleProcessPage() {
   const params = useParams();
@@ -47,6 +48,7 @@ export default function SingleProcessPage() {
         </div>
       </ResizableContainer>
       <Table
+        alterRowColor
         orientation="horizontal"
         header={["Instance Key", "Status", "Version", "Start Time"]}
         content={
@@ -54,7 +56,7 @@ export default function SingleProcessPage() {
             ? instances.items.map(
                 ({ instanceKey, version, status, startTime }) => [
                   <NavLink to={`/instances/${instanceKey.toString()}`}>
-                    {instanceKey}
+                    <Button variant="secondary">{instanceKey}</Button>
                   </NavLink>,
                   status,
                   version,
