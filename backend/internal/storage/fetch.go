@@ -48,7 +48,7 @@ func (f *Fetcher) paginated(pagination *Pagination) *Fetcher {
 	})
 }
 
-// Returns a new fetcher with a scopes applied to the database object.
+// Returns a new fetcher with scopes applied to the database object.
 func (f *Fetcher) scopes(fn ...func(db *gorm.DB) *gorm.DB) *Fetcher {
 	return &Fetcher{db: f.db.Scopes(fn...)}
 }

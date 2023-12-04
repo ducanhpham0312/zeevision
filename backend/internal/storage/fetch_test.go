@@ -32,6 +32,7 @@ var expectedProcesses = []Process{
 		Instances:            []Instance{},
 	},
 }
+
 var expectedJobs = []Job{
 	{
 		ElementID:          "element-1",
@@ -516,6 +517,82 @@ func TestVariablesForInstanceQuery(t *testing.T) {
 			assert.Len(t, variables.Items, len(test.variables))
 			for i := range variables.Items {
 				assert.Equal(t, test.variables[i], variables.Items[i])
+			}
+		})
+	}
+}
+
+func TestPaginatedQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedJobs).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name       string
+		pagination *Pagination
+		results    []Job
+	}{
+		{
+			name:       "first item",
+			pagination: &Pagination{Offset: 0, Limit: 1},
+			results:    expectedJobs[:1],
+		},
+		{
+			name:       "first two items",
+			pagination: &Pagination{Offset: 0, Limit: 2},
+			results:    expectedJobs[:2],
+		},
+		{
+			name:       "second item",
+			pagination: &Pagination{Offset: 1, Limit: 1},
+			results:    expectedJobs[1:2],
+		},
+		{
+			name:       "less items than limit",
+			pagination: &Pagination{Offset: 2, Limit: 2},
+			results:    expectedJobs[2:3],
+		},
+		{
+			name:       "large offset",
+			pagination: &Pagination{Offset: 100, Limit: 1},
+			results:    []Job{},
+		},
+		{
+			name:       "large limit",
+			pagination: &Pagination{Offset: 0, Limit: 100},
+			results:    expectedJobs,
+		},
+		{
+			name:       "no pagination with nil",
+			pagination: nil,
+			results:    expectedJobs,
+		},
+		{
+			name:       "no pagination with magic numbers",
+			pagination: &Pagination{Offset: -1, Limit: -1},
+			results:    expectedJobs,
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			jobs, err := fetcher.GetJobs(context.Background(), test.pagination)
+			assert.NoError(t, err)
+
+			assert.Equal(t, int64(3), jobs.TotalCount)
+
+			assert.Len(t, jobs.Items, len(test.results))
+			for i := range jobs.Items {
+				assert.Equal(t, test.results[i], jobs.Items[i])
 			}
 		})
 	}
