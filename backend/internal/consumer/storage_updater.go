@@ -30,8 +30,8 @@ func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeC
 		wg:           wg,
 	}
 
-	// launch a database handler goroutine
-	// Have a pool of five so we can (hopefully) avoid data races by retrying
+	// launch a pool of database handler goroutines that can consume
+	// messages from the channel and handle the records
 	poolSize := 20
 	for i := 0; i < poolSize; i++ {
 		wg.Add(1)
