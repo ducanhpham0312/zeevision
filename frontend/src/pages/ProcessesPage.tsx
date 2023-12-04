@@ -40,7 +40,7 @@ export default function ProcessesPage() {
                   optionElement={() => <></>}
                   content={
                     processes[idx].instances
-                      ? processes[idx].instances.map(
+                      ? processes[idx].instances.items.map(
                           ({ instanceKey, status, version, startTime }) => [
                             <NavLink
                               to={`/instances/${instanceKey.toString()}`}

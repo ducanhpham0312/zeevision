@@ -2,19 +2,23 @@ import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
 interface QueryJobsReturnType {
+  totalCount: number;
   jobs: JobType[];
 }
 
 const JOBS_QUERY = () => gql`
   query Jobs {
     jobs {
-      key
-      type
-      instanceKey
-      retries
-      worker
-      state
-      time
+      totalCount
+      items {
+        key
+        type
+        instanceKey
+        retries
+        worker
+        state
+        time
+      }
     }
   }
 `;
@@ -25,6 +29,7 @@ export function useQueryJobs(): QueryJobsReturnType {
   });
 
   return {
-    jobs: jobsData.data?.jobs,
+    totalCount: jobsData.data?.jobs.totalCount,
+    jobs: jobsData.data?.jobs.items,
   };
 }
