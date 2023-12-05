@@ -29,7 +29,6 @@ export interface TableProps {
 
 export function Table({
   orientation,
-  className,
   alterRowColor = true,
   ...props
 }: TableProps) {
