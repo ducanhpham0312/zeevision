@@ -27,12 +27,17 @@ export interface TableProps {
   filterConfig?: Record<string, FilterType>;
 }
 
-export function Table({ orientation, ...props }: TableProps) {
+export function Table({
+  orientation,
+  className,
+  alterRowColor = true,
+  ...props
+}: TableProps) {
   if (props.header.length === 0) return null;
   return (
     <>
       {orientation === "horizontal" ? (
-        <HorizontalTable {...props} />
+        <HorizontalTable alterRowColor={alterRowColor} {...props} />
       ) : (
         <VerticalTable {...props} />
       )}

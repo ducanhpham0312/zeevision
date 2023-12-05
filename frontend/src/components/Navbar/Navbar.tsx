@@ -33,7 +33,7 @@ export function Navbar() {
   const location = useLocation();
 
   return (
-    <header className="fixed z-50 flex w-full items-center gap-5 border-b border-black/20 bg-background px-5">
+    <header className="fixed z-50 flex w-full items-center gap-5 border-b border-black/10 bg-background px-5 transition hover:shadow-lg">
       <div>
         <div>ZEEVISION</div>
       </div>
