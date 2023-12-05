@@ -30,67 +30,74 @@ export default function SingleInstancesPage() {
     { label: "Jobs", content: <JobsTable jobs={jobs} /> },
   ];
   return (
-    <div className="flex h-full w-full flex-col gap-3">
+    <div className="flex h-full w-full flex-col">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
-            <div className="w-full pr-3">
-              <Table
-                orientation="vertical"
-                header={[
-                  "Instance Key",
-                  "BPMN Process ID",
-                  "Version",
-                  "Process Key",
-                  "Status",
-                  "Start Time",
-                  "End Time",
-                ]}
-                content={
-                  instance
-                    ? [
-                        [
-                          instanceKey,
-                          bpmnProcessId,
-                          version,
-                          <NavLink to={`/processes/${processKey}`}>
-                            <Button variant="secondary">{processKey}</Button>
-                          </NavLink>,
-                          status,
-                          startTime,
-                          endTime,
-                        ],
-                      ]
-                    : []
-                }
-              />
+            <div className="w-full overflow-hidden">
+              <div className="min-w-[400px] pr-3">
+                <Table
+                  orientation="vertical"
+                  header={[
+                    "Instance Key",
+                    "BPMN Process ID",
+                    "Version",
+                    "Process Key",
+                    "Status",
+                    "Start Time",
+                    "End Time",
+                  ]}
+                  content={
+                    instance
+                      ? [
+                          [
+                            instanceKey,
+                            bpmnProcessId,
+                            version,
+                            <NavLink to={`/processes/${processKey}`}>
+                              <Button variant="secondary">{processKey}</Button>
+                            </NavLink>,
+                            status,
+                            startTime,
+                            endTime,
+                          ],
+                        ]
+                      : []
+                  }
+                />
+              </div>
             </div>
           </ResizableContainer>
           <ResponsiveBpmnViewer
+            control
             navigated
-            className="h-full flex-grow"
+            className="h-full flex-grow overflow-hidden"
             bpmnString={bpmnResource}
           />
         </div>
       </ResizableContainer>
-      <Tabs defaultValue={"Variables"} className="bg-white">
-        <TabsList className="mb-5 mt-10 grid w-full grid-cols-2 rounded-xl border-2">
-          {tabsData.map((tab, index) => (
-            <Tab
-              key={index}
-              value={tab.label}
-              className={`m-1 rounded-xl py-2 hover:bg-second-accent focus:bg-second-accent/100`}
-            >
-              {tab.label}
-            </Tab>
-          ))}
-        </TabsList>
-        {tabsData.map((tab, index) => (
-          <TabPanel key={index} value={tab.label}>
-            {tab.content}
-          </TabPanel>
-        ))}
-      </Tabs>
+      <div className="relative flex-grow overflow-auto">
+        <div className="absolute h-full w-full">
+          <Tabs defaultValue={"Variables"} className="bg-white">
+            <TabsList className="mb-5 mt-10 grid w-full grid-cols-2 rounded-xl border-2">
+              {tabsData.map((tab, index) => (
+                <Tab
+                  key={index}
+                  value={tab.label}
+                  className={`m-1 rounded-xl py-2 hover:bg-second-accent focus:bg-second-accent/100`}
+                >
+                  {tab.label}
+                </Tab>
+              ))}
+            </TabsList>
+            {tabsData.map((tab, index) => (
+              <TabPanel key={index} value={tab.label}>
+                {tab.content}
+              </TabPanel>
+            ))}
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 }

@@ -6,4 +6,14 @@
   h1 {
     @apply text-3xl font-bold;
   }
+  a {
+    @apply underline decoration-accent decoration-dashed underline-offset-4;
+  }
+}
+
+.highlight:not(.djs-connection) .djs-visual > :nth-child(1) {
+  @apply text-green-600;
+  fill: green !important; /* color elements as green */
+  color: green !important; /* color elements as green */
+  stroke: green !important; /* color elements as green */
 }

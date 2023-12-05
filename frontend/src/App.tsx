@@ -15,7 +15,7 @@ const Layout = () => (
   <>
     <Navbar />
     <Snackbar />
-    <div className="m-4 mt-[70px]">
+    <div className="h-screen w-screen p-4 pt-[70px]">
       <Outlet />
     </div>
   </>
