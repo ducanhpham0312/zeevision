@@ -10,6 +10,7 @@ export interface ButtonProps
   active?: boolean;
   label?: string;
   helperText?: string;
+  helperTextPos?: "e" | "s" | "n" | "w";
 }
 
 export function Button({
@@ -22,6 +23,7 @@ export function Button({
   fullWidth,
   label,
   helperText,
+  helperTextPos = "w",
   ...props
 }: ButtonProps) {
   return (
@@ -34,7 +36,18 @@ export function Button({
       style={{ width: `${width}px` }}
     >
       {helperText ? (
-        <div className="absolute -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%] scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100">
+        <div
+          className={twMerge(
+            "absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100",
+            helperTextPos === "e" ? "" : "",
+            helperTextPos === "n"
+              ? "right-0 top-[-5px] -translate-y-[100%]"
+              : "",
+            helperTextPos === "w"
+              ? "-left-3 top-[50%] -translate-x-[100%] -translate-y-[50%]"
+              : "",
+          )}
+        >
           <p className="whitespace-nowrap text-sm">{helperText}</p>
         </div>
       ) : null}
@@ -48,7 +61,7 @@ export function Button({
 }
 
 const buttonVariant = tv({
-  base: "group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded",
+  base: "group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded",
   variants: {
     variant: {
       primary: "text-white bg-accent hover:bg-accent/90 active:bg-accent/80",

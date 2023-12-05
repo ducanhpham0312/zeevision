@@ -202,7 +202,6 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
           <DropdownMenu
             onOpenChange={(open) => {
               if (!open) {
-                console.log(open);
                 deactivateEmptyFilter();
               }
             }}

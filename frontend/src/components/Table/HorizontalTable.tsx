@@ -8,6 +8,7 @@ import { Button } from "../Button";
 import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
 import { DataFilter, FilterType } from "./DataFilter";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export interface HorizontalTableProps {
   header: string[];
@@ -126,10 +127,22 @@ export function HorizontalTable({
                     key={rowIdx}
                   >
                     {row.map((cell, index) => (
-                      <td className="p-3" key={index}>
-                        <p>
-                          {typeof cell === "string" ? prettifyJson(cell) : cell}
-                        </p>
+                      <td className="group p-3" key={index}>
+                        <div className="flex items-center gap-2">
+                          <p>
+                            {typeof cell === "string"
+                              ? prettifyJson(cell)
+                              : cell}
+                          </p>
+                          <Button
+                            helperTextPos="n"
+                            helperText="Copy content"
+                            onClick={() => navigator.clipboard.writeText("abc")}
+                            className="opacity-0 transition group-hover:opacity-100"
+                          >
+                            <ContentCopyIcon fontSize="small" />
+                          </Button>
+                        </div>
                       </td>
                     ))}
                     {expandElement ? (
