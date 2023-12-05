@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
+import { twMerge } from "tailwind-merge";
 
 export interface TableProps {
   /**
@@ -23,14 +24,22 @@ export interface TableProps {
   optionElement?: (idx: number) => ReactNode;
 
   alterRowColor?: boolean;
+  className?: string;
 }
 
-export function Table({ orientation, ...props }: TableProps) {
+export function Table({
+  orientation,
+  className,
+  alterRowColor = true,
+  ...props
+}: TableProps) {
   if (props.header.length === 0) return null;
   return (
-    <table className="w-full border-collapse rounded bg-white">
+    <table
+      className={twMerge("w-full border-collapse rounded bg-white", className)}
+    >
       {orientation === "horizontal" ? (
-        <HorizontalTable {...props} />
+        <HorizontalTable alterRowColor={alterRowColor} {...props} />
       ) : (
         <VerticalTable {...props} />
       )}

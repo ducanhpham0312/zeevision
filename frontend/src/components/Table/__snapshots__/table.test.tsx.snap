@@ -13,7 +13,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -21,11 +21,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Element ID
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -34,7 +37,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -42,11 +45,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Variable name
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -55,7 +61,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -63,11 +69,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Variable Value
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -76,7 +85,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -84,11 +93,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Flow Scope Key
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -97,7 +109,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -105,11 +117,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Time created
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -118,7 +133,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -126,11 +141,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Option
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -141,7 +159,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
       aria-label="custom pagination table"
     >
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
@@ -209,7 +227,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
@@ -277,7 +295,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
@@ -345,7 +363,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
@@ -413,7 +431,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         </td>
       </tr>
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
