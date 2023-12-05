@@ -111,32 +111,37 @@ const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
   ],
 };
 
+const getInitFilterState = (
+  filterConfig: DataFilterProps["filterConfig"],
+): Record<string, Record<string, FilterState>> =>
+  Object.entries(filterConfig).reduce(
+    (a, [column, type]) => {
+      a[column] = columnFilterOptions[type].reduce(
+        (a, filterOption) => {
+          a[filterOption.name] = {
+            active: false,
+            column: column,
+            filterName: filterOption.name,
+            filterValue: filterOption.queryInputNameList.reduce(
+              (a, queryInputName) => {
+                a[queryInputName] = "";
+                return a;
+              },
+              {} as Record<string, string>,
+            ),
+          };
+          return a;
+        },
+        {} as Record<string, FilterState>,
+      );
+      return a;
+    },
+    {} as Record<string, Record<string, FilterState>>,
+  );
+
 export function DataFilter({ filterConfig }: DataFilterProps) {
   const [filterState, setFilterState] = useState(
-    Object.entries(filterConfig).reduce(
-      (a, [column, type]) => {
-        a[column] = columnFilterOptions[type].reduce(
-          (a, filterOption) => {
-            a[filterOption.name] = {
-              active: false,
-              column: column,
-              filterName: filterOption.name,
-              filterValue: filterOption.queryInputNameList.reduce(
-                (a, queryInputName) => {
-                  a[queryInputName] = "";
-                  return a;
-                },
-                {} as Record<string, string>,
-              ),
-            };
-            return a;
-          },
-          {} as Record<string, FilterState>,
-        );
-        return a;
-      },
-      {} as Record<string, Record<string, FilterState>>,
-    ),
+    getInitFilterState(filterConfig),
   );
 
   const handleToggleFilter =
@@ -250,7 +255,10 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                 );
               })}
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-error">
+              <DropdownMenuItem
+                className="text-error"
+                onClick={() => setFilterState(getInitFilterState(filterConfig))}
+              >
                 <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
                 <span>Clear all filters</span>
               </DropdownMenuItem>
