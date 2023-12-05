@@ -17,6 +17,7 @@ import {
 } from "../DropdownMenu";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { twMerge } from "tailwind-merge";
+import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 
 export type FilterType = "string" | "time" | "value";
 
@@ -143,96 +144,140 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
       e.preventDefault();
       e.stopPropagation();
       setFilterState((prev) => {
+        // toggle active state of a filter
         prev[column][filterName].active = !prev[column][filterName].active;
+        // clear the query string of a filter
+        if (!prev[column][filterName].active) {
+          Object.keys(prev[column][filterName].filterValue).forEach(
+            (key) => (prev[column][filterName].filterValue[key] = ""),
+          );
+        }
+        return { ...prev };
+      });
+    };
+
+  const handleChangeQueryString =
+    (column: string, filterName: string) =>
+    (e: React.FormEvent<HTMLInputElement>) => {
+      setFilterState((prev) => {
+        prev[column][filterName].filterValue[e.currentTarget.name] =
+          e.currentTarget.value;
         return { ...prev };
       });
     };
 
   return (
-    <div className="mb-1 flex w-full gap-2">
-      <Input className="flex-grow" placeholder="Search by name" />
-      <div>
-        <DropdownMenu
-          onOpenChange={(open) => {
-            // use this to set active = false for empty filters
-            console.log(open);
-          }}
-        >
-          <DropdownMenuTrigger>
-            <Button variant="secondary">Filter {<FilterAltIcon />}</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" className="mr-4 mt-1 w-[250px]">
-            <DropdownMenuLabel>Choose a column</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {Object.keys(filterConfig).map((column) => {
-              const filterType = filterConfig[column];
-              return (
-                <DropdownMenuSub key={column}>
-                  <DropdownMenuSubTrigger>
-                    <span>{column}</span>
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent className="mr-[13px] w-[300px]">
-                      {columnFilterOptions[filterType].map(
-                        ({ name, queryInputNameList }) => {
-                          const thisFilterState = filterState[column][name];
-                          return (
-                            <DropdownMenuItem
-                              onPointerLeave={(e) => e.preventDefault()}
-                              onPointerMove={(e) => e.preventDefault()}
-                              onClick={handleToggleFilter(column, name)}
-                              key={name}
-                              className="flex flex-col gap-3"
-                            >
-                              <div className="group flex w-full items-center gap-2">
-                                <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
-                                  <div
-                                    className={twMerge(
-                                      "h-full w-full rounded-full transition group-hover:bg-gray-300",
-                                      thisFilterState.active
-                                        ? "bg-accent group-hover:bg-accent"
-                                        : "",
-                                    )}
-                                  />
-                                </div>
-                                <p>{name}</p>
-                              </div>
-                              {thisFilterState.active ? (
-                                <div
-                                  className="flex w-full flex-col gap-2"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  {queryInputNameList.map((name) => (
-                                    <Input
-                                      key={name}
-                                      name={name}
-                                      placeholder="Enter query value here"
-                                      className="w-full"
+    <div className="flex w-full flex-col">
+      <div className="mb-1 flex w-full gap-2">
+        <Input className="flex-grow" placeholder="Search by name" />
+        <div>
+          <DropdownMenu
+            onOpenChange={(open) => {
+              // use this to set active = false for empty filters
+              console.log(open);
+            }}
+          >
+            <DropdownMenuTrigger>
+              <Button variant="secondary">Filter {<FilterAltIcon />}</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" className="mr-4 mt-1 w-[250px]">
+              <DropdownMenuLabel>Choose a column</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {Object.keys(filterConfig).map((column) => {
+                const filterType = filterConfig[column];
+                return (
+                  <DropdownMenuSub key={column}>
+                    <DropdownMenuSubTrigger>
+                      <span>{column}</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent className="mr-[13px] w-[300px]">
+                        {columnFilterOptions[filterType].map(
+                          ({ name, queryInputNameList }) => {
+                            const thisFilterState = filterState[column][name];
+                            return (
+                              <DropdownMenuItem
+                                onPointerLeave={(e) => e.preventDefault()}
+                                onPointerMove={(e) => e.preventDefault()}
+                                onClick={handleToggleFilter(column, name)}
+                                key={name}
+                                className="flex flex-col gap-3"
+                              >
+                                <div className="group flex w-full items-center gap-2">
+                                  <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
+                                    <div
+                                      className={twMerge(
+                                        "h-full w-full rounded-full transition group-hover:bg-gray-300",
+                                        thisFilterState.active
+                                          ? "bg-accent group-hover:bg-accent"
+                                          : "",
+                                      )}
                                     />
-                                  ))}
+                                  </div>
+                                  <p>{name}</p>
                                 </div>
-                              ) : null}
-                            </DropdownMenuItem>
-                          );
-                        },
-                      )}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-error">
-                        <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
-                        <span>Clear column filters</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              );
-            })}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-error">
-              <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
-              <span>Clear all filters</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                                {thisFilterState.active ? (
+                                  <div
+                                    className="flex w-full flex-col gap-2"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {queryInputNameList.map((name) => (
+                                      <Input
+                                        key={name}
+                                        name={name}
+                                        onChange={handleChangeQueryString(
+                                          column,
+                                          thisFilterState.filterName,
+                                        )}
+                                        placeholder="Enter query value here"
+                                        className="w-full"
+                                      />
+                                    ))}
+                                  </div>
+                                ) : null}
+                              </DropdownMenuItem>
+                            );
+                          },
+                        )}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-error">
+                          <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
+                          <span>Clear column filters</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                );
+              })}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-error">
+                <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
+                <span>Clear all filters</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      <div className="w-full">
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(filterState).map(([column, type]) =>
+            Object.values(type).map((filter) => (
+              <>
+                {filter.active &&
+                !Object.values(filter.filterValue).some((value) => !value) ? (
+                  <Popover key={`${column}-${filter.filterName}`}>
+                    <PopoverTrigger>
+                      <Button>{`${column} ${filter.filterName} ${Object.values(
+                        filter.filterValue,
+                      ).join(" and ")}`}</Button>
+                    </PopoverTrigger>
+                    <PopoverContent>Anc</PopoverContent>
+                  </Popover>
+                ) : null}
+              </>
+            )),
+          )}
+        </div>
       </div>
     </div>
   );

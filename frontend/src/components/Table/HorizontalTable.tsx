@@ -95,9 +95,15 @@ export function HorizontalTable({
                   className="text-left"
                   onClick={() => handleSort(item)}
                 >
-                  <div className="flex justify-between">
+                  <div className="relative flex justify-between pr-5">
                     <p>{item}</p>
-                    {sortBy === item ? (sortOrder === "asc" ? " ▲" : " ▼") : ""}
+                    <div className="absolute right-0">
+                      {sortBy === item
+                        ? sortOrder === "asc"
+                          ? " ▲"
+                          : " ▼"
+                        : ""}
+                    </div>
                   </div>
                 </Button>
               </th>
