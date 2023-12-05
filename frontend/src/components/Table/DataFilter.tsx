@@ -172,6 +172,28 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
       });
     };
 
+  const deactivateEmptyFilter = () => {
+    setFilterState((prev) => {
+      Object.entries(prev).forEach(([column, filters]) =>
+        Object.keys(filters).forEach((filterName) => {
+          if (prev[column][filterName].active) {
+            if (
+              Object.values(prev[column][filterName].filterValue).some(
+                (value) => !value,
+              )
+            ) {
+              prev[column][filterName].active = false;
+              Object.keys(prev[column][filterName].filterValue).forEach(
+                (key) => (prev[column][filterName].filterValue[key] = ""),
+              );
+            }
+          }
+        }),
+      );
+      return { ...prev };
+    });
+  };
+
   return (
     <div className="flex w-full flex-col">
       <div className="mb-1 flex w-full gap-2">
@@ -179,8 +201,10 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
         <div>
           <DropdownMenu
             onOpenChange={(open) => {
-              // use this to set active = false for empty filters
-              console.log(open);
+              if (!open) {
+                console.log(open);
+                deactivateEmptyFilter();
+              }
             }}
           >
             <DropdownMenuTrigger>
@@ -282,7 +306,7 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                       <div className="flex items-center gap-3 rounded bg-hover p-2 px-3">
                         <div className="flex gap-1.5">
                           <p>{`${column}`}</p>
-                          <p className="text-black/70">{`${filter.filterName}`}</p>
+                          <p className="text-black/60">{`${filter.filterName}`}</p>
                           <p>
                             {`${Object.values(filter.filterValue).join(
                               " and ",
@@ -300,7 +324,11 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                         </div>
                       </div>
                     </PopoverTrigger>
-                    <PopoverContent>Anc</PopoverContent>
+                    <PopoverContent>
+                      <div className="flex">
+                        <p>Edit</p>
+                      </div>
+                    </PopoverContent>
                   </Popover>
                 ) : null}
               </>
