@@ -14,17 +14,17 @@ type Incident struct {
 }
 
 type Instance struct {
-	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
-	StartTime      string      `json:"startTime"`
-	EndTime        *string     `json:"endTime,omitempty"`
-	InstanceKey    int64       `json:"instanceKey"`
-	ProcessKey     int64       `json:"processKey"`
-	Version        int64       `json:"version"`
-	Status         string      `json:"status"`
-	Incidents      []*Incident `json:"incidents"`
-	Jobs           []*Job      `json:"jobs"`
-	Variables      []*Variable `json:"variables"`
-	Process        *Process    `json:"process"`
+	BpmnLiveStatus string              `json:"bpmnLiveStatus"`
+	StartTime      string              `json:"startTime"`
+	EndTime        *string             `json:"endTime,omitempty"`
+	InstanceKey    int64               `json:"instanceKey"`
+	ProcessKey     int64               `json:"processKey"`
+	Version        int64               `json:"version"`
+	Status         string              `json:"status"`
+	Incidents      *PaginatedIncidents `json:"incidents"`
+	Jobs           *PaginatedJobs      `json:"jobs"`
+	Variables      *PaginatedVariables `json:"variables"`
+	Process        *Process            `json:"process"`
 }
 
 type Job struct {
@@ -39,16 +39,46 @@ type Job struct {
 	Instance    *Instance `json:"instance"`
 }
 
+type PaginatedIncidents struct {
+	Items      []*Incident `json:"items"`
+	TotalCount int64       `json:"totalCount"`
+}
+
+type PaginatedInstances struct {
+	Items      []*Instance `json:"items"`
+	TotalCount int64       `json:"totalCount"`
+}
+
+type PaginatedJobs struct {
+	Items      []*Job `json:"items"`
+	TotalCount int64  `json:"totalCount"`
+}
+
+type PaginatedProcesses struct {
+	Items      []*Process `json:"items"`
+	TotalCount int64      `json:"totalCount"`
+}
+
+type PaginatedVariables struct {
+	Items      []*Variable `json:"items"`
+	TotalCount int64       `json:"totalCount"`
+}
+
+type Pagination struct {
+	Offset int64 `json:"offset"`
+	Limit  int64 `json:"limit"`
+}
+
 type Process struct {
-	ActiveInstances    int64       `json:"activeInstances"`
-	CompletedInstances int64       `json:"completedInstances"`
-	BpmnLiveStatus     string      `json:"bpmnLiveStatus"`
-	BpmnResource       string      `json:"bpmnResource"`
-	BpmnProcessID      string      `json:"bpmnProcessId"`
-	DeploymentTime     string      `json:"deploymentTime"`
-	Instances          []*Instance `json:"instances"`
-	ProcessKey         int64       `json:"processKey"`
-	Version            int64       `json:"version"`
+	ActiveInstances    int64               `json:"activeInstances"`
+	CompletedInstances int64               `json:"completedInstances"`
+	BpmnLiveStatus     string              `json:"bpmnLiveStatus"`
+	BpmnResource       string              `json:"bpmnResource"`
+	BpmnProcessID      string              `json:"bpmnProcessId"`
+	DeploymentTime     string              `json:"deploymentTime"`
+	Instances          *PaginatedInstances `json:"instances"`
+	ProcessKey         int64               `json:"processKey"`
+	Version            int64               `json:"version"`
 }
 
 type Variable struct {

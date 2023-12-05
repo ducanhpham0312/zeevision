@@ -26,8 +26,11 @@ export default function SingleInstancesPage() {
   } = instance;
 
   const tabsData = [
-    { label: "Variables", content: <VariablesTable variables={variables} /> },
-    { label: "Jobs", content: <JobsTable jobs={jobs} /> },
+    {
+      label: "Variables",
+      content: <VariablesTable variables={variables?.items} />,
+    },
+    { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
   ];
   return (
     <div className="flex h-full w-full flex-col">

@@ -92,6 +92,17 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 	}
 }
 
+// Convert GraphQL pagination to storage pagination. Nil value is preserved.
+func ToStoragePagination(pagination *Pagination) *storage.Pagination {
+	if pagination == nil {
+		return nil
+	}
+	return &storage.Pagination{
+		Limit:  int(pagination.Limit),
+		Offset: int(pagination.Offset),
+	}
+}
+
 // Convert time to RFC3339 format.
 func formatTime(t time.Time) string {
 	return t.UTC().Format(time.RFC3339)
