@@ -11,7 +11,7 @@ export function ResizableContainer({ direction, children }: ResizableProps) {
   let resizableProps: ResizableBoxProps;
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const [width, setWidth] = useState(Math.max(window.innerWidth * 0.3, 400));
+  const [width, setWidth] = useState(Math.max(window.innerWidth * 0.3, 412));
 
   useEffect(() => {
     let timer: number;

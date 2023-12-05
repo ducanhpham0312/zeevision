@@ -24,7 +24,6 @@ const PROCESSES_QUERY = () => gql`
 
 export function useQueryProcesses(): QueryProcessesReturnType {
   const processesData = useQuery(PROCESSES_QUERY(), {
-    // fetchPolicy: "network-only",
     pollInterval: queryPollIntervalMs,
   });
 
