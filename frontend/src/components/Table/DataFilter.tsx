@@ -18,6 +18,7 @@ import {
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { twMerge } from "tailwind-merge";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
+import CloseIcon from "@mui/icons-material/Close";
 
 export type FilterType = "string" | "time" | "value";
 
@@ -230,6 +231,9 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                                       <Input
                                         key={name}
                                         name={name}
+                                        value={
+                                          thisFilterState.filterValue[name]
+                                        }
                                         onChange={handleChangeQueryString(
                                           column,
                                           thisFilterState.filterName,
@@ -266,7 +270,7 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
           </DropdownMenu>
         </div>
       </div>
-      <div className="w-full">
+      <div className="my-2 w-full">
         <div className="flex flex-wrap gap-2">
           {Object.entries(filterState).map(([column, type]) =>
             Object.values(type).map((filter) => (
@@ -275,9 +279,26 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                 !Object.values(filter.filterValue).some((value) => !value) ? (
                   <Popover key={`${column}-${filter.filterName}`}>
                     <PopoverTrigger>
-                      <Button>{`${column} ${filter.filterName} ${Object.values(
-                        filter.filterValue,
-                      ).join(" and ")}`}</Button>
+                      <div className="flex items-center gap-3 rounded bg-hover p-2 px-3">
+                        <div className="flex gap-1.5">
+                          <p>{`${column}`}</p>
+                          <p className="text-black/70">{`${filter.filterName}`}</p>
+                          <p>
+                            {`${Object.values(filter.filterValue).join(
+                              " and ",
+                            )}`}
+                          </p>
+                        </div>
+                        <div
+                          onClick={handleToggleFilter(
+                            column,
+                            filter.filterName,
+                          )}
+                          className="flex h-7 w-7 items-center justify-center rounded-full transition hover:bg-gray-500/20"
+                        >
+                          <CloseIcon fontSize={"small"} />
+                        </div>
+                      </div>
                     </PopoverTrigger>
                     <PopoverContent>Anc</PopoverContent>
                   </Popover>
