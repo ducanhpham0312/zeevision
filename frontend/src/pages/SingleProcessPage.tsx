@@ -24,7 +24,7 @@ export default function SingleProcessPage() {
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
             <div className="w-full overflow-hidden">
-              <div className="min-w-[350px] pr-3">
+              <div className="min-w-[400px] pr-3">
                 <Table
                   orientation="vertical"
                   header={[
