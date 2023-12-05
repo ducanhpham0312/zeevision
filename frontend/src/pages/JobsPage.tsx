@@ -7,6 +7,7 @@ export default function JobsPage() {
   const { jobs } = useQueryJobs();
   return (
     <Table
+      alterRowColor
       orientation="horizontal"
       header={[
         "Instance Key",

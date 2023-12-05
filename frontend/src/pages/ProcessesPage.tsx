@@ -19,7 +19,7 @@ export default function ProcessesPage() {
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
       />
-      <div className="flex flex-col gap-10">
+      <div className="flex h-full flex-col gap-10 overflow-auto">
         <div className="flex items-center justify-between">
           <h1>PROCESSES</h1>
           <Button onClick={handleOpen} variant="secondary">
@@ -35,6 +35,7 @@ export default function ProcessesPage() {
               <p>Process Details:</p>
               <div>
                 <Table
+                  alterRowColor={false}
                   orientation="horizontal"
                   header={["Instance Key", "Status", "Version", "Start Time"]}
                   optionElement={() => <></>}
@@ -45,7 +46,7 @@ export default function ProcessesPage() {
                             <NavLink
                               to={`/instances/${instanceKey.toString()}`}
                             >
-                              {instanceKey}
+                              <Button variant="secondary">{instanceKey}</Button>
                             </NavLink>,
                             status,
                             version,
@@ -62,7 +63,9 @@ export default function ProcessesPage() {
             processes
               ? processes.map(
                   ({ processKey, bpmnProcessId, version, deploymentTime }) => [
-                    <NavLink to={processKey.toString()}>{processKey}</NavLink>,
+                    <NavLink to={processKey.toString()}>
+                      <Button variant="secondary">{processKey}</Button>
+                    </NavLink>,
                     bpmnProcessId,
                     version,
                     deploymentTime,
