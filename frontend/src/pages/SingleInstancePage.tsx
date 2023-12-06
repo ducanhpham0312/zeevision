@@ -1,5 +1,5 @@
 import { Table } from "../components/Table";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuerySingleInstance } from "../hooks/useQuerySingleInstance";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { ResizableContainer } from "../components/ResizableContainer";
@@ -7,7 +7,6 @@ import { Tabs } from "@mui/base/Tabs";
 import { TabsList } from "@mui/base/TabsList";
 import { TabPanel } from "@mui/base/TabPanel";
 import { Tab } from "@mui/base/Tab";
-import { Button } from "../components/Button";
 
 export default function SingleInstancesPage() {
   const params = useParams();
@@ -50,6 +49,10 @@ export default function SingleInstancesPage() {
                     "Start Time",
                     "End Time",
                   ]}
+                  navLinkColumn={{
+                    "Process Key": (value: string | number) =>
+                      `/processes/${value.toString()}`,
+                  }}
                   content={
                     instance
                       ? [
@@ -57,9 +60,7 @@ export default function SingleInstancesPage() {
                             instanceKey,
                             bpmnProcessId,
                             version,
-                            <NavLink to={`/processes/${processKey}`}>
-                              <Button variant="secondary">{processKey}</Button>
-                            </NavLink>,
+                            processKey,
                             status,
                             startTime,
                             endTime,
