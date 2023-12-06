@@ -47,21 +47,24 @@ export function HorizontalTable({
       order: string,
     ): (string | number | ReactNode)[][] => {
       return [...content].sort((a, b) => {
-        let comparison = 0;
         const columnIndex = header.indexOf(column);
-        if (isValidElement(a[columnIndex])) {
-          const aToCompare = a[columnIndex] as ReactElement;
-          const bToCompare = b[columnIndex] as ReactElement;
-          comparison =
-            aToCompare.props.children > bToCompare.props.children ? 1 : -1;
-        } else {
-          comparison = a[columnIndex]! > b[columnIndex]! ? 1 : -1;
-        }
+        const extractValue = (item: (string | number | ReactNode)[]) => {
+          const value = item[columnIndex];
+          return isValidElement(value)
+            ? (value as ReactElement).props.children.props.children
+            : value!;
+        };
+
+        const aValue = extractValue(a);
+        const bValue = extractValue(b);
+
+        const comparison = aValue > bValue ? 1 : -1;
         return order === "desc" ? comparison * -1 : comparison;
       });
     },
     [header],
   );
+
   useEffect(() => {
     // Sort the content when sortBy or sortOrder changes
     const sortedData = sortContent(content, sortBy, sortOrder);
