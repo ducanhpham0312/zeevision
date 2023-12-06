@@ -55,6 +55,17 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage audit log to GraphQL audit log.
+func FromStorageAuditLog(auditLog storage.AuditLog) *AuditLog {
+	return &AuditLog{
+		ElementID:   auditLog.ElementID,
+		ElementType: auditLog.ElementType,
+		Intent:      auditLog.Intent,
+		Position:    auditLog.Position,
+		Time:        formatTime(auditLog.Time),
+	}
+}
+
 // Convert storage incident to GraphQL incident.
 func FromStorageIncident(incident storage.Incident) *Incident {
 	return &Incident{
@@ -89,6 +100,18 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 		Name:  variable.Name,
 		Value: variable.Value,
 		Time:  formatTime(variable.Time),
+	}
+}
+
+// Convert GraphQL variable filter to storage filter. Nil value is preserved.
+func VariableFilterToStorageFilter(filter *VariableFilter) *storage.Filter {
+	if filter == nil {
+		return nil
+	}
+	return &storage.Filter{
+		Input: filter.Name,
+		// Not really ideal solution but it works for now.
+		Type: storage.FilterType(filter.Type.String()),
 	}
 }
 

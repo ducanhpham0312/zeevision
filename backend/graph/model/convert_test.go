@@ -169,6 +169,30 @@ func TestFromStorageProcess(t *testing.T) {
 	}
 }
 
+func TestFromStorageAuditLog(t *testing.T) {
+	now := time.Now()
+
+	storageAuditLog := storage.AuditLog{
+		Position:           10,
+		ProcessInstanceKey: 100,
+		ElementID:          "element-id",
+		ElementType:        "element-type",
+		Intent:             "intent",
+		Time:               now,
+	}
+	expected := &AuditLog{
+		ElementID:   "element-id",
+		ElementType: "element-type",
+		Intent:      "intent",
+		Position:    10,
+		Time:        now.UTC().Format(time.RFC3339),
+	}
+
+	actual := FromStorageAuditLog(storageAuditLog)
+
+	assert.Equal(t, expected, actual)
+}
+
 func TestFromStrorageIncident(t *testing.T) {
 	now := time.Now()
 

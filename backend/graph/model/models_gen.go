@@ -2,6 +2,20 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+type AuditLog struct {
+	ElementID   string `json:"elementId"`
+	ElementType string `json:"elementType"`
+	Intent      string `json:"intent"`
+	Position    int64  `json:"position"`
+	Time        string `json:"time"`
+}
+
 type Incident struct {
 	IncidentKey  int64     `json:"incidentKey"`
 	InstanceKey  int64     `json:"instanceKey"`
@@ -21,6 +35,7 @@ type Instance struct {
 	ProcessKey     int64               `json:"processKey"`
 	Version        int64               `json:"version"`
 	Status         string              `json:"status"`
+	AuditLogs      *PaginatedAuditLogs `json:"auditLogs"`
 	Incidents      *PaginatedIncidents `json:"incidents"`
 	Jobs           *PaginatedJobs      `json:"jobs"`
 	Variables      *PaginatedVariables `json:"variables"`
@@ -37,6 +52,11 @@ type Job struct {
 	State       string    `json:"state"`
 	Time        string    `json:"time"`
 	Instance    *Instance `json:"instance"`
+}
+
+type PaginatedAuditLogs struct {
+	Items      []*AuditLog `json:"items"`
+	TotalCount int64       `json:"totalCount"`
 }
 
 type PaginatedIncidents struct {
@@ -85,4 +105,52 @@ type Variable struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 	Time  string `json:"time"`
+}
+
+type VariableFilter struct {
+	Name string     `json:"name"`
+	Type FilterType `json:"type"`
+}
+
+type FilterType string
+
+const (
+	FilterTypeIs       FilterType = "IS"
+	FilterTypeIsNot    FilterType = "IS_NOT"
+	FilterTypeContains FilterType = "CONTAINS"
+)
+
+var AllFilterType = []FilterType{
+	FilterTypeIs,
+	FilterTypeIsNot,
+	FilterTypeContains,
+}
+
+func (e FilterType) IsValid() bool {
+	switch e {
+	case FilterTypeIs, FilterTypeIsNot, FilterTypeContains:
+		return true
+	}
+	return false
+}
+
+func (e FilterType) String() string {
+	return string(e)
+}
+
+func (e *FilterType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FilterType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FilterType", str)
+	}
+	return nil
+}
+
+func (e FilterType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

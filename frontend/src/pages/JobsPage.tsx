@@ -1,7 +1,5 @@
-import { NavLink } from "react-router-dom";
 import { Table } from "../components/Table";
 import { useQueryJobs } from "../hooks/useQueryJobs";
-import { Button } from "../components/Button";
 
 export default function JobsPage() {
   const { jobs } = useQueryJobs();
@@ -18,13 +16,15 @@ export default function JobsPage() {
         "State",
         "Time",
       ]}
+      navLinkColumn={{
+        "Instance Key": (value: string | number) =>
+          `/instances/${value.toString()}`,
+      }}
       content={
         jobs
           ? jobs.map(
               ({ instanceKey, key, type, retries, worker, state, time }) => [
-                <NavLink to={`/instances/${instanceKey.toString()}`}>
-                  <Button variant="secondary">{instanceKey}</Button>
-                </NavLink>,
+                instanceKey,
                 key,
                 type,
                 retries,

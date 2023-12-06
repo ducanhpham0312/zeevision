@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
-import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
 import { useQueryProcesses } from "../hooks/useQueryProcesses";
 
@@ -36,6 +35,9 @@ export default function ProcessesPage() {
           }}
           header={["Process Key", "Process ID", "Version", "Deployment Time"]}
           orientation="horizontal"
+          navLinkColumn={{
+            "Process Key": (value: string | number) => `/processes/${value}`,
+          }}
           expandElement={(idx: number) => (
             <div className="flex flex-col gap-4 p-4">
               <p>Process Details:</p>
@@ -44,16 +46,15 @@ export default function ProcessesPage() {
                   alterRowColor={false}
                   orientation="horizontal"
                   header={["Instance Key", "Status", "Version", "Start Time"]}
-                  optionElement={() => <></>}
+                  navLinkColumn={{
+                    "Instance Key": (value: string | number) =>
+                      `/instances/${value.toString()}`,
+                  }}
                   content={
                     processes[idx].instances
                       ? processes[idx].instances.items.map(
                           ({ instanceKey, status, version, startTime }) => [
-                            <NavLink
-                              to={`/instances/${instanceKey.toString()}`}
-                            >
-                              <Button variant="secondary">{instanceKey}</Button>
-                            </NavLink>,
+                            instanceKey,
                             status,
                             version,
                             startTime,
@@ -69,9 +70,7 @@ export default function ProcessesPage() {
             processes
               ? processes.map(
                   ({ processKey, bpmnProcessId, version, deploymentTime }) => [
-                    <NavLink to={processKey.toString()}>
-                      <Button variant="secondary">{processKey}</Button>
-                    </NavLink>,
+                    processKey,
                     bpmnProcessId,
                     version,
                     deploymentTime,

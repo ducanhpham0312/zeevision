@@ -25,6 +25,42 @@ type Paginated[T any] struct {
 	Items      []T
 }
 
+type FilterType string
+
+const (
+	FilterTypeIs       FilterType = "IS"
+	FilterTypeIsNot    FilterType = "IS_NOT"
+	FilterTypeContains FilterType = "CONTAINS"
+)
+
+// Filter is used to filter results with given input on a given field.
+type Filter struct {
+	Input string
+	Type  FilterType
+}
+
+// FilterFunctor returns a function that can be used to filter a query.
+// This can be called even if the filter is nil.
+//
+// NOTE: It is unsafe to use user provided input directly as the field name.
+func (f *Filter) FilterFunctor(field string) func(*gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if f == nil {
+			return db
+		}
+		switch f.Type {
+		case FilterTypeIs:
+			return db.Where(field+" = ?", f.Input)
+		case FilterTypeIsNot:
+			return db.Where(field+" != ?", f.Input)
+		case FilterTypeContains:
+			return db.Where(field+" LIKE ?", "%"+f.Input+"%")
+		default:
+			return db
+		}
+	}
+}
+
 // Creates new fetcher.
 //
 // Database object is assumed to be already initialized.
@@ -148,11 +184,23 @@ func (f *Fetcher) GetIncidentsForInstance(ctx context.Context, pagination *Pagin
 }
 
 // Gets all variables for an instance.
-func (f *Fetcher) GetVariablesForInstance(ctx context.Context, pagination *Pagination, instanceKey int64) (Paginated[Variable], error) {
-	return paginatedFetch[Variable](ctx, f.scopes(func(db *gorm.DB) *gorm.DB {
-		return db.Where(&Variable{ProcessInstanceKey: instanceKey})
-	}), pagination, func(db *gorm.DB, variables *[]Variable) *gorm.DB {
+func (f *Fetcher) GetVariablesForInstance(ctx context.Context, pagination *Pagination, filter *Filter, instanceKey int64) (Paginated[Variable], error) {
+	return paginatedFetch[Variable](ctx, f.scopes(
+		func(db *gorm.DB) *gorm.DB {
+			return db.Where(&Variable{ProcessInstanceKey: instanceKey})
+		},
+		filter.FilterFunctor("name"),
+	), pagination, func(db *gorm.DB, variables *[]Variable) *gorm.DB {
 		return db.Order("time DESC").Find(variables)
+	})
+}
+
+// Gets all audit logs for an instance.
+func (f *Fetcher) GetAuditLogsForInstance(ctx context.Context, pagination *Pagination, instanceKey int64) (Paginated[AuditLog], error) {
+	return paginatedFetch[AuditLog](ctx, f.scopes(func(db *gorm.DB) *gorm.DB {
+		return db.Where(&AuditLog{ProcessInstanceKey: instanceKey})
+	}), pagination, func(db *gorm.DB, auditLogs *[]AuditLog) *gorm.DB {
+		return db.Order("time DESC").Find(auditLogs)
 	})
 }
 
