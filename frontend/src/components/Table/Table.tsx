@@ -18,13 +18,14 @@ export interface TableProps {
    * List of all content of the table. Each list member represents one row in horizontal
    * or one column in vertical orientation
    */
-  content: (string | number | ReactNode)[][];
+  content: (string | number)[][];
 
   expandElement?: (idx: number) => ReactNode;
   optionElement?: (idx: number) => ReactNode;
 
   alterRowColor?: boolean;
   className?: string;
+  navLinkColumn?: Record<string, (value: string | number) => string>;
 }
 
 export function Table({

@@ -3,8 +3,6 @@ import {
   useCallback,
   useEffect,
   ReactNode,
-  ReactElement,
-  isValidElement,
   MouseEvent,
   ChangeEvent,
 } from "react";
@@ -16,10 +14,12 @@ import {
 import { Button } from "../Button";
 import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
+import { NavLink } from "react-router-dom";
 
 export interface HorizontalTableProps {
   header: string[];
-  content: (string | number | ReactNode)[][];
+  content: (string | number)[][];
+  navLinkColumn?: Record<string, (value: string | number) => string>;
   alterRowColor?: boolean;
   expandElement?: (idx: number) => ReactNode;
   optionElement?: (idx: number) => ReactNode;
@@ -29,6 +29,7 @@ export function HorizontalTable({
   header,
   content,
   alterRowColor,
+  navLinkColumn,
   expandElement,
   optionElement,
 }: HorizontalTableProps) {
@@ -38,27 +39,17 @@ export function HorizontalTable({
   const [sortOrder, setSortOrder] = useState("desc");
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [sortedContent, setSortedContent] =
-    useState<(string | number | ReactNode)[][]>(content);
+    useState<(string | number)[][]>(content);
 
   const sortContent = useCallback(
     (
-      content: (string | number | ReactNode)[][],
+      content: (string | number)[][],
       column: string,
       order: string,
-    ): (string | number | ReactNode)[][] => {
+    ): (string | number)[][] => {
       return [...content].sort((a, b) => {
         const columnIndex = header.indexOf(column);
-        const extractValue = (item: (string | number | ReactNode)[]) => {
-          const value = item[columnIndex];
-          return isValidElement(value)
-            ? (value as ReactElement).props.children.props.children
-            : value!;
-        };
-
-        const aValue = extractValue(a);
-        const bValue = extractValue(b);
-
-        const comparison = aValue > bValue ? 1 : -1;
+        const comparison = a[columnIndex] > b[columnIndex] ? 1 : -1;
         return order === "desc" ? comparison * -1 : comparison;
       });
     },
@@ -136,11 +127,19 @@ export function HorizontalTable({
                   }
                   key={rowIdx}
                 >
-                  {row.map((cell, index) => (
+                  {row.map((value, index) => (
                     <td className="p-3" key={index}>
-                      <p>
-                        {typeof cell === "string" ? prettifyJson(cell) : cell}
-                      </p>
+                      {navLinkColumn && navLinkColumn[header[index]] ? (
+                        <NavLink to={navLinkColumn[header[index]](value)}>
+                          <Button variant="secondary">{value}</Button>
+                        </NavLink>
+                      ) : (
+                        <p>
+                          {typeof value === "string"
+                            ? prettifyJson(value)
+                            : value}
+                        </p>
+                      )}
                     </td>
                   ))}
                   {expandElement ? (
