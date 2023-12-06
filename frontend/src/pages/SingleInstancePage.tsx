@@ -25,7 +25,14 @@ export default function SingleInstancesPage() {
     jobs,
     auditLogs,
   } = instance;
-
+  const getLatestLogs = () : { elementId: string; intent: string; }[] => {
+    const latestLogs: Record<string, string> = {};
+    auditLogs?.items.forEach(auditLog => {
+      const { elementId, intent} = auditLog;
+      if (!latestLogs[elementId]) latestLogs[elementId] = intent 
+    })
+    return Object.entries(latestLogs).map(([elementId, intent]) => ({ elementId, intent }));
+  }
   const tabsData = [
     {
       label: "Variables",
@@ -78,13 +85,14 @@ export default function SingleInstancesPage() {
             navigated
             className="h-full flex-grow overflow-hidden"
             bpmnString={bpmnResource}
+            colorOptions={getLatestLogs()}
           />
         </div>
       </ResizableContainer>
       <div className="relative flex-grow overflow-auto">
         <div className="absolute h-full w-full">
           <Tabs defaultValue={"Variables"} className="bg-white">
-            <TabsList className="mb-5 mt-10 grid w-full grid-cols-2 rounded-xl border-2">
+            <TabsList className="mb-5 mt-10 grid w-full grid-cols-3 rounded-xl border-2">
               {tabsData.map((tab, index) => (
                 <Tab
                   key={index}
@@ -106,6 +114,7 @@ export default function SingleInstancesPage() {
     </div>
   );
 }
+
 interface VariableListProps {
   variables: VariableType[];
 }

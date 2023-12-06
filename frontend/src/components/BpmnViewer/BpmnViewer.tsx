@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
 import Viewer from "bpmn-js/lib/Viewer";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -28,6 +29,11 @@ interface BpmnViewerProps {
   navigated?: boolean;
 
   control?: boolean;
+
+  /**
+   * List of bpmn element's intent for coloring BPMN diagram
+   */
+  colorOptions?: { elementId: string; intent: string; }[]
 }
 
 type ViewBoxInner = {
@@ -49,6 +55,7 @@ export function BpmnViewer({
   height,
   navigated,
   control,
+  colorOptions,
 }: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [modeler, setModeler] = useState<Viewer>();
@@ -77,8 +84,10 @@ export function BpmnViewer({
       try {
         await modeler.importXML(xmlString);
 
-        // const canvas = modeler.get("canvas");
-        // canvas.addMarker("Gateway_0wveo0b", "highlight");
+        colorOptions?.forEach(({ elementId, intent }) => {
+          setBpmnMarker(modeler, elementId, intent)
+          console.log(elementId, intent)
+        })
       } catch (err) {
         console.error(err);
       }
@@ -89,7 +98,7 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, height, navigated, width]);
+  }, [bpmnString, colorOptions, height, navigated, width]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {
@@ -116,9 +125,22 @@ export function BpmnViewer({
       return;
     }
     setCurrentZoom(zoom);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (modeler.get("canvas") as any).zoom(zoom);
   };
+
+  const setBpmnMarker = (modeler: Viewer, elementId: string, intent: string ) => {
+    const canvas = modeler.get("canvas") as any;
+    switch (intent) {
+      case "ELEMENT_ACTIVATING":
+        canvas.addMarker(elementId, "activating");
+        break
+      case "ELEMENT_ACTIVATED":
+        canvas.addMarker(elementId, "activated");
+        break
+      case "ELEMENT_COMPLETED":
+        canvas.addMarker(elementId, "completed")
+    }
+  }
 
   useEffect(() => {
     if (width && width < 400) {

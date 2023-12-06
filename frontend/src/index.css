@@ -12,14 +12,20 @@
 }
 
 .activating:not(.djs-connection) .djs-visual > :nth-child(1) {
-  color: green !important; /* color elements as green */
-  stroke: green !important; /* color elements as green */
+  color: green !important;
+  stroke: green !important;
   fill: green !important;
   opacity: 0.8;
 }
 
+.activated:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: yellow !important;
+  stroke: yellow !important;
+  opacity: 0.5;
+}
+
 .completed:not(.djs-connection) .djs-visual > :nth-child(1) {
-  color: green !important; /* color elements as green */
-  stroke: green !important; /* color elements as green */
+  color: green !important;
+  stroke: green !important;
   opacity: 0.5;
 }
