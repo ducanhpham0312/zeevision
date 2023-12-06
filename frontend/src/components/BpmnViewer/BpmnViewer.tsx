@@ -138,7 +138,10 @@ export function BpmnViewer({
         canvas.addMarker(elementId, "activated");
         break
       case "ELEMENT_COMPLETED":
-        canvas.addMarker(elementId, "completed")
+        canvas.addMarker(elementId, "completed");
+        break
+      case "SEQUENCE_FLOW_TAKEN":
+        canvas.addMarker(elementId, "flow_taken");
     }
   }
 

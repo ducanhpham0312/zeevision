@@ -29,3 +29,9 @@
   stroke: green !important;
   opacity: 0.5;
 }
+
+.flow_taken:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: green !important;
+  stroke: green !important;
+  opacity: 0.5;
+}
