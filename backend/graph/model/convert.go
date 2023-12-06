@@ -92,6 +92,7 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 	}
 }
 
+// Convert GraphQL variable filter to storage filter. Nil value is preserved.
 func VariableFilterToStorageFilter(filter *VariableFilter) *storage.Filter {
 	if filter == nil {
 		return nil
