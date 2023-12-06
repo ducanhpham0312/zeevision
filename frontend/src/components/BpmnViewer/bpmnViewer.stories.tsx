@@ -30,14 +30,14 @@ const LoadedBpmnViewer = () => {
   }, []);
 
   return (
-    <div style={{width: "200%", justifyContent: "center"}}>
+    <div style={{ width: "200%", justifyContent: "center" }}>
       <ResponsiveBpmnViewer
         width={3000}
         bpmnString={bpmnXml}
         control
         navigated
         className="h-full flex-grow overflow-hidden"
-        />
+      />
     </div>
   );
 };
