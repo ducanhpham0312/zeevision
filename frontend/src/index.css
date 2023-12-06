@@ -11,9 +11,15 @@
   }
 }
 
-.highlight:not(.djs-connection) .djs-visual > :nth-child(1) {
-  @apply text-green-600;
-  fill: green !important; /* color elements as green */
+.activating:not(.djs-connection) .djs-visual > :nth-child(1) {
   color: green !important; /* color elements as green */
   stroke: green !important; /* color elements as green */
+  fill: green !important;
+  opacity: 0.8;
+}
+
+.completed:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: green !important; /* color elements as green */
+  stroke: green !important; /* color elements as green */
+  opacity: 0.5;
 }

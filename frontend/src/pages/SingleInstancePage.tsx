@@ -23,6 +23,7 @@ export default function SingleInstancesPage() {
     bpmnProcessId,
     variables,
     jobs,
+    auditLogs,
   } = instance;
 
   const tabsData = [
@@ -31,6 +32,7 @@ export default function SingleInstancesPage() {
       content: <VariablesTable variables={variables?.items} />,
     },
     { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
+    { label: "Audit Logs", content: <AuditLogsTable auditLogs={auditLogs?.items} /> },
   ];
   return (
     <div className="flex h-full w-full flex-col">
@@ -149,6 +151,38 @@ function JobsTable({ jobs }: JobListProps) {
                 retries,
                 worker,
                 state,
+                time,
+              ],
+            )
+          : []
+      }
+    />
+  );
+}
+
+interface AuditLogListProps {
+  auditLogs: AuditLogType[];
+}
+function AuditLogsTable({ auditLogs }: AuditLogListProps) {
+  return (
+    <Table
+      alterRowColor
+      orientation="horizontal"
+      header={[
+        "Element ID",
+        "Element Type",
+        "Intent",
+        "Position",
+        "Time",
+      ]}
+      content={
+        auditLogs
+          ? auditLogs.map(
+              ({ elementId, elementType, intent, position, time }) => [
+                elementId,
+                elementType,
+                intent,
+                position,
                 time,
               ],
             )
