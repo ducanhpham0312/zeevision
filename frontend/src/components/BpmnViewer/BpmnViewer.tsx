@@ -43,12 +43,6 @@ type ViewBoxInner = {
   height: number;
 };
 
-type ViewBoxOuter = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
 export function BpmnViewer({
   bpmnString,
   width,
@@ -71,13 +65,9 @@ export function BpmnViewer({
     const modeler = navigated
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: height,
         })
       : new Viewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: height,
         });
 
     async function openDiagram(xmlString: string) {
@@ -86,7 +76,6 @@ export function BpmnViewer({
 
         colorOptions?.forEach(({ elementId, intent }) => {
           setBpmnMarker(modeler, elementId, intent);
-          console.log(elementId, intent);
         });
       } catch (err) {
         console.error(err);
@@ -98,7 +87,7 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, colorOptions, height, navigated, width]);
+  }, [bpmnString, colorOptions, navigated]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {
@@ -106,7 +95,7 @@ export function BpmnViewer({
     }
     setCurrentZoom(1);
     const canvas = modeler.get("canvas") as {
-      viewbox(): { inner: ViewBoxInner; outer: ViewBoxOuter };
+      viewbox(): { inner: ViewBoxInner };
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
 
