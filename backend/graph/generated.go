@@ -71,7 +71,7 @@ type ComplexityRoot struct {
 		ProcessKey     func(childComplexity int) int
 		StartTime      func(childComplexity int) int
 		Status         func(childComplexity int) int
-		Variables      func(childComplexity int, pagination *model.Pagination) int
+		Variables      func(childComplexity int, pagination *model.Pagination, filter *model.VariableFilter) int
 		Version        func(childComplexity int) int
 	}
 
@@ -146,7 +146,7 @@ type IncidentResolver interface {
 type InstanceResolver interface {
 	Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedIncidents, error)
 	Jobs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedJobs, error)
-	Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedVariables, error)
+	Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination, filter *model.VariableFilter) (*model.PaginatedVariables, error)
 	Process(ctx context.Context, obj *model.Instance) (*model.Process, error)
 }
 type JobResolver interface {
@@ -324,7 +324,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Instance.Variables(childComplexity, args["pagination"].(*model.Pagination)), true
+		return e.complexity.Instance.Variables(childComplexity, args["pagination"].(*model.Pagination), args["filter"].(*model.VariableFilter)), true
 
 	case "Instance.version":
 		if e.complexity.Instance.Version == nil {
@@ -636,6 +636,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputPagination,
+		ec.unmarshalInputVariableFilter,
 	)
 	first := true
 
@@ -779,6 +780,15 @@ func (ec *executionContext) field_Instance_variables_args(ctx context.Context, r
 		}
 	}
 	args["pagination"] = arg0
+	var arg1 *model.VariableFilter
+	if tmp, ok := rawArgs["filter"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
+		arg1, err = ec.unmarshalOVariableFilter2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐVariableFilter(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["filter"] = arg1
 	return args, nil
 }
 
@@ -1757,7 +1767,7 @@ func (ec *executionContext) _Instance_variables(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Variables(rctx, obj, fc.Args["pagination"].(*model.Pagination))
+		return ec.resolvers.Instance().Variables(rctx, obj, fc.Args["pagination"].(*model.Pagination), fc.Args["filter"].(*model.VariableFilter))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5672,8 +5682,6 @@ func (ec *executionContext) unmarshalInputPagination(ctx context.Context, obj in
 		}
 		switch k {
 		case "offset":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
 			data, err := ec.unmarshalNInt2int64(ctx, v)
 			if err != nil {
@@ -5681,14 +5689,46 @@ func (ec *executionContext) unmarshalInputPagination(ctx context.Context, obj in
 			}
 			it.Offset = data
 		case "limit":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
 			data, err := ec.unmarshalNInt2int64(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Limit = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputVariableFilter(ctx context.Context, obj interface{}) (model.VariableFilter, error) {
+	var it model.VariableFilter
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "type"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNFilterType2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐFilterType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
 		}
 	}
 
@@ -7070,6 +7110,16 @@ func (ec *executionContext) marshalNDateTime2string(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) unmarshalNFilterType2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐFilterType(ctx context.Context, v interface{}) (model.FilterType, error) {
+	var res model.FilterType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFilterType2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐFilterType(ctx context.Context, sel ast.SelectionSet, v model.FilterType) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNIncident2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐIncidentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Incident) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -7779,6 +7829,14 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOVariableFilter2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐVariableFilter(ctx context.Context, v interface{}) (*model.VariableFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputVariableFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

@@ -511,7 +511,7 @@ func TestVariablesForInstanceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, test.instanceKey)
+			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, nil, test.instanceKey)
 			assert.NoError(t, err)
 
 			assert.Len(t, variables.Items, len(test.variables))

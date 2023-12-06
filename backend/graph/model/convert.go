@@ -92,6 +92,17 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 	}
 }
 
+func VariableFilterToStorageFilter(filter *VariableFilter) *storage.Filter {
+	if filter == nil {
+		return nil
+	}
+	return &storage.Filter{
+		Input: filter.Name,
+		// Not really ideal solution but it works for now.
+		Type: storage.FilterType(filter.Type.String()),
+	}
+}
+
 // Convert GraphQL pagination to storage pagination. Nil value is preserved.
 func ToStoragePagination(pagination *Pagination) *storage.Pagination {
 	if pagination == nil {
