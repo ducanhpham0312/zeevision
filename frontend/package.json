@@ -63,7 +63,7 @@
     "@typescript-eslint/parser": "^6.13.2",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.16",
-    "cypress": "^13.6.0",
+    "cypress": "^13.6.1",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
