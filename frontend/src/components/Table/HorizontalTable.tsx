@@ -2,7 +2,6 @@ import {
   useState,
   useCallback,
   useEffect,
-  ReactNode,
   MouseEvent,
   ChangeEvent,
 } from "react";
@@ -16,6 +15,7 @@ import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
 import { DataFilter, FilterType } from "./DataFilter";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { NavLink } from "react-router-dom";
 
 export interface HorizontalTableProps {
   header: string[];
@@ -31,6 +31,7 @@ export function HorizontalTable({
   header,
   content,
   alterRowColor,
+  navLinkColumn,
   filterConfig,
   expandElement,
   optionElement,
@@ -42,6 +43,8 @@ export function HorizontalTable({
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [sortedContent, setSortedContent] =
     useState<(string | number)[][]>(content);
+
+  const [copyHelperText, setCopyHelperText] = useState("Copy");
 
   const sortContent = useCallback(
     (
@@ -135,18 +138,31 @@ export function HorizontalTable({
                     }
                     key={rowIdx}
                   >
-                    {row.map((cell, index) => (
-                      <td className="group p-3" key={index}>
+                    {row.map((value, index) => (
+                      <td
+                        className="group p-3"
+                        key={index}
+                        onMouseLeave={() => setCopyHelperText("Copy")}
+                      >
                         <div className="flex items-center gap-2">
-                          <p>
-                            {typeof cell === "string"
-                              ? prettifyJson(cell)
-                              : cell}
-                          </p>
+                          {navLinkColumn && navLinkColumn[header[index]] ? (
+                            <NavLink to={navLinkColumn[header[index]](value)}>
+                              <Button variant="secondary">{value}</Button>
+                            </NavLink>
+                          ) : (
+                            <p>
+                              {typeof value === "string"
+                                ? prettifyJson(value)
+                                : value}
+                            </p>
+                          )}
                           <Button
                             helperTextPos="n"
-                            helperText="Copy"
-                            onClick={() => navigator.clipboard.writeText("abc")}
+                            helperText={copyHelperText}
+                            onClick={() => {
+                              setCopyHelperText("Copied");
+                              navigator.clipboard.writeText(value.toString());
+                            }}
                             className="opacity-0 transition group-hover:opacity-100"
                           >
                             <ContentCopyIcon fontSize="small" />
