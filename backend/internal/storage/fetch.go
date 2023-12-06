@@ -156,6 +156,15 @@ func (f *Fetcher) GetVariablesForInstance(ctx context.Context, pagination *Pagin
 	})
 }
 
+// Gets all audit logs for an instance.
+func (f *Fetcher) GetAuditLogsForInstance(ctx context.Context, pagination *Pagination, instanceKey int64) (Paginated[AuditLog], error) {
+	return paginatedFetch[AuditLog](ctx, f.scopes(func(db *gorm.DB) *gorm.DB {
+		return db.Where(&AuditLog{ProcessInstanceKey: instanceKey})
+	}), pagination, func(db *gorm.DB, auditLogs *[]AuditLog) *gorm.DB {
+		return db.Order("time DESC").Find(auditLogs)
+	})
+}
+
 // Fetches paginated results from the database.
 //
 // `fetcher` should be a Fetcher with the filtering scope already applied to

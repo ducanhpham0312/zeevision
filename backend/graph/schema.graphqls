@@ -54,12 +54,27 @@ type Instance {
   processKey: Int!
   version: Int!
   status: String!
+  auditLogs(pagination: Pagination): PaginatedAuditLogs!
+    @goField(forceResolver: true)
   incidents(pagination: Pagination): PaginatedIncidents!
     @goField(forceResolver: true)
   jobs(pagination: Pagination): PaginatedJobs! @goField(forceResolver: true)
   variables(pagination: Pagination): PaginatedVariables!
     @goField(forceResolver: true)
   process: Process! @goField(forceResolver: true)
+}
+
+type PaginatedAuditLogs {
+  items: [AuditLog!]!
+  totalCount: Int!
+}
+
+type AuditLog {
+  elementId: String!
+  elementType: String!
+  intent: String!
+  position: Int!
+  time: DateTime!
 }
 
 type PaginatedIncidents {
