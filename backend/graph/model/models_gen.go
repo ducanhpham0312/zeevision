@@ -2,6 +2,14 @@
 
 package model
 
+type AuditLog struct {
+	ElementID   string `json:"elementId"`
+	ElementType string `json:"elementType"`
+	Intent      string `json:"intent"`
+	Position    int64  `json:"position"`
+	Time        string `json:"time"`
+}
+
 type Incident struct {
 	IncidentKey  int64     `json:"incidentKey"`
 	InstanceKey  int64     `json:"instanceKey"`
@@ -21,6 +29,7 @@ type Instance struct {
 	ProcessKey     int64               `json:"processKey"`
 	Version        int64               `json:"version"`
 	Status         string              `json:"status"`
+	AuditLogs      *PaginatedAuditLogs `json:"auditLogs"`
 	Incidents      *PaginatedIncidents `json:"incidents"`
 	Jobs           *PaginatedJobs      `json:"jobs"`
 	Variables      *PaginatedVariables `json:"variables"`
@@ -37,6 +46,11 @@ type Job struct {
 	State       string    `json:"state"`
 	Time        string    `json:"time"`
 	Instance    *Instance `json:"instance"`
+}
+
+type PaginatedAuditLogs struct {
+	Items      []*AuditLog `json:"items"`
+	TotalCount int64       `json:"totalCount"`
 }
 
 type PaginatedIncidents struct {
