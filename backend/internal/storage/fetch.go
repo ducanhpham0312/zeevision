@@ -41,6 +41,8 @@ type Filter struct {
 
 // FilterFunctor returns a function that can be used to filter a query.
 // This can be called even if the filter is nil.
+//
+// NOTE: It is unsafe to use user provided input directly as the field name.
 func (f *Filter) FilterFunctor(field string) func(*gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if f == nil {
