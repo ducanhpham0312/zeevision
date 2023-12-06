@@ -11,6 +11,19 @@ VALUES(12, 209384, 2, 'COMPLETED', '2023-11-27T02:05:00Z', '2023-11-27T03:00:00Z
 INSERT INTO instances(process_instance_key, process_definition_key, version, status, start_time, end_time)
 VALUES(13, 209384, 3, 'COMPLETED', '2023-11-27T02:40:00Z', '2023-11-27T02:42:00Z');
 
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(1, 11, 'StartEvent_1', 'START_EVENT', 'ELEMENT_ACTIVATING', '2023-11-27T02:45:00Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(2, 11, 'StartEvent_1', 'START_EVENT', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:01Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(3, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATING', '2023-11-27T02:45:02Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(4, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:03Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(5, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_COMPLETING', '2023-11-27T02:45:04Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(6, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_COMPLETED', '2023-11-27T02:45:05Z');
+
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'a', '1', '2023-11-27T02:05:00Z');
 INSERT INTO variables(process_instance_key, name, value, time)

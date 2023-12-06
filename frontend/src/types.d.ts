@@ -4,13 +4,23 @@ declare module "*.bpmn" {
   export default content;
 }
 
+type ProcessResult = {
+  totalCount: number;
+  items: ProcessType[];
+};
+
 type ProcessType = {
   processKey: number;
   deploymentTime: string;
   bpmnProcessId: string;
   bpmnResource: string;
   version: number;
-  instances: Instance[];
+  instances: InstanceResult;
+};
+
+type InstanceResult = {
+  totalCount: number;
+  items: Instance[];
 };
 
 // name colision, cannot name this to InstanceType
@@ -24,15 +34,25 @@ type Instance = {
   process: ProcessType;
   bpmnResource: string;
   bpmnProcessId: string;
-  variables: VariableType[];
-  jobs: JobType[];
-  incidents: IncidentType[];
+  variables: VariableResult;
+  jobs: JobResult;
+  incidents: IncidentResults;
+};
+
+type VariableResult = {
+  totalCount: number;
+  items: VariableType[];
 };
 
 type VariableType = {
   name: string;
   value: string;
   time: string;
+};
+
+type JobResult = {
+  totalCount: number;
+  items: JobType[];
 };
 
 type JobType = {
@@ -44,6 +64,11 @@ type JobType = {
   worker: string;
   state: string;
   time: string;
+};
+
+type IncidentResult = {
+  totalCount: number;
+  items: IncidentType[];
 };
 
 type IncidentType = {
