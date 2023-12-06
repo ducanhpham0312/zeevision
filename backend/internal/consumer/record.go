@@ -28,6 +28,8 @@ const (
 	// Also known as abstract task.
 	BpmnElementTypeUndefinedTask BpmnElementType = "UNDEFINED_TASK"
 	BpmnElementTypeUserTask      BpmnElementType = "USER_TASK"
+
+	BpmnElementTypeProcess BpmnElementType = "PROCESS"
 )
 
 // Intent indicates the intent of the record.

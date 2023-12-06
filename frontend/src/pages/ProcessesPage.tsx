@@ -19,7 +19,7 @@ export default function ProcessesPage() {
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
       />
-      <div className="flex flex-col gap-10">
+      <div className="flex h-full flex-col gap-10 overflow-auto">
         <div className="flex items-center justify-between">
           <h1>PROCESSES</h1>
           <Button onClick={handleOpen} variant="secondary">
@@ -28,24 +28,25 @@ export default function ProcessesPage() {
         </div>
         <Table
           alterRowColor
-          header={["Process Key", "Process ID", "Deployment Time"]}
+          header={["Process Key", "Process ID", "Version", "Deployment Time"]}
           orientation="horizontal"
           expandElement={(idx: number) => (
             <div className="flex flex-col gap-4 p-4">
               <p>Process Details:</p>
               <div>
                 <Table
+                  alterRowColor={false}
                   orientation="horizontal"
                   header={["Instance Key", "Status", "Version", "Start Time"]}
                   optionElement={() => <></>}
                   content={
                     processes[idx].instances
-                      ? processes[idx].instances.map(
+                      ? processes[idx].instances.items.map(
                           ({ instanceKey, status, version, startTime }) => [
                             <NavLink
                               to={`/instances/${instanceKey.toString()}`}
                             >
-                              {instanceKey}
+                              <Button variant="secondary">{instanceKey}</Button>
                             </NavLink>,
                             status,
                             version,
@@ -61,9 +62,12 @@ export default function ProcessesPage() {
           content={
             processes
               ? processes.map(
-                  ({ processKey, bpmnProcessId, deploymentTime }) => [
-                    <NavLink to={processKey.toString()}>{processKey}</NavLink>,
+                  ({ processKey, bpmnProcessId, version, deploymentTime }) => [
+                    <NavLink to={processKey.toString()}>
+                      <Button variant="secondary">{processKey}</Button>
+                    </NavLink>,
                     bpmnProcessId,
+                    version,
                     deploymentTime,
                   ],
                 )

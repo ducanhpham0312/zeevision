@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
@@ -28,12 +27,6 @@ func FromStorageBpmnResource(bpmnResource storage.BpmnResource) string {
 
 // Convert storage instance to GraphQL instance.
 func FromStorageInstance(instance storage.Instance) *Instance {
-	var status Status
-	if err := status.UnmarshalGQL(instance.Status); err != nil {
-		// Panic will be caught by the GraphQL server as internal server error.
-		panic(fmt.Errorf("unmarshal storage instance: %w", err))
-	}
-
 	return &Instance{
 		BpmnLiveStatus: "", // TODO
 		StartTime:      formatTime(instance.StartTime),
@@ -41,7 +34,7 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 		InstanceKey:    instance.ProcessInstanceKey,
 		ProcessKey:     instance.ProcessDefinitionKey,
 		Version:        instance.Version,
-		Status:         status,
+		Status:         instance.Status,
 		// Variables and Process have their own resolvers and are not populated
 		// here.
 	}
@@ -62,16 +55,31 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage incident to GraphQL incident.
+func FromStorageIncident(incident storage.Incident) *Incident {
+	return &Incident{
+		IncidentKey:  incident.Key,
+		InstanceKey:  incident.ProcessInstanceKey,
+		ElementID:    incident.ElementID,
+		ErrorType:    incident.ErrorType,
+		ErrorMessage: incident.ErrorMessage,
+		State:        incident.State,
+		Time:         formatTime(incident.Time),
+		// Instance is populated by the Instance resolver.
+	}
+}
+
 // Convert storage job to GraphQL job.
 func FromStorageJob(job storage.Job) *Job {
 	return &Job{
-		ElementID: job.ElementID,
-		Key:       job.Key,
-		Type:      job.Type,
-		Retries:   job.Retries,
-		Worker:    job.Worker,
-		State:     job.State,
-		Time:      formatTime(job.Time),
+		ElementID:   job.ElementID,
+		InstanceKey: job.ProcessInstanceKey,
+		Key:         job.Key,
+		Type:        job.Type,
+		Retries:     job.Retries,
+		Worker:      job.Worker,
+		State:       job.State,
+		Time:        formatTime(job.Time),
 	}
 }
 
@@ -81,6 +89,17 @@ func FromStorageVariable(variable storage.Variable) *Variable {
 		Name:  variable.Name,
 		Value: variable.Value,
 		Time:  formatTime(variable.Time),
+	}
+}
+
+// Convert GraphQL pagination to storage pagination. Nil value is preserved.
+func ToStoragePagination(pagination *Pagination) *storage.Pagination {
+	if pagination == nil {
+		return nil
+	}
+	return &storage.Pagination{
+		Limit:  int(pagination.Limit),
+		Offset: int(pagination.Offset),
 	}
 }
 

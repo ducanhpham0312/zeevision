@@ -1,0 +1,10 @@
+{
+  "primary": {
+    "bpmnString": "test-bpmn-xml-string",
+    "navigated": true
+  },
+  "secondary": {
+    "bpmnString": "test-bpmn-xml-string",
+    "navigated": false
+  }
+}

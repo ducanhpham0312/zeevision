@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BpmnViewer Component correctly render the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="relative h-full w-full select-none"
+    data-testid="canvas"
+    id="canvas"
+  />
+</DocumentFragment>
+`;
