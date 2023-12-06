@@ -37,6 +37,12 @@ type ViewBoxInner = {
   height: number;
 };
 
+type ViewBoxOuter = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 export function BpmnViewer({
   bpmnString,
   width,
@@ -58,9 +64,13 @@ export function BpmnViewer({
     const modeler = navigated
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
+          width: width,
+          height: height,
         })
       : new Viewer({
           container: containerRef.current as HTMLDivElement,
+          width: width,
+          height: height,
         });
 
     async function openDiagram(xmlString: string) {
@@ -79,7 +89,7 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, navigated]);
+  }, [bpmnString, height, navigated, width]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {
@@ -87,9 +97,10 @@ export function BpmnViewer({
     }
     setCurrentZoom(1);
     const canvas = modeler.get("canvas") as {
-      viewbox(): { inner: ViewBoxInner };
+      viewbox(): { inner: ViewBoxInner; outer: ViewBoxOuter };
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
+
     const { inner } = canvas.viewbox();
 
     const center = {
@@ -121,6 +132,7 @@ export function BpmnViewer({
       ref={containerRef}
       className="relative h-full w-full select-none"
       id="canvas"
+      data-testid="canvas"
     >
       {control ? (
         <div className="absolute right-2 top-2 z-50 flex w-10 flex-col gap-2">

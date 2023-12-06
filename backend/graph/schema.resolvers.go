@@ -21,6 +21,19 @@ func (r *incidentResolver) Instance(ctx context.Context, obj *model.Incident) (*
 	return model.FromStorageInstance(dbInstance), nil
 }
 
+// AuditLogs is the resolver for the auditLogs field.
+func (r *instanceResolver) AuditLogs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedAuditLogs, error) {
+	dbAuditLogs, err := r.Fetcher.GetAuditLogsForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch audit logs: %w", err)
+	}
+
+	return &model.PaginatedAuditLogs{
+		Items:      model.Map(dbAuditLogs.Items, model.FromStorageAuditLog),
+		TotalCount: dbAuditLogs.TotalCount,
+	}, nil
+}
+
 // Incidents is the resolver for the incidents field.
 func (r *instanceResolver) Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedIncidents, error) {
 	dbIncidents, err := r.Fetcher.GetIncidentsForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)

@@ -90,6 +90,30 @@ var expectedIncidents = []Incident{
 	},
 }
 
+var expectedAuditLogs = []AuditLog{
+	{
+		ProcessInstanceKey: 10,
+		ElementID:          "element-1",
+		ElementType:        "type-1",
+		Intent:             "intent-1",
+		Position:           1,
+	},
+	{
+		ProcessInstanceKey: 10,
+		ElementID:          "element-2",
+		ElementType:        "type-2",
+		Intent:             "intent-2",
+		Position:           2,
+	},
+	{
+		ProcessInstanceKey: 20,
+		ElementID:          "element-3",
+		ElementType:        "type-3",
+		Intent:             "intent-3",
+		Position:           3,
+	},
+}
+
 var expectedVariables = []Variable{
 	{
 		ProcessInstanceKey: 10,
@@ -635,6 +659,55 @@ func TestFilterVariableName(t *testing.T) {
 			assert.Len(t, variables.Items, len(test.variables))
 			for i := range variables.Items {
 				assert.Equal(t, test.variables[i], variables.Items[i])
+			}
+		})
+	}
+}
+
+func TestAuditLogsForInstanceQuery(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	fetcher := NewFetcher(db)
+
+	err := db.Create(expectedAuditLogs).Error
+	assert.NoError(t, err)
+
+	tests := []struct {
+		name        string
+		instanceKey int64
+		auditLogs   []AuditLog
+	}{
+		{
+			name:        "instance with two audit logs",
+			instanceKey: expectedAuditLogs[0].ProcessInstanceKey,
+			auditLogs:   expectedAuditLogs[:2],
+		},
+		{
+			name:        "instance with one audit log",
+			instanceKey: expectedAuditLogs[2].ProcessInstanceKey,
+			auditLogs:   expectedAuditLogs[2:],
+		},
+		{
+			name:        "instance with no audit logs",
+			instanceKey: 30,
+			auditLogs:   []AuditLog{},
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			auditLogs, err := fetcher.GetAuditLogsForInstance(context.Background(), nil, test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, auditLogs.Items, len(test.auditLogs))
+			for i := range auditLogs.Items {
+				assert.Equal(t, test.auditLogs[i], auditLogs.Items[i])
 			}
 		})
 	}

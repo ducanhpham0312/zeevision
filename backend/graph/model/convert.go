@@ -55,6 +55,17 @@ func FromStorageProcess(process storage.Process) *Process {
 	}
 }
 
+// Convert storage audit log to GraphQL audit log.
+func FromStorageAuditLog(auditLog storage.AuditLog) *AuditLog {
+	return &AuditLog{
+		ElementID:   auditLog.ElementID,
+		ElementType: auditLog.ElementType,
+		Intent:      auditLog.Intent,
+		Position:    auditLog.Position,
+		Time:        formatTime(auditLog.Time),
+	}
+}
+
 // Convert storage incident to GraphQL incident.
 func FromStorageIncident(incident storage.Incident) *Incident {
 	return &Incident{
