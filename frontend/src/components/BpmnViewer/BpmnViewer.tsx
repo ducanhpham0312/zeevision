@@ -33,7 +33,7 @@ interface BpmnViewerProps {
   /**
    * List of bpmn element's intent for coloring BPMN diagram
    */
-  colorOptions?: { elementId: string; intent: string; }[]
+  colorOptions?: { elementId: string; intent: string }[];
 }
 
 type ViewBoxInner = {
@@ -85,9 +85,9 @@ export function BpmnViewer({
         await modeler.importXML(xmlString);
 
         colorOptions?.forEach(({ elementId, intent }) => {
-          setBpmnMarker(modeler, elementId, intent)
-          console.log(elementId, intent)
-        })
+          setBpmnMarker(modeler, elementId, intent);
+          console.log(elementId, intent);
+        });
       } catch (err) {
         console.error(err);
       }
@@ -128,22 +128,26 @@ export function BpmnViewer({
     (modeler.get("canvas") as any).zoom(zoom);
   };
 
-  const setBpmnMarker = (modeler: Viewer, elementId: string, intent: string ) => {
+  const setBpmnMarker = (
+    modeler: Viewer,
+    elementId: string,
+    intent: string,
+  ) => {
     const canvas = modeler.get("canvas") as any;
     switch (intent) {
-      case "ELEMENT_ACTIVATING":
-        canvas.addMarker(elementId, "activating");
-        break
-      case "ELEMENT_ACTIVATED":
+      case "ELEMENT_ACTIVATING" || "ELEMENT_ACTIVATED":
         canvas.addMarker(elementId, "activated");
-        break
-      case "ELEMENT_COMPLETED":
+        break;
+      case "ELEMENT_COMPLETING" || "ELEMENT_COMPLETED":
         canvas.addMarker(elementId, "completed");
-        break
+        break;
+      case "ELEMENT_TERMINATING" || "ELEMENT_TERMINATED":
+        canvas.addMarker(elementId, "terminated");
+        break;
       case "SEQUENCE_FLOW_TAKEN":
         canvas.addMarker(elementId, "flow_taken");
     }
-  }
+  };
 
   useEffect(() => {
     if (width && width < 400) {

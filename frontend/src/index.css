@@ -11,16 +11,17 @@
   }
 }
 
-.activating:not(.djs-connection) .djs-visual > :nth-child(1) {
+.activated:not(.djs-connection) .djs-visual > :nth-child(1) {
   color: green !important;
   stroke: green !important;
   fill: green !important;
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
-.activated:not(.djs-connection) .djs-visual > :nth-child(1) {
-  color: yellow !important;
-  stroke: yellow !important;
+.terminated:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: red !important;
+  stroke: red !important;
+  fill: red !important;
   opacity: 0.5;
 }
 

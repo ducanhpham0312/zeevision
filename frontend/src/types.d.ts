@@ -72,9 +72,9 @@ type AuditLogType = {
   intent: string;
   position: number;
   time: string;
-}
+};
 
 type AuditLogResult = {
   totalCount: number;
   items: AuditLogType[];
-}
+};

@@ -25,21 +25,27 @@ export default function SingleInstancesPage() {
     jobs,
     auditLogs,
   } = instance;
-  const getLatestLogs = () : { elementId: string; intent: string; }[] => {
+  const getLatestLogs = (): { elementId: string; intent: string }[] => {
     const latestLogs: Record<string, string> = {};
-    auditLogs?.items.forEach(auditLog => {
-      const { elementId, intent} = auditLog;
-      if (!latestLogs[elementId]) latestLogs[elementId] = intent 
-    })
-    return Object.entries(latestLogs).map(([elementId, intent]) => ({ elementId, intent }));
-  }
+    auditLogs?.items.forEach((auditLog) => {
+      const { elementId, intent } = auditLog;
+      if (!latestLogs[elementId]) latestLogs[elementId] = intent;
+    });
+    return Object.entries(latestLogs).map(([elementId, intent]) => ({
+      elementId,
+      intent,
+    }));
+  };
   const tabsData = [
     {
       label: "Variables",
       content: <VariablesTable variables={variables?.items} />,
     },
     { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
-    { label: "Audit Logs", content: <AuditLogsTable auditLogs={auditLogs?.items} /> },
+    {
+      label: "Audit Logs",
+      content: <AuditLogsTable auditLogs={auditLogs?.items} />,
+    },
   ];
   return (
     <div className="flex h-full w-full flex-col">
@@ -177,13 +183,7 @@ function AuditLogsTable({ auditLogs }: AuditLogListProps) {
     <Table
       alterRowColor
       orientation="horizontal"
-      header={[
-        "Element ID",
-        "Element Type",
-        "Intent",
-        "Position",
-        "Time",
-      ]}
+      header={["Element ID", "Element Type", "Intent", "Position", "Time"]}
       content={
         auditLogs
           ? auditLogs.map(
