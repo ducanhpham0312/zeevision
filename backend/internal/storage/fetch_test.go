@@ -114,6 +114,29 @@ var expectedAuditLogs = []AuditLog{
 	},
 }
 
+var expectedVariables = []Variable{
+	{
+		ProcessInstanceKey: 10,
+		Name:               "name-1",
+		Value:              "value-1",
+	},
+	{
+		ProcessInstanceKey: 10,
+		Name:               "name-2",
+		Value:              "value-2",
+	},
+	{
+		ProcessInstanceKey: 10,
+		Name:               "name-3",
+		Value:              "value-3",
+	},
+	{
+		ProcessInstanceKey: 20,
+		Name:               "name-4",
+		Value:              "value-4",
+	},
+}
+
 func TestBpmnResourceQuery(t *testing.T) {
 	testDb := newMigratedTestDB(t)
 	defer func() {
@@ -535,7 +558,102 @@ func TestVariablesForInstanceQuery(t *testing.T) {
 		// Capture range variable.
 		test := test
 		t.Run(test.name, func(t *testing.T) {
-			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, test.instanceKey)
+			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, nil, test.instanceKey)
+			assert.NoError(t, err)
+
+			assert.Len(t, variables.Items, len(test.variables))
+			for i := range variables.Items {
+				assert.Equal(t, test.variables[i], variables.Items[i])
+			}
+		})
+	}
+}
+
+func TestFilterVariableName(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+
+	err := db.Create(expectedVariables).Error
+	assert.NoError(t, err)
+
+	fetcher := NewFetcher(db)
+
+	tests := []struct {
+		name      string
+		filter    *Filter
+		variables []Variable
+	}{
+		{
+			name: "is filter",
+			filter: &Filter{
+				Input: "name-1",
+				Type:  FilterTypeIs,
+			},
+			variables: expectedVariables[:1],
+		},
+		{
+			name: "is filter no items",
+			filter: &Filter{
+				Input: "name-4",
+				Type:  FilterTypeIs,
+			},
+			variables: []Variable{},
+		},
+		{
+			name: "is not filter",
+			filter: &Filter{
+				Input: "name-1",
+				Type:  FilterTypeIsNot,
+			},
+			variables: expectedVariables[1:3],
+		},
+		{
+			name: "is not filter no items",
+			filter: &Filter{
+				Input: "name",
+				Type:  FilterTypeIsNot,
+			},
+			variables: expectedVariables[:3],
+		},
+		{
+			name: "contains filter",
+			filter: &Filter{
+				Input: "name",
+				Type:  FilterTypeContains,
+			},
+			variables: expectedVariables[:3],
+		},
+		{
+			name: "contains filter single item",
+			filter: &Filter{
+				Input: "2",
+				Type:  FilterTypeContains,
+			},
+			variables: expectedVariables[1:2],
+		},
+		{
+			name: "contains filter no items",
+			filter: &Filter{
+				Input: "4",
+				Type:  FilterTypeContains,
+			},
+			variables: []Variable{},
+		},
+		{
+			name:      "nil filter",
+			filter:    nil,
+			variables: expectedVariables[:3],
+		},
+	}
+
+	for _, test := range tests {
+		// Capture range variable.
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			variables, err := fetcher.GetVariablesForInstance(context.Background(), nil, test.filter, 10)
 			assert.NoError(t, err)
 
 			assert.Len(t, variables.Items, len(test.variables))
