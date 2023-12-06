@@ -58,7 +58,7 @@ export default function SingleProcessPage() {
             header={["Instance Key", "Status", "Version", "Start Time"]}
             content={
               instances
-                ? instances.map(
+                ? instances.items.map(
                     ({ instanceKey, version, status, startTime }) => [
                       <NavLink to={`/instances/${instanceKey.toString()}`}>
                         <Button variant="secondary">{instanceKey}</Button>
