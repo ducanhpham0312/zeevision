@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
+import { twMerge } from "tailwind-merge";
 
 export interface TableProps {
   /**
@@ -16,17 +18,30 @@ export interface TableProps {
    * List of all content of the table. Each list member represents one row in horizontal
    * or one column in vertical orientation
    */
-  content: (string | number)[][];
+  content: (string | number | ReactNode)[][];
+
+  expandElement?: (idx: number) => ReactNode;
+  optionElement?: (idx: number) => ReactNode;
+
+  alterRowColor?: boolean;
+  className?: string;
 }
 
-export function Table({ orientation, header, content }: TableProps) {
-  if (header.length === 0) return null;
+export function Table({
+  orientation,
+  className,
+  alterRowColor = true,
+  ...props
+}: TableProps) {
+  if (props.header.length === 0) return null;
   return (
-    <table className="w-full border-collapse rounded border border-black/10">
+    <table
+      className={twMerge("w-full border-collapse rounded bg-white", className)}
+    >
       {orientation === "horizontal" ? (
-        <HorizontalTable header={header} content={content} />
+        <HorizontalTable alterRowColor={alterRowColor} {...props} />
       ) : (
-        <VerticalTable header={header} content={content} />
+        <VerticalTable {...props} />
       )}
     </table>
   );

@@ -1,76 +1,78 @@
 import { Table } from "../components/Table";
-import { gql, useQuery } from "@apollo/client";
-import { useParams } from "react-router-dom";
-import { BpmnViewer } from "../components/BpmnViewer";
-import { queryPollIntervalMs } from "../utils/constants";
+import { NavLink, useParams } from "react-router-dom";
+import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
+import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
+import { ResizableContainer } from "../components/ResizableContainer";
+import { Button } from "../components/Button";
 
-export default function ProcessesPage() {
+export default function SingleProcessPage() {
   const params = useParams();
-  const PROCESS = gql`
-    query SingleProcess {
-      process(processKey: ${params.id}) {
-        processId
-        processKey
-        version
-        deploymentTime
-        bpmnResource
-        instances {
-          instanceKey
-          status
-          startTime
-        }
-      }
-    }
-  `;
-  const { data } = useQuery(PROCESS, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { process } = useQueryProcessData(params.id || "");
+
   const {
     processKey,
-    processId,
+    bpmnProcessId,
     version,
     deploymentTime,
     bpmnResource,
     instances,
-  } = data ? data.process : [];
-  const decodedBpmn = atob(data ? bpmnResource : "");
+  } = process;
 
   return (
-    <div className="m-[40px]">
-      <div className="mb-[40px] flex">
-        <Table
-          orientation="vertical"
-          header={[
-            "Process Key",
-            "BPMN Process ID",
-            "Version",
-            "Deployment Time",
-          ]}
-          content={
-            data ? [[processKey, processId, version, deploymentTime]] : []
-          }
-        />
-        <BpmnViewer bpmnString={decodedBpmn} />
+    <div className="flex h-full w-full flex-col gap-3">
+      <ResizableContainer direction="vertical">
+        <div className="flex h-full">
+          <ResizableContainer direction="horizontal">
+            <div className="w-full overflow-hidden">
+              <div className="min-w-[400px] pr-3">
+                <Table
+                  orientation="vertical"
+                  header={[
+                    "Process Key",
+                    "BPMN Process ID",
+                    "Version",
+                    "Deployment Time",
+                  ]}
+                  content={
+                    process
+                      ? [[processKey, bpmnProcessId, version, deploymentTime]]
+                      : []
+                  }
+                />
+              </div>
+            </div>
+          </ResizableContainer>
+          <ResponsiveBpmnViewer
+            control
+            navigated
+            className="h-full flex-grow overflow-hidden"
+            bpmnString={bpmnResource}
+          />
+        </div>
+      </ResizableContainer>
+      <div className="relative flex-grow overflow-auto">
+        <div className="absolute h-full w-full">
+          <Table
+            alterRowColor
+            orientation="horizontal"
+            header={["Instance Key", "Status", "Version", "Start Time"]}
+            content={
+              instances
+                ? instances.items.map(
+                    ({ instanceKey, version, status, startTime }) => [
+                      <NavLink to={`/instances/${instanceKey.toString()}`}>
+                        <Button variant="secondary">{instanceKey}</Button>
+                      </NavLink>,
+                      status,
+                      version,
+                      startTime,
+                    ],
+                  )
+                : []
+            }
+          />
+        </div>
       </div>
-      <Table
-        orientation="horizontal"
-        header={["Instance Key", "Version", "Start Time"]}
-        content={
-          instances
-            ? instances.map(
-                ({
-                  instanceKey,
-                  status,
-                  startTime,
-                }: {
-                  instanceKey: number;
-                  status: string;
-                  startTime: string;
-                }) => [instanceKey, status, startTime],
-              )
-            : []
-        }
-      />
     </div>
   );
 }

@@ -8,21 +8,21 @@ import (
 	"gorm.io/gorm"
 )
 
-// Configuration to connect to database
+// Configuration to connect to database.
 type DsnConfig struct {
-	// Username used to log in to the database
+	// Username used to log in to the database.
 	User string
-	// Password of the logging in user
+	// Password of the logging in user.
 	Password string
-	// Database name to be accessed
+	// Database name to be accessed.
 	DatabaseName string
-	// The host used to host the database
+	// The host used to host the database.
 	Host string
-	// The port used to connect to the database
+	// The port used to connect to the database.
 	Port uint16
 }
 
-// Create a valid DSN string to connect database from DsnConfig
+// Create a valid DSN string to connect database from DsnConfig.
 func (config *DsnConfig) String() string {
 	dsn := fmt.Sprintf(
 		"user=%s password=%s dbname=%s host=%s port=%d",
@@ -31,7 +31,18 @@ func (config *DsnConfig) String() string {
 	return dsn
 }
 
-// Connect to database by DsnConfig
+func createGormConfig() *gorm.Config {
+	// Create config that disables foreign key constraint auto-creation on
+	// migration. We need this to avoid those constraints being hit when we
+	// get incidents or variables coming in before the corresponding
+	// instances do. This means that we'll possibly lose out on performance
+	// advantages, but it's worth it to avoid the retry issue
+	return &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	}
+}
+
+// Connect to database by DsnConfig.
 func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*gorm.DB, error) {
 	dsn := dsnConfig.String()
 
@@ -39,7 +50,7 @@ func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*
 	var err error
 
 	for attempt := 1; attempt <= maxRetries; attempt++ {
-		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		db, err = gorm.Open(postgres.Open(dsn), createGormConfig())
 		if err == nil {
 			return db, nil
 		}
@@ -48,11 +59,10 @@ func ConnectDb(dsnConfig DsnConfig, maxRetries int, retryDelay time.Duration) (*
 	return nil, fmt.Errorf("maximum number of retries reached: %w", err)
 }
 
-// AutoMigrate Process table, create, modify if the table is not existed, changed base on model
-func CreateProcessTable(db *gorm.DB) error {
-	err := db.AutoMigrate(&Process{})
-	if err != nil {
-		return fmt.Errorf("failed to create tables: %w", err)
+// Migrate all tables in database automatically.
+func AutoMigrate(db *gorm.DB) error {
+	if err := db.AutoMigrate(TableMigrations...); err != nil {
+		return fmt.Errorf("failed to migrate tables: %w", err)
 	}
 
 	return nil

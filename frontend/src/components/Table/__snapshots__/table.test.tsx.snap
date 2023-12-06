@@ -1,97 +1,157 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Table Component renders horizontal table correctly 1`] = `
+exports[`HorizontalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
-    class="w-full border-collapse rounded border border-black/10"
+    class="w-full border-collapse rounded bg-white"
   >
     <thead
-      class="border-b border-black/10 bg-second-accent font-bold text-text"
+      class="border-b-2 border-accent font-bold text-text"
     >
       <tr>
         <th
-          class="cursor-pointer p-3 text-left"
+          class="cursor-pointer py-1 text-left"
         >
-          <div
-            class="flex justify-between"
+          <button
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
-            <p>
-              Element ID
-            </p>
-            <span
-              class="w-10 text-right"
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
             />
-          </div>
+            <span>
+              <div
+                class="relative flex justify-between pr-5"
+              >
+                <p>
+                  Element ID
+                </p>
+                <div
+                  class="absolute right-0"
+                />
+              </div>
+            </span>
+          </button>
         </th>
         <th
-          class="cursor-pointer p-3 text-left"
+          class="cursor-pointer py-1 text-left"
         >
-          <div
-            class="flex justify-between"
+          <button
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
-            <p>
-              Variable name
-            </p>
-            <span
-              class="w-10 text-right"
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
             />
-          </div>
+            <span>
+              <div
+                class="relative flex justify-between pr-5"
+              >
+                <p>
+                  Variable name
+                </p>
+                <div
+                  class="absolute right-0"
+                />
+              </div>
+            </span>
+          </button>
         </th>
         <th
-          class="cursor-pointer p-3 text-left"
+          class="cursor-pointer py-1 text-left"
         >
-          <div
-            class="flex justify-between"
+          <button
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
-            <p>
-              Variable value
-            </p>
-            <span
-              class="w-10 text-right"
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
             />
-          </div>
+            <span>
+              <div
+                class="relative flex justify-between pr-5"
+              >
+                <p>
+                  Variable Value
+                </p>
+                <div
+                  class="absolute right-0"
+                />
+              </div>
+            </span>
+          </button>
         </th>
         <th
-          class="cursor-pointer p-3 text-left"
+          class="cursor-pointer py-1 text-left"
         >
-          <div
-            class="flex justify-between"
+          <button
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
-            <p>
-              Flow Scope Key
-            </p>
-            <span
-              class="w-10 text-right"
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
             />
-          </div>
+            <span>
+              <div
+                class="relative flex justify-between pr-5"
+              >
+                <p>
+                  Flow Scope Key
+                </p>
+                <div
+                  class="absolute right-0"
+                />
+              </div>
+            </span>
+          </button>
         </th>
         <th
-          class="cursor-pointer p-3 text-left"
+          class="cursor-pointer py-1 text-left"
         >
-          <div
-            class="flex justify-between"
+          <button
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
-            <p>
-              Time created
-            </p>
-            <span
-              class="w-10 text-right"
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
             />
-          </div>
+            <span>
+              <div
+                class="relative flex justify-between pr-5"
+              >
+                <p>
+                  Time created
+                </p>
+                <div
+                  class="absolute right-0"
+                />
+              </div>
+            </span>
+          </button>
         </th>
         <th
-          class="cursor-pointer p-3 text-left"
+          class="cursor-pointer py-1 text-left"
         >
-          <div
-            class="flex justify-between"
+          <button
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
-            <p>
-              Option
-            </p>
-            <span
-              class="w-10 text-right"
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
             />
-          </div>
+            <span>
+              <div
+                class="relative flex justify-between pr-5"
+              >
+                <p>
+                  Option
+                </p>
+                <div
+                  class="absolute right-0"
+                />
+              </div>
+            </span>
+          </button>
         </th>
       </tr>
     </thead>
@@ -99,256 +159,26 @@ exports[`Table Component renders horizontal table correctly 1`] = `
       aria-label="custom pagination table"
     >
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            sixth-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            amp
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            integer
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984642
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667164
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
         class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
         >
-          <pre>
-            new-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            kmean
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            newValue
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984100
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667542
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            another-multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            anotherVariable
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            string
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984432
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667333
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
+          <p>
             multi-instance-process
-          </pre>
+          </p>
         </td>
         <td
           class="p-3"
         >
-          <pre>
-            total
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            200
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984108
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667765
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            isValid
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            true
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            2251799813984108
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            1696667765
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
-            Show History
-          </pre>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
-      >
-        <td
-          class="p-3"
-        >
-          <pre>
-            multi-instance-process
-          </pre>
-        </td>
-        <td
-          class="p-3"
-        >
-          <pre>
+          <p>
             items
-          </pre>
+          </p>
         </td>
         <td
           class="p-3"
         >
-          <pre>
+          <p>
             [
   {
     "id": 1,
@@ -363,28 +193,455 @@ exports[`Table Component renders horizontal table correctly 1`] = `
     "inStock": 10
   }
 ]
-          </pre>
+          </p>
         </td>
         <td
           class="p-3"
         >
-          <pre>
+          <p>
             2251799813984108
-          </pre>
+          </p>
         </td>
         <td
           class="p-3"
         >
-          <pre>
+          <p>
             1696667765
-          </pre>
+          </p>
         </td>
         <td
           class="p-3"
         >
-          <pre>
+          <p>
             Show History
-          </pre>
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            isValid
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            true
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            total
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            200
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            another-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            anotherVariable
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            string
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984432
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667333
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            new-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            kmean
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            newValue
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984100
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667542
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            sixth-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            amp
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            integer
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984642
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667164
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            items
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            [
+  {
+    "id": 1,
+    "value": 10,
+    "inCart": 10,
+    "inStock": 20
+  },
+  {
+    "id": 2,
+    "value": 20,
+    "inCart": 2,
+    "inStock": 10
+  }
+]
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            isValid
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            true
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            total
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            200
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984108
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667765
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 hover:bg-second-accent/10"
+      >
+        <td
+          class="p-3"
+        >
+          <p>
+            another-multi-instance-process
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            anotherVariable
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            string
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            2251799813984432
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            1696667333
+          </p>
+        </td>
+        <td
+          class="p-3"
+        >
+          <p>
+            Show History
+          </p>
         </td>
       </tr>
     </tbody>
@@ -458,7 +715,7 @@ exports[`Table Component renders horizontal table correctly 1`] = `
             <p
               class="MuiTablePagination-displayedRows"
             >
-              1–6 of 6
+              1–10 of 12
             </p>
             <div
               class="MuiTablePagination-actions"
@@ -483,7 +740,6 @@ exports[`Table Component renders horizontal table correctly 1`] = `
               </button>
               <button
                 aria-label="Go to next page"
-                disabled=""
                 title="Go to next page"
               >
                 <span>
@@ -492,7 +748,6 @@ exports[`Table Component renders horizontal table correctly 1`] = `
               </button>
               <button
                 aria-label="Go to last page"
-                disabled=""
                 title="Go to last page"
               >
                 <span>
@@ -508,10 +763,10 @@ exports[`Table Component renders horizontal table correctly 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Table Component renders vertical table correctly 1`] = `
+exports[`VerticalTable Component renders correctly 1`] = `
 <DocumentFragment>
   <table
-    class="w-full border-collapse rounded border border-black/10"
+    class="w-full border-collapse rounded bg-white"
   >
     <tbody>
       <tr

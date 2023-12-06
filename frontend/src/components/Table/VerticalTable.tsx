@@ -1,10 +1,12 @@
+import { ReactNode } from "react";
+
 export interface VerticalTableProps {
   header: string[];
-  content: (string | number)[][];
+  content: (string | number | ReactNode)[][];
 }
 
 export function VerticalTable({ header, content }: VerticalTableProps) {
-  if (!content || content.length === 0) return null;
+  if (content.length < 1) return null;
   return (
     <tbody>
       {header.map((title, idx) => (

@@ -9,6 +9,7 @@ export interface ButtonProps
   children?: React.ReactNode;
   active?: boolean;
   label?: string;
+  helperText?: string;
 }
 
 export function Button({
@@ -20,6 +21,7 @@ export function Button({
   size,
   fullWidth,
   label,
+  helperText,
   ...props
 }: ButtonProps) {
   return (
@@ -31,6 +33,11 @@ export function Button({
       )}
       style={{ width: `${width}px` }}
     >
+      {helperText ? (
+        <div className="absolute -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%] scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100">
+          <p className="whitespace-nowrap text-sm">{helperText}</p>
+        </div>
+      ) : null}
       <div
         className={`transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100`}
         style={{ height: active ? "4px" : "0px" }}
@@ -41,7 +48,7 @@ export function Button({
 }
 
 const buttonVariant = tv({
-  base: "relative box-border text-accent hover:bg-hover active:bg-active rounded",
+  base: "group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded",
   variants: {
     variant: {
       primary: "text-white bg-accent hover:bg-accent/90 active:bg-accent/80",

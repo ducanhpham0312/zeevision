@@ -1,67 +1,80 @@
+import { useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
-import { useUIStore } from "../contexts/useUIStore";
-import { gql, useQuery } from "@apollo/client";
 import { NavLink } from "react-router-dom";
-import { queryPollIntervalMs } from "../utils/constants";
+import { DeployProcessPopup } from "../components/DeployProcessPopup";
+import { useQueryProcesses } from "../hooks/useQueryProcesses";
 
 export default function ProcessesPage() {
-  const PROCESSES = gql`
-    query Processes {
-      processes {
-        processId
-        processKey
-        deploymentTime
-      }
-    }
-  `;
-  const { data } = useQuery(PROCESSES, {
-    pollInterval: queryPollIntervalMs,
-  });
+  const { processes } = useQueryProcesses();
 
-  const { setSnackbarContent } = useUIStore();
-
-  const handleClick = (type: "success" | "error") => {
-    setSnackbarContent({
-      title: "This is a test",
-      message: "Everything was sent to the desired address.",
-      type,
-    });
-  };
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const handleOpen = () => setIsPopUpOpen(true);
+  const handleClose = () => setIsPopUpOpen(false);
 
   return (
     <>
-      <h1>ProcessesPage</h1>
-      <Button variant="primary" onClick={() => handleClick("success")}>
-        Test success snackbar
-      </Button>
-      <Button variant="secondary" onClick={() => handleClick("error")}>
-        Test error snackbar
-      </Button>
-
-      <Table
-        header={["Process Key", "Process ID", "Deployment Time"]}
-        orientation="horizontal"
-        content={
-          data
-            ? data.processes.map(
-                ({
-                  processKey,
-                  processId,
-                  deploymentTime,
-                }: {
-                  processKey: number;
-                  processId: number;
-                  deploymentTime: string;
-                }) => [
-                  <NavLink to={processKey.toString()}>{processKey}</NavLink>,
-                  processId,
-                  deploymentTime,
-                ],
-              )
-            : []
-        }
+      <DeployProcessPopup
+        isPopUpOpen={isPopUpOpen}
+        onOpenPopUp={handleOpen}
+        onClosePopUp={handleClose}
       />
+      <div className="flex h-full flex-col gap-10 overflow-auto">
+        <div className="flex items-center justify-between">
+          <h1>PROCESSES</h1>
+          <Button onClick={handleOpen} variant="secondary">
+            Deploy a Process
+          </Button>
+        </div>
+        <Table
+          alterRowColor
+          header={["Process Key", "Process ID", "Version", "Deployment Time"]}
+          orientation="horizontal"
+          expandElement={(idx: number) => (
+            <div className="flex flex-col gap-4 p-4">
+              <p>Process Details:</p>
+              <div>
+                <Table
+                  alterRowColor={false}
+                  orientation="horizontal"
+                  header={["Instance Key", "Status", "Version", "Start Time"]}
+                  optionElement={() => <></>}
+                  content={
+                    processes[idx].instances
+                      ? processes[idx].instances.items.map(
+                          ({ instanceKey, status, version, startTime }) => [
+                            <NavLink
+                              to={`/instances/${instanceKey.toString()}`}
+                            >
+                              <Button variant="secondary">{instanceKey}</Button>
+                            </NavLink>,
+                            status,
+                            version,
+                            startTime,
+                          ],
+                        )
+                      : []
+                  }
+                />
+              </div>
+            </div>
+          )}
+          content={
+            processes
+              ? processes.map(
+                  ({ processKey, bpmnProcessId, version, deploymentTime }) => [
+                    <NavLink to={processKey.toString()}>
+                      <Button variant="secondary">{processKey}</Button>
+                    </NavLink>,
+                    bpmnProcessId,
+                    version,
+                    deploymentTime,
+                  ],
+                )
+              : []
+          }
+        />
+      </div>
     </>
   );
 }

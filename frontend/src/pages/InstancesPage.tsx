@@ -1,20 +1,42 @@
-import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { Table } from "../components/Table";
+import { useQueryInstances } from "../hooks/useQueryInstances";
 import { Button } from "../components/Button";
-import { DeployProcessPopup } from "../components/DeployProcessPopup";
+
 export default function InstancesPage() {
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-  const handleOpen = () => setIsPopUpOpen(true);
-  const handleClose = () => setIsPopUpOpen(false);
+  const { instances } = useQueryInstances();
   return (
-    <>
-      <h1>InstancesPage</h1>
-      {/** Temporary test for open Modal */}
-      <Button onClick={handleOpen}>Deploy a Process</Button>
-      <DeployProcessPopup
-        isPopUpOpen={isPopUpOpen}
-        onOpenPopUp={handleOpen}
-        onClosePopUp={handleClose}
-      />
-    </>
+    <Table
+      alterRowColor
+      orientation="horizontal"
+      header={[
+        "Instance Key",
+        "BPMN Process ID",
+        "Status",
+        "Version",
+        "Start Time",
+      ]}
+      content={
+        instances
+          ? instances.map(
+              ({
+                instanceKey,
+                process: { bpmnProcessId },
+                status,
+                version,
+                startTime,
+              }) => [
+                <NavLink to={instanceKey.toString()}>
+                  <Button variant="secondary">{instanceKey}</Button>
+                </NavLink>,
+                bpmnProcessId,
+                status,
+                version,
+                startTime,
+              ],
+            )
+          : []
+      }
+    />
   );
 }

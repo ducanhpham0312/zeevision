@@ -19,6 +19,35 @@ export default withTV({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`,
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        in: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        out: {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        in: "in 0.2s ease-out",
+        out: "out 0.2s ease-out",
+      },
       colors: {
         hover: PRIMARY[100] + "55",
         active: PRIMARY[100] + "44",
@@ -27,6 +56,7 @@ export default withTV({
         sucess: "#070",
         background: "#fff",
         accent: PRIMARY[900],
+        popover: "white",
         "second-accent": PRIMARY[100] + "55",
       },
       screens: {

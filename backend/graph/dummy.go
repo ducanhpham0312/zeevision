@@ -2,7 +2,7 @@ package graph
 
 import "github.com/ducanhpham0312/zeevision/backend/graph/model"
 
-var dummyInstances = []*model.Instance{
+var DummyInstances = []*model.Instance{
 	{
 		//nolint:gomnd
 		InstanceKey: 12345,
@@ -12,7 +12,13 @@ var dummyInstances = []*model.Instance{
 	{
 		//nolint:gomnd
 		InstanceKey: 54321,
-		Status:      "completed",
+		Status:      "Completed",
 		StartTime:   "2023-01-01T00:15:00Z",
+	},
+	{
+		//nolint:gomnd
+		InstanceKey: 55555,
+		Status:      "Completed",
+		StartTime:   "2023-01-08T00:15:00Z",
 	},
 }
