@@ -7,8 +7,9 @@ import (
 
 // List of migrations to be run on database during initialization.
 var TableMigrations = []any{
-	&Process{},
 	&Instance{},
+	&Process{},
+	&AuditLog{},
 	&Incident{},
 	&Job{},
 	&Variable{},
@@ -30,6 +31,7 @@ type Instance struct {
 	Status               string    `gorm:"not null"`
 	StartTime            time.Time `gorm:"not null"`
 	EndTime              sql.NullTime
+	AuditLogs            []AuditLog `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 	Incidents            []Incident `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 	Jobs                 []Job      `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
 	Variables            []Variable `gorm:"foreignKey:ProcessInstanceKey;references:ProcessInstanceKey"`
@@ -51,6 +53,19 @@ type Process struct {
 
 func (Process) TableName() string {
 	return "processes"
+}
+
+type AuditLog struct {
+	Position           int64     `gorm:"primarykey"`
+	ProcessInstanceKey int64     `gorm:"not null"`
+	ElementID          string    `gorm:"not null"`
+	ElementType        string    `gorm:"not null"`
+	Intent             string    `gorm:"not null"`
+	Time               time.Time `gorm:"not null"`
+}
+
+func (AuditLog) TableName() string {
+	return "audit_logs"
 }
 
 type Incident struct {
