@@ -3,9 +3,9 @@
 exports[`BpmnViewer Component correctly render the snapshot 1`] = `
 <DocumentFragment>
   <div
+    class="relative h-full w-full select-none"
     data-testid="canvas"
     id="canvas"
-    style="user-select: none; width: 100%; height: 100%;"
   />
 </DocumentFragment>
 `;
