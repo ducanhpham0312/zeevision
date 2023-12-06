@@ -94,7 +94,7 @@ npm run eslint:fix
 
 ## Prettier
 
-For automatically formatting our code to maintain a consistent style, we use Prettier.
+For automatically formatting our code to maintain a consistent style, we use [Prettier].
 To format the code, use the following command:
 
 ```bash
