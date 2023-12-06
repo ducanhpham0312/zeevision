@@ -2,12 +2,6 @@
 
 package model
 
-import (
-	"fmt"
-	"io"
-	"strconv"
-)
-
 type Incident struct {
 	IncidentKey  int64     `json:"incidentKey"`
 	InstanceKey  int64     `json:"instanceKey"`
@@ -20,17 +14,17 @@ type Incident struct {
 }
 
 type Instance struct {
-	BpmnLiveStatus string      `json:"bpmnLiveStatus"`
-	StartTime      string      `json:"startTime"`
-	EndTime        *string     `json:"endTime,omitempty"`
-	InstanceKey    int64       `json:"instanceKey"`
-	ProcessKey     int64       `json:"processKey"`
-	Version        int64       `json:"version"`
-	Status         Status      `json:"status"`
-	Incidents      []*Incident `json:"incidents"`
-	Jobs           []*Job      `json:"jobs"`
-	Variables      []*Variable `json:"variables"`
-	Process        *Process    `json:"process"`
+	BpmnLiveStatus string              `json:"bpmnLiveStatus"`
+	StartTime      string              `json:"startTime"`
+	EndTime        *string             `json:"endTime,omitempty"`
+	InstanceKey    int64               `json:"instanceKey"`
+	ProcessKey     int64               `json:"processKey"`
+	Version        int64               `json:"version"`
+	Status         string              `json:"status"`
+	Incidents      *PaginatedIncidents `json:"incidents"`
+	Jobs           *PaginatedJobs      `json:"jobs"`
+	Variables      *PaginatedVariables `json:"variables"`
+	Process        *Process            `json:"process"`
 }
 
 type Job struct {
@@ -45,63 +39,50 @@ type Job struct {
 	Instance    *Instance `json:"instance"`
 }
 
+type PaginatedIncidents struct {
+	Items      []*Incident `json:"items"`
+	TotalCount int64       `json:"totalCount"`
+}
+
+type PaginatedInstances struct {
+	Items      []*Instance `json:"items"`
+	TotalCount int64       `json:"totalCount"`
+}
+
+type PaginatedJobs struct {
+	Items      []*Job `json:"items"`
+	TotalCount int64  `json:"totalCount"`
+}
+
+type PaginatedProcesses struct {
+	Items      []*Process `json:"items"`
+	TotalCount int64      `json:"totalCount"`
+}
+
+type PaginatedVariables struct {
+	Items      []*Variable `json:"items"`
+	TotalCount int64       `json:"totalCount"`
+}
+
+type Pagination struct {
+	Offset int64 `json:"offset"`
+	Limit  int64 `json:"limit"`
+}
+
 type Process struct {
-	ActiveInstances    int64       `json:"activeInstances"`
-	CompletedInstances int64       `json:"completedInstances"`
-	BpmnLiveStatus     string      `json:"bpmnLiveStatus"`
-	BpmnResource       string      `json:"bpmnResource"`
-	BpmnProcessID      string      `json:"bpmnProcessId"`
-	DeploymentTime     string      `json:"deploymentTime"`
-	Instances          []*Instance `json:"instances"`
-	ProcessKey         int64       `json:"processKey"`
-	Version            int64       `json:"version"`
+	ActiveInstances    int64               `json:"activeInstances"`
+	CompletedInstances int64               `json:"completedInstances"`
+	BpmnLiveStatus     string              `json:"bpmnLiveStatus"`
+	BpmnResource       string              `json:"bpmnResource"`
+	BpmnProcessID      string              `json:"bpmnProcessId"`
+	DeploymentTime     string              `json:"deploymentTime"`
+	Instances          *PaginatedInstances `json:"instances"`
+	ProcessKey         int64               `json:"processKey"`
+	Version            int64               `json:"version"`
 }
 
 type Variable struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 	Time  string `json:"time"`
-}
-
-type Status string
-
-const (
-	StatusActive     Status = "ACTIVE"
-	StatusCompleted  Status = "COMPLETED"
-	StatusTerminated Status = "TERMINATED"
-)
-
-var AllStatus = []Status{
-	StatusActive,
-	StatusCompleted,
-	StatusTerminated,
-}
-
-func (e Status) IsValid() bool {
-	switch e {
-	case StatusActive, StatusCompleted, StatusTerminated:
-		return true
-	}
-	return false
-}
-
-func (e Status) String() string {
-	return string(e)
-}
-
-func (e *Status) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Status(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Status", str)
-	}
-	return nil
-}
-
-func (e Status) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
 }

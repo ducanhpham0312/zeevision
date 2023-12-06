@@ -15,18 +15,24 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
       startTime
       endTime
       variables {
-        name
-        value
-        time
+        totalCount
+        items {
+          name
+          value
+          time
+        }
       }
       jobs {
-        elementId
-        key
-        type
-        retries
-        worker
-        state
-        time
+        totalCount
+        items {
+          elementId
+          key
+          type
+          retries
+          worker
+          state
+          time
+        }
       }
     }
   }

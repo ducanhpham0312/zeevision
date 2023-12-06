@@ -57,7 +57,7 @@ func TestFromStorageInstance(t *testing.T) {
 				InstanceKey:    10,
 				ProcessKey:     1,
 				Version:        1,
-				Status:         StatusActive,
+				Status:         "ACTIVE",
 			},
 		},
 		{
@@ -77,7 +77,7 @@ func TestFromStorageInstance(t *testing.T) {
 				InstanceKey:    20,
 				ProcessKey:     2,
 				Version:        2,
-				Status:         StatusCompleted,
+				Status:         "COMPLETED",
 			},
 		},
 	}
@@ -89,69 +89,6 @@ func TestFromStorageInstance(t *testing.T) {
 			assert.Equal(t, test.expected, actual)
 		})
 	}
-}
-
-func TestStatus(t *testing.T) {
-	tests := []struct {
-		name        string
-		status      any
-		expectedErr string
-		expected    Status
-	}{
-		{
-			name:     "Active",
-			status:   "ACTIVE",
-			expected: StatusActive,
-		},
-		{
-			name:     "Completed",
-			status:   "COMPLETED",
-			expected: StatusCompleted,
-		},
-		{
-			name:     "Terminated",
-			status:   "TERMINATED",
-			expected: StatusTerminated,
-		},
-		{
-			name:        "Invalid status",
-			status:      "INVALID_STATUS",
-			expectedErr: "INVALID_STATUS is not a valid Status",
-		},
-		{
-			name:        "Invalid type",
-			status:      1,
-			expectedErr: "enums must be strings",
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			var actual Status
-			err := actual.UnmarshalGQL(test.status)
-			if test.expectedErr != "" {
-				assert.EqualError(t, err, test.expectedErr)
-				return
-			}
-
-			assert.Equal(t, test.expected, actual)
-		})
-	}
-}
-
-func TestStorageInstanceConversionPanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			assert.Fail(t, "expected panic")
-		}
-	}()
-
-	storageInstance := storage.Instance{
-		Status: "INVALID_STATUS",
-	}
-
-	// Should panic.
-	FromStorageInstance(storageInstance)
 }
 
 func TestFromStorageProcess(t *testing.T) {

@@ -8,9 +8,9 @@ interface ExpandRowProps {
 
 export function ExpandRow({ children, isIn, colSpan }: ExpandRowProps) {
   const transition = useTransition(isIn, {
-    from: { opacity: 0, maxHeight: "0px" },
-    enter: { opacity: 1, maxHeight: "1000px" },
-    leave: { opacity: 0, maxHeight: "0px" },
+    from: { opacity: 0, maxHeight: "0px", overflow: "hidden" },
+    enter: { opacity: 1, maxHeight: "1000px", overflow: "auto" },
+    leave: { opacity: 0, maxHeight: "0px", overflow: "hidden" },
   });
   return (
     <>
