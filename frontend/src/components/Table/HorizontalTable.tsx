@@ -136,7 +136,7 @@ export function HorizontalTable({
                           </p>
                           <Button
                             helperTextPos="n"
-                            helperText="Copy content"
+                            helperText="Copy"
                             onClick={() => navigator.clipboard.writeText("abc")}
                             className="opacity-0 transition group-hover:opacity-100"
                           >

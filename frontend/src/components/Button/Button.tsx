@@ -41,7 +41,7 @@ export function Button({
             "absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100",
             helperTextPos === "e" ? "" : "",
             helperTextPos === "n"
-              ? "right-0 top-[-5px] -translate-y-[100%]"
+              ? "left-0 top-[-5px] -translate-y-[100%]"
               : "",
             helperTextPos === "w"
               ? "-left-3 top-[50%] -translate-x-[100%] -translate-y-[50%]"
