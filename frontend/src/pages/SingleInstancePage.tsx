@@ -108,7 +108,7 @@ export default function SingleInstancesPage() {
       <div className="relative flex-grow overflow-auto">
         <div className="absolute h-full w-full">
           <Tabs defaultValue={"Variables"} className="bg-white">
-            <TabsList className="mb-5 mt-10 grid w-full grid-cols-3 rounded-xl border-2">
+            <TabsList className="mb-5 mt-10 grid w-full grid-cols-4 rounded-xl border-2">
               {tabsData.map((tab, index) => (
                 <Tab
                   key={index}
