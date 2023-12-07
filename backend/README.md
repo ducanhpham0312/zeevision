@@ -29,8 +29,6 @@ in the root directory of the project. Use the `--build` flag to ensure the image
 
 Docker will build the backend and frontend separately, and combine them to single image where backend serves the frontend. The app will be available at `localhost:8080`. The API will be available at `localhost:8081/graphql` and the API Playground at `localhost:8081/playground`.
 
-To build and run only the backend without hosting also the frontend, you can run the [`run_api.sh`](run_api.sh) script from this directory. API and API Playground will be available at the same addresses as above. You can use this image for easier development of the frontend with hot-reloading by running `npm run dev` normally.
-
 ## API and Playground
 
 When backend is running locally, you can access [`localhost:8081/playground`](http://localhost:8081/playground) to try out the API. For more information about the playground, see [GraphiQL](https://github.com/graphql/graphiql/tree/main/packages/graphiql).
@@ -151,4 +149,4 @@ During the development process, it is sometimes required to update type and quer
 - Open the file and navigate to the type/query you want to update.
 - Update the type / query with correct fields.
 - Under `/backend`, run `./run_gqlgen.sh` to update query in automatically generated files (`generated.go`, `models_gen.go`, `schema.resolvers.go`). DO NOT manually update those files (except `schema.resolvers.go` as the functions here create the query itself).
-- Run the backend again `./run_api.sh` and open the playground to test the new changes.
+- Open the playground to test the new changes.
