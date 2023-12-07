@@ -78,7 +78,8 @@ type AuditLogType = {
 type AuditLogResult = {
   totalCount: number;
   items: AuditLogType[];
-  
+}
+
 type IncidentResult = {
   totalCount: number;
   items: IncidentType[];
