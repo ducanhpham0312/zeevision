@@ -135,9 +135,11 @@ export function HorizontalTable({
                         <NavLink to={navLinkColumn[header[index]](value)}>
                           <Button variant="secondary">{value}</Button>
                         </NavLink>
-                      ) : (noStyleColumn && noStyleColumn[header[index]] ? (
+                      ) : noStyleColumn && noStyleColumn[header[index]] ? (
                         <pre>{value}</pre>
-                      ) : value)}
+                      ) : (
+                        value
+                      )}
                     </td>
                   ))}
                   {expandElement ? (

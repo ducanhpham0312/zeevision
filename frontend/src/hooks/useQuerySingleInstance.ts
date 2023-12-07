@@ -35,12 +35,15 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
         }
       }
       incidents {
-        incidentKey
-        elementId
-        errorType
-        errorMessage
-        state
-        time
+        totalCount
+        items {
+          incidentKey
+          elementId
+          errorType
+          errorMessage
+          state
+          time
+        }
       }
     }
   }
