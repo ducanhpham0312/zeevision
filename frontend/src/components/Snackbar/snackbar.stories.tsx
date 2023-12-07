@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SnackbarContent } from ".";
+import {log} from "../../utils/logger.ts";
 
 const meta = {
   title: "Assets/Snackbar",
@@ -20,7 +21,7 @@ export const Success: Story = {
     title: "Stoybook success snackbar",
     message: "Everything was sent to the desired address.",
     type: "success",
-    handleClose: () => console.log("Snackbar handle close called"),
+    handleClose: () => log.info("Snackbar handle close called"),
   },
 };
 
@@ -30,6 +31,6 @@ export const Error: Story = {
     title: "Stoybook error snackbar",
     message: "Everything was not sent to the desired address.",
     type: "error",
-    handleClose: () => console.log("Snackbar handle close called"),
+    handleClose: () => log.info("Snackbar handle close called"),
   },
 };
