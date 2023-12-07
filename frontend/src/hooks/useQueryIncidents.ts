@@ -8,13 +8,16 @@ interface QueryIncidentsReturnType {
 const INCIDENTS_QUERY = () => gql`
   query Incidents {
     incidents {
-      incidentKey
-      elementId
-      instanceKey
-      errorType
-      errorMessage
-      state
-      time
+      totalCount
+      items {
+        incidentKey
+        elementId
+        instanceKey
+        errorType
+        errorMessage
+        state
+        time
+      }
     }
   }
 `;
