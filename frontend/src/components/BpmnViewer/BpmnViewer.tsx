@@ -124,13 +124,16 @@ export function BpmnViewer({
   ) => {
     const canvas = modeler.get("canvas") as any;
     switch (intent) {
-      case "ELEMENT_ACTIVATING" || "ELEMENT_ACTIVATED":
+      case "ELEMENT_ACTIVATING":
+      case "ELEMENT_ACTIVATED":
         canvas.addMarker(elementId, "activated");
         break;
-      case "ELEMENT_COMPLETING" || "ELEMENT_COMPLETED":
+      case "ELEMENT_COMPLETING":
+      case "ELEMENT_COMPLETED":
         canvas.addMarker(elementId, "completed");
         break;
-      case "ELEMENT_TERMINATING" || "ELEMENT_TERMINATED":
+      case "ELEMENT_TERMINATING":
+      case "ELEMENT_TERMINATED":
         canvas.addMarker(elementId, "terminated");
         break;
       case "SEQUENCE_FLOW_TAKEN":
