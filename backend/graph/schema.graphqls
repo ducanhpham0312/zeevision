@@ -10,12 +10,33 @@ directive @goField(
 
 # Root level query type.
 type Query {
-  processes: [Process!]!
+  processes(pagination: Pagination): PaginatedProcesses!
   process(processKey: Int!): Process
-  instances: [Instance!]!
+  instances(pagination: Pagination): PaginatedInstances!
   instance(instanceKey: Int!): Instance
-  incidents: [Incident!]!
-  jobs: [Job!]!
+  incidents(pagination: Pagination): PaginatedIncidents!
+  jobs(pagination: Pagination): PaginatedJobs!
+}
+
+input Pagination {
+  offset: Int!
+  limit: Int!
+}
+
+enum FilterType {
+  IS
+  IS_NOT
+  CONTAINS
+}
+
+input VariableFilter {
+  name: String!
+  type: FilterType!
+}
+
+type PaginatedProcesses {
+  items: [Process!]!
+  totalCount: Int!
 }
 
 type Process {
@@ -25,9 +46,15 @@ type Process {
   bpmnResource: String! @goField(forceResolver: true)
   bpmnProcessId: String!
   deploymentTime: DateTime!
-  instances: [Instance!]! @goField(forceResolver: true)
+  instances(pagination: Pagination): PaginatedInstances!
+    @goField(forceResolver: true)
   processKey: Int!
   version: Int!
+}
+
+type PaginatedInstances {
+  items: [Instance!]!
+  totalCount: Int!
 }
 
 type Instance {
@@ -37,11 +64,35 @@ type Instance {
   instanceKey: Int!
   processKey: Int!
   version: Int!
-  status: Status!
-  incidents: [Incident!]! @goField(forceResolver: true)
-  jobs: [Job!]! @goField(forceResolver: true)
-  variables: [Variable!]! @goField(forceResolver: true)
+  status: String!
+  auditLogs(pagination: Pagination): PaginatedAuditLogs!
+    @goField(forceResolver: true)
+  incidents(pagination: Pagination): PaginatedIncidents!
+    @goField(forceResolver: true)
+  jobs(pagination: Pagination): PaginatedJobs! @goField(forceResolver: true)
+  variables(
+    pagination: Pagination
+    filter: VariableFilter
+  ): PaginatedVariables! @goField(forceResolver: true)
   process: Process! @goField(forceResolver: true)
+}
+
+type PaginatedAuditLogs {
+  items: [AuditLog!]!
+  totalCount: Int!
+}
+
+type AuditLog {
+  elementId: String!
+  elementType: String!
+  intent: String!
+  position: Int!
+  time: DateTime!
+}
+
+type PaginatedIncidents {
+  items: [Incident!]!
+  totalCount: Int!
 }
 
 type Incident {
@@ -53,6 +104,11 @@ type Incident {
   state: String!
   time: DateTime!
   instance: Instance! @goField(forceResolver: true)
+}
+
+type PaginatedJobs {
+  items: [Job!]!
+  totalCount: Int!
 }
 
 type Job {
@@ -67,16 +123,15 @@ type Job {
   instance: Instance! @goField(forceResolver: true)
 }
 
+type PaginatedVariables {
+  items: [Variable!]!
+  totalCount: Int!
+}
+
 type Variable {
   name: String!
   value: String!
   time: DateTime!
-}
-
-enum Status {
-  ACTIVE
-  COMPLETED
-  TERMINATED
 }
 
 # The `DateTime` scalar type represents a date and time following the

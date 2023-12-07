@@ -2,21 +2,28 @@ import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
 interface QueryProcessesReturnType {
+  totalCount: number;
   processes: ProcessType[];
 }
 
 const PROCESSES_QUERY = () => gql`
   query Processes {
     processes {
-      bpmnProcessId
-      processKey
-      version
-      deploymentTime
-      instances {
+      totalCount
+      items {
+        bpmnProcessId
+        processKey
         version
-        instanceKey
-        status
-        startTime
+        deploymentTime
+        instances {
+          totalCount
+          items {
+            version
+            instanceKey
+            status
+            startTime
+          }
+        }
       }
     }
   }
@@ -28,6 +35,7 @@ export function useQueryProcesses(): QueryProcessesReturnType {
   });
 
   return {
-    processes: processesData.data?.processes,
+    totalCount: processesData.data?.processes.totalCount,
+    processes: processesData.data?.processes.items,
   };
 }

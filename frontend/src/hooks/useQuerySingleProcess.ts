@@ -13,10 +13,13 @@ const SINGLE_PROCESS_QUERY = (id: string) => gql`
         version
         deploymentTime
         instances {
-          version
-          instanceKey
-          status
-          startTime
+          totalCount
+          items {
+            version
+            instanceKey
+            status
+            startTime
+          }
         }
       }
     }

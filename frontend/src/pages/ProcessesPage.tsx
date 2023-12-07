@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
-import { NavLink } from "react-router-dom";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
 import { useQueryProcesses } from "../hooks/useQueryProcesses";
 
@@ -19,7 +18,7 @@ export default function ProcessesPage() {
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
       />
-      <div className="flex flex-col gap-10">
+      <div className="flex h-full flex-col gap-10 overflow-auto">
         <div className="flex items-center justify-between">
           <h1>PROCESSES</h1>
           <Button onClick={handleOpen} variant="secondary">
@@ -30,23 +29,26 @@ export default function ProcessesPage() {
           alterRowColor
           header={["Process Key", "Process ID", "Version", "Deployment Time"]}
           orientation="horizontal"
+          navLinkColumn={{
+            "Process Key": (value: string | number) => `/processes/${value}`,
+          }}
           expandElement={(idx: number) => (
             <div className="flex flex-col gap-4 p-4">
               <p>Process Details:</p>
               <div>
                 <Table
+                  alterRowColor={false}
                   orientation="horizontal"
                   header={["Instance Key", "Status", "Version", "Start Time"]}
-                  optionElement={() => <></>}
+                  navLinkColumn={{
+                    "Instance Key": (value: string | number) =>
+                      `/instances/${value.toString()}`,
+                  }}
                   content={
                     processes[idx].instances
-                      ? processes[idx].instances.map(
+                      ? processes[idx].instances.items.map(
                           ({ instanceKey, status, version, startTime }) => [
-                            <NavLink
-                              to={`/instances/${instanceKey.toString()}`}
-                            >
-                              {instanceKey}
-                            </NavLink>,
+                            instanceKey,
                             status,
                             version,
                             startTime,
@@ -62,7 +64,7 @@ export default function ProcessesPage() {
             processes
               ? processes.map(
                   ({ processKey, bpmnProcessId, version, deploymentTime }) => [
-                    <NavLink to={processKey.toString()}>{processKey}</NavLink>,
+                    processKey,
                     bpmnProcessId,
                     version,
                     deploymentTime,

@@ -50,6 +50,14 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	AuditLog struct {
+		ElementID   func(childComplexity int) int
+		ElementType func(childComplexity int) int
+		Intent      func(childComplexity int) int
+		Position    func(childComplexity int) int
+		Time        func(childComplexity int) int
+	}
+
 	Incident struct {
 		ElementID    func(childComplexity int) int
 		ErrorMessage func(childComplexity int) int
@@ -62,16 +70,17 @@ type ComplexityRoot struct {
 	}
 
 	Instance struct {
+		AuditLogs      func(childComplexity int, pagination *model.Pagination) int
 		BpmnLiveStatus func(childComplexity int) int
 		EndTime        func(childComplexity int) int
-		Incidents      func(childComplexity int) int
+		Incidents      func(childComplexity int, pagination *model.Pagination) int
 		InstanceKey    func(childComplexity int) int
-		Jobs           func(childComplexity int) int
+		Jobs           func(childComplexity int, pagination *model.Pagination) int
 		Process        func(childComplexity int) int
 		ProcessKey     func(childComplexity int) int
 		StartTime      func(childComplexity int) int
 		Status         func(childComplexity int) int
-		Variables      func(childComplexity int) int
+		Variables      func(childComplexity int, pagination *model.Pagination, filter *model.VariableFilter) int
 		Version        func(childComplexity int) int
 	}
 
@@ -87,6 +96,36 @@ type ComplexityRoot struct {
 		Worker      func(childComplexity int) int
 	}
 
+	PaginatedAuditLogs struct {
+		Items      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PaginatedIncidents struct {
+		Items      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PaginatedInstances struct {
+		Items      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PaginatedJobs struct {
+		Items      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PaginatedProcesses struct {
+		Items      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PaginatedVariables struct {
+		Items      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
 	Process struct {
 		ActiveInstances    func(childComplexity int) int
 		BpmnLiveStatus     func(childComplexity int) int
@@ -94,18 +133,18 @@ type ComplexityRoot struct {
 		BpmnResource       func(childComplexity int) int
 		CompletedInstances func(childComplexity int) int
 		DeploymentTime     func(childComplexity int) int
-		Instances          func(childComplexity int) int
+		Instances          func(childComplexity int, pagination *model.Pagination) int
 		ProcessKey         func(childComplexity int) int
 		Version            func(childComplexity int) int
 	}
 
 	Query struct {
-		Incidents func(childComplexity int) int
+		Incidents func(childComplexity int, pagination *model.Pagination) int
 		Instance  func(childComplexity int, instanceKey int64) int
-		Instances func(childComplexity int) int
-		Jobs      func(childComplexity int) int
+		Instances func(childComplexity int, pagination *model.Pagination) int
+		Jobs      func(childComplexity int, pagination *model.Pagination) int
 		Process   func(childComplexity int, processKey int64) int
-		Processes func(childComplexity int) int
+		Processes func(childComplexity int, pagination *model.Pagination) int
 	}
 
 	Variable struct {
@@ -119,9 +158,10 @@ type IncidentResolver interface {
 	Instance(ctx context.Context, obj *model.Incident) (*model.Instance, error)
 }
 type InstanceResolver interface {
-	Incidents(ctx context.Context, obj *model.Instance) ([]*model.Incident, error)
-	Jobs(ctx context.Context, obj *model.Instance) ([]*model.Job, error)
-	Variables(ctx context.Context, obj *model.Instance) ([]*model.Variable, error)
+	AuditLogs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedAuditLogs, error)
+	Incidents(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedIncidents, error)
+	Jobs(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedJobs, error)
+	Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination, filter *model.VariableFilter) (*model.PaginatedVariables, error)
 	Process(ctx context.Context, obj *model.Instance) (*model.Process, error)
 }
 type JobResolver interface {
@@ -130,15 +170,15 @@ type JobResolver interface {
 type ProcessResolver interface {
 	BpmnResource(ctx context.Context, obj *model.Process) (string, error)
 
-	Instances(ctx context.Context, obj *model.Process) ([]*model.Instance, error)
+	Instances(ctx context.Context, obj *model.Process, pagination *model.Pagination) (*model.PaginatedInstances, error)
 }
 type QueryResolver interface {
-	Processes(ctx context.Context) ([]*model.Process, error)
+	Processes(ctx context.Context, pagination *model.Pagination) (*model.PaginatedProcesses, error)
 	Process(ctx context.Context, processKey int64) (*model.Process, error)
-	Instances(ctx context.Context) ([]*model.Instance, error)
+	Instances(ctx context.Context, pagination *model.Pagination) (*model.PaginatedInstances, error)
 	Instance(ctx context.Context, instanceKey int64) (*model.Instance, error)
-	Incidents(ctx context.Context) ([]*model.Incident, error)
-	Jobs(ctx context.Context) ([]*model.Job, error)
+	Incidents(ctx context.Context, pagination *model.Pagination) (*model.PaginatedIncidents, error)
+	Jobs(ctx context.Context, pagination *model.Pagination) (*model.PaginatedJobs, error)
 }
 
 type executableSchema struct {
@@ -159,6 +199,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e, 0, 0, nil}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "AuditLog.elementId":
+		if e.complexity.AuditLog.ElementID == nil {
+			break
+		}
+
+		return e.complexity.AuditLog.ElementID(childComplexity), true
+
+	case "AuditLog.elementType":
+		if e.complexity.AuditLog.ElementType == nil {
+			break
+		}
+
+		return e.complexity.AuditLog.ElementType(childComplexity), true
+
+	case "AuditLog.intent":
+		if e.complexity.AuditLog.Intent == nil {
+			break
+		}
+
+		return e.complexity.AuditLog.Intent(childComplexity), true
+
+	case "AuditLog.position":
+		if e.complexity.AuditLog.Position == nil {
+			break
+		}
+
+		return e.complexity.AuditLog.Position(childComplexity), true
+
+	case "AuditLog.time":
+		if e.complexity.AuditLog.Time == nil {
+			break
+		}
+
+		return e.complexity.AuditLog.Time(childComplexity), true
 
 	case "Incident.elementId":
 		if e.complexity.Incident.ElementID == nil {
@@ -216,6 +291,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Incident.Time(childComplexity), true
 
+	case "Instance.auditLogs":
+		if e.complexity.Instance.AuditLogs == nil {
+			break
+		}
+
+		args, err := ec.field_Instance_auditLogs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.AuditLogs(childComplexity, args["pagination"].(*model.Pagination)), true
+
 	case "Instance.bpmnLiveStatus":
 		if e.complexity.Instance.BpmnLiveStatus == nil {
 			break
@@ -235,7 +322,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Instance.Incidents(childComplexity), true
+		args, err := ec.field_Instance_incidents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.Incidents(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Instance.instanceKey":
 		if e.complexity.Instance.InstanceKey == nil {
@@ -249,7 +341,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Instance.Jobs(childComplexity), true
+		args, err := ec.field_Instance_jobs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.Jobs(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Instance.process":
 		if e.complexity.Instance.Process == nil {
@@ -284,7 +381,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Instance.Variables(childComplexity), true
+		args, err := ec.field_Instance_variables_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Instance.Variables(childComplexity, args["pagination"].(*model.Pagination), args["filter"].(*model.VariableFilter)), true
 
 	case "Instance.version":
 		if e.complexity.Instance.Version == nil {
@@ -356,6 +458,90 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Job.Worker(childComplexity), true
 
+	case "PaginatedAuditLogs.items":
+		if e.complexity.PaginatedAuditLogs.Items == nil {
+			break
+		}
+
+		return e.complexity.PaginatedAuditLogs.Items(childComplexity), true
+
+	case "PaginatedAuditLogs.totalCount":
+		if e.complexity.PaginatedAuditLogs.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PaginatedAuditLogs.TotalCount(childComplexity), true
+
+	case "PaginatedIncidents.items":
+		if e.complexity.PaginatedIncidents.Items == nil {
+			break
+		}
+
+		return e.complexity.PaginatedIncidents.Items(childComplexity), true
+
+	case "PaginatedIncidents.totalCount":
+		if e.complexity.PaginatedIncidents.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PaginatedIncidents.TotalCount(childComplexity), true
+
+	case "PaginatedInstances.items":
+		if e.complexity.PaginatedInstances.Items == nil {
+			break
+		}
+
+		return e.complexity.PaginatedInstances.Items(childComplexity), true
+
+	case "PaginatedInstances.totalCount":
+		if e.complexity.PaginatedInstances.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PaginatedInstances.TotalCount(childComplexity), true
+
+	case "PaginatedJobs.items":
+		if e.complexity.PaginatedJobs.Items == nil {
+			break
+		}
+
+		return e.complexity.PaginatedJobs.Items(childComplexity), true
+
+	case "PaginatedJobs.totalCount":
+		if e.complexity.PaginatedJobs.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PaginatedJobs.TotalCount(childComplexity), true
+
+	case "PaginatedProcesses.items":
+		if e.complexity.PaginatedProcesses.Items == nil {
+			break
+		}
+
+		return e.complexity.PaginatedProcesses.Items(childComplexity), true
+
+	case "PaginatedProcesses.totalCount":
+		if e.complexity.PaginatedProcesses.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PaginatedProcesses.TotalCount(childComplexity), true
+
+	case "PaginatedVariables.items":
+		if e.complexity.PaginatedVariables.Items == nil {
+			break
+		}
+
+		return e.complexity.PaginatedVariables.Items(childComplexity), true
+
+	case "PaginatedVariables.totalCount":
+		if e.complexity.PaginatedVariables.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PaginatedVariables.TotalCount(childComplexity), true
+
 	case "Process.activeInstances":
 		if e.complexity.Process.ActiveInstances == nil {
 			break
@@ -403,7 +589,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Process.Instances(childComplexity), true
+		args, err := ec.field_Process_instances_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Process.Instances(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Process.processKey":
 		if e.complexity.Process.ProcessKey == nil {
@@ -424,7 +615,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Incidents(childComplexity), true
+		args, err := ec.field_Query_incidents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Incidents(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Query.instance":
 		if e.complexity.Query.Instance == nil {
@@ -443,14 +639,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Instances(childComplexity), true
+		args, err := ec.field_Query_instances_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Instances(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Query.jobs":
 		if e.complexity.Query.Jobs == nil {
 			break
 		}
 
-		return e.complexity.Query.Jobs(childComplexity), true
+		args, err := ec.field_Query_jobs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Jobs(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Query.process":
 		if e.complexity.Query.Process == nil {
@@ -469,7 +675,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Processes(childComplexity), true
+		args, err := ec.field_Query_processes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Processes(childComplexity, args["pagination"].(*model.Pagination)), true
 
 	case "Variable.name":
 		if e.complexity.Variable.Name == nil {
@@ -499,7 +710,10 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap()
+	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputPagination,
+		ec.unmarshalInputVariableFilter,
+	)
 	first := true
 
 	switch rc.Operation.Operation {
@@ -600,6 +814,90 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Instance_auditLogs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Instance_incidents_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Instance_jobs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Instance_variables_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	var arg1 *model.VariableFilter
+	if tmp, ok := rawArgs["filter"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
+		arg1, err = ec.unmarshalOVariableFilter2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐVariableFilter(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["filter"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Process_instances_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -612,6 +910,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_incidents_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
 	return args, nil
 }
 
@@ -630,6 +943,36 @@ func (ec *executionContext) field_Query_instance_args(ctx context.Context, rawAr
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_instances_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_jobs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_process_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -642,6 +985,21 @@ func (ec *executionContext) field_Query_process_args(ctx context.Context, rawArg
 		}
 	}
 	args["processKey"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_processes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Pagination
+	if tmp, ok := rawArgs["pagination"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+		arg0, err = ec.unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pagination"] = arg0
 	return args, nil
 }
 
@@ -682,6 +1040,226 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _AuditLog_elementId(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_elementId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ElementID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuditLog_elementId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuditLog",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuditLog_elementType(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_elementType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ElementType, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuditLog_elementType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuditLog",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuditLog_intent(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_intent(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Intent, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuditLog_intent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuditLog",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuditLog_position(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_position(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Position, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuditLog_position(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuditLog",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuditLog_time(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Time, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuditLog_time(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuditLog",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _Incident_incidentKey(ctx context.Context, field graphql.CollectedField, obj *model.Incident) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Incident_incidentKey(ctx, field)
@@ -1044,6 +1622,8 @@ func (ec *executionContext) fieldContext_Incident_instance(ctx context.Context, 
 				return ec.fieldContext_Instance_version(ctx, field)
 			case "status":
 				return ec.fieldContext_Instance_status(ctx, field)
+			case "auditLogs":
+				return ec.fieldContext_Instance_auditLogs(ctx, field)
 			case "incidents":
 				return ec.fieldContext_Instance_incidents(ctx, field)
 			case "jobs":
@@ -1346,9 +1926,9 @@ func (ec *executionContext) _Instance_status(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Status)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNStatus2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐStatus(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Instance_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1358,8 +1938,69 @@ func (ec *executionContext) fieldContext_Instance_status(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Status does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Instance_auditLogs(ctx context.Context, field graphql.CollectedField, obj *model.Instance) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Instance_auditLogs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Instance().AuditLogs(rctx, obj, fc.Args["pagination"].(*model.Pagination))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PaginatedAuditLogs)
+	fc.Result = res
+	return ec.marshalNPaginatedAuditLogs2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedAuditLogs(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Instance_auditLogs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Instance",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "items":
+				return ec.fieldContext_PaginatedAuditLogs_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedAuditLogs_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedAuditLogs", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_auditLogs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -1378,7 +2019,7 @@ func (ec *executionContext) _Instance_incidents(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Incidents(rctx, obj)
+		return ec.resolvers.Instance().Incidents(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1390,9 +2031,9 @@ func (ec *executionContext) _Instance_incidents(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Incident)
+	res := resTmp.(*model.PaginatedIncidents)
 	fc.Result = res
-	return ec.marshalNIncident2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐIncidentᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedIncidents2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedIncidents(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Instance_incidents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1403,25 +2044,24 @@ func (ec *executionContext) fieldContext_Instance_incidents(ctx context.Context,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "incidentKey":
-				return ec.fieldContext_Incident_incidentKey(ctx, field)
-			case "instanceKey":
-				return ec.fieldContext_Incident_instanceKey(ctx, field)
-			case "elementId":
-				return ec.fieldContext_Incident_elementId(ctx, field)
-			case "errorType":
-				return ec.fieldContext_Incident_errorType(ctx, field)
-			case "errorMessage":
-				return ec.fieldContext_Incident_errorMessage(ctx, field)
-			case "state":
-				return ec.fieldContext_Incident_state(ctx, field)
-			case "time":
-				return ec.fieldContext_Incident_time(ctx, field)
-			case "instance":
-				return ec.fieldContext_Incident_instance(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedIncidents_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedIncidents_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Incident", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedIncidents", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_incidents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -1440,7 +2080,7 @@ func (ec *executionContext) _Instance_jobs(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Jobs(rctx, obj)
+		return ec.resolvers.Instance().Jobs(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1452,9 +2092,9 @@ func (ec *executionContext) _Instance_jobs(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Job)
+	res := resTmp.(*model.PaginatedJobs)
 	fc.Result = res
-	return ec.marshalNJob2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐJobᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedJobs2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedJobs(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Instance_jobs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1465,27 +2105,24 @@ func (ec *executionContext) fieldContext_Instance_jobs(ctx context.Context, fiel
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "elementId":
-				return ec.fieldContext_Job_elementId(ctx, field)
-			case "instanceKey":
-				return ec.fieldContext_Job_instanceKey(ctx, field)
-			case "key":
-				return ec.fieldContext_Job_key(ctx, field)
-			case "type":
-				return ec.fieldContext_Job_type(ctx, field)
-			case "retries":
-				return ec.fieldContext_Job_retries(ctx, field)
-			case "worker":
-				return ec.fieldContext_Job_worker(ctx, field)
-			case "state":
-				return ec.fieldContext_Job_state(ctx, field)
-			case "time":
-				return ec.fieldContext_Job_time(ctx, field)
-			case "instance":
-				return ec.fieldContext_Job_instance(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedJobs_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedJobs_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Job", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedJobs", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_jobs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -1504,7 +2141,7 @@ func (ec *executionContext) _Instance_variables(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Instance().Variables(rctx, obj)
+		return ec.resolvers.Instance().Variables(rctx, obj, fc.Args["pagination"].(*model.Pagination), fc.Args["filter"].(*model.VariableFilter))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1516,9 +2153,9 @@ func (ec *executionContext) _Instance_variables(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Variable)
+	res := resTmp.(*model.PaginatedVariables)
 	fc.Result = res
-	return ec.marshalNVariable2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐVariableᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedVariables2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedVariables(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Instance_variables(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1529,15 +2166,24 @@ func (ec *executionContext) fieldContext_Instance_variables(ctx context.Context,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "name":
-				return ec.fieldContext_Variable_name(ctx, field)
-			case "value":
-				return ec.fieldContext_Variable_value(ctx, field)
-			case "time":
-				return ec.fieldContext_Variable_time(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedVariables_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedVariables_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Variable", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedVariables", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Instance_variables_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2011,6 +2657,8 @@ func (ec *executionContext) fieldContext_Job_instance(ctx context.Context, field
 				return ec.fieldContext_Instance_version(ctx, field)
 			case "status":
 				return ec.fieldContext_Instance_status(ctx, field)
+			case "auditLogs":
+				return ec.fieldContext_Instance_auditLogs(ctx, field)
 			case "incidents":
 				return ec.fieldContext_Instance_incidents(ctx, field)
 			case "jobs":
@@ -2021,6 +2669,638 @@ func (ec *executionContext) fieldContext_Job_instance(ctx context.Context, field
 				return ec.fieldContext_Instance_process(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedAuditLogs_items(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedAuditLogs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedAuditLogs_items(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.AuditLog)
+	fc.Result = res
+	return ec.marshalNAuditLog2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐAuditLogᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedAuditLogs_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedAuditLogs",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "elementId":
+				return ec.fieldContext_AuditLog_elementId(ctx, field)
+			case "elementType":
+				return ec.fieldContext_AuditLog_elementType(ctx, field)
+			case "intent":
+				return ec.fieldContext_AuditLog_intent(ctx, field)
+			case "position":
+				return ec.fieldContext_AuditLog_position(ctx, field)
+			case "time":
+				return ec.fieldContext_AuditLog_time(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AuditLog", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedAuditLogs_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedAuditLogs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedAuditLogs_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedAuditLogs_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedAuditLogs",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedIncidents_items(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedIncidents) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedIncidents_items(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Incident)
+	fc.Result = res
+	return ec.marshalNIncident2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐIncidentᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedIncidents_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedIncidents",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "incidentKey":
+				return ec.fieldContext_Incident_incidentKey(ctx, field)
+			case "instanceKey":
+				return ec.fieldContext_Incident_instanceKey(ctx, field)
+			case "elementId":
+				return ec.fieldContext_Incident_elementId(ctx, field)
+			case "errorType":
+				return ec.fieldContext_Incident_errorType(ctx, field)
+			case "errorMessage":
+				return ec.fieldContext_Incident_errorMessage(ctx, field)
+			case "state":
+				return ec.fieldContext_Incident_state(ctx, field)
+			case "time":
+				return ec.fieldContext_Incident_time(ctx, field)
+			case "instance":
+				return ec.fieldContext_Incident_instance(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Incident", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedIncidents_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedIncidents) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedIncidents_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedIncidents_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedIncidents",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedInstances_items(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedInstances) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedInstances_items(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Instance)
+	fc.Result = res
+	return ec.marshalNInstance2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐInstanceᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedInstances_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedInstances",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "bpmnLiveStatus":
+				return ec.fieldContext_Instance_bpmnLiveStatus(ctx, field)
+			case "startTime":
+				return ec.fieldContext_Instance_startTime(ctx, field)
+			case "endTime":
+				return ec.fieldContext_Instance_endTime(ctx, field)
+			case "instanceKey":
+				return ec.fieldContext_Instance_instanceKey(ctx, field)
+			case "processKey":
+				return ec.fieldContext_Instance_processKey(ctx, field)
+			case "version":
+				return ec.fieldContext_Instance_version(ctx, field)
+			case "status":
+				return ec.fieldContext_Instance_status(ctx, field)
+			case "auditLogs":
+				return ec.fieldContext_Instance_auditLogs(ctx, field)
+			case "incidents":
+				return ec.fieldContext_Instance_incidents(ctx, field)
+			case "jobs":
+				return ec.fieldContext_Instance_jobs(ctx, field)
+			case "variables":
+				return ec.fieldContext_Instance_variables(ctx, field)
+			case "process":
+				return ec.fieldContext_Instance_process(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedInstances_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedInstances) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedInstances_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedInstances_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedInstances",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedJobs_items(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedJobs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedJobs_items(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Job)
+	fc.Result = res
+	return ec.marshalNJob2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐJobᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedJobs_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedJobs",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "elementId":
+				return ec.fieldContext_Job_elementId(ctx, field)
+			case "instanceKey":
+				return ec.fieldContext_Job_instanceKey(ctx, field)
+			case "key":
+				return ec.fieldContext_Job_key(ctx, field)
+			case "type":
+				return ec.fieldContext_Job_type(ctx, field)
+			case "retries":
+				return ec.fieldContext_Job_retries(ctx, field)
+			case "worker":
+				return ec.fieldContext_Job_worker(ctx, field)
+			case "state":
+				return ec.fieldContext_Job_state(ctx, field)
+			case "time":
+				return ec.fieldContext_Job_time(ctx, field)
+			case "instance":
+				return ec.fieldContext_Job_instance(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Job", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedJobs_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedJobs) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedJobs_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedJobs_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedJobs",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedProcesses_items(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedProcesses) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedProcesses_items(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Process)
+	fc.Result = res
+	return ec.marshalNProcess2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcessᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedProcesses_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedProcesses",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "activeInstances":
+				return ec.fieldContext_Process_activeInstances(ctx, field)
+			case "completedInstances":
+				return ec.fieldContext_Process_completedInstances(ctx, field)
+			case "bpmnLiveStatus":
+				return ec.fieldContext_Process_bpmnLiveStatus(ctx, field)
+			case "bpmnResource":
+				return ec.fieldContext_Process_bpmnResource(ctx, field)
+			case "bpmnProcessId":
+				return ec.fieldContext_Process_bpmnProcessId(ctx, field)
+			case "deploymentTime":
+				return ec.fieldContext_Process_deploymentTime(ctx, field)
+			case "instances":
+				return ec.fieldContext_Process_instances(ctx, field)
+			case "processKey":
+				return ec.fieldContext_Process_processKey(ctx, field)
+			case "version":
+				return ec.fieldContext_Process_version(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Process", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedProcesses_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedProcesses) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedProcesses_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedProcesses_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedProcesses",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedVariables_items(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedVariables) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedVariables_items(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Variable)
+	fc.Result = res
+	return ec.marshalNVariable2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐVariableᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedVariables_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedVariables",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_Variable_name(ctx, field)
+			case "value":
+				return ec.fieldContext_Variable_value(ctx, field)
+			case "time":
+				return ec.fieldContext_Variable_time(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Variable", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PaginatedVariables_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.PaginatedVariables) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PaginatedVariables_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int64)
+	fc.Result = res
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PaginatedVariables_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PaginatedVariables",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2304,7 +3584,7 @@ func (ec *executionContext) _Process_instances(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Process().Instances(rctx, obj)
+		return ec.resolvers.Process().Instances(rctx, obj, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2316,9 +3596,9 @@ func (ec *executionContext) _Process_instances(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Instance)
+	res := resTmp.(*model.PaginatedInstances)
 	fc.Result = res
-	return ec.marshalNInstance2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐInstanceᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedInstances2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedInstances(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Process_instances(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2329,31 +3609,24 @@ func (ec *executionContext) fieldContext_Process_instances(ctx context.Context, 
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "bpmnLiveStatus":
-				return ec.fieldContext_Instance_bpmnLiveStatus(ctx, field)
-			case "startTime":
-				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "endTime":
-				return ec.fieldContext_Instance_endTime(ctx, field)
-			case "instanceKey":
-				return ec.fieldContext_Instance_instanceKey(ctx, field)
-			case "processKey":
-				return ec.fieldContext_Instance_processKey(ctx, field)
-			case "version":
-				return ec.fieldContext_Instance_version(ctx, field)
-			case "status":
-				return ec.fieldContext_Instance_status(ctx, field)
-			case "incidents":
-				return ec.fieldContext_Instance_incidents(ctx, field)
-			case "jobs":
-				return ec.fieldContext_Instance_jobs(ctx, field)
-			case "variables":
-				return ec.fieldContext_Instance_variables(ctx, field)
-			case "process":
-				return ec.fieldContext_Instance_process(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedInstances_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedInstances_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedInstances", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Process_instances_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2460,7 +3733,7 @@ func (ec *executionContext) _Query_processes(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Processes(rctx)
+		return ec.resolvers.Query().Processes(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2472,9 +3745,9 @@ func (ec *executionContext) _Query_processes(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Process)
+	res := resTmp.(*model.PaginatedProcesses)
 	fc.Result = res
-	return ec.marshalNProcess2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcessᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedProcesses2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedProcesses(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_processes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2485,27 +3758,24 @@ func (ec *executionContext) fieldContext_Query_processes(ctx context.Context, fi
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "activeInstances":
-				return ec.fieldContext_Process_activeInstances(ctx, field)
-			case "completedInstances":
-				return ec.fieldContext_Process_completedInstances(ctx, field)
-			case "bpmnLiveStatus":
-				return ec.fieldContext_Process_bpmnLiveStatus(ctx, field)
-			case "bpmnResource":
-				return ec.fieldContext_Process_bpmnResource(ctx, field)
-			case "bpmnProcessId":
-				return ec.fieldContext_Process_bpmnProcessId(ctx, field)
-			case "deploymentTime":
-				return ec.fieldContext_Process_deploymentTime(ctx, field)
-			case "instances":
-				return ec.fieldContext_Process_instances(ctx, field)
-			case "processKey":
-				return ec.fieldContext_Process_processKey(ctx, field)
-			case "version":
-				return ec.fieldContext_Process_version(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedProcesses_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedProcesses_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Process", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedProcesses", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_processes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2596,7 +3866,7 @@ func (ec *executionContext) _Query_instances(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Instances(rctx)
+		return ec.resolvers.Query().Instances(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2608,9 +3878,9 @@ func (ec *executionContext) _Query_instances(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Instance)
+	res := resTmp.(*model.PaginatedInstances)
 	fc.Result = res
-	return ec.marshalNInstance2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐInstanceᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedInstances2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedInstances(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_instances(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2621,31 +3891,24 @@ func (ec *executionContext) fieldContext_Query_instances(ctx context.Context, fi
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "bpmnLiveStatus":
-				return ec.fieldContext_Instance_bpmnLiveStatus(ctx, field)
-			case "startTime":
-				return ec.fieldContext_Instance_startTime(ctx, field)
-			case "endTime":
-				return ec.fieldContext_Instance_endTime(ctx, field)
-			case "instanceKey":
-				return ec.fieldContext_Instance_instanceKey(ctx, field)
-			case "processKey":
-				return ec.fieldContext_Instance_processKey(ctx, field)
-			case "version":
-				return ec.fieldContext_Instance_version(ctx, field)
-			case "status":
-				return ec.fieldContext_Instance_status(ctx, field)
-			case "incidents":
-				return ec.fieldContext_Instance_incidents(ctx, field)
-			case "jobs":
-				return ec.fieldContext_Instance_jobs(ctx, field)
-			case "variables":
-				return ec.fieldContext_Instance_variables(ctx, field)
-			case "process":
-				return ec.fieldContext_Instance_process(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedInstances_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedInstances_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Instance", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedInstances", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_instances_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2700,6 +3963,8 @@ func (ec *executionContext) fieldContext_Query_instance(ctx context.Context, fie
 				return ec.fieldContext_Instance_version(ctx, field)
 			case "status":
 				return ec.fieldContext_Instance_status(ctx, field)
+			case "auditLogs":
+				return ec.fieldContext_Instance_auditLogs(ctx, field)
 			case "incidents":
 				return ec.fieldContext_Instance_incidents(ctx, field)
 			case "jobs":
@@ -2740,7 +4005,7 @@ func (ec *executionContext) _Query_incidents(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Incidents(rctx)
+		return ec.resolvers.Query().Incidents(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2752,9 +4017,9 @@ func (ec *executionContext) _Query_incidents(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Incident)
+	res := resTmp.(*model.PaginatedIncidents)
 	fc.Result = res
-	return ec.marshalNIncident2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐIncidentᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedIncidents2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedIncidents(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_incidents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2765,25 +4030,24 @@ func (ec *executionContext) fieldContext_Query_incidents(ctx context.Context, fi
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "incidentKey":
-				return ec.fieldContext_Incident_incidentKey(ctx, field)
-			case "instanceKey":
-				return ec.fieldContext_Incident_instanceKey(ctx, field)
-			case "elementId":
-				return ec.fieldContext_Incident_elementId(ctx, field)
-			case "errorType":
-				return ec.fieldContext_Incident_errorType(ctx, field)
-			case "errorMessage":
-				return ec.fieldContext_Incident_errorMessage(ctx, field)
-			case "state":
-				return ec.fieldContext_Incident_state(ctx, field)
-			case "time":
-				return ec.fieldContext_Incident_time(ctx, field)
-			case "instance":
-				return ec.fieldContext_Incident_instance(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedIncidents_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedIncidents_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Incident", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedIncidents", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_incidents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -2802,7 +4066,7 @@ func (ec *executionContext) _Query_jobs(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Jobs(rctx)
+		return ec.resolvers.Query().Jobs(rctx, fc.Args["pagination"].(*model.Pagination))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2814,9 +4078,9 @@ func (ec *executionContext) _Query_jobs(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Job)
+	res := resTmp.(*model.PaginatedJobs)
 	fc.Result = res
-	return ec.marshalNJob2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐJobᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaginatedJobs2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedJobs(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_jobs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2827,27 +4091,24 @@ func (ec *executionContext) fieldContext_Query_jobs(ctx context.Context, field g
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "elementId":
-				return ec.fieldContext_Job_elementId(ctx, field)
-			case "instanceKey":
-				return ec.fieldContext_Job_instanceKey(ctx, field)
-			case "key":
-				return ec.fieldContext_Job_key(ctx, field)
-			case "type":
-				return ec.fieldContext_Job_type(ctx, field)
-			case "retries":
-				return ec.fieldContext_Job_retries(ctx, field)
-			case "worker":
-				return ec.fieldContext_Job_worker(ctx, field)
-			case "state":
-				return ec.fieldContext_Job_state(ctx, field)
-			case "time":
-				return ec.fieldContext_Job_time(ctx, field)
-			case "instance":
-				return ec.fieldContext_Job_instance(ctx, field)
+			case "items":
+				return ec.fieldContext_PaginatedJobs_items(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PaginatedJobs_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Job", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PaginatedJobs", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_jobs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -4886,6 +6147,74 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputPagination(ctx context.Context, obj interface{}) (model.Pagination, error) {
+	var it model.Pagination
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"offset", "limit"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "offset":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+			data, err := ec.unmarshalNInt2int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Offset = data
+		case "limit":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+			data, err := ec.unmarshalNInt2int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Limit = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputVariableFilter(ctx context.Context, obj interface{}) (model.VariableFilter, error) {
+	var it model.VariableFilter
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "type"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNFilterType2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐFilterType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4893,6 +6222,65 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var auditLogImplementors = []string{"AuditLog"}
+
+func (ec *executionContext) _AuditLog(ctx context.Context, sel ast.SelectionSet, obj *model.AuditLog) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, auditLogImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AuditLog")
+		case "elementId":
+			out.Values[i] = ec._AuditLog_elementId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "elementType":
+			out.Values[i] = ec._AuditLog_elementType(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "intent":
+			out.Values[i] = ec._AuditLog_intent(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "position":
+			out.Values[i] = ec._AuditLog_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "time":
+			out.Values[i] = ec._AuditLog_time(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var incidentImplementors = []string{"Incident"}
 
@@ -5042,6 +6430,42 @@ func (ec *executionContext) _Instance(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "auditLogs":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Instance_auditLogs(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "incidents":
 			field := field
 
@@ -5296,6 +6720,270 @@ func (ec *executionContext) _Job(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var paginatedAuditLogsImplementors = []string{"PaginatedAuditLogs"}
+
+func (ec *executionContext) _PaginatedAuditLogs(ctx context.Context, sel ast.SelectionSet, obj *model.PaginatedAuditLogs) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paginatedAuditLogsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaginatedAuditLogs")
+		case "items":
+			out.Values[i] = ec._PaginatedAuditLogs_items(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PaginatedAuditLogs_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var paginatedIncidentsImplementors = []string{"PaginatedIncidents"}
+
+func (ec *executionContext) _PaginatedIncidents(ctx context.Context, sel ast.SelectionSet, obj *model.PaginatedIncidents) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paginatedIncidentsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaginatedIncidents")
+		case "items":
+			out.Values[i] = ec._PaginatedIncidents_items(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PaginatedIncidents_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var paginatedInstancesImplementors = []string{"PaginatedInstances"}
+
+func (ec *executionContext) _PaginatedInstances(ctx context.Context, sel ast.SelectionSet, obj *model.PaginatedInstances) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paginatedInstancesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaginatedInstances")
+		case "items":
+			out.Values[i] = ec._PaginatedInstances_items(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PaginatedInstances_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var paginatedJobsImplementors = []string{"PaginatedJobs"}
+
+func (ec *executionContext) _PaginatedJobs(ctx context.Context, sel ast.SelectionSet, obj *model.PaginatedJobs) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paginatedJobsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaginatedJobs")
+		case "items":
+			out.Values[i] = ec._PaginatedJobs_items(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PaginatedJobs_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var paginatedProcessesImplementors = []string{"PaginatedProcesses"}
+
+func (ec *executionContext) _PaginatedProcesses(ctx context.Context, sel ast.SelectionSet, obj *model.PaginatedProcesses) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paginatedProcessesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaginatedProcesses")
+		case "items":
+			out.Values[i] = ec._PaginatedProcesses_items(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PaginatedProcesses_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var paginatedVariablesImplementors = []string{"PaginatedVariables"}
+
+func (ec *executionContext) _PaginatedVariables(ctx context.Context, sel ast.SelectionSet, obj *model.PaginatedVariables) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paginatedVariablesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaginatedVariables")
+		case "items":
+			out.Values[i] = ec._PaginatedVariables_items(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PaginatedVariables_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6011,6 +7699,60 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNAuditLog2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐAuditLogᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.AuditLog) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNAuditLog2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐAuditLog(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNAuditLog2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐAuditLog(ctx context.Context, sel ast.SelectionSet, v *model.AuditLog) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AuditLog(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -6039,6 +7781,16 @@ func (ec *executionContext) marshalNDateTime2string(ctx context.Context, sel ast
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNFilterType2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐFilterType(ctx context.Context, v interface{}) (model.FilterType, error) {
+	var res model.FilterType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFilterType2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐFilterType(ctx context.Context, sel ast.SelectionSet, v model.FilterType) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) marshalNIncident2ᚕᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐIncidentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Incident) graphql.Marshaler {
@@ -6222,6 +7974,90 @@ func (ec *executionContext) marshalNJob2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevi
 	return ec._Job(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNPaginatedAuditLogs2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedAuditLogs(ctx context.Context, sel ast.SelectionSet, v model.PaginatedAuditLogs) graphql.Marshaler {
+	return ec._PaginatedAuditLogs(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaginatedAuditLogs2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedAuditLogs(ctx context.Context, sel ast.SelectionSet, v *model.PaginatedAuditLogs) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PaginatedAuditLogs(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaginatedIncidents2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedIncidents(ctx context.Context, sel ast.SelectionSet, v model.PaginatedIncidents) graphql.Marshaler {
+	return ec._PaginatedIncidents(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaginatedIncidents2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedIncidents(ctx context.Context, sel ast.SelectionSet, v *model.PaginatedIncidents) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PaginatedIncidents(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaginatedInstances2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedInstances(ctx context.Context, sel ast.SelectionSet, v model.PaginatedInstances) graphql.Marshaler {
+	return ec._PaginatedInstances(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaginatedInstances2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedInstances(ctx context.Context, sel ast.SelectionSet, v *model.PaginatedInstances) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PaginatedInstances(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaginatedJobs2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedJobs(ctx context.Context, sel ast.SelectionSet, v model.PaginatedJobs) graphql.Marshaler {
+	return ec._PaginatedJobs(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaginatedJobs2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedJobs(ctx context.Context, sel ast.SelectionSet, v *model.PaginatedJobs) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PaginatedJobs(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaginatedProcesses2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedProcesses(ctx context.Context, sel ast.SelectionSet, v model.PaginatedProcesses) graphql.Marshaler {
+	return ec._PaginatedProcesses(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaginatedProcesses2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedProcesses(ctx context.Context, sel ast.SelectionSet, v *model.PaginatedProcesses) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PaginatedProcesses(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaginatedVariables2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedVariables(ctx context.Context, sel ast.SelectionSet, v model.PaginatedVariables) graphql.Marshaler {
+	return ec._PaginatedVariables(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaginatedVariables2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPaginatedVariables(ctx context.Context, sel ast.SelectionSet, v *model.PaginatedVariables) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PaginatedVariables(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNProcess2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcess(ctx context.Context, sel ast.SelectionSet, v model.Process) graphql.Marshaler {
 	return ec._Process(ctx, sel, &v)
 }
@@ -6278,16 +8114,6 @@ func (ec *executionContext) marshalNProcess2ᚖgithubᚗcomᚋducanhpham0312ᚋz
 		return graphql.Null
 	}
 	return ec._Process(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNStatus2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐStatus(ctx context.Context, v interface{}) (model.Status, error) {
-	var res model.Status
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNStatus2githubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐStatus(ctx context.Context, sel ast.SelectionSet, v model.Status) graphql.Marshaler {
-	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -6661,6 +8487,14 @@ func (ec *executionContext) marshalOInstance2ᚖgithubᚗcomᚋducanhpham0312ᚋ
 	return ec._Instance(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOPagination2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐPagination(ctx context.Context, v interface{}) (*model.Pagination, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputPagination(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalOProcess2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐProcess(ctx context.Context, sel ast.SelectionSet, v *model.Process) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -6682,6 +8516,14 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOVariableFilter2ᚖgithubᚗcomᚋducanhpham0312ᚋzeevisionᚋbackendᚋgraphᚋmodelᚐVariableFilter(ctx context.Context, v interface{}) (*model.VariableFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputVariableFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

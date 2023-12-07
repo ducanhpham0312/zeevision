@@ -11,14 +11,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	// Maximum attempts to try creating eg. a variable when it might be
-	// failing due to the instance not existing yet (race handling
-	// nigh-simultaneous incoming records)
-	maxCreateAttempts  = 5
-	createAttemptDelay = 100 * time.Millisecond
-)
-
 // Intermediary object that handles communication between consumers and storage.
 type storageUpdater struct {
 	storer storage.Storer
@@ -29,8 +21,7 @@ type storageUpdater struct {
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType,
-	wg *sync.WaitGroup) *storageUpdater {
+func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
 	result := &storageUpdater{
 		storer: storer,
 
@@ -39,9 +30,9 @@ func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeC
 		wg:           wg,
 	}
 
-	// launch a database handler goroutine
-	// Have a pool of five so we can (hopefully) avoid data races by retrying
-	poolSize := 5
+	// launch a pool of database handler goroutines that can consume
+	// messages from the channel and handle the records
+	poolSize := 20
 	for i := 0; i < poolSize; i++ {
 		wg.Add(1)
 		go func() {
@@ -105,6 +96,11 @@ func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 		err = u.handleVariable(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle variable: %w", err)
+		}
+	case ValueTypeIncident:
+		err = u.handleIncident(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle incident: %w", err)
 		}
 	default:
 		zap.L().Info("Unhandled record:",
@@ -293,31 +289,12 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 			zap.String("name", name),
 			zap.String("value", value),
 			zap.Int64("process instance", processInstanceKey))
-		// Retry five times with a delay of 100 milliseconds until we successfully create the variable
-		retryDelay := createAttemptDelay
-		retryCount := maxCreateAttempts
-		// create err outside the loop so we can return it later
-		var err error
-		for i := 0; i < retryCount; i++ {
-			err = storer.VariableCreated(
-				processInstanceKey,
-				name,
-				value,
-				time.UnixMilli(record.Timestamp),
-			)
-			if err != nil {
-				time.Sleep(retryDelay)
-				zap.L().Info("Failed to create variable", zap.String("name", name))
-				zap.L().Info("Retrying:", zap.Error(err))
-
-			} else {
-				zap.L().Info("Variable successfully created", zap.String("name", name))
-				return nil
-			}
-		}
-		// err should not be nil here but it doesn't matter if we
-		// succeed and fall through
-		return err
+		return storer.VariableCreated(
+			processInstanceKey,
+			name,
+			value,
+			time.UnixMilli(record.Timestamp),
+		)
 	case IntentUpdated:
 		zap.L().Info("Variable updated",
 			zap.String("name", name),
@@ -338,4 +315,49 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 	// If we get here we did nothing or missed all err returns so handling
 	// succeeded
 	return nil
+}
+
+func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
+	storer := u.storer
+
+	record, err := WithTypedValue[IncidentValue](*untypedRecord)
+	if err != nil {
+		return fmt.Errorf("failed to cast: %w", err)
+	}
+
+	key := record.Key
+	processInstanceKey := record.Value.ProcessInstanceKey
+	elementID := record.Value.ElementID
+	errorType := record.Value.ErrorType
+	errorMessage := record.Value.ErrorMessage
+	time := time.UnixMilli(record.Timestamp)
+
+	switch record.Intent { // nolint:exhaustive
+	case IntentCreated:
+		log.Printf("Incident created: %s (instance %d)",
+			errorType, processInstanceKey)
+		return storer.IncidentCreated(
+			key,
+			processInstanceKey,
+			elementID,
+			errorType,
+			errorMessage,
+			time,
+		)
+	case IntentResolved:
+		log.Printf("Incident resolved: %s (instance %d)",
+			errorType, processInstanceKey)
+		return storer.IncidentResolved(
+			key,
+			time,
+		)
+	default:
+		zap.L().Info("Unhandled intent for ",
+			zap.String("value type", string(record.ValueType)),
+			zap.String("intent", string(record.Intent)))
+
+	}
+
+	return nil
+
 }

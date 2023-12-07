@@ -13,7 +13,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -21,11 +21,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Element ID
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -34,7 +37,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -42,11 +45,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Variable name
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -55,7 +61,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -63,11 +69,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Variable Value
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -76,7 +85,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -84,11 +93,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Flow Scope Key
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -97,7 +109,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -105,11 +117,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Time created
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -118,7 +133,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           class="cursor-pointer py-1 text-left"
         >
           <button
-            class="relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
           >
             <div
               class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
@@ -126,11 +141,14 @@ exports[`HorizontalTable Component renders correctly 1`] = `
             />
             <span>
               <div
-                class="flex justify-between"
+                class="relative flex justify-between pr-5"
               >
                 <p>
                   Option
                 </p>
+                <div
+                  class="absolute right-0"
+                />
               </div>
             </span>
           </button>
@@ -141,62 +159,37 @@ exports[`HorizontalTable Component renders correctly 1`] = `
       aria-label="custom pagination table"
     >
       <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
       >
         <td
           class="p-3"
         >
-          <p>
-            multi-instance-process
-          </p>
+          multi-instance-process
         </td>
         <td
           class="p-3"
         >
-          <p>
-            items
-          </p>
+          items
         </td>
         <td
           class="p-3"
         >
-          <p>
-            [
-  {
-    "id": 1,
-    "value": 10,
-    "inCart": 10,
-    "inStock": 20
-  },
-  {
-    "id": 2,
-    "value": 20,
-    "inCart": 2,
-    "inStock": 10
-  }
-]
-          </p>
+          [{"id":1,"value":10,"inCart":10,"inStock":20},{"id":2,"value":20,"inCart":2,"inStock":10}]
         </td>
         <td
           class="p-3"
         >
-          <p>
-            2251799813984108
-          </p>
+          2251799813984108
         </td>
         <td
           class="p-3"
         >
-          <p>
-            1696667765
-          </p>
+          1696667765
         </td>
         <td
           class="p-3"
         >
-          <p>
-            Show History
-          </p>
+          Show History
         </td>
       </tr>
       <tr
@@ -205,44 +198,66 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         <td
           class="p-3"
         >
-          <p>
-            multi-instance-process
-          </p>
+          multi-instance-process
         </td>
         <td
           class="p-3"
         >
-          <p>
-            isValid
-          </p>
+          isValid
         </td>
         <td
           class="p-3"
         >
-          <p>
-            true
-          </p>
+          true
         </td>
         <td
           class="p-3"
         >
-          <p>
-            2251799813984108
-          </p>
+          2251799813984108
         </td>
         <td
           class="p-3"
         >
-          <p>
-            1696667765
-          </p>
+          1696667765
         </td>
         <td
           class="p-3"
         >
-          <p>
-            Show History
-          </p>
+          Show History
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          multi-instance-process
+        </td>
+        <td
+          class="p-3"
+        >
+          total
+        </td>
+        <td
+          class="p-3"
+        >
+          200
+        </td>
+        <td
+          class="p-3"
+        >
+          2251799813984108
+        </td>
+        <td
+          class="p-3"
+        >
+          1696667765
+        </td>
+        <td
+          class="p-3"
+        >
+          Show History
         </td>
       </tr>
       <tr
@@ -251,44 +266,66 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         <td
           class="p-3"
         >
-          <p>
-            multi-instance-process
-          </p>
+          another-multi-instance-process
         </td>
         <td
           class="p-3"
         >
-          <p>
-            total
-          </p>
+          anotherVariable
         </td>
         <td
           class="p-3"
         >
-          <p>
-            200
-          </p>
+          string
         </td>
         <td
           class="p-3"
         >
-          <p>
-            2251799813984108
-          </p>
+          2251799813984432
         </td>
         <td
           class="p-3"
         >
-          <p>
-            1696667765
-          </p>
+          1696667333
         </td>
         <td
           class="p-3"
         >
-          <p>
-            Show History
-          </p>
+          Show History
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          new-multi-instance-process
+        </td>
+        <td
+          class="p-3"
+        >
+          kmean
+        </td>
+        <td
+          class="p-3"
+        >
+          newValue
+        </td>
+        <td
+          class="p-3"
+        >
+          2251799813984100
+        </td>
+        <td
+          class="p-3"
+        >
+          1696667542
+        </td>
+        <td
+          class="p-3"
+        >
+          Show History
         </td>
       </tr>
       <tr
@@ -297,44 +334,66 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         <td
           class="p-3"
         >
-          <p>
-            another-multi-instance-process
-          </p>
+          sixth-multi-instance-process
         </td>
         <td
           class="p-3"
         >
-          <p>
-            anotherVariable
-          </p>
+          amp
         </td>
         <td
           class="p-3"
         >
-          <p>
-            string
-          </p>
+          integer
         </td>
         <td
           class="p-3"
         >
-          <p>
-            2251799813984432
-          </p>
+          2251799813984642
         </td>
         <td
           class="p-3"
         >
-          <p>
-            1696667333
-          </p>
+          1696667164
         </td>
         <td
           class="p-3"
         >
-          <p>
-            Show History
-          </p>
+          Show History
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          multi-instance-process
+        </td>
+        <td
+          class="p-3"
+        >
+          items
+        </td>
+        <td
+          class="p-3"
+        >
+          [{"id":1,"value":10,"inCart":10,"inStock":20},{"id":2,"value":20,"inCart":2,"inStock":10}]
+        </td>
+        <td
+          class="p-3"
+        >
+          2251799813984108
+        </td>
+        <td
+          class="p-3"
+        >
+          1696667765
+        </td>
+        <td
+          class="p-3"
+        >
+          Show History
         </td>
       </tr>
       <tr
@@ -343,44 +402,66 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         <td
           class="p-3"
         >
-          <p>
-            new-multi-instance-process
-          </p>
+          multi-instance-process
         </td>
         <td
           class="p-3"
         >
-          <p>
-            kmean
-          </p>
+          isValid
         </td>
         <td
           class="p-3"
         >
-          <p>
-            newValue
-          </p>
+          true
         </td>
         <td
           class="p-3"
         >
-          <p>
-            2251799813984100
-          </p>
+          2251799813984108
         </td>
         <td
           class="p-3"
         >
-          <p>
-            1696667542
-          </p>
+          1696667765
         </td>
         <td
           class="p-3"
         >
-          <p>
-            Show History
-          </p>
+          Show History
+        </td>
+      </tr>
+      <tr
+        class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+      >
+        <td
+          class="p-3"
+        >
+          multi-instance-process
+        </td>
+        <td
+          class="p-3"
+        >
+          total
+        </td>
+        <td
+          class="p-3"
+        >
+          200
+        </td>
+        <td
+          class="p-3"
+        >
+          2251799813984108
+        </td>
+        <td
+          class="p-3"
+        >
+          1696667765
+        </td>
+        <td
+          class="p-3"
+        >
+          Show History
         </td>
       </tr>
       <tr
@@ -389,241 +470,32 @@ exports[`HorizontalTable Component renders correctly 1`] = `
         <td
           class="p-3"
         >
-          <p>
-            sixth-multi-instance-process
-          </p>
+          another-multi-instance-process
         </td>
         <td
           class="p-3"
         >
-          <p>
-            amp
-          </p>
+          anotherVariable
         </td>
         <td
           class="p-3"
         >
-          <p>
-            integer
-          </p>
+          string
         </td>
         <td
           class="p-3"
         >
-          <p>
-            2251799813984642
-          </p>
+          2251799813984432
         </td>
         <td
           class="p-3"
         >
-          <p>
-            1696667164
-          </p>
+          1696667333
         </td>
         <td
           class="p-3"
         >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            items
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            [
-  {
-    "id": 1,
-    "value": 10,
-    "inCart": 10,
-    "inStock": 20
-  },
-  {
-    "id": 2,
-    "value": 20,
-    "inCart": 2,
-    "inStock": 10
-  }
-]
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            isValid
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            true
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            total
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            200
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984108
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667765
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
-        </td>
-      </tr>
-      <tr
-        class="border-b border-black/10 hover:bg-second-accent/10"
-      >
-        <td
-          class="p-3"
-        >
-          <p>
-            another-multi-instance-process
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            anotherVariable
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            string
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            2251799813984432
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            1696667333
-          </p>
-        </td>
-        <td
-          class="p-3"
-        >
-          <p>
-            Show History
-          </p>
+          Show History
         </td>
       </tr>
     </tbody>
