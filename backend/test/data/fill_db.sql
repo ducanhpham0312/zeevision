@@ -12,37 +12,11 @@ INSERT INTO instances(process_instance_key, process_definition_key, version, sta
 VALUES(13, 209384, 3, 'COMPLETED', '2023-11-27T02:40:00Z', '2023-11-27T02:42:00Z');
 
 INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(1, 11, 'StartEvent_1', 'START_EVENT', 'ELEMENT_ACTIVATING', '2023-11-27T02:45:00Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(2, 11, 'StartEvent_1', 'START_EVENT', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:01Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(15, 11, 'StartEvent_1', 'START_EVENT', 'ELEMENT_COMPLETING', '2023-11-27T02:45:02Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
 VALUES(16, 11, 'StartEvent_1', 'START_EVENT', 'ELEMENT_COMPLETED', '2023-11-27T02:45:03Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(3, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATING', '2023-11-27T02:45:02Z');
 INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
 VALUES(4, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:03Z');
 INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(5, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_COMPLETING', '2023-11-27T02:45:04Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(6, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_COMPLETED', '2023-11-27T02:45:05Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(7, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_ACTIVATING', '2023-11-27T02:45:06Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(8, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:07Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(9, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_COMPLETING', '2023-11-27T02:45:08Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(10, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_COMPLETED', '2023-11-27T02:45:09Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(11, 11, 'transfer-money', 'SERVICE_TASK', 'ELEMENT_ACTIVATING', '2023-11-27T02:45:10Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(12, 11, 'transfer-money', 'SERVICE_TASK', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:11Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(13, 11, 'transfer-money', 'SERVICE_TASK', 'ELEMENT_COMPLETING', '2023-11-27T02:45:12Z');
-INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
-VALUES(14, 11, 'transfer-money', 'SERVICE_TASK', 'ELEMENT_COMPLETED', '2023-11-27T02:45:13Z');
+VALUES(7, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_TERMINATED', '2023-11-27T02:45:06Z');
 
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'a', '1', '2023-11-27T02:05:00Z');
