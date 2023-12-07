@@ -17,6 +17,8 @@ INSERT INTO audit_logs(position, process_instance_key, element_id, element_type,
 VALUES(4, 11, 'Gateway_0wveo0b', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:03Z');
 INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
 VALUES(7, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_TERMINATED', '2023-11-27T02:45:06Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(10, 11, 'Event_19fj3y9', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:03Z');
 
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'a', '1', '2023-11-27T02:05:00Z');
@@ -24,24 +26,9 @@ INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'b', '2', '2023-11-27T02:22:00Z');
 
 INSERT INTO incidents(process_instance_key, element_id, key, error_type, error_message, state, time)
-VALUES(11, 'some-element-1', 100, 'ERROR', 'panic: runtime error: index out of range [4] with length 4
-
-goroutine 1 [running]:
-main.validateInput(0xc00001e1e0, 0x4, 0x4, 0x0, 0x0)
-    /path/to/validate.go:29 +0x1a2
-main.processData(0xc00001e1e0, 0x4, 0x4, 0x0)
-    /path/to/process.go:56 +0xef
-main.aggregateData(0x1139ba0, 0xc000010030, 0x3, 0x3)
-    /path/to/aggregate.go:42 +0x9c
-main.loadData(0x1139ba0, 0x1185b40, 0x1)
-    /path/to/load.go:37 +0x5a
-main.setupEnvironment()
-    /path/to/setup.go:24 +0x87
-main.init.0()
-    /path/to/main.go:18 +0x29
-', 'OPEN', '2023-11-27T02:23:00Z');
+VALUES(11, 'Gateway_0wveo0b', 100, 'EXTRACT_VALUE_ERROR', 'failed to evaluate expression debt > 1000: ValError(no variable found for name debt) is not comparable', 'CREATED', '2023-11-27T02:23:00Z');
 INSERT INTO incidents(process_instance_key, element_id, key, error_type, error_message, state, time)
-VALUES(11, 'some-element-2', 101, 'ERROR', 'Thing not work', 'RESOLVED', '2023-11-27T02:24:00Z');
+VALUES(11, 'send-rejection-letter', 200, 'EXTRACT_VALUE_ERROR', 'failed to evaluate expression debt > 1000: ValError(no variable found for name debt) is not comparable', 'RESOLVED', '2023-11-27T02:23:00Z');
 
 INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
 VALUES(11, 'some-element-1', 100, 'big-job', 4, 'big-boy-1', 'WORKING', '2023-11-27T02:23:00Z');
