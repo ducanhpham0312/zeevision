@@ -141,7 +141,7 @@ export function BpmnViewer({
         canvas.addMarker(elementId, "incident");
         break;
       case "SEQUENCE_FLOW_TAKEN":
-        canvas.addMarker("Flow_0kwk6ch", "flow_taken");
+        canvas.addMarker(elementId, "flow_taken");
     }
   };
 

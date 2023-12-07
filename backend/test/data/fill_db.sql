@@ -19,6 +19,8 @@ INSERT INTO audit_logs(position, process_instance_key, element_id, element_type,
 VALUES(7, 11, 'send-acceptance-letter', 'SERVICE_TASK', 'ELEMENT_TERMINATED', '2023-11-27T02:45:06Z');
 INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
 VALUES(10, 11, 'Event_19fj3y9', 'EXCLUSIVE_GATEWAY', 'ELEMENT_ACTIVATED', '2023-11-27T02:45:03Z');
+INSERT INTO audit_logs(position, process_instance_key, element_id, element_type, intent, time)
+VALUES(11, 11, 'Flow_03ei1b4', 'SEQUENCE_FLOW', 'SEQUENCE_FLOW_TAKEN', '2023-11-27T02:45:03Z');
 
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(11, 'a', '1', '2023-11-27T02:05:00Z');
