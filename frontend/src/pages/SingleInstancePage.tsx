@@ -1,5 +1,5 @@
 import { Table } from "../components/Table";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuerySingleInstance } from "../hooks/useQuerySingleInstance";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { ResizableContainer } from "../components/ResizableContainer";
@@ -7,7 +7,6 @@ import { Tabs } from "@mui/base/Tabs";
 import { TabsList } from "@mui/base/TabsList";
 import { TabPanel } from "@mui/base/TabPanel";
 import { Tab } from "@mui/base/Tab";
-import { Button } from "../components/Button";
 
 export default function SingleInstancesPage() {
   const params = useParams();
@@ -24,6 +23,7 @@ export default function SingleInstancesPage() {
     variables,
     jobs,
     auditLogs,
+    incidents,
   } = instance;
   const getLatestLogs = (): { elementId: string; intent: string }[] => {
     const latestLogs: Record<string, string> = {};
@@ -46,6 +46,10 @@ export default function SingleInstancesPage() {
       label: "Audit Logs",
       content: <AuditLogsTable auditLogs={auditLogs?.items} />,
     },
+    {
+      label: "Incidents",
+      content: <IncidentsTable incidents={incidents?.items} />,
+    },
   ];
   return (
     <div className="flex h-full w-full flex-col">
@@ -65,6 +69,10 @@ export default function SingleInstancesPage() {
                     "Start Time",
                     "End Time",
                   ]}
+                  navLinkColumn={{
+                    "Process Key": (value: string | number) =>
+                      `/processes/${value.toString()}`,
+                  }}
                   content={
                     instance
                       ? [
@@ -72,9 +80,7 @@ export default function SingleInstancesPage() {
                             instanceKey,
                             bpmnProcessId,
                             version,
-                            <NavLink to={`/processes/${processKey}`}>
-                              <Button variant="secondary">{processKey}</Button>
-                            </NavLink>,
+                            processKey,
                             status,
                             startTime,
                             endTime,
@@ -130,6 +136,9 @@ function VariablesTable({ variables }: VariableListProps) {
       alterRowColor
       orientation="horizontal"
       header={["Variable Name", "Variable Value", "Time"]}
+      noStyleColumn={{
+        "Variable Value": (value: string | number) => value.toString(),
+      }}
       content={
         variables && variables.length > 0
           ? variables.map(({ name, value, time }) => [name, value, time])
@@ -192,6 +201,49 @@ function AuditLogsTable({ auditLogs }: AuditLogListProps) {
                 elementType,
                 intent,
                 position,
+                time,
+              ],
+            )
+          : []
+      }
+    />
+  );
+}
+
+interface IncidentListProps {
+  incidents: IncidentType[];
+}
+function IncidentsTable({ incidents }: IncidentListProps) {
+  return (
+    <Table
+      orientation="horizontal"
+      header={[
+        "Element ID",
+        "Incident Key",
+        "Error Type",
+        "Error Message",
+        "State",
+        "Time",
+      ]}
+      noStyleColumn={{
+        "Error Message": (value: string | number) => value.toString(),
+      }}
+      content={
+        incidents
+          ? incidents.map(
+              ({
+                elementId,
+                incidentKey,
+                errorType,
+                errorMessage,
+                state,
+                time,
+              }) => [
+                elementId,
+                incidentKey,
+                errorType,
+                errorMessage,
+                state,
                 time,
               ],
             )

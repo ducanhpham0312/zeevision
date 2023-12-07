@@ -2,6 +2,12 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
 type AuditLog struct {
 	ElementID   string `json:"elementId"`
 	ElementType string `json:"elementType"`
@@ -99,4 +105,52 @@ type Variable struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 	Time  string `json:"time"`
+}
+
+type VariableFilter struct {
+	Name string     `json:"name"`
+	Type FilterType `json:"type"`
+}
+
+type FilterType string
+
+const (
+	FilterTypeIs       FilterType = "IS"
+	FilterTypeIsNot    FilterType = "IS_NOT"
+	FilterTypeContains FilterType = "CONTAINS"
+)
+
+var AllFilterType = []FilterType{
+	FilterTypeIs,
+	FilterTypeIsNot,
+	FilterTypeContains,
+}
+
+func (e FilterType) IsValid() bool {
+	switch e {
+	case FilterTypeIs, FilterTypeIsNot, FilterTypeContains:
+		return true
+	}
+	return false
+}
+
+func (e FilterType) String() string {
+	return string(e)
+}
+
+func (e *FilterType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FilterType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FilterType", str)
+	}
+	return nil
+}
+
+func (e FilterType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

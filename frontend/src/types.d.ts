@@ -37,6 +37,7 @@ type Instance = {
   variables: VariableResult;
   jobs: JobResult;
   auditLogs: AuditLogResult;
+  incidents: IncidentResults;
 };
 
 type VariableResult = {
@@ -77,4 +78,18 @@ type AuditLogType = {
 type AuditLogResult = {
   totalCount: number;
   items: AuditLogType[];
+  
+type IncidentResult = {
+  totalCount: number;
+  items: IncidentType[];
+};
+
+type IncidentType = {
+  incidentKey: number;
+  elementId: string;
+  instanceKey: number;
+  errorType: string;
+  errorMessage: string;
+  state: string;
+  time: string;
 };

@@ -61,8 +61,12 @@ func (r *instanceResolver) Jobs(ctx context.Context, obj *model.Instance, pagina
 }
 
 // Variables is the resolver for the variables field.
-func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination) (*model.PaginatedVariables, error) {
-	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx, model.ToStoragePagination(pagination), obj.InstanceKey)
+func (r *instanceResolver) Variables(ctx context.Context, obj *model.Instance, pagination *model.Pagination, filter *model.VariableFilter) (*model.PaginatedVariables, error) {
+	dbVariables, err := r.Fetcher.GetVariablesForInstance(ctx,
+		model.ToStoragePagination(pagination),
+		model.VariableFilterToStorageFilter(filter),
+		obj.InstanceKey,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch variables: %w", err)
 	}

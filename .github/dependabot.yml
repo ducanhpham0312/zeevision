@@ -40,6 +40,7 @@ updates:
           - "eslint"
           - "eslint-*"
           - "@typescript-eslint/*"
+          - "@swc/*"
     open-pull-requests-limit: 10
     labels:
       - "dependabot"

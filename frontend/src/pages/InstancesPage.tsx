@@ -1,7 +1,5 @@
-import { NavLink } from "react-router-dom";
 import { Table } from "../components/Table";
 import { useQueryInstances } from "../hooks/useQueryInstances";
-import { Button } from "../components/Button";
 
 export default function InstancesPage() {
   const { instances } = useQueryInstances();
@@ -16,6 +14,9 @@ export default function InstancesPage() {
         "Version",
         "Start Time",
       ]}
+      navLinkColumn={{
+        "Instance Key": (value: string | number) => value.toString(),
+      }}
       content={
         instances
           ? instances.map(
@@ -25,15 +26,7 @@ export default function InstancesPage() {
                 status,
                 version,
                 startTime,
-              }) => [
-                <NavLink to={instanceKey.toString()}>
-                  <Button variant="secondary">{instanceKey}</Button>
-                </NavLink>,
-                bpmnProcessId,
-                status,
-                version,
-                startTime,
-              ],
+              }) => [instanceKey, bpmnProcessId, status, version, startTime],
             )
           : []
       }
