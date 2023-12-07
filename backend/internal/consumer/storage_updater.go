@@ -21,7 +21,8 @@ type storageUpdater struct {
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType,
+	wg *sync.WaitGroup) *storageUpdater {
 	result := &storageUpdater{
 		storer: storer,
 
@@ -334,8 +335,9 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 
 	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
-		log.Printf("Incident created: %s (instance %d)",
-			errorType, processInstanceKey)
+		zap.L().Info("Incident created",
+			zap.String("error type", errorType),
+			zap.Int64("process instance", processInstanceKey))
 		return storer.IncidentCreated(
 			key,
 			processInstanceKey,
@@ -345,8 +347,9 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 			time,
 		)
 	case IntentResolved:
-		log.Printf("Incident resolved: %s (instance %d)",
-			errorType, processInstanceKey)
+		zap.L().Info("Incident resolved",
+			zap.String("error type", errorType),
+			zap.Int64("process instance", processInstanceKey))
 		return storer.IncidentResolved(
 			key,
 			time,
