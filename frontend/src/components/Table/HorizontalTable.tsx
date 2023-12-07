@@ -20,6 +20,7 @@ export interface HorizontalTableProps {
   header: string[];
   content: (string | number)[][];
   navLinkColumn?: Record<string, (value: string | number) => string>;
+  noStyleColumn?: Record<string, (value: string | number) => string>;
   alterRowColor?: boolean;
   expandElement?: (idx: number) => ReactNode;
   optionElement?: (idx: number) => ReactNode;
@@ -30,6 +31,7 @@ export function HorizontalTable({
   content,
   alterRowColor,
   navLinkColumn,
+  noStyleColumn,
   expandElement,
   optionElement,
 }: HorizontalTableProps) {
@@ -133,12 +135,10 @@ export function HorizontalTable({
                         <NavLink to={navLinkColumn[header[index]](value)}>
                           <Button variant="secondary">{value}</Button>
                         </NavLink>
+                      ) : noStyleColumn && noStyleColumn[header[index]] ? (
+                        <pre>{value}</pre>
                       ) : (
-                        <p>
-                          {typeof value === "string"
-                            ? prettifyJson(value)
-                            : value}
-                        </p>
+                        value
                       )}
                     </td>
                   ))}
@@ -212,15 +212,6 @@ export function HorizontalTable({
       </tfoot>
     </>
   );
-}
-
-function prettifyJson(str: string) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return str;
-  }
-  return JSON.stringify(JSON.parse(str), null, 2);
 }
 
 const StyledTablePagination = styled(TablePagination)`

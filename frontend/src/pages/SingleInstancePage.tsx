@@ -22,6 +22,7 @@ export default function SingleInstancesPage() {
     bpmnProcessId,
     variables,
     jobs,
+    incidents,
   } = instance;
 
   const tabsData = [
@@ -30,6 +31,10 @@ export default function SingleInstancesPage() {
       content: <VariablesTable variables={variables?.items} />,
     },
     { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
+    {
+      label: "Incidents",
+      content: <IncidentsTable incidents={incidents?.items} />,
+    },
   ];
   return (
     <div className="flex h-full w-full flex-col">
@@ -114,6 +119,9 @@ function VariablesTable({ variables }: VariableListProps) {
       alterRowColor
       orientation="horizontal"
       header={["Variable Name", "Variable Value", "Time"]}
+      noStyleColumn={{
+        "Variable Value": (value: string | number) => value.toString(),
+      }}
       content={
         variables && variables.length > 0
           ? variables.map(({ name, value, time }) => [name, value, time])
@@ -149,6 +157,49 @@ function JobsTable({ jobs }: JobListProps) {
                 type,
                 retries,
                 worker,
+                state,
+                time,
+              ],
+            )
+          : []
+      }
+    />
+  );
+}
+
+interface IncidentListProps {
+  incidents: IncidentType[];
+}
+function IncidentsTable({ incidents }: IncidentListProps) {
+  return (
+    <Table
+      orientation="horizontal"
+      header={[
+        "Element ID",
+        "Incident Key",
+        "Error Type",
+        "Error Message",
+        "State",
+        "Time",
+      ]}
+      noStyleColumn={{
+        "Error Message": (value: string | number) => value.toString(),
+      }}
+      content={
+        incidents
+          ? incidents.map(
+              ({
+                elementId,
+                incidentKey,
+                errorType,
+                errorMessage,
+                state,
+                time,
+              }) => [
+                elementId,
+                incidentKey,
+                errorType,
+                errorMessage,
                 state,
                 time,
               ],

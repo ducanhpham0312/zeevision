@@ -59,7 +59,20 @@ VALUES(12, 'foo', 'bar', '2023-11-27T02:30:00Z');
 INSERT INTO variables(process_instance_key, name, value, time)
 VALUES(12, 'hello', 'world', '2023-11-27T02:32:00Z');
 INSERT INTO variables(process_instance_key, name, value, time)
-VALUES(12, 'x', '[{"id": 1,"value" : 10,"inCart": 10,"inStock": 20},{"id": 2,"value" : 20,"inCart": 2,"inStock": 10}]', '2023-11-27T02:32:30Z');
+VALUES(12, 'x', '[
+	{
+		"id": 1,
+		"value" : 10,
+		"inCart": 10,
+		"inStock": 20
+	},
+	{
+		"id": 2,
+		"value" : 20,
+		"inCart": 2,
+		"inStock": 10
+	}
+]', '2023-11-27T02:32:30Z');
 
 INSERT INTO jobs(process_instance_key, element_id, key, type, retries, worker, state, time)
 VALUES(12, 'some-element-12', 200, 'small-job', 10, 'big-boy-1', 'WORKING', '2023-11-27T02:23:00Z');
