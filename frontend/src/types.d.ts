@@ -37,7 +37,7 @@ type Instance = {
   variables: VariableResult;
   jobs: JobResult;
   auditLogs: AuditLogResult;
-  incidents: IncidentResults;
+  incidents: IncidentResult;
 };
 
 type VariableResult = {

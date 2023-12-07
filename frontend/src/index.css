@@ -19,9 +19,9 @@
 }
 
 .terminated:not(.djs-connection) .djs-visual > :nth-child(1) {
-  color: red !important;
-  stroke: red !important;
-  fill: red !important;
+  color: gray !important;
+  stroke: gray !important;
+  fill: gray !important;
   opacity: 0.5;
 }
 
@@ -34,5 +34,12 @@
 .flow_taken:not(.djs-connection) .djs-visual > :nth-child(1) {
   color: green !important;
   stroke: green !important;
+  opacity: 0.5;
+}
+
+.incident:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: red !important;
+  stroke: red !important;
+  fill: red !important;
   opacity: 0.5;
 }

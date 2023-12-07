@@ -27,6 +27,9 @@ export default function SingleInstancesPage() {
   } = instance;
   const getLatestLogs = (): { elementId: string; intent: string }[] => {
     const latestLogs: Record<string, string> = {};
+    incidents?.items.forEach(incident => {
+      latestLogs[incident.elementId] = incident.state === "CREATED" ? "INCIDENT_CREATED" : "INCIDENT_RESOLVED"
+    })
     auditLogs?.items.forEach((auditLog) => {
       const { elementId, intent } = auditLog;
       if (!latestLogs[elementId]) latestLogs[elementId] = intent;

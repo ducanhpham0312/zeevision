@@ -130,14 +130,18 @@ export function BpmnViewer({
         break;
       case "ELEMENT_COMPLETING":
       case "ELEMENT_COMPLETED":
+      case "INCIDENT_RESOLVED":
         canvas.addMarker(elementId, "completed");
         break;
       case "ELEMENT_TERMINATING":
       case "ELEMENT_TERMINATED":
         canvas.addMarker(elementId, "terminated");
         break;
+      case "INCIDENT_CREATED":
+        canvas.addMarker(elementId, "incident");
+        break;
       case "SEQUENCE_FLOW_TAKEN":
-        canvas.addMarker(elementId, "flow_taken");
+        canvas.addMarker("Flow_0kwk6ch", "flow_taken");
     }
   };
 
