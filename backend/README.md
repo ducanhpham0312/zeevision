@@ -37,28 +37,38 @@ To try out the API Playground, try putting the query below to the query field an
 
 ```graphql
 query ManyProcesses {
-    processes {
+  processes(pagination: { limit: 3, offset: 0 }) {
+    totalCount
+    items {
         bpmnProcessId
         processKey
     }
+  }
 }
 ```
 
-You should see a JSON response with structure similar to this:
+You should see a JSON response with structure similar to this (after [filling the database](#filling-database-with-data) or deploying a process to Zeebe):
 
 ```json
 {
   "data": {
-    "processes": [
-      {
-        "bpmnProcessId": "multi-instance-process",
-        "processKey": 1
-      },
-      {
-        "bpmnProcessId": "money-loan",
-        "processKey": 2
-      }
-    ]
+    "processes": {
+      "totalCount": 5,
+      "items": [
+        {
+          "bpmnProcessId": "money-loan",
+          "processKey": 123456
+        },
+        {
+          "bpmnProcessId": "order-subprocess",
+          "processKey": 409187
+        },
+        {
+          "bpmnProcessId": "order-main",
+          "processKey": 912375
+        }
+      ]
+    }
   }
 }
 ```
