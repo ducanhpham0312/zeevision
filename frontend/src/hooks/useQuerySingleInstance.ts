@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
+import useQueryWithLoading from "./useQueryWithLoading";
 
 export interface QueryInstanceReturnType {
   instance: Instance;
@@ -50,7 +51,7 @@ const SINGLE_INSTANCE_BPMN_RESOURCE_QUERY = (id: string) => gql`
 `;
 
 export function useQuerySingleInstance(id: string): QueryInstanceReturnType {
-  const instanceData = useQuery(SINGLE_INSTANCE_QUERY(id), {
+  const instanceData = useQueryWithLoading(SINGLE_INSTANCE_QUERY(id), {
     pollInterval: queryPollIntervalMs,
   });
 

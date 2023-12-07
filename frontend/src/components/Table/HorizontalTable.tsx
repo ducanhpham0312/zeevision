@@ -5,17 +5,13 @@ import {
   MouseEvent,
   ChangeEvent,
 } from "react";
-import { styled } from "@mui/system";
-import {
-  TablePagination,
-  tablePaginationClasses as classes,
-} from "@mui/base/TablePagination";
 import { Button } from "../Button";
 import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
 import { DataFilter, FilterType } from "./DataFilter";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { NavLink } from "react-router-dom";
+import { useTableStore } from "../../contexts/useTableStore";
 
 export interface HorizontalTableProps {
   header: string[];
@@ -45,6 +41,7 @@ export function HorizontalTable({
     useState<(string | number)[][]>(content);
 
   const [copyHelperText, setCopyHelperText] = useState("Copy");
+  const { loading } = useTableStore();
 
   const sortContent = useCallback(
     (
@@ -74,19 +71,8 @@ export function HorizontalTable({
     setSortOrder(newSortOrder);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - content.length) : 0;
-
-  const handleChangePage = (
-    _event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    setPage(newPage);
-  };
-
   const handleChangeRowsPerPage = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -96,7 +82,7 @@ export function HorizontalTable({
     expandElement || optionElement ? header.length + 1 : header.length;
 
   return (
-    <div>
+    <div className="relative flex h-full flex-col">
       {filterConfig ? <DataFilter filterConfig={filterConfig} /> : null}
       <table className="relative w-full border-collapse rounded bg-white">
         <thead className="border-b-2 border-accent font-bold text-text">
@@ -123,7 +109,10 @@ export function HorizontalTable({
             ))}
           </tr>
         </thead>
-        <tbody aria-label="custom pagination table">
+        <tbody
+          aria-label="custom pagination table"
+          className="border-l-2 border-r-2 border-accent"
+        >
           {sortedContent
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, rowIdx) => {
@@ -150,11 +139,7 @@ export function HorizontalTable({
                               <Button variant="secondary">{value}</Button>
                             </NavLink>
                           ) : (
-                            <p>
-                              {typeof value === "string"
-                                ? prettifyJson(value)
-                                : value}
-                            </p>
+                            <p>{value}</p>
                           )}
                           <Button
                             helperTextPos="n"
@@ -171,7 +156,7 @@ export function HorizontalTable({
                       </td>
                     ))}
                     {expandElement ? (
-                      <td className="flex h-[55px] items-center justify-center p-0">
+                      <td className="p-3">
                         <Button
                           onClick={() =>
                             setExpandedRow((prev) =>
@@ -201,7 +186,7 @@ export function HorizontalTable({
                 </>
               );
             })}
-          {content.length === 0 ? (
+          {content.length === 0 && !loading ? (
             <tr>
               <td colSpan={colSpan}>
                 <div className="flex h-20 w-full items-center justify-center border border-black/10">
@@ -210,82 +195,82 @@ export function HorizontalTable({
               </td>
             </tr>
           ) : null}
-          {emptyRows > 0 && (
-            <tr style={{ height: 41 * emptyRows }}>
-              <td colSpan={colSpan} />
+          {loading ? (
+            <tr>
+              <td colSpan={colSpan}>
+                <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                  <p>Loading</p>
+                </div>
+              </td>
             </tr>
-          )}
+          ) : null}
         </tbody>
-        <tfoot>
-          <tr>
-            <StyledTablePagination
-              rowsPerPageOptions={[
-                ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
-                { label: "All", value: -1 },
-              ]}
-              colSpan={colSpan}
-              count={content.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              slotProps={{
-                select: {
-                  "aria-label": "rows per page",
-                },
-                actions: {
-                  showFirstButton: true,
-                  showLastButton: true,
-                },
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </tr>
-        </tfoot>
       </table>
+
+      <div className="sticky bottom-12 w-full border-t-2 border-accent" />
+      <div className="sticky bottom-0 mt-auto h-12 bg-white">
+        <div className="flex h-12 w-full items-center justify-end gap-6 px-3 pt-1">
+          <div className="flex gap-4">
+            <p className="text-sm">Rows per page:</p>
+            <select
+              className="text-sm"
+              value={rowsPerPage}
+              onChange={handleChangeRowsPerPage}
+            >
+              {/* <optgroup className="text-sm"> */}
+              {Array.from({ length: 6 }, (_, index) => (index + 1) * 5).map(
+                (option) => (
+                  <option value={option}>{option}</option>
+                ),
+              )}
+              {/* </optgroup> */}
+            </select>
+          </div>
+          <p className="text-sm text-black/60">
+            {rowsPerPage * page + 1}-
+            {Math.min(rowsPerPage * (page + 1), content.length)} of{" "}
+            {content.length}
+          </p>
+          {/* have at least 2 page button to render */}
+          {Math.ceil(content.length / rowsPerPage) > 1 ? (
+            <div className="flex gap-1">
+              {Array.from({
+                length: Math.ceil(content.length / rowsPerPage),
+              }).map((_, index) => (
+                <Button
+                  active={index === page}
+                  onClick={() => setPage(index)}
+                  width={40}
+                  variant="secondary"
+                >
+                  {index + 1}
+                </Button>
+              ))}
+            </div>
+          ) : null}
+        </div>
+        {/* <StyledTablePagination
+          rowsPerPageOptions={[
+            ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
+            { label: "All", value: -1 },
+          ]}
+          colSpan={colSpan}
+          count={content.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          slotProps={{
+            select: {
+              "aria-label": "rows per page",
+            },
+            actions: {
+              showFirstButton: true,
+              showLastButton: true,
+            },
+          }}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        /> */}
+      </div>
     </div>
   );
 }
-
-function prettifyJson(str: string) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return str;
-  }
-  return JSON.stringify(JSON.parse(str), null, 2);
-}
-
-const StyledTablePagination = styled(TablePagination)`
-  & .${classes.toolbar} {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-
-    @media (min-width: 768px) {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-
-  & .${classes.selectLabel} {
-    margin: 0;
-  }
-
-  & .${classes.displayedRows} {
-    margin: 0;
-
-    @media (min-width: 768px) {
-      margin-left: auto;
-    }
-  }
-
-  & .${classes.spacer} {
-    display: none;
-  }
-
-  & .${classes.actions} {
-    display: flex;
-    gap: 0.25rem;
-  }
-`;

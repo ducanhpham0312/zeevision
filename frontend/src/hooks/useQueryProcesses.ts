@@ -1,5 +1,6 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
+import useQueryWithLoading from "./useQueryWithLoading";
 
 interface QueryProcessesReturnType {
   totalCount: number;
@@ -30,7 +31,7 @@ const PROCESSES_QUERY = () => gql`
 `;
 
 export function useQueryProcesses(): QueryProcessesReturnType {
-  const processesData = useQuery(PROCESSES_QUERY(), {
+  const processesData = useQueryWithLoading(PROCESSES_QUERY(), {
     pollInterval: queryPollIntervalMs,
   });
 

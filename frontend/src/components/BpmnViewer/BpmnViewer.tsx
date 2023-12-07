@@ -64,13 +64,9 @@ export function BpmnViewer({
     const modeler = navigated
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: height,
         })
       : new Viewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: height,
         });
 
     async function openDiagram(xmlString: string) {
@@ -89,7 +85,7 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, height, navigated, width]);
+  }, [bpmnString, navigated]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {

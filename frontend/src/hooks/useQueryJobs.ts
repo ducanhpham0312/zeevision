@@ -1,5 +1,6 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
+import useQueryWithLoading from "./useQueryWithLoading";
 
 interface QueryJobsReturnType {
   totalCount: number;
@@ -24,7 +25,7 @@ const JOBS_QUERY = () => gql`
 `;
 
 export function useQueryJobs(): QueryJobsReturnType {
-  const jobsData = useQuery(JOBS_QUERY(), {
+  const jobsData = useQueryWithLoading(JOBS_QUERY(), {
     pollInterval: queryPollIntervalMs,
   });
 

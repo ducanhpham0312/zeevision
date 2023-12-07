@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
+import useQueryWithLoading from "./useQueryWithLoading";
 
 interface QueryProcessDataReturnType {
   process: ProcessType;
@@ -34,7 +35,7 @@ const SINGLE_PROCESS_BPMN_RESOURCE_QUERY = (id: string) => gql`
   `;
 
 export function useQueryProcessData(id: string): QueryProcessDataReturnType {
-  const processData = useQuery(SINGLE_PROCESS_QUERY(id), {
+  const processData = useQueryWithLoading(SINGLE_PROCESS_QUERY(id), {
     pollInterval: queryPollIntervalMs,
   });
   const bpmnData = useQuery(SINGLE_PROCESS_BPMN_RESOURCE_QUERY(id));
