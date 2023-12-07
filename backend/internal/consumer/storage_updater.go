@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
+	"go.uber.org/zap"
 )
 
 const (
@@ -29,7 +29,8 @@ type storageUpdater struct {
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType,
+	wg *sync.WaitGroup) *storageUpdater {
 	result := &storageUpdater{
 		storer: storer,
 
@@ -66,13 +67,13 @@ readLoop:
 			var untypedRecord UntypedRecord
 			err := json.Unmarshal(msg, &untypedRecord)
 			if err != nil {
-				log.Printf("Failed to unmarshal: %v", err)
+				zap.L().Info("Failed to unmarshal: ", zap.Error(err))
 				continue readLoop
 			}
 
 			err = u.handlingDispatch(&untypedRecord)
 			if err != nil {
-				log.Printf("Handling failed: %v", err)
+				zap.L().Info("Handling failed: ", zap.Error(err))
 				continue readLoop
 			}
 		}
@@ -106,8 +107,9 @@ func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 			return fmt.Errorf("failed to handle variable: %w", err)
 		}
 	default:
-		log.Printf("Unhandled record: %v (intent: %v)",
-			untypedRecord.ValueType, untypedRecord.Intent)
+		zap.L().Info("Unhandled record:",
+			zap.String("value type", string(untypedRecord.ValueType)),
+			zap.String("intent", string(untypedRecord.Intent)))
 	}
 	return nil
 }
@@ -145,7 +147,7 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 			processDefinitionKey := process.ProcessDefinitionKey
 			deploymentTime := time.UnixMilli(record.Timestamp)
 			version := process.Version
-			log.Printf("Deploying %s", bpmnProcessID)
+			zap.L().Info("Deploying ", zap.String("bpmn process", bpmnProcessID))
 
 			err := storer.ProcessDeployed(
 				processDefinitionKey,
@@ -157,8 +159,9 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 			if err != nil {
 				errs = append(errs, err)
 			} else {
-				log.Printf("Deployed process %d (%s)",
-					processDefinitionKey, bpmnProcessID)
+				zap.L().Info("Deployed process with ",
+					zap.Int64("process definition", processDefinitionKey),
+					zap.String("bpmn process", bpmnProcessID))
 			}
 		}
 
@@ -170,8 +173,9 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 		// We'll also get IntentFullyDistributed once it's distributed to all
 		// zeebe partitions but I'm not sure that's useful information to us
 	default:
-		log.Printf("Unhandled intent for %v: %s",
-			record.ValueType, record.Intent)
+		zap.L().Info("Unhandled intent for ",
+			zap.String("value type", string(record.ValueType)),
+			zap.String("intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -192,11 +196,13 @@ func (u *storageUpdater) handleProcess(untypedRecord *UntypedRecord) error {
 	case IntentCreated:
 		// I think these should already be handled in deploy?
 		// Log them here anyway in case that's *not* always the case
-		log.Printf("Process created: %d (%s)",
-			processDefinitionKey, bpmnProcessID)
+		zap.L().Info("Process created:",
+			zap.Int64("process definition", processDefinitionKey),
+			zap.String("bpmn process", bpmnProcessID))
 	default:
-		log.Printf("Unhandled intent for %v: %s",
-			record.ValueType, record.Intent)
+		zap.L().Info("Unhandled intent for ",
+			zap.String("value type", string(record.ValueType)),
+			zap.String("intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -223,11 +229,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	switch record.Intent { // nolint:exhaustive
 	case IntentElementActivating:
 		if bpmnElementType == BpmnElementTypeProcess {
-			log.Printf("Process instance activating: %d", processInstanceKey)
+			zap.L().Info("Process instance activating:", zap.Int64("process instance", processInstanceKey))
 		}
 	case IntentElementActivated:
 		if bpmnElementType == BpmnElementTypeProcess {
-			log.Printf("Process instance activated: %d", processInstanceKey)
+			zap.L().Info("Process instance activated:", zap.Int64("process instance", processInstanceKey))
 			return storer.ProcessInstanceActivated(
 				processInstanceKey,
 				processDefinitionKey,
@@ -237,11 +243,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		}
 	case IntentElementCompleting:
 		if bpmnElementType == BpmnElementTypeProcess {
-			log.Printf("Process instance completing: %d", processInstanceKey)
+			zap.L().Info("Process instance completing:", zap.Int64("process instance", processInstanceKey))
 		}
 	case IntentElementCompleted:
 		if bpmnElementType == BpmnElementTypeProcess {
-			log.Printf("Process instance completed: %d", processInstanceKey)
+			zap.L().Info("Process instance completed:", zap.Int64("process instance", processInstanceKey))
 			return storer.ProcessInstanceCompleted(
 				processInstanceKey,
 				time.UnixMilli(record.Timestamp),
@@ -249,19 +255,20 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		}
 	case IntentElementTerminating:
 		if bpmnElementType == BpmnElementTypeProcess {
-			log.Printf("Process instance terminating: %d", processInstanceKey)
+			zap.L().Info("Process instance terminating:", zap.Int64("process instance", processInstanceKey))
 		}
 	case IntentElementTerminated:
 		if bpmnElementType == BpmnElementTypeProcess {
-			log.Printf("Process instance terminated: %d", processInstanceKey)
+			zap.L().Info("Process instance terminated:", zap.Int64("process instance", processInstanceKey))
 			return storer.ProcessInstanceTerminated(
 				processInstanceKey,
 				time.UnixMilli(record.Timestamp),
 			)
 		}
 	default:
-		log.Printf("Unhandled intent for %v: %s",
-			record.ValueType, record.Intent)
+		zap.L().Info("Unhandled intent for ",
+			zap.String("value type", string(record.ValueType)),
+			zap.String("intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -282,8 +289,10 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 	value := record.Value.Value
 	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
-		log.Printf("Variable created: %s = %s (instance %d)",
-			name, value, processInstanceKey)
+		zap.L().Info("Variable created",
+			zap.String("name", name),
+			zap.String("value", value),
+			zap.Int64("process instance", processInstanceKey))
 		// Retry five times with a delay of 100 milliseconds until we successfully create the variable
 		retryDelay := createAttemptDelay
 		retryCount := maxCreateAttempts
@@ -298,11 +307,11 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 			)
 			if err != nil {
 				time.Sleep(retryDelay)
-				log.Printf("Failed to create variable %s, retrying: %v",
-					name, err)
+				zap.L().Info("Failed to create variable", zap.String("name", name))
+				zap.L().Info("Retrying:", zap.Error(err))
+
 			} else {
-				log.Printf("Variable successfully created: %s",
-					name)
+				zap.L().Info("Variable successfully created", zap.String("name", name))
 				return nil
 			}
 		}
@@ -310,8 +319,10 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 		// succeed and fall through
 		return err
 	case IntentUpdated:
-		log.Printf("Variable updated: %s = %s (instance %d)",
-			name, value, processInstanceKey)
+		zap.L().Info("Variable updated",
+			zap.String("name", name),
+			zap.String("value", value),
+			zap.Int64("process instance", processInstanceKey))
 		return storer.VariableUpdated(
 			processInstanceKey,
 			name,
@@ -319,8 +330,9 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 			time.UnixMilli(record.Timestamp),
 		)
 	default:
-		log.Printf("Unhandled intent for %v: %s",
-			record.ValueType, record.Intent)
+		zap.L().Info("Unhandled intent for ",
+			zap.String("value type", string(record.ValueType)),
+			zap.String("intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling

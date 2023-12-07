@@ -2,12 +2,12 @@ package consumer
 
 import (
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/ducanhpham0312/zeevision/backend/internal/storage"
+	"go.uber.org/zap"
 )
 
 type msgChannelType = chan []byte
@@ -113,7 +113,7 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 		defer wg.Done()
 		defer func() {
 			if err := partitionConsumer.Close(); err != nil {
-				log.Fatal("partition consumer close error:", err)
+				zap.L().Fatal("partition consumer close error:", zap.Error(err))
 			}
 		}()
 
@@ -129,8 +129,11 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 				// TODO: don't necessarily log every message like this
 				select {
 				case msgChannel <- msg.Value:
-					log.Printf("[%s/%d] Consumed message offset %d\n",
-						topic, partition, msg.Offset)
+					zap.L().Info("Consumed message",
+						zap.Int64("offset", msg.Offset),
+						zap.String("", topic),
+						zap.String("", "/"),
+						zap.Int32("", partition))
 				case <-closeChannel:
 					// Also listen to closeChannel here to
 					// avoid dropping values on the floor
