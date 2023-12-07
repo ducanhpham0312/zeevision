@@ -1,7 +1,5 @@
-import { NavLink } from "react-router-dom";
 import { Table } from "../components/Table";
 import { useQueryIncidents } from "../hooks/useQueryIncidents";
-import { Button } from "../components/Button";
 
 export default function IncidentsPage() {
   const { incidents } = useQueryIncidents();
@@ -9,13 +7,15 @@ export default function IncidentsPage() {
     <Table
       orientation="horizontal"
       header={["Instance Key", "Incident Key", "Element ID", "State", "Time"]}
+      navLinkColumn={{
+        "Instance Key": (value: string | number) =>
+          `/instances/${value.toString()}`,
+      }}
       content={
         incidents
           ? incidents.map(
               ({ instanceKey, incidentKey, elementId, state, time }) => [
-                <NavLink to={`/instances/${instanceKey.toString()}`}>
-                  <Button variant="secondary">{instanceKey}</Button>
-                </NavLink>,
+                instanceKey,
                 incidentKey,
                 elementId,
                 state,

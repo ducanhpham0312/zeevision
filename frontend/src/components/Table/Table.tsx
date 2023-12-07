@@ -26,6 +26,7 @@ export interface TableProps {
   alterRowColor?: boolean;
   className?: string;
   navLinkColumn?: Record<string, (value: string | number) => string>;
+  noStyleColumn?: Record<string, (value: string | number) => string>;
 }
 
 export function Table({

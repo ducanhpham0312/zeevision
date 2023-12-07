@@ -31,7 +31,10 @@ export default function SingleInstancesPage() {
       content: <VariablesTable variables={variables?.items} />,
     },
     { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
-    { label: "Incidents", content: <IncidentsTable incidents={incidents?.items} /> },
+    {
+      label: "Incidents",
+      content: <IncidentsTable incidents={incidents?.items} />,
+    },
   ];
   return (
     <div className="flex h-full w-full flex-col">
@@ -116,13 +119,12 @@ function VariablesTable({ variables }: VariableListProps) {
       alterRowColor
       orientation="horizontal"
       header={["Variable Name", "Variable Value", "Time"]}
+      noStyleColumn={{
+        "Variable Value": (value: string | number) => value.toString(),
+      }}
       content={
         variables && variables.length > 0
-          ? variables.map(({ name, value, time }) => [
-              name,
-              <pre>{value}</pre>,
-              time,
-            ])
+          ? variables.map(({ name, value, time }) => [name, value, time])
           : []
       }
     />
@@ -176,10 +178,13 @@ function IncidentsTable({ incidents }: IncidentListProps) {
         "Element ID",
         "Incident Key",
         "Error Type",
-        "Retries",
+        "Error Message",
         "State",
         "Time",
       ]}
+      noStyleColumn={{
+        "Error Message": (value: string | number) => value.toString(),
+      }}
       content={
         incidents
           ? incidents.map(
@@ -194,7 +199,7 @@ function IncidentsTable({ incidents }: IncidentListProps) {
                 elementId,
                 incidentKey,
                 errorType,
-                <pre>{errorMessage}</pre>,
+                errorMessage,
                 state,
                 time,
               ],
