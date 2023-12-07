@@ -28,6 +28,6 @@ export function useQueryIncidents(): QueryIncidentsReturnType {
   });
 
   return {
-    incidents: incidentsData.data?.incidents,
+    incidents: incidentsData.data?.incidents.items,
   };
 }
