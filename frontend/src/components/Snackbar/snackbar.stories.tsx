@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SnackbarContent } from ".";
-import {log} from "../../utils/logger.ts";
+import { log } from "../../utils/logger.ts";
 
 const meta = {
   title: "Assets/Snackbar",
