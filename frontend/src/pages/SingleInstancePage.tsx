@@ -32,7 +32,7 @@ export default function SingleInstancesPage() {
     { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
   ];
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col pr-4">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">

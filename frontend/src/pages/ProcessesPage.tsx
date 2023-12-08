@@ -17,7 +17,7 @@ export default function ProcessesPage() {
         onOpenPopUp={handleOpen}
         onClosePopUp={handleClose}
       />
-      <div className="flex h-full flex-col gap-10 overflow-auto">
+      <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
         <div className="flex items-center justify-between">
           <h1>PROCESSES</h1>
           <Button onClick={handleOpen} variant="secondary">
@@ -28,10 +28,15 @@ export default function ProcessesPage() {
           <Table
             alterRowColor
             filterConfig={{
-              "Process Key": "string",
-              "Process ID": "string",
-              Version: "value",
-              "Deployment Time": "time",
+              mainFilter: {
+                column: "Process ID",
+              },
+              filterOptions: {
+                "Process Key": "string",
+                "Process ID": "string",
+                Version: "value",
+                "Deployment Time": "time",
+              },
             }}
             header={["Process Key", "Process ID", "Version", "Deployment Time"]}
             orientation="horizontal"

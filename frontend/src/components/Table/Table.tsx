@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
-import { FilterType } from "./DataFilter";
+import { DataFilterProps } from "./DataFilter";
 
 export interface TableProps {
   /**
@@ -24,7 +24,7 @@ export interface TableProps {
   optionElement?: (idx: number) => ReactNode;
 
   alterRowColor?: boolean;
-  filterConfig?: Record<string, FilterType>;
+  filterConfig?: DataFilterProps["filterConfig"];
   navLinkColumn?: Record<string, (value: string | number) => string>;
 }
 

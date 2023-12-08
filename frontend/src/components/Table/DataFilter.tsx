@@ -22,8 +22,13 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export type FilterType = "string" | "time" | "value";
 
-interface DataFilterProps {
-  filterConfig: Record<string, FilterType>;
+export interface DataFilterProps {
+  filterConfig: {
+    mainFilter: {
+      column: string;
+    };
+    filterOptions: Record<string, FilterType>;
+  };
 }
 
 type FilterOptionType = {
@@ -115,7 +120,7 @@ const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
 const getInitFilterState = (
   filterConfig: DataFilterProps["filterConfig"],
 ): Record<string, Record<string, FilterState>> =>
-  Object.entries(filterConfig).reduce(
+  Object.entries(filterConfig.filterOptions).reduce(
     (a, [column, type]) => {
       a[column] = columnFilterOptions[type].reduce(
         (a, filterOption) => {
@@ -144,6 +149,8 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
   const [filterState, setFilterState] = useState(
     getInitFilterState(filterConfig),
   );
+
+  const [mainFilterQueryString, setMainFilterQueryString] = useState("");
 
   const handleToggleFilter =
     (column: string, filterName: string) => (e: React.MouseEvent) => {
@@ -197,7 +204,23 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
   return (
     <div className="flex w-full flex-col">
       <div className="mb-1 flex w-full gap-2">
-        <Input className="flex-grow" placeholder="Search by name" />
+        <Input
+          value={mainFilterQueryString}
+          onChange={(e) => {
+            let timerId: number;
+
+            // Debounce function: Input as function which needs to be debounced and delay is the debounced time in milliseconds
+            let debounceFunction = function (func, delay) {
+              // Cancels the setTimeout method execution
+              clearTimeout(timerId);
+
+              // Executes the func after delay time.
+              timerId = setTimeout(func, delay);
+            };
+          }}
+          className="flex-grow"
+          placeholder={`Search by ${filterConfig.mainFilter.column}`}
+        />
         <div>
           <DropdownMenu
             onOpenChange={(open) => {
@@ -212,8 +235,8 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
             <DropdownMenuContent side="bottom" className="mr-4 mt-1 w-[250px]">
               <DropdownMenuLabel>Choose a column</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {Object.keys(filterConfig).map((column) => {
-                const filterType = filterConfig[column];
+              {Object.keys(filterConfig.filterOptions).map((column) => {
+                const filterType = filterConfig.filterOptions[column];
                 return (
                   <DropdownMenuSub key={column}>
                     <DropdownMenuSubTrigger>

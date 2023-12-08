@@ -4,12 +4,22 @@ import { useQueryInstances } from "../hooks/useQueryInstances";
 export default function InstancesPage() {
   const { instances } = useQueryInstances();
   return (
-    <div className="flex h-full flex-col gap-10 overflow-auto">
+    <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
       <h1>INSTANCES</h1>
 
       <Table
         alterRowColor
         orientation="horizontal"
+        filterConfig={{
+          mainFilter: { column: "Instance Key" },
+          filterOptions: {
+            "Instance Key": "string",
+            "BPMN Process ID": "string",
+            Status: "string",
+            Version: "value",
+            "Start Time": "time",
+          },
+        }}
         header={[
           "Instance Key",
           "BPMN Process ID",

@@ -1,14 +1,8 @@
-import {
-  useState,
-  useCallback,
-  useEffect,
-  MouseEvent,
-  ChangeEvent,
-} from "react";
+import { useState, useCallback, useEffect, ChangeEvent } from "react";
 import { Button } from "../Button";
 import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
-import { DataFilter, FilterType } from "./DataFilter";
+import { DataFilter, DataFilterProps } from "./DataFilter";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { NavLink } from "react-router-dom";
 import { useTableStore } from "../../contexts/useTableStore";
@@ -18,7 +12,7 @@ export interface HorizontalTableProps {
   content: (string | number)[][];
   navLinkColumn?: Record<string, (value: string | number) => string>;
   alterRowColor?: boolean;
-  filterConfig?: Record<string, FilterType>;
+  filterConfig?: DataFilterProps["filterConfig"];
   expandElement?: (idx: number) => React.ReactNode;
   optionElement?: (idx: number) => React.ReactNode;
 }
@@ -82,7 +76,7 @@ export function HorizontalTable({
     expandElement || optionElement ? header.length + 1 : header.length;
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="flex h-full flex-col">
       {filterConfig ? <DataFilter filterConfig={filterConfig} /> : null}
       <table className="relative w-full border-collapse rounded bg-white">
         <thead className="border-b-2 border-accent font-bold text-text">
@@ -209,7 +203,7 @@ export function HorizontalTable({
 
       <div className="sticky bottom-12 w-full border-t-2 border-accent" />
       <div className="sticky bottom-0 mt-auto h-12 bg-white">
-        <div className="flex h-12 w-full items-center justify-end gap-6 px-3 pt-1">
+        <div className="flex h-12 w-full items-center justify-end gap-8 px-3 pt-1">
           <div className="flex gap-4">
             <p className="text-sm">Rows per page:</p>
             <select
@@ -217,13 +211,13 @@ export function HorizontalTable({
               value={rowsPerPage}
               onChange={handleChangeRowsPerPage}
             >
-              {/* <optgroup className="text-sm"> */}
               {Array.from({ length: 6 }, (_, index) => (index + 1) * 5).map(
                 (option) => (
-                  <option value={option}>{option}</option>
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
                 ),
               )}
-              {/* </optgroup> */}
             </select>
           </div>
           <p className="text-sm text-black/60">
@@ -233,7 +227,7 @@ export function HorizontalTable({
           </p>
           {/* have at least 2 page button to render */}
           {Math.ceil(content.length / rowsPerPage) > 1 ? (
-            <div className="flex gap-1">
+            <div className="flex gap-1.5">
               {Array.from({
                 length: Math.ceil(content.length / rowsPerPage),
               }).map((_, index) => (
@@ -249,27 +243,6 @@ export function HorizontalTable({
             </div>
           ) : null}
         </div>
-        {/* <StyledTablePagination
-          rowsPerPageOptions={[
-            ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
-            { label: "All", value: -1 },
-          ]}
-          colSpan={colSpan}
-          count={content.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          slotProps={{
-            select: {
-              "aria-label": "rows per page",
-            },
-            actions: {
-              showFirstButton: true,
-              showLastButton: true,
-            },
-          }}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        /> */}
       </div>
     </div>
   );
