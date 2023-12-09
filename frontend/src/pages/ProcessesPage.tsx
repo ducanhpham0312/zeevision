@@ -8,7 +8,12 @@ export default function ProcessesPage() {
     <div className="flex h-full flex-col gap-10 overflow-auto">
       <Table
         alterRowColor
-        header={["Process Key", "Process ID", "Version", "Deployment Time"]}
+        header={[
+          "Process Key",
+          "BPMN Process ID",
+          "Version",
+          "Deployment Time",
+        ]}
         orientation="horizontal"
         navLinkColumn={{
           "Process Key": (value: string | number) => `/processes/${value}`,
