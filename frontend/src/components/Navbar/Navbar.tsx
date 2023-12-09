@@ -35,7 +35,7 @@ export function Navbar() {
   return (
     <header className="fixed z-50 flex w-full items-center gap-5 border-b border-black/10 bg-background px-5 transition hover:shadow-lg">
       <div>
-        <div>ZEEVISION</div>
+        <button onClick={() => navigate("/")}>ZEEVISION</button>
       </div>
       <div className="h-10 w-0 border-l border-black/30" />
       <div className="flex">
