@@ -11,9 +11,34 @@
   }
 }
 
-.highlight:not(.djs-connection) .djs-visual > :nth-child(1) {
-  @apply text-green-600;
-  fill: green !important; /* color elements as green */
-  color: green !important; /* color elements as green */
-  stroke: green !important; /* color elements as green */
+.activated:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: green !important;
+  stroke: green !important;
+  fill: green !important;
+  opacity: 0.5;
+}
+
+.terminated:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: gray !important;
+  stroke: gray !important;
+  fill: gray !important;
+  opacity: 0.5;
+}
+
+.completed:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: green !important;
+  stroke: green !important;
+  opacity: 0.5;
+}
+
+.flow_taken.djs-connection .djs-visual > :nth-child(1) {
+  stroke: green !important;
+  opacity: 0.5;
+}
+
+.incident:not(.djs-connection) .djs-visual > :nth-child(1) {
+  color: red !important;
+  stroke: red !important;
+  fill: red !important;
+  opacity: 0.5;
 }

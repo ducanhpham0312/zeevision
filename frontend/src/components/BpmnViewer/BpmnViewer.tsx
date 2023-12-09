@@ -28,6 +28,11 @@ interface BpmnViewerProps {
   navigated?: boolean;
 
   control?: boolean;
+
+  /**
+   * List of bpmn element's intent for coloring BPMN diagram
+   */
+  colorOptions?: { elementId: string; intent: string }[];
 }
 
 type ViewBoxInner = {
@@ -37,18 +42,13 @@ type ViewBoxInner = {
   height: number;
 };
 
-type ViewBoxOuter = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
 export function BpmnViewer({
   bpmnString,
   width,
   height,
   navigated,
   control,
+  colorOptions,
 }: BpmnViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [modeler, setModeler] = useState<Viewer>();
@@ -64,21 +64,18 @@ export function BpmnViewer({
     const modeler = navigated
       ? new NavigatedViewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: height,
         })
       : new Viewer({
           container: containerRef.current as HTMLDivElement,
-          width: width,
-          height: height,
         });
 
     async function openDiagram(xmlString: string) {
       try {
         await modeler.importXML(xmlString);
 
-        // const canvas = modeler.get("canvas");
-        // canvas.addMarker("Gateway_0wveo0b", "highlight");
+        colorOptions?.forEach(({ elementId, intent }) => {
+          setBpmnMarker(modeler, elementId, intent);
+        });
       } catch (err) {
         console.error(err);
       }
@@ -89,7 +86,7 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, height, navigated, width]);
+  }, [bpmnString, colorOptions, navigated]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {
@@ -97,7 +94,7 @@ export function BpmnViewer({
     }
     setCurrentZoom(1);
     const canvas = modeler.get("canvas") as {
-      viewbox(): { inner: ViewBoxInner; outer: ViewBoxOuter };
+      viewbox(): { inner: ViewBoxInner };
       zoom: (mode: string, center: { x: number; y: number }) => void;
     };
 
@@ -118,6 +115,35 @@ export function BpmnViewer({
     setCurrentZoom(zoom);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (modeler.get("canvas") as any).zoom(zoom);
+  };
+
+  const setBpmnMarker = (
+    modeler: Viewer,
+    elementId: string,
+    intent: string,
+  ) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const canvas = modeler.get("canvas") as any;
+    switch (intent) {
+      case "ELEMENT_ACTIVATING":
+      case "ELEMENT_ACTIVATED":
+        canvas.addMarker(elementId, "activated");
+        break;
+      case "ELEMENT_COMPLETING":
+      case "ELEMENT_COMPLETED":
+      case "INCIDENT_RESOLVED":
+        canvas.addMarker(elementId, "completed");
+        break;
+      case "ELEMENT_TERMINATING":
+      case "ELEMENT_TERMINATED":
+        canvas.addMarker(elementId, "terminated");
+        break;
+      case "INCIDENT_CREATED":
+        canvas.addMarker(elementId, "incident");
+        break;
+      case "SEQUENCE_FLOW_TAKEN":
+        canvas.addMarker(elementId, "flow_taken");
+    }
   };
 
   useEffect(() => {

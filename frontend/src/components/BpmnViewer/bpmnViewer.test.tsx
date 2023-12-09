@@ -44,14 +44,11 @@ jest.mock("bpmn-js/lib/Viewer", () => {
 describe("BpmnViewer Component", () => {
   it("correctly render the snapshot", () => {
     const { asFragment } = render(<BpmnViewer {...mockdata.primary} />);
-
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders and initializes bpmn-js viewer", async () => {
-    // Render the component
     const { getByTestId } = render(<BpmnViewer {...mockdata.primary} />);
-
     await waitFor(() => {
       expect(getByTestId("canvas")).toBeInTheDocument();
     });
@@ -59,7 +56,6 @@ describe("BpmnViewer Component", () => {
 
   it("uses NavigatedViewer when navigated prop is true", async () => {
     render(<BpmnViewer {...mockdata.primary} />);
-
     await waitFor(() => {
       expect(NavigatedViewer).toHaveBeenCalled();
     });
@@ -67,7 +63,6 @@ describe("BpmnViewer Component", () => {
 
   it("uses Viewer when navigated prop is false", async () => {
     render(<BpmnViewer {...mockdata.secondary} />);
-
     await waitFor(() => {
       expect(Viewer).toHaveBeenCalled();
     });
