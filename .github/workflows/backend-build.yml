@@ -31,16 +31,17 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
+          context: ./
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+
       - name: Build arm image
         if: github.event.schedule == '0 12 * * *'
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
+          context: ./
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -80,7 +81,7 @@ jobs:
           go-version: "1.21.x"
           cache: false
 
-      - name: Run tests coverage
+      - name: Run tests with coverage tracking
         working-directory: ./backend
         run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
 
