@@ -218,7 +218,7 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	timestamp := time.UnixMilli(record.Timestamp)
 
 	// Record all events in the audit log first
-	storer.AuditLogEventOccurred(
+	err = storer.AuditLogEventOccurred(
 		record.Position,
 		processInstanceKey,
 		elementID,
@@ -226,6 +226,13 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		string(record.Intent),
 		timestamp,
 	)
+	if err != nil {
+		log.Printf(
+			"Failed to log event to audit log: position %d, element id %s",
+			record.Position,
+			elementID,
+		)
+	}
 
 	// Once we handle further element types it may be desirable to dispatch
 	// them further based on either intent or element type, depending on
