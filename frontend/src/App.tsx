@@ -1,6 +1,5 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import {
-  Navigate,
   Outlet,
   RouterProvider,
   createBrowserRouter,
@@ -31,10 +30,6 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-      {
-        path: "/",
-        element: <Navigate to="/processes" />,
-      },
       {
         path: "processes",
         element: <ProcessesPage />,
