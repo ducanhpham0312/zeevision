@@ -1,9 +1,5 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import {
-  Outlet,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import ProcessesPage from "./pages/ProcessesPage";
 import InstancesPage from "./pages/InstancesPage";
