@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
 import Viewer from "bpmn-js/lib/Viewer";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -114,6 +113,7 @@ export function BpmnViewer({
       return;
     }
     setCurrentZoom(zoom);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (modeler.get("canvas") as any).zoom(zoom);
   };
 
@@ -122,6 +122,7 @@ export function BpmnViewer({
     elementId: string,
     intent: string,
   ) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const canvas = modeler.get("canvas") as any;
     switch (intent) {
       case "ELEMENT_ACTIVATING":
