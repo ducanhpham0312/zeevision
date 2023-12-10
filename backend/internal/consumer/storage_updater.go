@@ -228,9 +228,10 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	)
 	if err != nil {
 		log.Printf(
-			"Failed to log event to audit log: position %d, element id %s",
+			"Failed to log event to audit log: position %d, element id %s, err: %v",
 			record.Position,
 			elementID,
+			err,
 		)
 	}
 
