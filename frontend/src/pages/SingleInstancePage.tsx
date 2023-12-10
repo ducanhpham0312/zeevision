@@ -32,7 +32,8 @@ export default function SingleInstancesPage() {
         incident.state === "CREATED" ? "INCIDENT_CREATED" : "INCIDENT_RESOLVED";
     });
     auditLogs?.items.forEach((auditLog) => {
-      const { elementId, intent } = auditLog;
+      const { elementId, intent, elementType } = auditLog;
+      if (elementType === "PROCESS") return;
       if (!latestLogs[elementId]) latestLogs[elementId] = intent;
     });
     return Object.entries(latestLogs).map(([elementId, intent]) => ({

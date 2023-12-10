@@ -96,7 +96,7 @@ var expectedAuditLogs = []AuditLog{
 		ElementID:          "element-1",
 		ElementType:        "type-1",
 		Intent:             "intent-1",
-		Position:           1,
+		Position:           3,
 	},
 	{
 		ProcessInstanceKey: 10,
@@ -110,7 +110,7 @@ var expectedAuditLogs = []AuditLog{
 		ElementID:          "element-3",
 		ElementType:        "type-3",
 		Intent:             "intent-3",
-		Position:           3,
+		Position:           1,
 	},
 }
 

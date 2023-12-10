@@ -71,6 +71,15 @@ var expectedIncidentResolved = Incident{
 	Time:               time.Unix(1701235497, 0),
 }
 
+var expectedAuditLog = AuditLog{
+	Position:           100,
+	ProcessInstanceKey: expectedInstance.ProcessInstanceKey,
+	ElementID:          expectedProcess.BpmnProcessID,
+	ElementType:        "PROCESS",
+	Intent:             "ACTIVATED",
+	Time:               expectedInstance.StartTime,
+}
+
 func TestProcessDeployed(t *testing.T) {
 	// helper defined in fetch_test.go
 	testDb := newMigratedTestDB(t)
@@ -441,5 +450,51 @@ func TestIncidentResolved(t *testing.T) {
 		assert.Equal(t, expectedIncidentResolved.ErrorType, incident.ErrorType)
 		assert.Equal(t, expectedIncidentResolved.ErrorMessage, incident.ErrorMessage)
 		assert.Equal(t, expectedIncidentResolved.Time.UTC(), incident.Time.UTC())
+	})
+}
+
+func TestAuditLogEventOccurred(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+	storer := NewStorer(db)
+
+	t.Run("activate instance event", func(t *testing.T) {
+		err := storer.AuditLogEventOccurred(
+			expectedAuditLog.Position,
+			expectedAuditLog.ProcessInstanceKey,
+			expectedAuditLog.ElementID,
+			expectedAuditLog.ElementType,
+			expectedAuditLog.Intent,
+			expectedAuditLog.Time,
+		)
+		assert.NoError(t, err)
+	})
+
+	t.Run("duplicate event", func(t *testing.T) {
+		err := storer.AuditLogEventOccurred(
+			expectedAuditLog.Position,
+			expectedAuditLog.ProcessInstanceKey,
+			expectedAuditLog.ElementID,
+			expectedAuditLog.ElementType,
+			expectedAuditLog.Intent,
+			expectedAuditLog.Time,
+		)
+		assert.ErrorContains(t, err, "failed to add to audit log")
+	})
+
+	t.Run("ensure equal value", func(t *testing.T) {
+		var auditLog AuditLog
+		err := db.First(&auditLog).Error
+		assert.NoError(t, err)
+
+		assert.Equal(t, expectedAuditLog.Position, auditLog.Position)
+		assert.Equal(t, expectedAuditLog.ProcessInstanceKey, auditLog.ProcessInstanceKey)
+		assert.Equal(t, expectedAuditLog.ElementID, auditLog.ElementID)
+		assert.Equal(t, expectedAuditLog.ElementType, auditLog.ElementType)
+		assert.Equal(t, expectedAuditLog.Intent, auditLog.Intent)
+		assert.Equal(t, expectedAuditLog.Time.UTC(), auditLog.Time.UTC())
 	})
 }
