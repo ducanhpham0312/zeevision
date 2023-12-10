@@ -6,6 +6,7 @@ import { DataFilter, DataFilterProps } from "./DataFilter";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { NavLink } from "react-router-dom";
 import { useTableStore } from "../../contexts/useTableStore";
+import React from "react";
 
 export interface HorizontalTableProps {
   header: string[];
@@ -147,7 +148,7 @@ export function HorizontalTable({
         >
           {paginatedSortedContent.map((row, rowIdx) => {
             return (
-              <>
+              <React.Fragment key={rowIdx}>
                 <tr
                   className={
                     "border-b border-black/10 " +
@@ -155,12 +156,11 @@ export function HorizontalTable({
                       ? "bg-second-accent hover:bg-second-accent/20"
                       : "hover:bg-second-accent/10")
                   }
-                  key={rowIdx}
                 >
                   {row.map((value, index) => (
                     <td
                       className="group p-3"
-                      key={index}
+                      key={`${rowIdx}-${index}`}
                       onMouseLeave={() => setCopyHelperText("Copy")}
                     >
                       <div className="flex items-center gap-2">
@@ -215,7 +215,7 @@ export function HorizontalTable({
                     {expandElement(rowIdx)}
                   </ExpandRow>
                 ) : null}
-              </>
+              </React.Fragment>
             );
           })}
           {contentLength === 0 && !loading ? (

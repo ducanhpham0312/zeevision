@@ -226,8 +226,8 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
               }
             }}
           >
-            <DropdownMenuTrigger>
-              <Button variant="secondary">Filter {<FilterAltIcon />}</Button>
+            <DropdownMenuTrigger className="relative box-border h-full w-full rounded bg-second-accent p-2 px-4 text-accent transition hover:bg-hover hover:shadow-lg active:bg-active">
+              <p>Filter {<FilterAltIcon />}</p>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" className="mr-4 mt-1 w-[250px]">
               <DropdownMenuLabel>Choose a column</DropdownMenuLabel>
@@ -317,7 +317,7 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
         <div className="flex flex-wrap gap-2">
           {Object.entries(filterState).map(([column, type]) =>
             Object.values(type).map((filter) => (
-              <>
+              <React.Fragment key={filter.filterName}>
                 {filter.active &&
                 !Object.values(filter.filterValue).some((value) => !value) ? (
                   <Popover key={`${column}-${filter.filterName}`}>
@@ -350,7 +350,7 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                     </PopoverContent>
                   </Popover>
                 ) : null}
-              </>
+              </React.Fragment>
             )),
           )}
         </div>
