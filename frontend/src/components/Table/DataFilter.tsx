@@ -152,7 +152,7 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
   );
   const debouncedHandleMainFilterChange = useDebounce(
     (e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value),
-    200,
+    500,
   );
 
   const [mainFilterQueryString, setMainFilterQueryString] = useState("");

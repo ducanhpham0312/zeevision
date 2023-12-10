@@ -27,6 +27,12 @@ export interface TableProps {
   filterConfig?: DataFilterProps["filterConfig"];
   navLinkColumn?: Record<string, (value: string | number) => string>;
   noStyleColumn?: Record<string, (value: string | number) => string>;
+
+  useApiPagination?: {
+    setPage: (page: number) => void;
+    setLimit: (limit: number) => void;
+  };
+  apiTotalCount?: number;
 }
 
 export function Table({

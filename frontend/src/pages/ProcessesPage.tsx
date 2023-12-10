@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Table } from "../components/Table";
 import { DeployProcessPopup } from "../components/DeployProcessPopup";
 import { useQueryProcesses } from "../hooks/useQueryProcesses";
+import { useTableStore } from "../contexts/useTableStore";
 
 export default function ProcessesPage() {
-  const { processes } = useQueryProcesses();
+  const { page, limit, setLimit, setPage, resetPagination } = useTableStore();
+  const { processes, totalCount } = useQueryProcesses(page, limit);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const handleOpen = () => setIsPopUpOpen(true);
   const handleClose = () => setIsPopUpOpen(false);
+
+  useEffect(() => {
+    return () => {
+      resetPagination();
+    };
+  }, [resetPagination]);
 
   return (
     <>
@@ -26,6 +34,11 @@ export default function ProcessesPage() {
         </div>
         <div className="flex-grow">
           <Table
+            useApiPagination={{
+              setLimit,
+              setPage,
+            }}
+            apiTotalCount={totalCount}
             alterRowColor
             filterConfig={{
               mainFilter: {

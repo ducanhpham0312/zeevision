@@ -8,8 +8,8 @@ interface QueryProcessesReturnType {
 }
 
 const PROCESSES_QUERY = () => gql`
-  query Processes {
-    processes {
+  query Processes($limit: Int!, $offset: Int!) {
+    processes(pagination: { limit: $limit, offset: $offset }) {
       totalCount
       items {
         bpmnProcessId
@@ -30,9 +30,16 @@ const PROCESSES_QUERY = () => gql`
   }
 `;
 
-export function useQueryProcesses(): QueryProcessesReturnType {
+export function useQueryProcesses(
+  page: number,
+  limit: number,
+): QueryProcessesReturnType {
   const processesData = useQueryWithLoading(PROCESSES_QUERY(), {
     pollInterval: queryPollIntervalMs,
+    variables: {
+      offset: page * limit,
+      limit,
+    },
   });
 
   return {

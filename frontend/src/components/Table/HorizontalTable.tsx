@@ -16,6 +16,11 @@ export interface HorizontalTableProps {
   filterConfig?: DataFilterProps["filterConfig"];
   expandElement?: (idx: number) => React.ReactNode;
   optionElement?: (idx: number) => React.ReactNode;
+  useApiPagination?: {
+    setPage: (page: number) => void;
+    setLimit: (limit: number) => void;
+  };
+  apiTotalCount?: number;
 }
 
 export function HorizontalTable({
@@ -27,7 +32,12 @@ export function HorizontalTable({
   noStyleColumn,
   expandElement,
   optionElement,
+  useApiPagination,
+  apiTotalCount,
 }: HorizontalTableProps) {
+  const [contentLength, setContentLength] = useState(
+    apiTotalCount || content.length,
+  );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortBy, setSortBy] = useState("");
@@ -54,6 +64,26 @@ export function HorizontalTable({
     [header],
   );
 
+  // Sync with global pagination state
+  useEffect(() => {
+    if (useApiPagination) {
+      useApiPagination.setLimit(rowsPerPage);
+      useApiPagination.setPage(page);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage]);
+
+  // Sync content length
+  useEffect(() => {
+    setContentLength((prev) => {
+      const newLength = apiTotalCount || content.length;
+      if (newLength) {
+        return newLength;
+      }
+      return prev;
+    });
+  }, [content, apiTotalCount]);
+
   useEffect(() => {
     // Sort the content when sortBy or sortOrder changes
     const sortedData = sortContent(content, sortBy, sortOrder);
@@ -76,6 +106,10 @@ export function HorizontalTable({
 
   const colSpan =
     expandElement || optionElement ? header.length + 1 : header.length;
+
+  const paginatedSortedContent = useApiPagination
+    ? sortedContent
+    : sortedContent.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <div className="flex h-full flex-col">
@@ -109,82 +143,80 @@ export function HorizontalTable({
           aria-label="custom pagination table"
           className="border-l-2 border-r-2 border-accent"
         >
-          {sortedContent
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, rowIdx) => {
-              return (
-                <>
-                  <tr
-                    className={
-                      "border-b border-black/10 " +
-                      (alterRowColor && rowIdx % 2 === 0
-                        ? "bg-second-accent hover:bg-second-accent/20"
-                        : "hover:bg-second-accent/10")
-                    }
-                    key={rowIdx}
-                  >
-                    {row.map((value, index) => (
-                      <td
-                        className="group p-3"
-                        key={index}
-                        onMouseLeave={() => setCopyHelperText("Copy")}
-                      >
-                        <div className="flex items-center gap-2">
-                          {navLinkColumn && navLinkColumn[header[index]] ? (
-                            <NavLink to={navLinkColumn[header[index]](value)}>
-                              <Button variant="secondary">{value}</Button>
-                            </NavLink>
-                          ) : noStyleColumn && noStyleColumn[header[index]] ? (
-                            <pre>{value}</pre>
-                          ) : (
-                            <p>{value}</p>
-                          )}
-                          <Button
-                            helperTextPos="n"
-                            helperText={copyHelperText}
-                            onClick={() => {
-                              setCopyHelperText("Copied");
-                              navigator.clipboard.writeText(value.toString());
-                            }}
-                            className="opacity-0 transition group-hover:opacity-100"
-                          >
-                            <ContentCopyIcon fontSize="small" />
-                          </Button>
-                        </div>
-                      </td>
-                    ))}
-                    {expandElement ? (
-                      <td className="p-3">
-                        <Button
-                          onClick={() =>
-                            setExpandedRow((prev) =>
-                              prev === rowIdx ? null : rowIdx,
-                            )
-                          }
-                        >
-                          {expandedRow === rowIdx ? <Minus /> : <Plus />}
-                        </Button>
-                      </td>
-                    ) : null}
-
-                    {optionElement ? (
-                      <td className="mt-1 flex justify-center">
-                        {optionElement(rowIdx)}
-                      </td>
-                    ) : null}
-                  </tr>
-                  {expandElement ? (
-                    <ExpandRow
-                      isIn={expandedRow === rowIdx}
-                      colSpan={header.length + 1}
+          {paginatedSortedContent.map((row, rowIdx) => {
+            return (
+              <>
+                <tr
+                  className={
+                    "border-b border-black/10 " +
+                    (alterRowColor && rowIdx % 2 === 0
+                      ? "bg-second-accent hover:bg-second-accent/20"
+                      : "hover:bg-second-accent/10")
+                  }
+                  key={rowIdx}
+                >
+                  {row.map((value, index) => (
+                    <td
+                      className="group p-3"
+                      key={index}
+                      onMouseLeave={() => setCopyHelperText("Copy")}
                     >
-                      {expandElement(rowIdx)}
-                    </ExpandRow>
+                      <div className="flex items-center gap-2">
+                        {navLinkColumn && navLinkColumn[header[index]] ? (
+                          <NavLink to={navLinkColumn[header[index]](value)}>
+                            <Button variant="secondary">{value}</Button>
+                          </NavLink>
+                        ) : noStyleColumn && noStyleColumn[header[index]] ? (
+                          <pre>{value}</pre>
+                        ) : (
+                          <p>{value}</p>
+                        )}
+                        <Button
+                          helperTextPos="n"
+                          helperText={copyHelperText}
+                          onClick={() => {
+                            setCopyHelperText("Copied");
+                            navigator.clipboard.writeText(value.toString());
+                          }}
+                          className="opacity-0 transition group-hover:opacity-100"
+                        >
+                          <ContentCopyIcon fontSize="small" />
+                        </Button>
+                      </div>
+                    </td>
+                  ))}
+                  {expandElement ? (
+                    <td className="p-3">
+                      <Button
+                        onClick={() =>
+                          setExpandedRow((prev) =>
+                            prev === rowIdx ? null : rowIdx,
+                          )
+                        }
+                      >
+                        {expandedRow === rowIdx ? <Minus /> : <Plus />}
+                      </Button>
+                    </td>
                   ) : null}
-                </>
-              );
-            })}
-          {content.length === 0 && !loading ? (
+
+                  {optionElement ? (
+                    <td className="mt-1 flex justify-center">
+                      {optionElement(rowIdx)}
+                    </td>
+                  ) : null}
+                </tr>
+                {expandElement ? (
+                  <ExpandRow
+                    isIn={expandedRow === rowIdx}
+                    colSpan={header.length + 1}
+                  >
+                    {expandElement(rowIdx)}
+                  </ExpandRow>
+                ) : null}
+              </>
+            );
+          })}
+          {contentLength === 0 && !loading ? (
             <tr>
               <td colSpan={colSpan}>
                 <div className="flex h-20 w-full items-center justify-center border border-black/10">
@@ -215,6 +247,7 @@ export function HorizontalTable({
               value={rowsPerPage}
               onChange={handleChangeRowsPerPage}
             >
+              <option value={1}>{1}</option>
               {Array.from({ length: 6 }, (_, index) => (index + 1) * 5).map(
                 (option) => (
                   <option key={option} value={option}>
@@ -226,14 +259,14 @@ export function HorizontalTable({
           </div>
           <p className="text-sm text-black/60">
             {rowsPerPage * page + 1}-
-            {Math.min(rowsPerPage * (page + 1), content.length)} of{" "}
-            {content.length}
+            {Math.min(rowsPerPage * (page + 1), contentLength)} of{" "}
+            {contentLength}
           </p>
           {/* have at least 2 page button to render */}
-          {Math.ceil(content.length / rowsPerPage) > 1 ? (
+          {Math.ceil(contentLength / rowsPerPage) > 1 ? (
             <div className="flex gap-1.5">
               {Array.from({
-                length: Math.ceil(content.length / rowsPerPage),
+                length: Math.ceil(contentLength / rowsPerPage),
               }).map((_, index) => (
                 <Button
                   active={index === page}

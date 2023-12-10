@@ -1,13 +1,15 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
+import useQueryWithLoading from "./useQueryWithLoading";
 
 interface QueryIncidentsReturnType {
+  totalCount: number;
   incidents: IncidentType[];
 }
 
 const INCIDENTS_QUERY = () => gql`
-  query Incidents {
-    incidents {
+  query Incidents($limit: Int!, $offset: Int!) {
+    incidents(pagination: { limit: $limit, offset: $offset }) {
       totalCount
       items {
         incidentKey
@@ -22,12 +24,20 @@ const INCIDENTS_QUERY = () => gql`
   }
 `;
 
-export function useQueryIncidents(): QueryIncidentsReturnType {
-  const incidentsData = useQuery(INCIDENTS_QUERY(), {
+export function useQueryIncidents(
+  page: number,
+  limit: number,
+): QueryIncidentsReturnType {
+  const incidentsData = useQueryWithLoading(INCIDENTS_QUERY(), {
     pollInterval: queryPollIntervalMs,
+    variables: {
+      offset: page * limit,
+      limit,
+    },
   });
 
   return {
+    totalCount: incidentsData.data?.incidents.totalCount,
     incidents: incidentsData.data?.incidents.items,
   };
 }

@@ -8,8 +8,8 @@ interface QueryJobsReturnType {
 }
 
 const JOBS_QUERY = () => gql`
-  query Jobs {
-    jobs {
+  query Jobs($limit: Int!, $offset: Int!) {
+    jobs(pagination: { limit: $limit, offset: $offset }) {
       totalCount
       items {
         key
@@ -24,9 +24,13 @@ const JOBS_QUERY = () => gql`
   }
 `;
 
-export function useQueryJobs(): QueryJobsReturnType {
+export function useQueryJobs(page: number, limit: number): QueryJobsReturnType {
   const jobsData = useQueryWithLoading(JOBS_QUERY(), {
     pollInterval: queryPollIntervalMs,
+    variables: {
+      offset: page * limit,
+      limit,
+    },
   });
 
   return {

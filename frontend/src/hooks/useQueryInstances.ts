@@ -8,8 +8,8 @@ interface QueryInstancesReturnType {
 }
 
 const INSTANCES_QUERY = () => gql`
-  query Instances {
-    instances {
+  query Instances($limit: Int!, $offset: Int!) {
+    instances(pagination: { limit: $limit, offset: $offset }) {
       totalCount
       items {
         instanceKey
@@ -24,9 +24,16 @@ const INSTANCES_QUERY = () => gql`
   }
 `;
 
-export function useQueryInstances(): QueryInstancesReturnType {
+export function useQueryInstances(
+  page: number,
+  limit: number,
+): QueryInstancesReturnType {
   const instancesData = useQueryWithLoading(INSTANCES_QUERY(), {
     pollInterval: queryPollIntervalMs,
+    variables: {
+      offset: page * limit,
+      limit,
+    },
   });
 
   return {
