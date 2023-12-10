@@ -77,6 +77,8 @@ export function HorizontalTable({
   useEffect(() => {
     setContentLength((prev) => {
       const newLength = apiTotalCount || content.length;
+      // the apiTotalCount is undefined when the graphql query is loading so it would take the content.length which is 0 as the new length
+      // this if statement make sure that the value of contentLength is not changed to 0 between fetches
       if (newLength) {
         return newLength;
       }

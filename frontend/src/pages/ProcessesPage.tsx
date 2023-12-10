@@ -69,7 +69,7 @@ export default function ProcessesPage() {
                         `/instances/${value.toString()}`,
                     }}
                     content={
-                      processes[idx].instances
+                      processes && processes[idx].instances
                         ? processes[idx].instances.items.map(
                             ({ instanceKey, status, version, startTime }) => [
                               instanceKey,
