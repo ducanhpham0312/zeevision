@@ -459,24 +459,16 @@ func TestStoring(t *testing.T) {
 				assert.ErrorContains(t, err, r.err.Error())
 			}
 
-			if r.touched != nil {
-				for i := range r.touched {
-					// The value will be the zero value (bool) if
-					// the key doesn't exist so this will work
-					// without the ok check
-					assert.True(t, storer.touched[r.touched[i]])
-				}
+			for _, touched := range r.touched {
+				// Verify that we hit the updater functions we
+				// were supposed to.
+				assert.True(t, storer.touched[touched])
+				delete(storer.touched, touched)
 			}
 
-		wrongTouchLoop:
-			for key, value := range storer.touched {
-				// Fail if we hit the wrong updater function
-				for i := range r.touched {
-					if key == r.touched[i] {
-						continue wrongTouchLoop
-					}
-				}
-				// If we fell through the loop, we didn't hit a continue
+			for _, value := range storer.touched {
+				// Verify that we didn't hit any updater
+				// functions we weren't supposed to.
 				assert.False(t, value)
 			}
 		})
