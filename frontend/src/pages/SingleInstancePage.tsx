@@ -33,7 +33,7 @@ export default function SingleInstancesPage() {
     });
     auditLogs?.items.forEach((auditLog) => {
       const { elementId, intent, elementType } = auditLog;
-      if (elementType === "PROCESS") return
+      if (elementType === "PROCESS") return;
       if (!latestLogs[elementId]) latestLogs[elementId] = intent;
     });
     return Object.entries(latestLogs).map(([elementId, intent]) => ({

@@ -468,7 +468,7 @@ func TestStoring(t *testing.T) {
 				}
 			}
 
-			wrongTouchLoop:
+		wrongTouchLoop:
 			for key, value := range storer.touched {
 				// Fail if we hit the wrong updater function
 				for i := range r.touched {

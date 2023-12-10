@@ -77,7 +77,7 @@ var expectedAuditLog = AuditLog{
 	ElementID:          expectedProcess.BpmnProcessID,
 	ElementType:        "PROCESS",
 	Intent:             "ACTIVATED",
-	Time:          expectedInstance.StartTime,
+	Time:               expectedInstance.StartTime,
 }
 
 func TestProcessDeployed(t *testing.T) {
