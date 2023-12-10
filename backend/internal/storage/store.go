@@ -297,12 +297,12 @@ func (r *databaseStorer) AuditLogEventOccurred(
 	timestamp time.Time,
 ) error {
 	err := r.db.Create(&AuditLog{
-		Position: position,
+		Position:           position,
 		ProcessInstanceKey: processInstanceKey,
-		ElementID: elementID,
-		ElementType: elementType,
-		Intent: intent,
-		Time: timestamp,
+		ElementID:          elementID,
+		ElementType:        elementType,
+		Intent:             intent,
+		Time:               timestamp,
 	}).Error
 	if err != nil {
 		return fmt.Errorf("failed to add to audit log: %w", err)
