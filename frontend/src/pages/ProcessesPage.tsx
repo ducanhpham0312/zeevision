@@ -57,9 +57,9 @@ export default function ProcessesPage() {
               "Process Key": (value: string | number) => `/processes/${value}`,
             }}
             expandElement={(idx: number) => (
-              <div className="flex flex-col gap-4 p-4">
+              <div className="flex h-full flex-col gap-4 p-4">
                 <p>Process Details:</p>
-                <div>
+                <div className="flex-grow">
                   <Table
                     alterRowColor={false}
                     orientation="horizontal"
@@ -69,7 +69,7 @@ export default function ProcessesPage() {
                         `/instances/${value.toString()}`,
                     }}
                     content={
-                      processes && processes[idx].instances
+                      processes && processes[idx] && processes[idx].instances
                         ? processes[idx].instances.items.map(
                             ({ instanceKey, status, version, startTime }) => [
                               instanceKey,

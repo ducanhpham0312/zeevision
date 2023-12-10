@@ -106,21 +106,28 @@ export default function SingleInstancesPage() {
         </div>
       </ResizableContainer>
       <div className="relative flex-grow overflow-auto">
-        <div className="absolute h-full w-full">
-          <Tabs defaultValue={"Variables"} className="bg-white">
-            <TabsList className="mb-5 mt-10 grid w-full grid-cols-4 rounded-xl border-2">
+        <div className="absolute h-full w-full pb-3 pt-5">
+          <Tabs defaultValue={0} className="flex h-full flex-col bg-white gap-4">
+            <TabsList className="flex w-full gap-2 border-b-2 border-accent">
               {tabsData.map((tab, index) => (
-                <Tab
-                  key={index}
-                  value={tab.label}
-                  className={`m-1 rounded-xl py-2 hover:bg-second-accent focus:bg-second-accent/100`}
-                >
-                  {tab.label}
-                </Tab>
+                <div className="flex-grow">
+                  <Tab
+                    key={index}
+                    value={index}
+                    className={`w-full rounded-xl border-2 border-accent py-2 transition-all hover:bg-second-accent hover:shadow-lg focus:bg-second-accent active:bg-accent/20
+                  aria-selected:h-[53px] aria-selected:rounded-b-none aria-selected:bg-accent aria-selected:bg-second-accent aria-selected:text-white aria-selected:shadow-lg`}
+                  >
+                    {tab.label}
+                  </Tab>
+                </div>
               ))}
             </TabsList>
             {tabsData.map((tab, index) => (
-              <TabPanel key={index} value={tab.label}>
+              <TabPanel
+                key={index}
+                value={index}
+                className="flex-grow overflow-auto"
+              >
                 {tab.content}
               </TabPanel>
             ))}
