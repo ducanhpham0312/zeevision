@@ -26,6 +26,7 @@ export interface TableProps {
   alterRowColor?: boolean;
   filterConfig?: DataFilterProps["filterConfig"];
   navLinkColumn?: Record<string, (value: string | number) => string>;
+  noStyleColumn?: Record<string, (value: string | number) => string>;
 }
 
 export function Table({

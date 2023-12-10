@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { BpmnViewer } from ".";
+import { ResponsiveBpmnViewer } from ".";
 import { useEffect, useState } from "react";
 import bpmnUrl from "./bpmn/money-loan.bpmn";
 
-const meta: Meta<typeof BpmnViewer> = {
-  title: "Assets/BpmnViewer",
-  component: BpmnViewer,
+const meta: Meta<typeof ResponsiveBpmnViewer> = {
+  title: "Assets/ResponsiveBpmnViewer",
+  component: ResponsiveBpmnViewer,
   parameters: {
     layout: "centered",
   },
@@ -30,14 +30,14 @@ const LoadedBpmnViewer = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        border: "1px solid black",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      {bpmnXml && <BpmnViewer width={1200} height={500} bpmnString={bpmnXml} />}
+    <div style={{ width: "200%", justifyContent: "center" }}>
+      <ResponsiveBpmnViewer
+        width={3000}
+        bpmnString={bpmnXml}
+        control
+        navigated
+        className="h-full flex-grow overflow-hidden"
+      />
     </div>
   );
 };

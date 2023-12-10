@@ -11,6 +11,7 @@ export interface HorizontalTableProps {
   header: string[];
   content: (string | number)[][];
   navLinkColumn?: Record<string, (value: string | number) => string>;
+  noStyleColumn?: Record<string, (value: string | number) => string>;
   alterRowColor?: boolean;
   filterConfig?: DataFilterProps["filterConfig"];
   expandElement?: (idx: number) => React.ReactNode;
@@ -23,6 +24,7 @@ export function HorizontalTable({
   alterRowColor,
   navLinkColumn,
   filterConfig,
+  noStyleColumn,
   expandElement,
   optionElement,
 }: HorizontalTableProps) {

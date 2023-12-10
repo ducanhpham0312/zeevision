@@ -35,6 +35,27 @@ const SINGLE_INSTANCE_QUERY = (id: string) => gql`
           time
         }
       }
+      auditLogs {
+        totalCount
+        items {
+          elementId
+          elementType
+          intent
+          position
+          time
+        }
+      }
+      incidents {
+        totalCount
+        items {
+          incidentKey
+          elementId
+          errorType
+          errorMessage
+          state
+          time
+        }
+      }
     }
   }
 `;

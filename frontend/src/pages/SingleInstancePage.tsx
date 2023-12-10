@@ -22,14 +22,38 @@ export default function SingleInstancesPage() {
     bpmnProcessId,
     variables,
     jobs,
+    auditLogs,
+    incidents,
   } = instance;
-
+  const getLatestLogs = (): { elementId: string; intent: string }[] => {
+    const latestLogs: Record<string, string> = {};
+    incidents?.items.forEach((incident) => {
+      latestLogs[incident.elementId] =
+        incident.state === "CREATED" ? "INCIDENT_CREATED" : "INCIDENT_RESOLVED";
+    });
+    auditLogs?.items.forEach((auditLog) => {
+      const { elementId, intent } = auditLog;
+      if (!latestLogs[elementId]) latestLogs[elementId] = intent;
+    });
+    return Object.entries(latestLogs).map(([elementId, intent]) => ({
+      elementId,
+      intent,
+    }));
+  };
   const tabsData = [
     {
       label: "Variables",
       content: <VariablesTable variables={variables?.items} />,
     },
     { label: "Jobs", content: <JobsTable jobs={jobs?.items} /> },
+    {
+      label: "Audit Logs",
+      content: <AuditLogsTable auditLogs={auditLogs?.items} />,
+    },
+    {
+      label: "Incidents",
+      content: <IncidentsTable incidents={incidents?.items} />,
+    },
   ];
   return (
     <div className="flex h-full w-full flex-col pr-4">
@@ -77,13 +101,14 @@ export default function SingleInstancesPage() {
             navigated
             className="h-full flex-grow overflow-hidden"
             bpmnString={bpmnResource}
+            colorOptions={getLatestLogs()}
           />
         </div>
       </ResizableContainer>
       <div className="relative flex-grow overflow-auto">
         <div className="absolute h-full w-full">
           <Tabs defaultValue={"Variables"} className="bg-white">
-            <TabsList className="mb-5 mt-10 grid w-full grid-cols-2 rounded-xl border-2">
+            <TabsList className="mb-5 mt-10 grid w-full grid-cols-4 rounded-xl border-2">
               {tabsData.map((tab, index) => (
                 <Tab
                   key={index}
@@ -105,6 +130,7 @@ export default function SingleInstancesPage() {
     </div>
   );
 }
+
 interface VariableListProps {
   variables: VariableType[];
 }
@@ -114,6 +140,9 @@ function VariablesTable({ variables }: VariableListProps) {
       alterRowColor
       orientation="horizontal"
       header={["Variable Name", "Variable Value", "Time"]}
+      noStyleColumn={{
+        "Variable Value": (value: string | number) => value.toString(),
+      }}
       content={
         variables && variables.length > 0
           ? variables.map(({ name, value, time }) => [name, value, time])
@@ -149,6 +178,75 @@ function JobsTable({ jobs }: JobListProps) {
                 type,
                 retries,
                 worker,
+                state,
+                time,
+              ],
+            )
+          : []
+      }
+    />
+  );
+}
+
+interface AuditLogListProps {
+  auditLogs: AuditLogType[];
+}
+function AuditLogsTable({ auditLogs }: AuditLogListProps) {
+  return (
+    <Table
+      alterRowColor
+      orientation="horizontal"
+      header={["Element ID", "Element Type", "Intent", "Position", "Time"]}
+      content={
+        auditLogs
+          ? auditLogs.map(
+              ({ elementId, elementType, intent, position, time }) => [
+                elementId,
+                elementType,
+                intent,
+                position,
+                time,
+              ],
+            )
+          : []
+      }
+    />
+  );
+}
+
+interface IncidentListProps {
+  incidents: IncidentType[];
+}
+function IncidentsTable({ incidents }: IncidentListProps) {
+  return (
+    <Table
+      orientation="horizontal"
+      header={[
+        "Element ID",
+        "Incident Key",
+        "Error Type",
+        "Error Message",
+        "State",
+        "Time",
+      ]}
+      noStyleColumn={{
+        "Error Message": (value: string | number) => value.toString(),
+      }}
+      content={
+        incidents
+          ? incidents.map(
+              ({
+                elementId,
+                incidentKey,
+                errorType,
+                errorMessage,
+                state,
+                time,
+              }) => [
+                elementId,
+                incidentKey,
+                errorType,
+                errorMessage,
                 state,
                 time,
               ],
