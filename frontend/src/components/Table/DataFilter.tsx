@@ -19,6 +19,7 @@ import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { twMerge } from "tailwind-merge";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 import CloseIcon from "@mui/icons-material/Close";
+import { useDebounce } from "../../hooks/useDebounce";
 
 export type FilterType = "string" | "time" | "value";
 
@@ -149,6 +150,10 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
   const [filterState, setFilterState] = useState(
     getInitFilterState(filterConfig),
   );
+  const debouncedHandleMainFilterChange = useDebounce(
+    (e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value),
+    200,
+  );
 
   const [mainFilterQueryString, setMainFilterQueryString] = useState("");
 
@@ -207,16 +212,8 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
         <Input
           value={mainFilterQueryString}
           onChange={(e) => {
-            let timerId: number;
-
-            // Debounce function: Input as function which needs to be debounced and delay is the debounced time in milliseconds
-            let debounceFunction = function (func, delay) {
-              // Cancels the setTimeout method execution
-              clearTimeout(timerId);
-
-              // Executes the func after delay time.
-              timerId = setTimeout(func, delay);
-            };
+            setMainFilterQueryString(e.target.value);
+            debouncedHandleMainFilterChange(e);
           }}
           className="flex-grow"
           placeholder={`Search by ${filterConfig.mainFilter.column}`}
