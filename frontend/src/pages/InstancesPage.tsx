@@ -30,8 +30,6 @@ export default function InstancesPage() {
 
   return (
     <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
-      <h1>INSTANCES</h1>
-
       <Table
         alterRowColor
         useApiPagination={{

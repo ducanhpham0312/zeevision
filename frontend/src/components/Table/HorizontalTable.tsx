@@ -69,35 +69,6 @@ export function HorizontalTable({
     [header],
   );
 
-  // Sync with global pagination state
-  useEffect(() => {
-    if (useApiPagination) {
-      useApiPagination.setLimit(rowsPerPage);
-      useApiPagination.setPage(page);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage]);
-
-  // Sync content length
-  useEffect(() => {
-    setContentLength((prev) => {
-      const newLength = apiTotalCount || processedContent.length;
-      // the apiTotalCount is undefined when the graphql query is loading so it would take the content.length which is 0 as the new length
-      // this if statement make sure that the value of contentLength is not set to 0 between fetches
-      if (shouldUseClientPagination) {
-        return processedContent.length;
-      }
-      if (newLength) {
-        return newLength;
-      }
-      return prev;
-    });
-  }, [processedContent, apiTotalCount, shouldUseClientPagination]);
-
-  useEffect(() => {
-    setShouldUseClientPagination(!!filters.length);
-  }, [filters, setShouldUseClientPagination]);
-
   useEffect(() => {
     // Sort and filter the content when sortBy or sortOrder or filters changes
     const sortedData = sortContent(content, sortBy, sortOrder);
@@ -110,7 +81,34 @@ export function HorizontalTable({
           ),
       ),
     );
-  }, [content, sortBy, sortContent, sortOrder, filters, header]);
+  }, [content, sortBy, sortOrder, filters, sortContent, header]);
+
+  // Sync with global pagination state
+  useEffect(() => {
+    if (useApiPagination && !shouldUseClientPagination) {
+      useApiPagination.setLimit(rowsPerPage);
+      useApiPagination.setPage(page);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage]);
+
+  // Sync content length
+  useEffect(() => {
+    setContentLength((prev) => {
+      if (apiTotalCount) {
+        if (shouldUseClientPagination) {
+          return processedContent.length;
+        }
+        return apiTotalCount;
+      }
+      return prev;
+    });
+  }, [processedContent, apiTotalCount, shouldUseClientPagination]);
+
+  useEffect(() => {
+    setPage(0);
+    setShouldUseClientPagination(!!filters.length);
+  }, [filters, setShouldUseClientPagination]);
 
   const handleSort = (column: string): void => {
     const newSortOrder =
