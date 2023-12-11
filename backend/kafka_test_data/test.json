@@ -1,0 +1,24 @@
+{
+  "zeebe-job-batch": {
+    "partitionId": 1,
+    "value": {
+      "type": "send-acceptance-letter",
+      "jobKeys": [],
+      "truncated": false,
+      "maxJobsToActivate": 32,
+      "jobs": [],
+      "timeout": 300000,
+      "worker": "moneyLoan#sendAcceptanceLetter"
+    },
+    "key": 2251799814054580,
+    "timestamp": 1697461586798,
+    "intent": "ACTIVATED",
+    "rejectionType": "NULL_VAL",
+    "rejectionReason": "",
+    "sourceRecordPosition": 739920,
+    "valueType": "JOB_BATCH",
+    "brokerVersion": "8.2.1",
+    "recordType": "EVENT",
+    "position": 739932
+  }
+}

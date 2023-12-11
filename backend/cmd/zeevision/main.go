@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DBConnectionRetries    = 5
+	DBConnectionRetries    = 50
 	DBConnectionRetryDelay = 2 * time.Second
 
 	ConsumerRetries    = 5
@@ -27,6 +27,7 @@ func main() {
 		Host:         environment.DatabaseHost(),
 		Port:         environment.DatabasePort(),
 	}
+	//kafka_test_data.SendMessageToKafka()
 
 	// Connect to database with retry
 	db, err := storage.ConnectDb(dsnConfig, DBConnectionRetries, DBConnectionRetryDelay)
