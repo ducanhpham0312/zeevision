@@ -72,10 +72,6 @@ export function BpmnViewer({
     async function openDiagram(xmlString: string) {
       try {
         await modeler.importXML(xmlString);
-
-        colorOptions?.forEach(({ elementId, intent }) => {
-          setBpmnMarker(modeler, elementId, intent);
-        });
       } catch (err) {
         console.error(err);
       }
@@ -86,7 +82,19 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, colorOptions, navigated]);
+  }, [bpmnString, navigated]);
+
+  useEffect(() => {
+    if (modeler) {
+      try {
+        colorOptions?.forEach(({ elementId, intent }) => {
+          setBpmnMarker(modeler, elementId, intent);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [colorOptions, modeler]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {

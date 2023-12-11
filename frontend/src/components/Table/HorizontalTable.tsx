@@ -95,15 +95,23 @@ export function HorizontalTable({
   // Sync content length
   useEffect(() => {
     setContentLength((prev) => {
-      if (apiTotalCount) {
+      if (useApiPagination) {
+        if (apiTotalCount) {
+          return apiTotalCount;
+        }
         if (shouldUseClientPagination) {
           return processedContent.length;
         }
-        return apiTotalCount;
+        return prev;
       }
-      return prev;
+      return processedContent.length;
     });
-  }, [processedContent, apiTotalCount, shouldUseClientPagination]);
+  }, [
+    processedContent,
+    apiTotalCount,
+    shouldUseClientPagination,
+    useApiPagination,
+  ]);
 
   useEffect(() => {
     setPage(0);

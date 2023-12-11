@@ -7,6 +7,7 @@ import { Tabs } from "@mui/base/Tabs";
 import { TabsList } from "@mui/base/TabsList";
 import { TabPanel } from "@mui/base/TabPanel";
 import { Tab } from "@mui/base/Tab";
+import { useMemo } from "react";
 
 export default function SingleInstancesPage() {
   const params = useParams();
@@ -25,7 +26,7 @@ export default function SingleInstancesPage() {
     auditLogs,
     incidents,
   } = instance;
-  const getLatestLogs = (): { elementId: string; intent: string }[] => {
+  const getLatestLogs = useMemo((): { elementId: string; intent: string }[] => {
     const latestLogs: Record<string, string> = {};
     incidents?.items.forEach((incident) => {
       latestLogs[incident.elementId] =
@@ -40,7 +41,7 @@ export default function SingleInstancesPage() {
       elementId,
       intent,
     }));
-  };
+  }, [incidents, auditLogs]);
   const tabsData = [
     {
       label: "Variables",
@@ -102,7 +103,7 @@ export default function SingleInstancesPage() {
             navigated
             className="h-full flex-grow overflow-hidden"
             bpmnString={bpmnResource}
-            colorOptions={getLatestLogs()}
+            colorOptions={getLatestLogs}
           />
         </div>
       </ResizableContainer>
@@ -123,7 +124,7 @@ export default function SingleInstancesPage() {
             </TabsList>
             {tabsData.map((tab, index) => (
               <TabPanel
-                key={index}
+                key={`panel-${index}`}
                 value={index}
                 className="flex-grow overflow-auto"
               >
@@ -148,6 +149,16 @@ function VariablesTable({ variables }: VariableListProps) {
       header={["Variable Name", "Variable Value", "Time"]}
       noStyleColumn={{
         "Variable Value": (value: string | number) => value.toString(),
+      }}
+      filterConfig={{
+        mainFilter: {
+          column: "Variable Name",
+        },
+        filterOptions: {
+          "Variable Name": "string",
+          "Variable Value": "string",
+          Time: "string",
+        },
       }}
       content={
         variables && variables.length > 0
