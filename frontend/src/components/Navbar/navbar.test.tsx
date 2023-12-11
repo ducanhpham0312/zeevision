@@ -33,6 +33,12 @@ describe("Navbar Component", () => {
     });
   });
 
+  it("navigates to processes page when clicking ZeeVision", () => {
+    customRender(<Navbar />);
+    fireEvent.click(screen.getByText("ZEEVISION"));
+    expect(window.location.pathname).toBe("/processes");
+  });
+
   it("highlights the active navigation item", () => {
     NavigationPath.forEach(async (navItem) => {
       customRender(<Navbar />, { route: navItem.path });

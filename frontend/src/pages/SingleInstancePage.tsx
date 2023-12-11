@@ -76,7 +76,7 @@ export default function SingleInstancesPage() {
                   ]}
                   navLinkColumn={{
                     "Process Key": (value: string | number) =>
-                      `/processes/${value.toString()}`,
+                      `/processes/${value}`,
                   }}
                   content={
                     instance
