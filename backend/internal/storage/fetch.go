@@ -200,7 +200,7 @@ func (f *Fetcher) GetAuditLogsForInstance(ctx context.Context, pagination *Pagin
 	return paginatedFetch[AuditLog](ctx, f.scopes(func(db *gorm.DB) *gorm.DB {
 		return db.Where(&AuditLog{ProcessInstanceKey: instanceKey})
 	}), pagination, func(db *gorm.DB, auditLogs *[]AuditLog) *gorm.DB {
-		return db.Order("time DESC").Find(auditLogs)
+		return db.Order("position DESC").Find(auditLogs)
 	})
 }
 

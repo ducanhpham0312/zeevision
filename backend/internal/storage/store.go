@@ -62,6 +62,15 @@ type Storer interface {
 		key int64,
 		time time.Time,
 	) error
+
+	AuditLogEventOccurred(
+		position int64,
+		processInstanceKey int64,
+		elementID string,
+		elementType string,
+		intent string,
+		time time.Time,
+	) error
 }
 
 // TODO: use context for queries where reasonable
@@ -274,6 +283,29 @@ func (r *databaseStorer) IncidentResolved(
 		}).Error
 	if err != nil {
 		return fmt.Errorf("failed to save incident: %w", err)
+	}
+
+	return nil
+}
+
+func (r *databaseStorer) AuditLogEventOccurred(
+	position int64,
+	processInstanceKey int64,
+	elementID string,
+	elementType string,
+	intent string,
+	timestamp time.Time,
+) error {
+	err := r.db.Create(&AuditLog{
+		Position:           position,
+		ProcessInstanceKey: processInstanceKey,
+		ElementID:          elementID,
+		ElementType:        elementType,
+		Intent:             intent,
+		Time:               timestamp,
+	}).Error
+	if err != nil {
+		return fmt.Errorf("failed to add to audit log: %w", err)
 	}
 
 	return nil
