@@ -106,12 +106,9 @@ export default function SingleInstancesPage() {
         </div>
       </ResizableContainer>
       <div className="relative flex-grow overflow-auto">
-        <div className="absolute h-full w-full pb-3 pt-5">
-          <Tabs
-            defaultValue={0}
-            className="flex h-full flex-col gap-4 bg-white"
-          >
-            <TabsList className="flex w-full gap-2 border-b-2 border-accent">
+        <div className="absolute h-full w-full pt-5">
+          <Tabs defaultValue={0} className="flex h-full flex-col bg-white">
+            <TabsList className="mb-4 flex w-full gap-2 border-b-2 border-accent">
               {tabsData.map((tab, index) => (
                 <div key={index} className="flex-grow">
                   <Tab

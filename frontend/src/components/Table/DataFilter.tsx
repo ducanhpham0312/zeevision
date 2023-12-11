@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Input } from "../Input";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { Button } from "../Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +29,11 @@ export interface DataFilterProps {
     };
     filterOptions: Record<string, FilterType>;
   };
+  setFilter: React.Dispatch<
+    React.SetStateAction<
+      ((input: Record<string, string | number>) => boolean)[]
+    >
+  >;
 }
 
 type FilterOptionType = {
@@ -44,6 +48,8 @@ type FilterState = {
   active: boolean;
   filterName: string;
   filterValue: Record<string, string>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  filterFunc: (...args: any[]) => boolean;
 };
 
 const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
@@ -52,21 +58,21 @@ const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
       name: "is",
       queryInputNameList: ["is"],
       filterFunc: (input: string, queryString: string) => {
-        return queryString === input;
+        return queryString.toString() === input.toString();
       },
     },
     {
       name: "is not",
       queryInputNameList: ["is-not"],
       filterFunc: (input: string, queryString: string) => {
-        return queryString !== input;
+        return queryString.toString() !== input.toString();
       },
     },
     {
       name: "contains",
       queryInputNameList: ["contains"],
       filterFunc: (input: string, queryString: string) => {
-        return queryString !== input;
+        return input.toString().includes(queryString);
       },
     },
   ],
@@ -98,21 +104,21 @@ const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
       name: "is",
       queryInputNameList: ["is"],
       filterFunc: (input: string, queryString: string) => {
-        return queryString === input;
+        return queryString.toString() === input.toString();
       },
     },
     {
       name: "is not",
       queryInputNameList: ["is-not"],
       filterFunc: (input: string, queryString: string) => {
-        return queryString !== input;
+        return queryString.toString() !== input.toString();
       },
     },
     {
       name: "is between",
       queryInputNameList: ["is-between-first", "is-between-second"],
       filterFunc: (input: string, queryString: string) => {
-        return queryString !== input;
+        return queryString.toString() !== input.toString();
       },
     },
   ],
@@ -136,6 +142,7 @@ const getInitFilterState = (
               },
               {} as Record<string, string>,
             ),
+            filterFunc: filterOption.filterFunc,
           };
           return a;
         },
@@ -146,16 +153,52 @@ const getInitFilterState = (
     {} as Record<string, Record<string, FilterState>>,
   );
 
-export function DataFilter({ filterConfig }: DataFilterProps) {
+export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
+  const [mainFilterQueryString, setMainFilterQueryString] = useState("");
   const [filterState, setFilterState] = useState(
     getInitFilterState(filterConfig),
+  );
+  const [filterCount, setFilterCount] = useState(
+    Object.fromEntries(
+      Object.keys(filterConfig.filterOptions).map((column) => [column, 0]),
+    ),
   );
   const debouncedHandleMainFilterChange = useDebounce(
     (e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value),
     500,
   );
 
-  const [mainFilterQueryString, setMainFilterQueryString] = useState("");
+  useEffect(() => {
+    console.log([filterConfig, filterState, setFilter]);
+    const newFilterCount = Object.fromEntries(
+      Object.keys(filterConfig.filterOptions).map((column) => [column, 0]),
+    );
+    setFilter(
+      Object.entries(filterState).flatMap(([column, filterByColumn]) =>
+        Object.values(filterByColumn).reduce(
+          (a, filter) => {
+            if (
+              filter.active &&
+              !Object.values(filter.filterValue).some(
+                (value) => value.length === 0,
+              )
+            ) {
+              newFilterCount[column] += 1;
+              a.push((input: Record<string, string | number>): boolean =>
+                filter.filterFunc(
+                  input[filter.column],
+                  ...Object.values(filter.filterValue),
+                ),
+              );
+            }
+            return a;
+          },
+          [] as ((input: Record<string, string | number>) => boolean)[],
+        ),
+      ),
+    );
+    setFilterCount(newFilterCount);
+  }, [filterConfig, filterState, setFilter]);
 
   const handleToggleFilter =
     (column: string, filterName: string) => (e: React.MouseEvent) => {
@@ -176,10 +219,10 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
 
   const handleChangeQueryString =
     (column: string, filterName: string) =>
-    (e: React.FormEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       setFilterState((prev) => {
-        prev[column][filterName].filterValue[e.currentTarget.name] =
-          e.currentTarget.value;
+        prev[column][filterName].filterValue[e.target.name] =
+          e.target.value;
         return { ...prev };
       });
     };
@@ -237,7 +280,11 @@ export function DataFilter({ filterConfig }: DataFilterProps) {
                 return (
                   <DropdownMenuSub key={column}>
                     <DropdownMenuSubTrigger>
-                      <span>{column}</span>
+                      <span>{`${column} ${
+                        filterCount[column] > 0
+                          ? `[${filterCount[column]}]`
+                          : ""
+                      }`}</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent className="mr-[13px] w-[300px]">

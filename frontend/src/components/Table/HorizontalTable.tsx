@@ -44,10 +44,13 @@ export function HorizontalTable({
   const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
-  const [sortedContent, setSortedContent] =
+  const [processedContent, setProcessedContent] =
     useState<(string | number)[][]>(content);
 
   const [copyHelperText, setCopyHelperText] = useState("Copy");
+  const [filters, setFilters] = useState<
+    ((input: Record<string, string | number>) => boolean)[]
+  >([]);
   const { loading } = useTableStore();
 
   const sortContent = useCallback(
@@ -79,7 +82,7 @@ export function HorizontalTable({
     setContentLength((prev) => {
       const newLength = apiTotalCount || content.length;
       // the apiTotalCount is undefined when the graphql query is loading so it would take the content.length which is 0 as the new length
-      // this if statement make sure that the value of contentLength is not changed to 0 between fetches
+      // this if statement make sure that the value of contentLength is not set to 0 between fetches
       if (newLength) {
         return newLength;
       }
@@ -88,10 +91,18 @@ export function HorizontalTable({
   }, [content, apiTotalCount]);
 
   useEffect(() => {
-    // Sort the content when sortBy or sortOrder changes
+    // Sort and filter the content when sortBy or sortOrder or filters changes
     const sortedData = sortContent(content, sortBy, sortOrder);
-    setSortedContent(sortedData);
-  }, [content, sortBy, sortContent, sortOrder]);
+    setProcessedContent(
+      sortedData.filter(
+        (data) =>
+          !filters.some(
+            (filter) =>
+              !filter(Object.fromEntries(header.map((k, i) => [k, data[i]]))),
+          ),
+      ),
+    );
+  }, [content, sortBy, sortContent, sortOrder, filters, header]);
 
   const handleSort = (column: string): void => {
     const newSortOrder =
@@ -111,12 +122,17 @@ export function HorizontalTable({
     expandElement || optionElement ? header.length + 1 : header.length;
 
   const paginatedSortedContent = useApiPagination
-    ? sortedContent
-    : sortedContent.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    ? processedContent
+    : processedContent.slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage,
+      );
 
   return (
     <div className="flex h-full flex-col">
-      {filterConfig ? <DataFilter filterConfig={filterConfig} /> : null}
+      {filterConfig ? (
+        <DataFilter setFilter={setFilters} filterConfig={filterConfig} />
+      ) : null}
       <table className="relative w-full border-collapse rounded bg-white">
         <thead className="border-b-2 border-accent font-bold text-text">
           <tr>
