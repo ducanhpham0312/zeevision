@@ -5,7 +5,7 @@
 [Tests](#tests) •
 [Tech Stack](#tech-stack)
 
-# Introduction <a name="introduction"/>
+## Introduction <a name="introduction"/>
 
 This document provides an overview of the frontend part of our application. It outlines how to get started, guides on tests and the technologies used.
 
@@ -15,6 +15,7 @@ Before you begin, ensure you have the following installed:
 
 - Node.js (version 18 or later)
 - npm (for managing packages)
+- Start the customized `zeebe-test-bench` and build the application as instructed in the main README.
 
 **Clone the repository and navigate to the frontend folder in project directory:**
 
