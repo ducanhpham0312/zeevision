@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, waitFor } from "@testing-library/react";
 import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
-import { BpmnViewer } from "./BpmnViewer";
+import { BpmnViewer, ResponsiveBpmnViewer } from "./BpmnViewer";
 import Viewer from "bpmn-js/lib/Viewer";
 import * as mockdata from "./mockdata.json";
 
@@ -66,5 +66,26 @@ describe("BpmnViewer Component", () => {
     await waitFor(() => {
       expect(Viewer).toHaveBeenCalled();
     });
+  });
+});
+
+describe("ResponsiveBpmnViewer", () => {
+  it("correctly render the ResponsiveBpmnViewer snapshot", () => {
+    const { asFragment } = render(
+      <ResponsiveBpmnViewer {...mockdata.moneyLoan} />,
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("does not throw error when bpmnString is empty", () => {
+    const { asFragment } = render(<ResponsiveBpmnViewer bpmnString="" />);
+    expect(asFragment()).not.toBeNull;
+  });
+
+  it("zoom button is visible", () => {
+    const { getAllByRole } = render(
+      <ResponsiveBpmnViewer {...mockdata.moneyLoan} />,
+    );
+    expect(getAllByRole("button")[0]).toBeInTheDocument();
   });
 });
