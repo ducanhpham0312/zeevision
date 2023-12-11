@@ -169,7 +169,6 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
   );
 
   useEffect(() => {
-    console.log([filterConfig, filterState, setFilter]);
     const newFilterCount = Object.fromEntries(
       Object.keys(filterConfig.filterOptions).map((column) => [column, 0]),
     );
@@ -198,7 +197,8 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
       ),
     );
     setFilterCount(newFilterCount);
-  }, [filterConfig, filterState, setFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterState, setFilter]);
 
   const handleToggleFilter =
     (column: string, filterName: string) => (e: React.MouseEvent) => {
@@ -221,8 +221,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
     (column: string, filterName: string) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFilterState((prev) => {
-        prev[column][filterName].filterValue[e.target.name] =
-          e.target.value;
+        prev[column][filterName].filterValue[e.target.name] = e.target.value;
         return { ...prev };
       });
     };

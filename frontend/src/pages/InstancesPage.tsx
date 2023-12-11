@@ -4,14 +4,29 @@ import { useTableStore } from "../contexts/useTableStore";
 import { useQueryInstances } from "../hooks/useQueryInstances";
 
 export default function InstancesPage() {
-  const { page, limit, setLimit, setPage, resetPagination } = useTableStore();
-  const { instances, totalCount } = useQueryInstances(page, limit);
+  const {
+    page,
+    limit,
+    shouldUseClientPagination,
+    setLimit,
+    setPage,
+    resetPagination,
+  } = useTableStore();
+  const { instances, totalCount } = useQueryInstances(
+    page,
+    limit,
+    shouldUseClientPagination,
+  );
 
   useEffect(() => {
     return () => {
       resetPagination();
     };
   }, [resetPagination]);
+
+  useEffect(() => {
+    console.log(shouldUseClientPagination);
+  }, [shouldUseClientPagination]);
 
   return (
     <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
