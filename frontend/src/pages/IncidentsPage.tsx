@@ -15,7 +15,6 @@ export default function IncidentsPage() {
 
   return (
     <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
-      <h1>INSTANCES</h1>
       <Table
         orientation="horizontal"
         header={["Instance Key", "Incident Key", "Element ID", "State", "Time"]}
@@ -28,6 +27,16 @@ export default function IncidentsPage() {
           setPage,
         }}
         apiTotalCount={totalCount}
+        filterConfig={{
+          mainFilter: { column: "Instance Key" },
+          filterOptions: {
+            "Instance Key": "string",
+            "Incident Key": "string",
+            "Element ID": "string",
+            State: "string",
+            Time: "time",
+          },
+        }}
         content={
           incidents
             ? incidents.map(

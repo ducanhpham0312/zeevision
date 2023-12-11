@@ -15,7 +15,6 @@ export default function JobsPage() {
 
   return (
     <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
-      <h1>JOBS</h1>
       <Table
         alterRowColor
         orientation="horizontal"
@@ -33,6 +32,17 @@ export default function JobsPage() {
           "State",
           "Time",
         ]}
+        filterConfig={{
+          mainFilter: { column: "Instance Key" },
+          filterOptions: {
+            "Job Key": "string",
+            "Job Type": "string",
+            Retries: "string",
+            Worker: "string",
+            State: "string",
+            Time: "time",
+          },
+        }}
         navLinkColumn={{
           "Instance Key": (value: string | number) =>
             `/instances/${value.toString()}`,

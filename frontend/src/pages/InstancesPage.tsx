@@ -24,10 +24,6 @@ export default function InstancesPage() {
     };
   }, [resetPagination]);
 
-  useEffect(() => {
-    console.log(shouldUseClientPagination);
-  }, [shouldUseClientPagination]);
-
   return (
     <div className="flex h-full flex-col gap-10 overflow-auto pr-4">
       <Table
