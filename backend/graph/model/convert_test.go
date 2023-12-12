@@ -33,7 +33,7 @@ func TestFromStorageBpmnResource(t *testing.T) {
 
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
-	nowFormatted := now.UTC().Format(time.RFC3339)
+	nowFormatted := now.UTC().Format(RFC3339Milli)
 
 	tests := []struct {
 		name            string
@@ -125,7 +125,7 @@ func TestFromStorageProcess(t *testing.T) {
 				ActiveInstances:    0,  // TODO
 				CompletedInstances: 0,  // TODO
 				BpmnLiveStatus:     "", // TODO
-				DeploymentTime:     now.UTC().Format(time.RFC3339),
+				DeploymentTime:     now.UTC().Format(RFC3339Milli),
 				BpmnProcessID:      "main-loop",
 				BpmnResource:       "",
 				ProcessKey:         1,
@@ -151,7 +151,7 @@ func TestFromStorageProcess(t *testing.T) {
 				ActiveInstances:    0,  // TODO
 				CompletedInstances: 0,  // TODO
 				BpmnLiveStatus:     "", // TODO
-				DeploymentTime:     now.UTC().Format(time.RFC3339),
+				DeploymentTime:     now.UTC().Format(RFC3339Milli),
 				BpmnProcessID:      "main-loop",
 				BpmnResource:       "",
 				ProcessKey:         2,
@@ -185,7 +185,7 @@ func TestFromStorageAuditLog(t *testing.T) {
 		ElementType: "element-type",
 		Intent:      "intent",
 		Position:    10,
-		Time:        now.UTC().Format(time.RFC3339),
+		Time:        now.UTC().Format(RFC3339Milli),
 	}
 
 	actual := FromStorageAuditLog(storageAuditLog)
@@ -212,7 +212,7 @@ func TestFromStrorageIncident(t *testing.T) {
 		ErrorType:    "error-type",
 		ErrorMessage: "error-message",
 		State:        "state",
-		Time:         now.UTC().Format(time.RFC3339),
+		Time:         now.UTC().Format(RFC3339Milli),
 	}
 
 	actual := FromStorageIncident(storageIncident)
@@ -240,7 +240,7 @@ func TestFromStorageJob(t *testing.T) {
 		Retries:     3,
 		Worker:      "worker",
 		State:       "state",
-		Time:        now.UTC().Format(time.RFC3339),
+		Time:        now.UTC().Format(RFC3339Milli),
 		InstanceKey: 100,
 	}
 
@@ -261,7 +261,7 @@ func TestFromStorageVariable(t *testing.T) {
 	expected := &Variable{
 		Name:  "variable-name",
 		Value: "variable-value",
-		Time:  now.UTC().Format(time.RFC3339),
+		Time:  now.UTC().Format(RFC3339Milli),
 	}
 
 	actual := FromStorageVariable(storageVariable)
