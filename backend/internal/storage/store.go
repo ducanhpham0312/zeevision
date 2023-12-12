@@ -71,6 +71,24 @@ type Storer interface {
 		intent string,
 		time time.Time,
 	) error
+
+	JobCreated(
+		key int64,
+		elementID string,
+		processInstanceKey int64,
+		jobType string,
+		retries int64,
+		worker string,
+		time time.Time,
+	) error
+
+	JobUpdated(
+		key int64,
+		retries int64,
+		worker string,
+		state string,
+		time time.Time,
+	) error
 }
 
 // TODO: use context for queries where reasonable
@@ -306,6 +324,64 @@ func (r *databaseStorer) AuditLogEventOccurred(
 	}).Error
 	if err != nil {
 		return fmt.Errorf("failed to add to audit log: %w", err)
+	}
+
+	return nil
+}
+
+func (r *databaseStorer) JobCreated(
+	key int64,
+	elementID string,
+	processInstanceKey int64,
+	jobType string,
+	retries int64,
+	worker string,
+	time time.Time,
+) error {
+	err := r.db.Create(&Job{
+		Key:                key,
+		ElementID:          elementID,
+		ProcessInstanceKey: processInstanceKey,
+		Type:               jobType,
+		Retries:            retries,
+		Worker:             worker,
+		State:              "CREATED",
+		Time:               time,
+	}).Error
+	if err != nil {
+		return fmt.Errorf("failed to create job: %w", err)
+	}
+
+	return nil
+}
+
+func (r *databaseStorer) JobUpdated(
+	key int64,
+	retries int64,
+	worker string,
+	state string,
+	time time.Time,
+) error {
+	var job Job
+	err := r.db.
+		Where(&Job{
+			Key: key,
+		}).
+		First(&job).Error
+	if err != nil {
+		return fmt.Errorf("failed to find job: %w", err)
+	}
+
+	err = r.db.Model(&job).
+		Select("Retries", "Worker", "State", "Time").
+		Updates(&Job{
+			Retries: retries,
+			Worker:  worker,
+			State:   state,
+			Time:    time,
+		}).Error
+	if err != nil {
+		return fmt.Errorf("failed to save job: %w", err)
 	}
 
 	return nil
