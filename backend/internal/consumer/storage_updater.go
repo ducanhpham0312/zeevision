@@ -416,17 +416,16 @@ func (u *storageUpdater) handleJob(untypedRecord *UntypedRecord) error {
 			worker,
 			time,
 		)
-	} else {
-		// Other intents should only come in for jobs that already
-		// exist so they're Update type tasks
-		log.Printf("Job state changed: %s, %s (instance %d, element %s)",
-			state, jobType, processInstanceKey, elementID)
-		return storer.JobUpdated(
-			key,
-			retries,
-			worker,
-			state,
-			time,
-		)
 	}
+	// Other intents should only come in for jobs that already
+	// exist so they're Update type tasks
+	log.Printf("Job state changed: %s, %s (instance %d, element %s)",
+		state, jobType, processInstanceKey, elementID)
+	return storer.JobUpdated(
+		key,
+		retries,
+		worker,
+		state,
+		time,
+	)
 }
