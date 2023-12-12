@@ -15,29 +15,35 @@ import (
 type storageUpdater struct {
 	storer storage.Storer
 
-	msgChannel   listenOnlyMsgChannel
+	msgChannels  map[string]listenOnlyMsgChannel
 	closeChannel listenOnlySignalChannel
 
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+func newDatabaseUpdater(storer storage.Storer, msgChannels map[string]msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+	// Turn the channels into listen-only channels
+	listenOnlyMsgChannels := map[string]listenOnlyMsgChannel{}
+	for topic, channel := range msgChannels {
+		listenOnlyMsgChannels[topic] = channel
+	}
+
 	result := &storageUpdater{
 		storer: storer,
 
-		msgChannel:   msgChannel,
+		msgChannels:  listenOnlyMsgChannels,
 		closeChannel: closeChannel,
 		wg:           wg,
 	}
 
-	// launch a pool of database handler goroutines that can consume
-	// messages from the channel and handle the records
-	poolSize := 20
-	for i := 0; i < poolSize; i++ {
+	// launch a handler goroutine for each topic
+	for topic := range listenOnlyMsgChannels {
+		// copy topic so each goroutine gets its own channel
+		capturedTopic := topic
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			result.storageUpdaterLoop()
+			result.storageUpdaterLoop(capturedTopic)
 		}()
 	}
 
@@ -45,9 +51,9 @@ func newDatabaseUpdater(storer storage.Storer, msgChannel msgChannelType, closeC
 }
 
 // Handle actual database updates from consumers
-func (u *storageUpdater) storageUpdaterLoop() {
+func (u *storageUpdater) storageUpdaterLoop(topic string) {
 	closeChannel := u.closeChannel
-	msgChannel := u.msgChannel
+	msgChannel := u.msgChannels[topic]
 readLoop:
 	for {
 		select {
@@ -62,7 +68,7 @@ readLoop:
 				continue readLoop
 			}
 
-			err = u.handlingDispatch(&untypedRecord)
+			err = u.handlingDispatch(topic, &untypedRecord)
 			if err != nil {
 				log.Printf("Handling failed: %v", err)
 				continue readLoop
@@ -71,45 +77,49 @@ readLoop:
 	}
 }
 
-func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
+func (u *storageUpdater) handlingDispatch(topic string, untypedRecord *UntypedRecord) error {
 	var err error
 
-	switch untypedRecord.ValueType { // nolint:exhaustive
-	case "":
+	if untypedRecord.ValueType == "" {
 		return fmt.Errorf("zero-value value type in record")
-	case ValueTypeDeployment:
+	}
+	// Dispatch by topic, so that all of them can use this shared dispatch
+	// This way the checking for the correct value type also makes slightly
+	// more sense to hoist out of the dispatch, perhaps..?
+	switch topic {
+	case "zeebe-deployment":
 		err = u.handleDeployment(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle deployment: %w", err)
 		}
-	case ValueTypeProcess:
+	case "zeebe-process":
 		err = u.handleProcess(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle process: %w", err)
 		}
-	case ValueTypeProcessInstance:
+	case "zeebe-process-instance":
 		err = u.handleProcessInstance(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle process instance: %w", err)
 		}
-	case ValueTypeVariable:
+	case "zeebe-variable":
 		err = u.handleVariable(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle variable: %w", err)
 		}
-	case ValueTypeIncident:
+	case "zeebe-incident":
 		err = u.handleIncident(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle incident: %w", err)
 		}
-	case ValueTypeJob:
+	case "zeebe-job":
 		err = u.handleJob(untypedRecord)
 		if err != nil {
 			return fmt.Errorf("failed to handle job: %w", err)
 		}
 	default:
-		log.Printf("Unhandled record: %v (intent: %v)",
-			untypedRecord.ValueType, untypedRecord.Intent)
+		log.Printf("Unhandled topic: %s (valuetype %v, intent: %v)",
+			topic, untypedRecord.ValueType, untypedRecord.Intent)
 	}
 	return nil
 }
