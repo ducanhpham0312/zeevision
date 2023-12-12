@@ -20,6 +20,9 @@ const (
 
 // Entry point for the application.
 func main() {
+	// Create a global logger
+	zap.ReplaceGlobals(zap.Must(zap.NewProduction()))
+
 	zap.L().Info("Starting ...")
 
 	dsnConfig := storage.DsnConfig{
@@ -35,7 +38,7 @@ func main() {
 	if err != nil {
 		zap.L().Panic("Failed connecting to database", zap.Error(err))
 	}
-	zap.L().Info("Successfully connect to database")
+	zap.L().Info("Successfully connected to database")
 
 	err = storage.AutoMigrate(db)
 	if err != nil {
@@ -55,7 +58,7 @@ func main() {
 	if err != nil {
 		zap.L().Panic("Failed connecting to Kafka", zap.Strings("brokers", brokers), zap.Error(err))
 	}
-	zap.L().Info("Successfully connect to Kafka", zap.Strings("brokers", brokers))
+	zap.L().Info("Successfully connected to Kafka", zap.Strings("brokers", brokers))
 
 	// The consumer needs to be closed manually because its sub-consumers
 	// need to be closed manually
@@ -87,7 +90,6 @@ func main() {
 	for _, topic := range topics {
 		err = kafkaConsumer.ConsumeTopic(0, topic)
 		if err != nil {
-			// TODO: error handling
 			zap.L().Panic("Failed consuming", zap.String("topic", topic), zap.Error(err))
 		}
 	}
@@ -98,6 +100,6 @@ func main() {
 	}
 
 	if err := server.Run(); err != nil {
-		zap.L().Fatal("Errors happens when trying to run server")
+		zap.L().Fatal("Server error", zap.Error(err))
 	}
 }

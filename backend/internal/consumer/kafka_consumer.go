@@ -132,7 +132,6 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 					zap.L().Info("Consumed message",
 						zap.Int64("offset", msg.Offset),
 						zap.String("", topic),
-						zap.String("", "/"),
 						zap.Int32("", partition))
 				case <-closeChannel:
 					// Also listen to closeChannel here to

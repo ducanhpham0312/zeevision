@@ -11,8 +11,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"go.uber.org/zap"
 )
 
 const (
@@ -97,9 +95,6 @@ func init() {
 	setOrFallback(EnvVarDatabaseHost, DefaultHostDatabase)
 	setOrFallback(EnvVarDatabaseUser, "")
 	setOrFallback(EnvVarDatabasePassword, "")
-
-	// Create a global logger
-	zap.ReplaceGlobals(zap.Must(zap.NewProduction()))
 }
 
 // Return the full address for Kafka where consumer can connect.

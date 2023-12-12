@@ -59,13 +59,13 @@ readLoop:
 			var untypedRecord UntypedRecord
 			err := json.Unmarshal(msg, &untypedRecord)
 			if err != nil {
-				zap.L().Info("Failed to unmarshal: ", zap.Error(err))
+				zap.L().Error("Failed to unmarshal: ", zap.Error(err))
 				continue readLoop
 			}
 
 			err = u.handlingDispatch(&untypedRecord)
 			if err != nil {
-				zap.L().Info("Handling failed: ", zap.Error(err))
+				zap.L().Error("Handling failed: ", zap.Error(err))
 				continue readLoop
 			}
 		}
@@ -104,7 +104,7 @@ func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 			return fmt.Errorf("failed to handle incident: %w", err)
 		}
 	default:
-		zap.L().Info("Unhandled record:",
+		zap.L().Warn("Unhandled record:",
 			zap.String("value type", string(untypedRecord.ValueType)),
 			zap.String("intent", string(untypedRecord.Intent)))
 	}
@@ -170,7 +170,7 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 		// We'll also get IntentFullyDistributed once it's distributed to all
 		// zeebe partitions but I'm not sure that's useful information to us
 	default:
-		zap.L().Info("Unhandled intent for ",
+		zap.L().Warn("Unhandled intent for ",
 			zap.String("value type", string(record.ValueType)),
 			zap.String("intent", string(record.Intent)))
 	}
@@ -197,7 +197,7 @@ func (u *storageUpdater) handleProcess(untypedRecord *UntypedRecord) error {
 			zap.Int64("process definition", processDefinitionKey),
 			zap.String("bpmn process", bpmnProcessID))
 	default:
-		zap.L().Info("Unhandled intent for ",
+		zap.L().Warn("Unhandled intent for ",
 			zap.String("value type", string(record.ValueType)),
 			zap.String("intent", string(record.Intent)))
 	}
@@ -263,7 +263,7 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 			)
 		}
 	default:
-		zap.L().Info("Unhandled intent for ",
+		zap.L().Warn("Unhandled intent for ",
 			zap.String("value type", string(record.ValueType)),
 			zap.String("intent", string(record.Intent)))
 	}
@@ -308,7 +308,7 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 			time.UnixMilli(record.Timestamp),
 		)
 	default:
-		zap.L().Info("Unhandled intent for ",
+		zap.L().Warn("Unhandled intent for ",
 			zap.String("value type", string(record.ValueType)),
 			zap.String("intent", string(record.Intent)))
 	}
@@ -355,7 +355,7 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 			time,
 		)
 	default:
-		zap.L().Info("Unhandled intent for ",
+		zap.L().Warn("Unhandled intent for ",
 			zap.String("value type", string(record.ValueType)),
 			zap.String("intent", string(record.Intent)))
 
