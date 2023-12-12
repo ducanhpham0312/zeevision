@@ -339,14 +339,14 @@ func (r *databaseStorer) JobCreated(
 	time time.Time,
 ) error {
 	err := r.db.Create(&Job{
-		Key: key,
-		ElementID: elementID,
+		Key:                key,
+		ElementID:          elementID,
 		ProcessInstanceKey: processInstanceKey,
-		Type: jobType,
-		Retries: retries,
-		Worker: worker,
-		State: "CREATED",
-		Time: time,
+		Type:               jobType,
+		Retries:            retries,
+		Worker:             worker,
+		State:              "CREATED",
+		Time:               time,
 	}).Error
 	if err != nil {
 		return fmt.Errorf("failed to create job: %w", err)
@@ -376,9 +376,9 @@ func (r *databaseStorer) JobUpdated(
 		Select("Retries", "Worker", "State", "Time").
 		Updates(&Job{
 			Retries: retries,
-			Worker: worker,
-			State: state,
-			Time:  time,
+			Worker:  worker,
+			State:   state,
+			Time:    time,
 		}).Error
 	if err != nil {
 		return fmt.Errorf("failed to save job: %w", err)

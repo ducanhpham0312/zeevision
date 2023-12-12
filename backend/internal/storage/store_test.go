@@ -81,24 +81,24 @@ var expectedAuditLog = AuditLog{
 }
 
 var expectedJob = Job{
-	Key: 1,
-	ElementID: "test-job",
+	Key:                1,
+	ElementID:          "test-job",
 	ProcessInstanceKey: expectedInstance.ProcessInstanceKey,
-	Type: "test-job",
-	Retries: 2,
-	Worker: "a",
-	State: "CREATED",
+	Type:               "test-job",
+	Retries:            2,
+	Worker:             "a",
+	State:              "CREATED",
 	Time:               time.Unix(1701235497, 0),
 }
 
 var expectedJobUpdated = Job{
-	Key: expectedJob.Key,
-	ElementID: expectedJob.ElementID,
+	Key:                expectedJob.Key,
+	ElementID:          expectedJob.ElementID,
 	ProcessInstanceKey: expectedJob.ProcessInstanceKey,
-	Type: expectedJob.Type,
-	Retries: 3,
-	Worker: "b",
-	State: "COMPLETED",
+	Type:               expectedJob.Type,
+	Retries:            3,
+	Worker:             "b",
+	State:              "COMPLETED",
 	Time:               time.Unix(1701235498, 0),
 }
 
@@ -604,7 +604,7 @@ func TestJobUpdated(t *testing.T) {
 
 	t.Run("no such job", func(t *testing.T) {
 		err := storer.JobUpdated(
-			expectedJobUpdated.Key + 1,
+			expectedJobUpdated.Key+1,
 			expectedJobUpdated.Retries,
 			expectedJobUpdated.Worker,
 			expectedJobUpdated.State,
