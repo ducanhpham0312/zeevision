@@ -7,16 +7,17 @@ type SomeFunction = (...args: any[]) => void;
 export function useDebounce<Func extends SomeFunction>(
   func: Func,
   delay = 1000,
-) {
+): [SomeFunction, boolean] {
   const [timer, setTimer] = useState<Timer>();
 
   const debouncedFunction = ((...args) => {
     const newTimer = setTimeout(() => {
       func(...args);
+      setTimer(undefined);
     }, delay);
     clearTimeout(timer);
     setTimer(newTimer);
   }) as Func;
 
-  return debouncedFunction;
+  return [debouncedFunction, !!timer];
 }

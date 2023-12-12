@@ -19,6 +19,7 @@ import { twMerge } from "tailwind-merge";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDebounce } from "../../hooks/useDebounce";
+import { useTableStore } from "../../contexts/useTableStore";
 
 export type FilterType = "string" | "time" | "value";
 
@@ -163,17 +164,28 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
       Object.keys(filterConfig.filterOptions).map((column) => [column, 0]),
     ),
   );
-  const debouncedHandleMainFilterChange = useDebounce(
-    (e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value),
-    500,
+  const { setLoading } = useTableStore();
+  const [debouncedHandleMainFilterChange, isDebouncing] = useDebounce(
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setMainFilterQueryString(e.target.value),
+    200,
   );
+
+  useEffect(() => {
+    if (!isDebouncing) {
+      // avoid race condition that result in flash of un-filtered content.
+      setTimeout(() => setLoading(isDebouncing as boolean), 100);
+    } else {
+      setLoading(isDebouncing as boolean);
+    }
+  }, [isDebouncing, setLoading]);
 
   useEffect(() => {
     const newFilterCount = Object.fromEntries(
       Object.keys(filterConfig.filterOptions).map((column) => [column, 0]),
     );
-    setFilter(
-      Object.entries(filterState).flatMap(([column, filterByColumn]) =>
+    const newFilters = Object.entries(filterState).flatMap(
+      ([column, filterByColumn]) =>
         Object.values(filterByColumn).reduce(
           (a, filter) => {
             if (
@@ -194,11 +206,20 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
           },
           [] as ((input: Record<string, string | number>) => boolean)[],
         ),
-      ),
     );
+
+    if (mainFilterQueryString) {
+      newFilters.push((input: Record<string, string | number>): boolean => {
+        return input[filterConfig.mainFilter.column]
+          .toString()
+          .includes(mainFilterQueryString);
+      });
+    }
+
+    setFilter(newFilters);
     setFilterCount(newFilterCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterState, setFilter]);
+  }, [filterState, setFilter, mainFilterQueryString]);
 
   const handleToggleFilter =
     (column: string, filterName: string) => (e: React.MouseEvent) => {
@@ -252,9 +273,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
     <div className="flex w-full flex-col">
       <div className="mb-1 flex w-full gap-2">
         <Input
-          value={mainFilterQueryString}
           onChange={(e) => {
-            setMainFilterQueryString(e.target.value);
             debouncedHandleMainFilterChange(e);
           }}
           className="flex-grow"
@@ -359,7 +378,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
           </DropdownMenu>
         </div>
       </div>
-      <div className="my-2 w-full">
+      <div className="w-full">
         <div className="flex flex-wrap gap-2">
           {Object.entries(filterState).map(([column, type]) =>
             Object.values(type).map((filter) => (
@@ -368,7 +387,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                 !Object.values(filter.filterValue).some((value) => !value) ? (
                   <Popover key={`${column}-${filter.filterName}`}>
                     <PopoverTrigger>
-                      <div className="flex items-center gap-3 rounded bg-hover p-2 px-3">
+                      <div className="my-2 flex items-center gap-3 rounded bg-hover p-2 px-3">
                         <div className="flex gap-1.5">
                           <p>{`${column}`}</p>
                           <p className="text-black/60">{`${filter.filterName}`}</p>

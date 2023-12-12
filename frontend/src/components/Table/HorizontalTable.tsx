@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, ChangeEvent } from "react";
+import { useState, useCallback, useEffect, ChangeEvent, Fragment } from "react";
 import { Button } from "../Button";
 import { Minus, Plus } from "lucide-react";
 import { ExpandRow } from "./ExpandRow";
@@ -96,11 +96,11 @@ export function HorizontalTable({
   useEffect(() => {
     setContentLength((prev) => {
       if (useApiPagination) {
-        if (apiTotalCount) {
-          return apiTotalCount;
-        }
         if (shouldUseClientPagination) {
           return processedContent.length;
+        }
+        if (apiTotalCount) {
+          return apiTotalCount;
         }
         return prev;
       }
@@ -177,9 +177,9 @@ export function HorizontalTable({
           aria-label="custom pagination table"
           className="border-l-2 border-r-2 border-accent"
         >
-          {paginatedSortedContent.map((row, rowIdx) => {
+          {(loading ? [] : paginatedSortedContent).map((row, rowIdx) => {
             return (
-              <React.Fragment key={rowIdx}>
+              <Fragment key={rowIdx}>
                 <tr
                   className={
                     "border-b border-black/10 " +
@@ -246,10 +246,10 @@ export function HorizontalTable({
                     {expandElement(rowIdx)}
                   </ExpandRow>
                 ) : null}
-              </React.Fragment>
+              </Fragment>
             );
           })}
-          {contentLength === 0 && !loading ? (
+          {content.length === 0 && !loading ? (
             <tr>
               <td colSpan={colSpan}>
                 <div className="flex h-20 w-full items-center justify-center border border-black/10">
@@ -258,11 +258,20 @@ export function HorizontalTable({
               </td>
             </tr>
           ) : null}
+          {content.length > 0 && contentLength === 0 && !loading ? (
+            <tr>
+              <td colSpan={colSpan}>
+                <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                  <p>No data satisfying selection.</p>
+                </div>
+              </td>
+            </tr>
+          ) : null}
           {loading ? (
             <tr>
               <td colSpan={colSpan}>
                 <div className="flex h-20 w-full items-center justify-center border border-black/10">
-                  <p>Loading</p>
+                  <p>Loading...</p>
                 </div>
               </td>
             </tr>

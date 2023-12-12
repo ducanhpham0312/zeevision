@@ -27,16 +27,14 @@ export function VerticalTable({
           >
             <th className="border border-r-0 p-3 text-left">{title}</th>
             <td className="border border-l-0 p-3 text-left">
-            {navLinkColumn && navLinkColumn[title] ? (
-              <NavLink to={navLinkColumn[title](content[0][idx])}>
-                <Button variant="secondary">
-              {content[0][idx]}
-            </Button>
-              </NavLink>
-            ) : (
-              content[0][idx]
-            )}
-          </td>
+              {navLinkColumn && navLinkColumn[title] ? (
+                <NavLink to={navLinkColumn[title](content[0][idx])}>
+                  <Button variant="secondary">{content[0][idx]}</Button>
+                </NavLink>
+              ) : (
+                content[0][idx]
+              )}
+            </td>
           </tr>
         ))}
       </tbody>

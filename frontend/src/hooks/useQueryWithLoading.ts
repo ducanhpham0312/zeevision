@@ -19,8 +19,6 @@ function useQueryWithLoading<TData, TVariables extends OperationVariables>(
   useEffect(() => {
     setLoading(result.loading);
   }, [result.loading, setLoading]);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return result;
 }
 

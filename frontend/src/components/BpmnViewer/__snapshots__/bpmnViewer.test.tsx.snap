@@ -22,10 +22,10 @@ exports[`ResponsiveBpmnViewer correctly render the ResponsiveBpmnViewer snapshot
         class="absolute right-2 top-2 z-50 flex w-10 flex-col gap-2"
       >
         <button
-          class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+          class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
         >
           <div
-            class="absolute -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%] scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100"
+            class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%]"
           >
             <p
               class="whitespace-nowrap text-sm"
@@ -55,10 +55,10 @@ exports[`ResponsiveBpmnViewer correctly render the ResponsiveBpmnViewer snapshot
           </span>
         </button>
         <button
-          class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+          class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
         >
           <div
-            class="absolute -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%] scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100"
+            class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%]"
           >
             <p
               class="whitespace-nowrap text-sm"
@@ -85,10 +85,10 @@ exports[`ResponsiveBpmnViewer correctly render the ResponsiveBpmnViewer snapshot
           </span>
         </button>
         <button
-          class="group hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+          class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
         >
           <div
-            class="absolute -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%] scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100"
+            class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 -left-3 top-[50%] -translate-x-[100%] -translate-y-[50%]"
           >
             <p
               class="whitespace-nowrap text-sm"

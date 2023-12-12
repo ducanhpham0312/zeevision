@@ -25,11 +25,11 @@ export default function ProcessesPage() {
           alterRowColor
           filterConfig={{
             mainFilter: {
-              column: "Process ID",
+              column: "BPMN Process ID",
             },
             filterOptions: {
               "Process Key": "string",
-              "Process ID": "string",
+              "BPMN Process ID": "string",
               Version: "value",
               "Deployment Time": "time",
             },
