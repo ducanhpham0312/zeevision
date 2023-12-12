@@ -72,6 +72,16 @@ func (s *fixedErrStorer) AuditLogEventOccurred(int64, int64, string, string, str
 	return s.err
 }
 
+func (s *fixedErrStorer) JobCreated(int64, string, int64, string, int64, string, time.Time) error {
+	s.touched["JobCreated"] = true
+	return s.err
+}
+
+func (s *fixedErrStorer) JobUpdated(int64, int64, string, string, time.Time) error {
+	s.touched["JobUpdated"] = true
+	return s.err
+}
+
 type testRecord struct {
 	name    string
 	record  *UntypedRecord
@@ -268,6 +278,50 @@ func newIncidentTestRecord(
 	}
 }
 
+func newJobTestRecord(
+	name string,
+	intent Intent,
+	touched []string,
+	err error,
+) *testRecord {
+	return &testRecord{
+		name,
+		&UntypedRecord{
+			PartitionID: 1,
+			Value: json.RawMessage(`{
+				"deadline": 1234567890,
+				"processInstanceKey": 1,
+				"retries": 2,
+				"retryBackoff": 10,
+				"recurringTime": 10,
+				"processDefinitionVersion": 1,
+				"processDefinitionKey": 2,
+				"elementInstanceKey": 10,
+				"elementId": "example-job",
+				"errorMessage": "",
+				"customHeaders": {},
+				"bpmnProcessID": "test-id",
+				"variables": {},
+				"type": "example-job",
+				"errorCode": "",
+				"worker": "worker"
+			}`),
+			RejectionType:        RejectionTypeNullVal,
+			RejectionReason:      "",
+			SourceRecordPosition: 4,
+			Key:                  5,
+			Timestamp:            time.Now().UnixMilli(),
+			Position:             6,
+			ValueType:            ValueTypeJob,
+			Intent:               intent,
+			RecordType:           RecordTypeEvent,
+			BrokerVersion:        "1.2.3",
+		},
+		touched,
+		err,
+	}
+}
+
 var errTest = errors.New("errTest")
 var testData = []*testRecord{
 	newDeploymentTestRecord(
@@ -392,6 +446,31 @@ var testData = []*testRecord{
 		"IncidentResolvedError",
 		IntentResolved,
 		[]string{"IncidentResolved"},
+		errTest,
+	),
+
+	newJobTestRecord(
+		"JobCreated",
+		IntentCreated,
+		[]string{"JobCreated"},
+		nil,
+	),
+	newJobTestRecord(
+		"JobCreatedError",
+		IntentCreated,
+		[]string{"JobCreated"},
+		errTest,
+	),
+	newJobTestRecord(
+		"JobUpdated",
+		IntentCompleted,
+		[]string{"JobUpdated"},
+		nil,
+	),
+	newJobTestRecord(
+		"JobUpdatedError",
+		IntentCompleted,
+		[]string{"JobUpdated"},
 		errTest,
 	),
 }

@@ -102,6 +102,11 @@ func (u *storageUpdater) handlingDispatch(untypedRecord *UntypedRecord) error {
 		if err != nil {
 			return fmt.Errorf("failed to handle incident: %w", err)
 		}
+	case ValueTypeJob:
+		err = u.handleJob(untypedRecord)
+		if err != nil {
+			return fmt.Errorf("failed to handle job: %w", err)
+		}
 	default:
 		log.Printf("Unhandled record: %v (intent: %v)",
 			untypedRecord.ValueType, untypedRecord.Intent)
@@ -368,4 +373,59 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 
 	return nil
 
+}
+
+func (u *storageUpdater) handleJob(untypedRecord *UntypedRecord) error {
+	storer := u.storer
+
+	record, err := WithTypedValue[JobValue](*untypedRecord)
+	if err != nil {
+		return fmt.Errorf("failed to cast: %w", err)
+	}
+
+	// Other than created we just need to handle all the other ones as
+	// state updates.
+	// It looks like they're still adding more intents here so we'll
+	// automatically support those if we just plop the intent in there, and
+	// if I'm understanding correctly all the state should come in each message.
+	// The key is the unique key, but other than that i think element id,
+	// process instance key and job type *probably* shouldn't change in
+	// state updates, since element id and process instance key specify
+	// which part of which process instance the job is executing for, and
+	// job type is used to dispatch to workers.
+	// If this assumption is wrong, the JobUpdated interface needs to be updated.
+
+	key := record.Key
+	elementID := record.Value.ElementID
+	processInstanceKey := record.Value.ProcessInstanceKey
+	jobType := record.Value.Type
+	retries := record.Value.Retries
+	worker := record.Value.Worker
+	state := string(record.Intent)
+	time := time.UnixMilli(record.Timestamp)
+
+	if record.Intent == IntentCreated {
+		log.Printf("Job created: %s (instance %d, element %s)",
+			jobType, processInstanceKey, elementID)
+		return storer.JobCreated(
+			key,
+			elementID,
+			processInstanceKey,
+			jobType,
+			retries,
+			worker,
+			time,
+		)
+	}
+	// Other intents should only come in for jobs that already
+	// exist so they're Update type tasks
+	log.Printf("Job state changed: %s, %s (instance %d, element %s)",
+		state, jobType, processInstanceKey, elementID)
+	return storer.JobUpdated(
+		key,
+		retries,
+		worker,
+		state,
+		time,
+	)
 }
