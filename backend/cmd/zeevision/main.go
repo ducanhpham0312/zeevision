@@ -96,7 +96,7 @@ func main() {
 
 	server, err := endpoint.NewFromEnv(fetcher)
 	if err != nil {
-		zap.L().Fatal("Failed creating a new endpoint from environment variables")
+		zap.L().Fatal("Failed creating a new endpoint from environment variables", zap.Error(err))
 	}
 
 	if err := server.Run(); err != nil {
