@@ -68,7 +68,7 @@ You should see a JSON response with structure similar to this (after [filling th
 }
 ```
 
-The whole GraphQL API schema is defined [here](../backend/graph/schema.graphqls), and it is used directly by [gqlgen](https://gqlgen.com/) to generate Go code.
+The whole GraphQL API schema is defined [here](./backend/graph/schema.graphqls), and it is used directly by [gqlgen](https://gqlgen.com/) to generate Go code.
 
 ## GUI database management
 
@@ -83,7 +83,7 @@ With `pgadmin`, you can perform query, visualise data, utilize dashboards, etc w
 - `PGADMIN_EMAIL`: user@example.com
 - `PGADMIN_PASSWORD`: pass
 
-Defined in [docker-compose.yml](../docker-compose.yml)
+Defined in [docker-compose.yml](./docker-compose.yml)
 
 ### Set up and access step-by-step
 
@@ -101,7 +101,7 @@ After this you should see *Servers* on the right menu.
 
 ### Filling database with data
 
-You can use [`fill_db.sql`](test/data/fill_db.sql) to fill the database with some data. You can open the *Query Tool* for the database, paste the contents of the file there, and execute it. You can also use the *Query Tool* to execute any other SQL queries you want.
+You can use [`fill_db.sql`](./backend/test/data/fill_db.sql) to fill the database with some data. You can open the *Query Tool* for the database, paste the contents of the file there, and execute it. You can also use the *Query Tool* to execute any other SQL queries you want.
 
 ## Architecture
 
