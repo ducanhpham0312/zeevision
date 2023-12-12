@@ -233,11 +233,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		timestamp,
 	)
 	if err != nil {
-		log.Printf(
+		zap.L().Error(
 			"Failed to log event to audit log: position %d, element id %s, err: %v",
-			record.Position,
-			elementID,
-			err,
+			zap.Int64("record position", record.Position),
+			zap.String("elementID", elementID),
+			zap.Error(err),
 		)
 	}
 
