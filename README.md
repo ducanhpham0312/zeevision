@@ -12,6 +12,24 @@ For developers, below are some shortcuts to the designated "areas":
 - [Internal discussion with customer](https://github.com/ducanhpham0312/zeevision-private/discussions/113)
 - [Codecov detailed Code Coverage report](https://app.codecov.io/gh/ducanhpham0312/zeevision)
 
+## Architecture
+
+Simplified architecture diagram of ZeeVision and its relation Kafka, PostgreSQL and the frontend:
+
+```mermaid
+flowchart LR
+    kafka([Kafka]) -.->|Sarama lib| Consumer
+    subgraph ZeeVision
+        Consumer -->|Store API| Storage
+        Storage -->|Fetch API| Endpoint
+    end
+    Storage <-.->|GORM lib| postgres[(PostgreSQL)]
+    Endpoint -.->|GraphQL| front([Frontend])
+    postgres <-.-> |GUI managed| pgadmin([PgAdmin])
+```
+
+Consumer has connection to Kafka and streams them directly to _Storage_ using its provided **Store API**. Consumer here indirectly filters unnecessary information from the received messages when converting to Storage compatible types. Storage has **Fetch API** which is used by the _Endpoint_ to fetch data from the database. Endpoint has GraphQL API which is used by the _Frontend_ to query data from the backend. Arrows in the diagram show the direction of the data flow.
+
 ## Build and Run
 
 Building and running the whole stack (backend and frontend) is done by running
@@ -102,21 +120,3 @@ After this you should see *Servers* on the right menu.
 ### Filling database with data
 
 You can use [`fill_db.sql`](./backend/test/data/fill_db.sql) to fill the database with some data. You can open the *Query Tool* for the database, paste the contents of the file there, and execute it. You can also use the *Query Tool* to execute any other SQL queries you want.
-
-## Architecture
-
-Simplified architecture diagram of ZeeVision and its relation Kafka, PostgreSQL and the frontend:
-
-```mermaid
-flowchart LR
-    kafka([Kafka]) -.->|Sarama lib| Consumer
-    subgraph ZeeVision
-        Consumer -->|Store API| Storage
-        Storage -->|Fetch API| Endpoint
-    end
-    Storage <-.->|GORM lib| postgres[(PostgreSQL)]
-    Endpoint -.->|GraphQL| front([Frontend])
-    postgres <-.-> |GUI managed| pgadmin([PgAdmin])
-```
-
-Consumer has connection to Kafka and streams them directly to _Storage_ using its provided **Store API**. Consumer here indirectly filters unnecessary information from the received messages when converting to Storage compatible types. Storage has **Fetch API** which is used by the _Endpoint_ to fetch data from the database. Endpoint has GraphQL API which is used by the _Frontend_ to query data from the backend. Arrows in the diagram show the direction of the data flow.
