@@ -190,7 +190,7 @@ export function HorizontalTable({
           <StyledTablePagination
             rowsPerPageOptions={[
               ...Array.from({ length: 6 }, (_, index) => (index + 1) * 5),
-              { label: "All", value: -1 },
+              { label: "All", value: content.length },
             ]}
             colSpan={colSpan}
             count={content.length}

@@ -561,7 +561,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
               </option>
               <option
                 class="MuiTablePagination-menuItem"
-                value="-1"
+                value="12"
               >
                 All
               </option>

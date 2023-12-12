@@ -1,11 +1,17 @@
-import { ReactNode } from "react";
+import { Button } from "../Button";
+import { NavLink } from "react-router-dom";
 
 export interface VerticalTableProps {
   header: string[];
-  content: (string | number | ReactNode)[][];
+  content: (string | number)[][];
+  navLinkColumn?: Record<string, (value: string | number) => string>;
 }
 
-export function VerticalTable({ header, content }: VerticalTableProps) {
+export function VerticalTable({
+  header,
+  content,
+  navLinkColumn,
+}: VerticalTableProps) {
   if (content.length < 1) return null;
   return (
     <tbody>
@@ -19,7 +25,15 @@ export function VerticalTable({ header, content }: VerticalTableProps) {
           }
         >
           <th className="border border-r-0 p-3 text-left">{title}</th>
-          <td className="border border-l-0 p-3 text-left">{content[0][idx]}</td>
+          <td className="border border-l-0 p-3 text-left">
+            {navLinkColumn && navLinkColumn[title] ? (
+              <NavLink to={navLinkColumn[title](content[0][idx])}>
+                <Button variant="secondary">{content[0][idx]}</Button>
+              </NavLink>
+            ) : (
+              content[0][idx]
+            )}
+          </td>
         </tr>
       ))}
     </tbody>

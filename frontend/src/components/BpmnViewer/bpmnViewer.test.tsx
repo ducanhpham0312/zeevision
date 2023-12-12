@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, waitFor } from "@testing-library/react";
 import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
-import { BpmnViewer } from "./BpmnViewer";
+import { BpmnViewer, ResponsiveBpmnViewer } from "./BpmnViewer";
 import Viewer from "bpmn-js/lib/Viewer";
 import * as mockdata from "./mockdata.json";
 
@@ -44,14 +44,11 @@ jest.mock("bpmn-js/lib/Viewer", () => {
 describe("BpmnViewer Component", () => {
   it("correctly render the snapshot", () => {
     const { asFragment } = render(<BpmnViewer {...mockdata.primary} />);
-
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders and initializes bpmn-js viewer", async () => {
-    // Render the component
     const { getByTestId } = render(<BpmnViewer {...mockdata.primary} />);
-
     await waitFor(() => {
       expect(getByTestId("canvas")).toBeInTheDocument();
     });
@@ -59,7 +56,6 @@ describe("BpmnViewer Component", () => {
 
   it("uses NavigatedViewer when navigated prop is true", async () => {
     render(<BpmnViewer {...mockdata.primary} />);
-
     await waitFor(() => {
       expect(NavigatedViewer).toHaveBeenCalled();
     });
@@ -67,9 +63,29 @@ describe("BpmnViewer Component", () => {
 
   it("uses Viewer when navigated prop is false", async () => {
     render(<BpmnViewer {...mockdata.secondary} />);
-
     await waitFor(() => {
       expect(Viewer).toHaveBeenCalled();
     });
+  });
+});
+
+describe("ResponsiveBpmnViewer", () => {
+  it("correctly render the ResponsiveBpmnViewer snapshot", () => {
+    const { asFragment } = render(
+      <ResponsiveBpmnViewer {...mockdata.moneyLoan} />,
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("does not throw error when bpmnString is empty", () => {
+    const { asFragment } = render(<ResponsiveBpmnViewer bpmnString="" />);
+    expect(asFragment()).not.toBeNull;
+  });
+
+  it("zoom button is visible", () => {
+    const { getAllByRole } = render(
+      <ResponsiveBpmnViewer {...mockdata.moneyLoan} />,
+    );
+    expect(getAllByRole("button")[0]).toBeInTheDocument();
   });
 });

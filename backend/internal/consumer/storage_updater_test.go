@@ -67,17 +67,22 @@ func (s *fixedErrStorer) IncidentResolved(int64, time.Time) error {
 	return s.err
 }
 
+func (s *fixedErrStorer) AuditLogEventOccurred(int64, int64, string, string, string, time.Time) error {
+	s.touched["AuditLogEventOccurred"] = true
+	return s.err
+}
+
 type testRecord struct {
 	name    string
 	record  *UntypedRecord
-	touched string
+	touched []string
 	err     error
 }
 
 func newDeploymentTestRecord(
 	name string,
 	intent Intent,
-	touched string,
+	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
@@ -123,7 +128,7 @@ func newDeploymentTestRecord(
 func newProcessTestRecord(
 	name string,
 	intent Intent,
-	touched string,
+	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
@@ -157,7 +162,7 @@ func newProcessTestRecord(
 func newProcessInstanceTestRecord(
 	name string,
 	intent Intent,
-	touched string,
+	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
@@ -195,7 +200,7 @@ func newProcessInstanceTestRecord(
 func newVariableTestRecord(
 	name string,
 	intent Intent,
-	touched string,
+	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
@@ -229,7 +234,7 @@ func newVariableTestRecord(
 func newIncidentTestRecord(
 	name string,
 	intent Intent,
-	touched string,
+	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
@@ -268,125 +273,125 @@ var testData = []*testRecord{
 	newDeploymentTestRecord(
 		"DeploymentCreated",
 		IntentCreated,
-		"ProcessDeployed",
+		[]string{"ProcessDeployed"},
 		nil,
 	),
 	newDeploymentTestRecord(
 		"DeploymentCreatedError",
 		IntentCreated,
-		"ProcessDeployed",
+		[]string{"ProcessDeployed"},
 		errTest,
 	),
 
 	newProcessTestRecord(
 		"ProcessCreated",
 		IntentCreated,
-		"",
+		nil,
 		nil,
 	),
 
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivating",
 		IntentElementActivating,
-		"",
+		[]string{"AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivated",
 		IntentElementActivated,
-		"ProcessInstanceActivated",
+		[]string{"ProcessInstanceActivated", "AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivatedError",
 		IntentElementActivated,
-		"ProcessInstanceActivated",
+		[]string{"ProcessInstanceActivated", "AuditLogEventOccurred"},
 		errTest,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompleting",
 		IntentElementCompleting,
-		"",
+		[]string{"AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompleted",
 		IntentElementCompleted,
-		"ProcessInstanceCompleted",
+		[]string{"ProcessInstanceCompleted", "AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompletedError",
 		IntentElementCompleted,
-		"ProcessInstanceCompleted",
+		[]string{"ProcessInstanceCompleted", "AuditLogEventOccurred"},
 		errTest,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminating",
 		IntentElementTerminating,
-		"",
+		[]string{"AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminated",
 		IntentElementTerminated,
-		"ProcessInstanceTerminated",
+		[]string{"ProcessInstanceTerminated", "AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminatedError",
 		IntentElementTerminated,
-		"ProcessInstanceTerminated",
+		[]string{"ProcessInstanceTerminated", "AuditLogEventOccurred"},
 		errTest,
 	),
 
 	newVariableTestRecord(
 		"VariableCreated",
 		IntentCreated,
-		"VariableCreated",
+		[]string{"VariableCreated"},
 		nil,
 	),
 	newVariableTestRecord(
 		"VariableCreatedError",
 		IntentCreated,
-		"VariableCreated",
+		[]string{"VariableCreated"},
 		errTest,
 	),
 	newVariableTestRecord(
 		"VariableUpdated",
 		IntentUpdated,
-		"VariableUpdated",
+		[]string{"VariableUpdated"},
 		nil,
 	),
 	newVariableTestRecord(
 		"VariableUpdatedError",
 		IntentUpdated,
-		"VariableUpdated",
+		[]string{"VariableUpdated"},
 		errTest,
 	),
 
 	newIncidentTestRecord(
 		"IncidentCreated",
 		IntentCreated,
-		"IncidentCreated",
+		[]string{"IncidentCreated"},
 		nil,
 	),
 	newIncidentTestRecord(
 		"IncidentCreatedError",
 		IntentCreated,
-		"IncidentCreated",
+		[]string{"IncidentCreated"},
 		errTest,
 	),
 	newIncidentTestRecord(
 		"IncidentResolved",
 		IntentResolved,
-		"IncidentResolved",
+		[]string{"IncidentResolved"},
 		nil,
 	),
 	newIncidentTestRecord(
 		"IncidentResolvedError",
 		IntentResolved,
-		"IncidentResolved",
+		[]string{"IncidentResolved"},
 		errTest,
 	),
 }
@@ -454,18 +459,17 @@ func TestStoring(t *testing.T) {
 				assert.ErrorContains(t, err, r.err.Error())
 			}
 
-			if r.touched != "" {
-				// The value will be the zero value (bool) if
-				// the key doesn't exist so this will work
-				// without the ok check
-				assert.True(t, storer.touched[r.touched])
+			for _, touched := range r.touched {
+				// Verify that we hit the updater functions we
+				// were supposed to.
+				assert.True(t, storer.touched[touched])
+				delete(storer.touched, touched)
 			}
 
-			for key, value := range storer.touched {
-				// Fail if we hit the wrong updater function
-				if key != r.touched {
-					assert.False(t, value)
-				}
+			for _, value := range storer.touched {
+				// Verify that we didn't hit any updater
+				// functions we weren't supposed to.
+				assert.False(t, value)
 			}
 		})
 

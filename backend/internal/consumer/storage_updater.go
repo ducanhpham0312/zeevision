@@ -217,8 +217,29 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 
 	processInstanceKey := record.Value.ProcessInstanceKey
 	processDefinitionKey := record.Value.ProcessDefinitionKey
+	elementID := record.Value.ElementID
 	bpmnElementType := record.Value.BpmnElementType
 	version := record.Value.Version
+
+	timestamp := time.UnixMilli(record.Timestamp)
+
+	// Record all events in the audit log first
+	err = storer.AuditLogEventOccurred(
+		record.Position,
+		processInstanceKey,
+		elementID,
+		string(bpmnElementType),
+		string(record.Intent),
+		timestamp,
+	)
+	if err != nil {
+		log.Printf(
+			"Failed to log event to audit log: position %d, element id %s, err: %v",
+			record.Position,
+			elementID,
+			err,
+		)
+	}
 
 	// Once we handle further element types it may be desirable to dispatch
 	// them further based on either intent or element type, depending on
@@ -235,7 +256,7 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 				processInstanceKey,
 				processDefinitionKey,
 				version,
-				time.UnixMilli(record.Timestamp),
+				timestamp,
 			)
 		}
 	case IntentElementCompleting:
@@ -247,7 +268,7 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 			zap.L().Info("Process instance completed:", zap.Int64("process instance", processInstanceKey))
 			return storer.ProcessInstanceCompleted(
 				processInstanceKey,
-				time.UnixMilli(record.Timestamp),
+				timestamp,
 			)
 		}
 	case IntentElementTerminating:
@@ -259,7 +280,7 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 			zap.L().Info("Process instance terminated:", zap.Int64("process instance", processInstanceKey))
 			return storer.ProcessInstanceTerminated(
 				processInstanceKey,
-				time.UnixMilli(record.Timestamp),
+				timestamp,
 			)
 		}
 	default:

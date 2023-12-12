@@ -36,7 +36,8 @@ type Instance = {
   bpmnProcessId: string;
   variables: VariableResult;
   jobs: JobResult;
-  incidents: IncidentResults;
+  auditLogs: AuditLogResult;
+  incidents: IncidentResult;
 };
 
 type VariableResult = {
@@ -64,6 +65,19 @@ type JobType = {
   worker: string;
   state: string;
   time: string;
+};
+
+type AuditLogType = {
+  elementId: string;
+  elementType: string;
+  intent: string;
+  position: number;
+  time: string;
+};
+
+type AuditLogResult = {
+  totalCount: number;
+  items: AuditLogType[];
 };
 
 type IncidentResult = {
