@@ -186,6 +186,17 @@ function JobsTable({ jobs }: JobListProps) {
         "State",
         "Time",
       ]}
+      filterConfig={{
+        mainFilter: { column: "Job Key" },
+        filterOptions: {
+          "Job Key": "string",
+          "Job Type": "string",
+          Retries: "string",
+          Worker: "string",
+          State: "string",
+          Time: "time",
+        },
+      }}
       content={
         jobs
           ? jobs.map(
@@ -214,6 +225,16 @@ function AuditLogsTable({ auditLogs }: AuditLogListProps) {
       alterRowColor
       orientation="horizontal"
       header={["Element ID", "Element Type", "Intent", "Position", "Time"]}
+      filterConfig={{
+        mainFilter: { column: "Element ID" },
+        filterOptions: {
+          "Element ID": "string",
+          "Element Type": "string",
+          Intent: "string",
+          Position: "string",
+          Time: "time",
+        },
+      }}
       content={
         auditLogs
           ? auditLogs.map(
@@ -248,6 +269,19 @@ function IncidentsTable({ incidents }: IncidentListProps) {
       ]}
       noStyleColumn={{
         "Error Message": (value: string | number) => value.toString(),
+      }}
+      filterConfig={{
+        mainFilter: {
+          column: "Incident Key",
+        },
+        filterOptions: {
+          "Element ID": "string",
+          "Incident Key": "string",
+          "Error Type": "string",
+          "Error Message": "string",
+          State: "string",
+          Time: "time",
+        },
       }}
       content={
         incidents

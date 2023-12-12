@@ -33,7 +33,7 @@ export default function JobsPage() {
           "Time",
         ]}
         filterConfig={{
-          mainFilter: { column: "Instance Key" },
+          mainFilter: { column: "Job Key" },
           filterOptions: {
             "Job Key": "string",
             "Job Type": "string",

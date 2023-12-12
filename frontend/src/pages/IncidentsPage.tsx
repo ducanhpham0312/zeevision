@@ -28,7 +28,7 @@ export default function IncidentsPage() {
         }}
         apiTotalCount={totalCount}
         filterConfig={{
-          mainFilter: { column: "Instance Key" },
+          mainFilter: { column: "Incident Key" },
           filterOptions: {
             "Instance Key": "string",
             "Incident Key": "string",
