@@ -84,6 +84,7 @@ func (s *fixedErrStorer) JobUpdated(int64, int64, string, string, time.Time) err
 
 type testRecord struct {
 	name    string
+	topic   string
 	record  *UntypedRecord
 	touched []string
 	err     error
@@ -91,12 +92,14 @@ type testRecord struct {
 
 func newDeploymentTestRecord(
 	name string,
+	topic string,
 	intent Intent,
 	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
 		name,
+		topic,
 		&UntypedRecord{
 			PartitionID: 1,
 			Value: json.RawMessage(`{
@@ -137,12 +140,14 @@ func newDeploymentTestRecord(
 
 func newProcessTestRecord(
 	name string,
+	topic string,
 	intent Intent,
 	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
 		name,
+		topic,
 		&UntypedRecord{
 			PartitionID: 1,
 			Value: json.RawMessage(`{
@@ -171,12 +176,14 @@ func newProcessTestRecord(
 
 func newProcessInstanceTestRecord(
 	name string,
+	topic string,
 	intent Intent,
 	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
 		name,
+		topic,
 		&UntypedRecord{
 			PartitionID: 1,
 			Value: json.RawMessage(`{
@@ -209,12 +216,14 @@ func newProcessInstanceTestRecord(
 
 func newVariableTestRecord(
 	name string,
+	topic string,
 	intent Intent,
 	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
 		name,
+		topic,
 		&UntypedRecord{
 			PartitionID: 1,
 			Value: json.RawMessage(`{
@@ -243,12 +252,14 @@ func newVariableTestRecord(
 
 func newIncidentTestRecord(
 	name string,
+	topic string,
 	intent Intent,
 	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
 		name,
+		topic,
 		&UntypedRecord{
 			PartitionID: 1,
 			Value: json.RawMessage(`{
@@ -280,12 +291,14 @@ func newIncidentTestRecord(
 
 func newJobTestRecord(
 	name string,
+	topic string,
 	intent Intent,
 	touched []string,
 	err error,
 ) *testRecord {
 	return &testRecord{
 		name,
+		topic,
 		&UntypedRecord{
 			PartitionID: 1,
 			Value: json.RawMessage(`{
@@ -326,12 +339,14 @@ var errTest = errors.New("errTest")
 var testData = []*testRecord{
 	newDeploymentTestRecord(
 		"DeploymentCreated",
+		"zeebe-deployment",
 		IntentCreated,
 		[]string{"ProcessDeployed"},
 		nil,
 	),
 	newDeploymentTestRecord(
 		"DeploymentCreatedError",
+		"zeebe-deployment",
 		IntentCreated,
 		[]string{"ProcessDeployed"},
 		errTest,
@@ -339,6 +354,7 @@ var testData = []*testRecord{
 
 	newProcessTestRecord(
 		"ProcessCreated",
+		"zeebe-process",
 		IntentCreated,
 		nil,
 		nil,
@@ -346,54 +362,63 @@ var testData = []*testRecord{
 
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivating",
+		"zeebe-process-instance",
 		IntentElementActivating,
 		[]string{"AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivated",
+		"zeebe-process-instance",
 		IntentElementActivated,
 		[]string{"ProcessInstanceActivated", "AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementActivatedError",
+		"zeebe-process-instance",
 		IntentElementActivated,
 		[]string{"ProcessInstanceActivated", "AuditLogEventOccurred"},
 		errTest,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompleting",
+		"zeebe-process-instance",
 		IntentElementCompleting,
 		[]string{"AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompleted",
+		"zeebe-process-instance",
 		IntentElementCompleted,
 		[]string{"ProcessInstanceCompleted", "AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementCompletedError",
+		"zeebe-process-instance",
 		IntentElementCompleted,
 		[]string{"ProcessInstanceCompleted", "AuditLogEventOccurred"},
 		errTest,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminating",
+		"zeebe-process-instance",
 		IntentElementTerminating,
 		[]string{"AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminated",
+		"zeebe-process-instance",
 		IntentElementTerminated,
 		[]string{"ProcessInstanceTerminated", "AuditLogEventOccurred"},
 		nil,
 	),
 	newProcessInstanceTestRecord(
 		"ProcessInstanceElementTerminatedError",
+		"zeebe-process-instance",
 		IntentElementTerminated,
 		[]string{"ProcessInstanceTerminated", "AuditLogEventOccurred"},
 		errTest,
@@ -401,24 +426,28 @@ var testData = []*testRecord{
 
 	newVariableTestRecord(
 		"VariableCreated",
+		"zeebe-variable",
 		IntentCreated,
 		[]string{"VariableCreated"},
 		nil,
 	),
 	newVariableTestRecord(
 		"VariableCreatedError",
+		"zeebe-variable",
 		IntentCreated,
 		[]string{"VariableCreated"},
 		errTest,
 	),
 	newVariableTestRecord(
 		"VariableUpdated",
+		"zeebe-variable",
 		IntentUpdated,
 		[]string{"VariableUpdated"},
 		nil,
 	),
 	newVariableTestRecord(
 		"VariableUpdatedError",
+		"zeebe-variable",
 		IntentUpdated,
 		[]string{"VariableUpdated"},
 		errTest,
@@ -426,24 +455,28 @@ var testData = []*testRecord{
 
 	newIncidentTestRecord(
 		"IncidentCreated",
+		"zeebe-incident",
 		IntentCreated,
 		[]string{"IncidentCreated"},
 		nil,
 	),
 	newIncidentTestRecord(
 		"IncidentCreatedError",
+		"zeebe-incident",
 		IntentCreated,
 		[]string{"IncidentCreated"},
 		errTest,
 	),
 	newIncidentTestRecord(
 		"IncidentResolved",
+		"zeebe-incident",
 		IntentResolved,
 		[]string{"IncidentResolved"},
 		nil,
 	),
 	newIncidentTestRecord(
 		"IncidentResolvedError",
+		"zeebe-incident",
 		IntentResolved,
 		[]string{"IncidentResolved"},
 		errTest,
@@ -451,24 +484,28 @@ var testData = []*testRecord{
 
 	newJobTestRecord(
 		"JobCreated",
+		"zeebe-job",
 		IntentCreated,
 		[]string{"JobCreated"},
 		nil,
 	),
 	newJobTestRecord(
 		"JobCreatedError",
+		"zeebe-job",
 		IntentCreated,
 		[]string{"JobCreated"},
 		errTest,
 	),
 	newJobTestRecord(
 		"JobUpdated",
+		"zeebe-job",
 		IntentCompleted,
 		[]string{"JobUpdated"},
 		nil,
 	),
 	newJobTestRecord(
 		"JobUpdatedError",
+		"zeebe-job",
 		IntentCompleted,
 		[]string{"JobUpdated"},
 		errTest,
@@ -479,10 +516,11 @@ var testData = []*testRecord{
 func TestDatabaseUpdater(t *testing.T) {
 	var wg sync.WaitGroup
 	storer := newFixedErrStorer(nil)
-	msgChannel := make(msgChannelType)
+	msgChannels := map[string]msgChannelType{}
+	msgChannels["zeebe-process"] = make(msgChannelType)
 	closeChannel := make(signalChannelType)
 
-	updater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
+	updater := newDatabaseUpdater(storer, msgChannels, closeChannel, &wg)
 	defer func() {
 		// close closeChannel to make reads from it succeed (and return
 		// nil)
@@ -502,7 +540,7 @@ func TestDatabaseUpdater(t *testing.T) {
 	// Put in an empty JSON record - this is invalid and will cause an
 	// error in handling, but errors in handling should not crash or
 	// anything.
-	msgChannel <- []byte(`{}`)
+	msgChannels["zeebe-process"] <- []byte(`{}`)
 }
 
 // Automatically test that handlers hit all their intended storer functions.
@@ -514,7 +552,7 @@ func TestStoring(t *testing.T) {
 	updater := &storageUpdater{
 		storer: storer,
 
-		msgChannel:   nil,
+		msgChannels:  nil,
 		closeChannel: nil,
 
 		wg: nil,
@@ -530,7 +568,7 @@ func TestStoring(t *testing.T) {
 			// Pass it to the handling dispatcher (if the dispatch
 			// does something wrong we'll likely touch the wrong
 			// database updater at the end and fail that way)
-			err := updater.handlingDispatch(r.record)
+			err := updater.handlingDispatch(r.topic, r.record)
 
 			if r.err == nil {
 				assert.NoError(t, err)
@@ -560,7 +598,7 @@ func TestMissingDeploymentResource(t *testing.T) {
 	updater := &storageUpdater{
 		storer: storer,
 
-		msgChannel:   nil,
+		msgChannels:  nil,
 		closeChannel: nil,
 
 		wg: nil,
@@ -598,7 +636,7 @@ func TestMissingDeploymentResource(t *testing.T) {
 	}
 
 	// There should be an error now
-	err := updater.handlingDispatch(untypedRecord)
+	err := updater.handlingDispatch("zeebe-deployment", untypedRecord)
 	assert.ErrorContains(t, err, "resource not in map")
 }
 
@@ -607,13 +645,73 @@ func TestDispatchInvalidRecord(t *testing.T) {
 	updater := &storageUpdater{
 		storer: storer,
 
-		msgChannel:   nil,
+		msgChannels:  nil,
 		closeChannel: nil,
 
 		wg: nil,
 	}
 
-	// Pass in a zero-value record; this should fail
-	err := updater.handlingDispatch(&UntypedRecord{})
+	// Pass in a zero-value record; this should fail and not hit topic
+	// handling at all
+	err := updater.handlingDispatch("invalid-topic", &UntypedRecord{})
 	assert.ErrorContains(t, err, "zero-value value type in record")
+}
+
+// Test that a value type in the incorrect topic breaks
+func TestValueTypeInWrongTopic(t *testing.T) {
+	storer := newFixedErrStorer(nil)
+	updater := &storageUpdater{
+		storer: storer,
+
+		msgChannels:  nil,
+		closeChannel: nil,
+
+		wg: nil,
+	}
+
+	// First create two records we'll use for this
+	// Job for all the non-job topics
+	r := newJobTestRecord(
+		"Job",
+		"zeebe-job",
+		IntentCreated,
+		[]string{"JobCreated"},
+		nil,
+	)
+	// process instnce for the others
+	r2 := newProcessInstanceTestRecord(
+		"JobInstance",
+		"zeebe-process-instance",
+		IntentCreated,
+		[]string{"ProcessInstanceCreated"},
+		nil,
+	)
+
+	topics := []string{
+		"zeebe-deployment",
+		"zeebe-process",
+		"zeebe-process-instance",
+		"zeebe-variable",
+		"zeebe-incident",
+		"zeebe-job",
+	}
+
+	for _, topic := range topics {
+		t.Run(topic, func(t *testing.T) {
+			t.Cleanup(func() {
+				// Reset err and the touched map after a test
+				storer.reset()
+			})
+
+			if topic != r.topic {
+				err := updater.handlingDispatch(topic, r.record)
+				assert.ErrorContains(t, err, "failed to cast")
+			} else {
+				// for the one other topic use r2 instead
+				err := updater.handlingDispatch(topic, r2.record)
+				assert.ErrorContains(t, err, "failed to cast")
+			}
+		})
+
+	}
 }
