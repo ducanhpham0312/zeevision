@@ -86,7 +86,7 @@ func (u *storageUpdater) handlingDispatch(topic string, untypedRecord *UntypedRe
 	// Dispatch by topic, so that all of them can use this shared dispatch
 	// This way the checking for the correct value type also makes slightly
 	// more sense to hoist out of the dispatch, perhaps..?
-	switch topic { // nolint:exhaustive
+	switch topic {
 	case "zeebe-deployment":
 		err = u.handleDeployment(untypedRecord)
 		if err != nil {
