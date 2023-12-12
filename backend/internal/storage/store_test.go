@@ -80,6 +80,28 @@ var expectedAuditLog = AuditLog{
 	Time:               expectedInstance.StartTime,
 }
 
+var expectedJob = Job{
+	Key: 1,
+	ElementID: "test-job",
+	ProcessInstanceKey: expectedInstance.ProcessInstanceKey,
+	Type: "test-job",
+	Retries: 2,
+	Worker: "a",
+	State: "CREATED",
+	Time:               time.Unix(1701235497, 0),
+}
+
+var expectedJobUpdated = Job{
+	Key: expectedJob.Key,
+	ElementID: expectedJob.ElementID,
+	ProcessInstanceKey: expectedJob.ProcessInstanceKey,
+	Type: expectedJob.Type,
+	Retries: 3,
+	Worker: "b",
+	State: "COMPLETED",
+	Time:               time.Unix(1701235498, 0),
+}
+
 func TestProcessDeployed(t *testing.T) {
 	// helper defined in fetch_test.go
 	testDb := newMigratedTestDB(t)
@@ -496,5 +518,113 @@ func TestAuditLogEventOccurred(t *testing.T) {
 		assert.Equal(t, expectedAuditLog.ElementType, auditLog.ElementType)
 		assert.Equal(t, expectedAuditLog.Intent, auditLog.Intent)
 		assert.Equal(t, expectedAuditLog.Time.UTC(), auditLog.Time.UTC())
+	})
+}
+
+func TestJobCreated(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+	storer := NewStorer(db)
+
+	t.Run("create job", func(t *testing.T) {
+		err := storer.JobCreated(
+			expectedJob.Key,
+			expectedJob.ElementID,
+			expectedJob.ProcessInstanceKey,
+			expectedJob.Type,
+			expectedJob.Retries,
+			expectedJob.Worker,
+			expectedJob.Time,
+		)
+		assert.NoError(t, err)
+	})
+
+	t.Run("create duplicate", func(t *testing.T) {
+		err := storer.JobCreated(
+			expectedJob.Key,
+			expectedJob.ElementID,
+			expectedJob.ProcessInstanceKey,
+			expectedJob.Type,
+			expectedJob.Retries,
+			expectedJob.Worker,
+			expectedJob.Time,
+		)
+		assert.ErrorContains(t, err, "failed to create job")
+	})
+
+	t.Run("ensure equal value", func(t *testing.T) {
+		var job Job
+		err := db.First(&job).Error
+		assert.NoError(t, err)
+
+		assert.Equal(t, expectedJob.Key, job.Key)
+		assert.Equal(t, expectedJob.ElementID, job.ElementID)
+		assert.Equal(t, expectedJob.ProcessInstanceKey, job.ProcessInstanceKey)
+		assert.Equal(t, expectedJob.Type, job.Type)
+		assert.Equal(t, expectedJob.Retries, job.Retries)
+		assert.Equal(t, expectedJob.Worker, job.Worker)
+		assert.Equal(t, expectedJob.State, job.State)
+		assert.Equal(t, expectedJob.Time.UTC(), job.Time.UTC())
+	})
+}
+
+func TestJobUpdated(t *testing.T) {
+	testDb := newMigratedTestDB(t)
+	defer func() {
+		assert.NoError(t, testDb.Rollback())
+	}()
+	db := testDb.DB()
+	storer := NewStorer(db)
+
+	// Create job to update it
+	err := storer.JobCreated(
+		expectedJob.Key,
+		expectedJob.ElementID,
+		expectedJob.ProcessInstanceKey,
+		expectedJob.Type,
+		expectedJob.Retries,
+		expectedJob.Worker,
+		expectedJob.Time,
+	)
+	assert.NoError(t, err)
+
+	t.Run("update job", func(t *testing.T) {
+		err := storer.JobUpdated(
+			expectedJobUpdated.Key,
+			expectedJobUpdated.Retries,
+			expectedJobUpdated.Worker,
+			expectedJobUpdated.State,
+			expectedJobUpdated.Time,
+		)
+		assert.NoError(t, err)
+	})
+
+	t.Run("no such job", func(t *testing.T) {
+		err := storer.JobUpdated(
+			expectedJobUpdated.Key + 1,
+			expectedJobUpdated.Retries,
+			expectedJobUpdated.Worker,
+			expectedJobUpdated.State,
+			expectedJobUpdated.Time,
+		)
+		assert.ErrorContains(t, err, "failed to find job")
+	})
+
+	t.Run("ensure equal value", func(t *testing.T) {
+		var job Job
+		err := db.First(&job).Error
+		assert.NoError(t, err)
+
+		assert.Equal(t, expectedJobUpdated.Key, job.Key)
+		assert.Equal(t, expectedJobUpdated.ElementID, job.ElementID)
+		assert.Equal(t, expectedJobUpdated.ProcessInstanceKey, job.ProcessInstanceKey)
+		assert.Equal(t, expectedJobUpdated.Type, job.Type)
+		assert.Equal(t, expectedJobUpdated.Retries, job.Retries)
+		assert.Equal(t, expectedJobUpdated.Worker, job.Worker)
+		assert.Equal(t, expectedJobUpdated.State, job.State)
+		assert.Equal(t, expectedJobUpdated.Time.UTC(), job.Time.UTC())
 	})
 }
