@@ -28,13 +28,12 @@ func FromStorageBpmnResource(bpmnResource storage.BpmnResource) string {
 // Convert storage instance to GraphQL instance.
 func FromStorageInstance(instance storage.Instance) *Instance {
 	return &Instance{
-		BpmnLiveStatus: "", // TODO
-		StartTime:      formatTime(instance.StartTime),
-		EndTime:        formatNullTime(instance.EndTime),
-		InstanceKey:    instance.ProcessInstanceKey,
-		ProcessKey:     instance.ProcessDefinitionKey,
-		Version:        instance.Version,
-		Status:         instance.Status,
+		StartTime:   formatTime(instance.StartTime),
+		EndTime:     formatNullTime(instance.EndTime),
+		InstanceKey: instance.ProcessInstanceKey,
+		ProcessKey:  instance.ProcessDefinitionKey,
+		Version:     instance.Version,
+		Status:      instance.Status,
 		// Variables and Process have their own resolvers and are not populated
 		// here.
 	}
@@ -43,13 +42,10 @@ func FromStorageInstance(instance storage.Instance) *Instance {
 // Convert storage process to GraphQL process.
 func FromStorageProcess(process storage.Process) *Process {
 	return &Process{
-		ActiveInstances:    0,  // TODO
-		CompletedInstances: 0,  // TODO
-		BpmnLiveStatus:     "", // TODO
-		BpmnProcessID:      process.BpmnProcessID,
-		DeploymentTime:     formatTime(process.DeploymentTime),
-		ProcessKey:         process.ProcessDefinitionKey,
-		Version:            process.Version,
+		BpmnProcessID:  process.BpmnProcessID,
+		DeploymentTime: formatTime(process.DeploymentTime),
+		ProcessKey:     process.ProcessDefinitionKey,
+		Version:        process.Version,
 		// Instances, MessageSubscriptions, Timers, BpmnResource have their
 		// own resolvers and are not populated here.
 	}
@@ -126,9 +122,13 @@ func ToStoragePagination(pagination *Pagination) *storage.Pagination {
 	}
 }
 
+// Custom format since it's not found in the time module.
+// Time in RFC3339 format, but with milliseconds (including zero digits)
+const RFC3339Milli = "2006-01-02T15:04:05.000Z07:00"
+
 // Convert time to RFC3339 format.
 func formatTime(t time.Time) string {
-	return t.UTC().Format(time.RFC3339)
+	return t.UTC().Format(RFC3339Milli)
 }
 
 // Convert nullable time to RFC3339 format. Null times are converted to nil.

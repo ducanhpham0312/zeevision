@@ -66,6 +66,7 @@ jobs:
         with:
           version: v1.54
           working-directory: ./backend
+          args: --timeout 3m0s
 
   test:
     runs-on: ubuntu-latest

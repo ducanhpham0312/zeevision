@@ -28,18 +28,17 @@ type Incident struct {
 }
 
 type Instance struct {
-	BpmnLiveStatus string              `json:"bpmnLiveStatus"`
-	StartTime      string              `json:"startTime"`
-	EndTime        *string             `json:"endTime,omitempty"`
-	InstanceKey    int64               `json:"instanceKey"`
-	ProcessKey     int64               `json:"processKey"`
-	Version        int64               `json:"version"`
-	Status         string              `json:"status"`
-	AuditLogs      *PaginatedAuditLogs `json:"auditLogs"`
-	Incidents      *PaginatedIncidents `json:"incidents"`
-	Jobs           *PaginatedJobs      `json:"jobs"`
-	Variables      *PaginatedVariables `json:"variables"`
-	Process        *Process            `json:"process"`
+	StartTime   string              `json:"startTime"`
+	EndTime     *string             `json:"endTime,omitempty"`
+	InstanceKey int64               `json:"instanceKey"`
+	ProcessKey  int64               `json:"processKey"`
+	Version     int64               `json:"version"`
+	Status      string              `json:"status"`
+	AuditLogs   *PaginatedAuditLogs `json:"auditLogs"`
+	Incidents   *PaginatedIncidents `json:"incidents"`
+	Jobs        *PaginatedJobs      `json:"jobs"`
+	Variables   *PaginatedVariables `json:"variables"`
+	Process     *Process            `json:"process"`
 }
 
 type Job struct {
@@ -90,15 +89,12 @@ type Pagination struct {
 }
 
 type Process struct {
-	ActiveInstances    int64               `json:"activeInstances"`
-	CompletedInstances int64               `json:"completedInstances"`
-	BpmnLiveStatus     string              `json:"bpmnLiveStatus"`
-	BpmnResource       string              `json:"bpmnResource"`
-	BpmnProcessID      string              `json:"bpmnProcessId"`
-	DeploymentTime     string              `json:"deploymentTime"`
-	Instances          *PaginatedInstances `json:"instances"`
-	ProcessKey         int64               `json:"processKey"`
-	Version            int64               `json:"version"`
+	BpmnResource   string              `json:"bpmnResource"`
+	BpmnProcessID  string              `json:"bpmnProcessId"`
+	DeploymentTime string              `json:"deploymentTime"`
+	Instances      *PaginatedInstances `json:"instances"`
+	ProcessKey     int64               `json:"processKey"`
+	Version        int64               `json:"version"`
 }
 
 type Variable struct {

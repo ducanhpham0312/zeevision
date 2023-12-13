@@ -33,7 +33,7 @@ func TestFromStorageBpmnResource(t *testing.T) {
 
 func TestFromStorageInstance(t *testing.T) {
 	now := time.Now()
-	nowFormatted := now.UTC().Format(time.RFC3339)
+	nowFormatted := now.UTC().Format(RFC3339Milli)
 
 	tests := []struct {
 		name            string
@@ -51,13 +51,12 @@ func TestFromStorageInstance(t *testing.T) {
 				EndTime:              sql.NullTime{},
 			},
 			expected: &Instance{
-				BpmnLiveStatus: "", // TODO
-				StartTime:      nowFormatted,
-				EndTime:        nil,
-				InstanceKey:    10,
-				ProcessKey:     1,
-				Version:        1,
-				Status:         "ACTIVE",
+				StartTime:   nowFormatted,
+				EndTime:     nil,
+				InstanceKey: 10,
+				ProcessKey:  1,
+				Version:     1,
+				Status:      "ACTIVE",
 			},
 		},
 		{
@@ -71,13 +70,12 @@ func TestFromStorageInstance(t *testing.T) {
 				EndTime:              sql.NullTime{Time: now, Valid: true},
 			},
 			expected: &Instance{
-				BpmnLiveStatus: "", // TODO
-				StartTime:      nowFormatted,
-				EndTime:        &nowFormatted,
-				InstanceKey:    20,
-				ProcessKey:     2,
-				Version:        2,
-				Status:         "COMPLETED",
+				StartTime:   nowFormatted,
+				EndTime:     &nowFormatted,
+				InstanceKey: 20,
+				ProcessKey:  2,
+				Version:     2,
+				Status:      "COMPLETED",
 			},
 		},
 	}
@@ -122,14 +120,11 @@ func TestFromStorageProcess(t *testing.T) {
 				},
 			},
 			expected: &Process{
-				ActiveInstances:    0,  // TODO
-				CompletedInstances: 0,  // TODO
-				BpmnLiveStatus:     "", // TODO
-				DeploymentTime:     now.UTC().Format(time.RFC3339),
-				BpmnProcessID:      "main-loop",
-				BpmnResource:       "",
-				ProcessKey:         1,
-				Version:            1,
+				DeploymentTime: now.UTC().Format(RFC3339Milli),
+				BpmnProcessID:  "main-loop",
+				BpmnResource:   "",
+				ProcessKey:     1,
+				Version:        1,
 			},
 		},
 		{
@@ -148,14 +143,11 @@ func TestFromStorageProcess(t *testing.T) {
 				Instances: []storage.Instance{},
 			},
 			expected: &Process{
-				ActiveInstances:    0,  // TODO
-				CompletedInstances: 0,  // TODO
-				BpmnLiveStatus:     "", // TODO
-				DeploymentTime:     now.UTC().Format(time.RFC3339),
-				BpmnProcessID:      "main-loop",
-				BpmnResource:       "",
-				ProcessKey:         2,
-				Version:            1,
+				DeploymentTime: now.UTC().Format(RFC3339Milli),
+				BpmnProcessID:  "main-loop",
+				BpmnResource:   "",
+				ProcessKey:     2,
+				Version:        1,
 			},
 		},
 	}
@@ -185,7 +177,7 @@ func TestFromStorageAuditLog(t *testing.T) {
 		ElementType: "element-type",
 		Intent:      "intent",
 		Position:    10,
-		Time:        now.UTC().Format(time.RFC3339),
+		Time:        now.UTC().Format(RFC3339Milli),
 	}
 
 	actual := FromStorageAuditLog(storageAuditLog)
@@ -212,7 +204,7 @@ func TestFromStrorageIncident(t *testing.T) {
 		ErrorType:    "error-type",
 		ErrorMessage: "error-message",
 		State:        "state",
-		Time:         now.UTC().Format(time.RFC3339),
+		Time:         now.UTC().Format(RFC3339Milli),
 	}
 
 	actual := FromStorageIncident(storageIncident)
@@ -240,7 +232,7 @@ func TestFromStorageJob(t *testing.T) {
 		Retries:     3,
 		Worker:      "worker",
 		State:       "state",
-		Time:        now.UTC().Format(time.RFC3339),
+		Time:        now.UTC().Format(RFC3339Milli),
 		InstanceKey: 100,
 	}
 
@@ -261,7 +253,7 @@ func TestFromStorageVariable(t *testing.T) {
 	expected := &Variable{
 		Name:  "variable-name",
 		Value: "variable-value",
-		Time:  now.UTC().Format(time.RFC3339),
+		Time:  now.UTC().Format(RFC3339Milli),
 	}
 
 	actual := FromStorageVariable(storageVariable)

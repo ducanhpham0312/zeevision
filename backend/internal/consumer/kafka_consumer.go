@@ -16,6 +16,27 @@ type signalChannelType = chan struct{}
 type listenOnlyMsgChannel = <-chan []byte
 type listenOnlySignalChannel = <-chan struct{}
 
+// We know what topics we can handle inside this package; this does not really
+// need to be exposed on the outside
+var knownTopics = []string{
+	"zeebe-deployment",
+	"zeebe-deployment-distribution",
+	"zeebe-error",
+	"zeebe-incident",
+	"zeebe-job",
+	"zeebe-job-batch",
+	"zeebe-message",
+	"zeebe-message-subscription",
+	"zeebe-message-subscription-start-event",
+	"zeebe-process",
+	"zeebe-process-event",
+	"zeebe-process-instance",
+	"zeebe-process-instance-result",
+	"zeebe-process-message-subscription",
+	"zeebe-timer",
+	"zeebe-variable",
+}
+
 // TODO: we need a method of reconnecting when the connection drops. I'm not
 // entirely sure how to *detect* this, except perhaps by adding a condition
 // variable of some kind to the Consumer object where, upon seeing it, a
@@ -35,7 +56,7 @@ type Consumer struct {
 	storageUpdater *storageUpdater
 
 	consumer     sarama.Consumer
-	msgChannel   msgChannelType
+	msgChannels  map[string]msgChannelType
 	closeChannel chan struct{}
 
 	wg *sync.WaitGroup
@@ -62,17 +83,21 @@ func newConsumer(storer storage.Storer, brokers []string) (*Consumer, error) {
 		return nil, err
 	}
 
-	// The optimal buffer size is an open question; it could be as low as 0
-	// if we're okay yielding the consumer goroutine whenever we get to
-	// that point
-	bufSize := 10
-	msgChannel := make(msgChannelType, bufSize)
+	msgChannels := map[string]msgChannelType{}
+	for _, topic := range knownTopics {
+		// The optimal buffer size is an open question; it could be as low as 0
+		// if we're okay yielding the consumer goroutine whenever we get to
+		// that point
+		bufSize := 10
+		msgChannel := make(msgChannelType, bufSize)
+		msgChannels[topic] = msgChannel
+	}
 
 	closeChannel := make(signalChannelType)
 
 	var wg sync.WaitGroup
 
-	storageUpdater := newDatabaseUpdater(storer, msgChannel, closeChannel, &wg)
+	storageUpdater := newDatabaseUpdater(storer, msgChannels, closeChannel, &wg)
 
 	result := Consumer{
 		brokers: brokers,
@@ -81,18 +106,26 @@ func newConsumer(storer storage.Storer, brokers []string) (*Consumer, error) {
 		storageUpdater: storageUpdater,
 
 		consumer:     consumer,
-		msgChannel:   msgChannel,
+		msgChannels:  msgChannels,
 		closeChannel: closeChannel,
 
 		wg: &wg,
+	}
+
+	for _, topic := range knownTopics {
+		err = result.ConsumeTopic(0, topic)
+		if err != nil {
+			// If consuming a topic fails, close consumer and
+			// return error
+			result.Close()
+			return nil, err
+		}
 	}
 
 	return &result, err
 }
 
 // ConsumeTopic creates a sarama.PartitionConsumer to consume a particular topic.
-// TODO: In the future this will not return a channel but will instead connect
-// to our storage in some manner
 func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error) {
 	partitionConsumer, err := consumer.consumer.ConsumePartition(
 		topic, partition, sarama.OffsetNewest)
@@ -100,7 +133,7 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 	if err != nil {
 		return err
 	}
-	msgChannel := consumer.msgChannel
+	msgChannel := consumer.msgChannels[topic]
 	closeChannel := consumer.closeChannel
 	wg := consumer.wg
 
