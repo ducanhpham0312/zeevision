@@ -336,19 +336,23 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                                     onClick={(e) => e.stopPropagation()}
                                   >
                                     {queryInputNameList.map((name) => (
-                                      <Input
+                                      <div
+                                        onKeyDown={(e) => e.stopPropagation()}
                                         key={name}
-                                        name={name}
-                                        value={
-                                          thisFilterState.filterValue[name]
-                                        }
-                                        onChange={handleChangeQueryString(
-                                          column,
-                                          thisFilterState.filterName,
-                                        )}
-                                        placeholder="Enter query value here"
-                                        className="w-full"
-                                      />
+                                      >
+                                        <Input
+                                          name={name}
+                                          value={
+                                            thisFilterState.filterValue[name]
+                                          }
+                                          onChange={handleChangeQueryString(
+                                            column,
+                                            thisFilterState.filterName,
+                                          )}
+                                          placeholder="Enter query value here"
+                                          className="w-full"
+                                        />
+                                      </div>
                                     ))}
                                   </div>
                                 ) : null}
