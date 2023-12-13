@@ -15,8 +15,7 @@ export interface HorizontalTableProps {
   noStyleColumn?: Record<string, (value: string | number) => string>;
   alterRowColor?: boolean;
   filterConfig?: DataFilterProps["filterConfig"];
-  expandElement?: (idx: number) => React.ReactNode;
-  optionElement?: (idx: number) => React.ReactNode;
+  expandElement?: (id: string | number) => React.ReactNode;
   useApiPagination?: {
     setPage: (page: number) => void;
     setLimit: (limit: number) => void;
@@ -26,13 +25,12 @@ export interface HorizontalTableProps {
 
 export function HorizontalTable({
   header,
-  content,
+  content = [],
   alterRowColor,
   navLinkColumn,
   filterConfig,
   noStyleColumn,
   expandElement,
-  optionElement,
   useApiPagination,
   apiTotalCount,
 }: HorizontalTableProps) {
@@ -51,8 +49,7 @@ export function HorizontalTable({
   const [filters, setFilters] = useState<
     ((input: Record<string, string | number>) => boolean)[]
   >([]);
-  const { loading, shouldUseClientPagination, setShouldUseClientPagination } =
-    useTableStore();
+  const { loading, setShouldUseClientPagination } = useTableStore();
 
   const sortContent = useCallback(
     (
@@ -85,18 +82,18 @@ export function HorizontalTable({
 
   // Sync with global pagination state
   useEffect(() => {
-    if (useApiPagination && !shouldUseClientPagination) {
+    if (useApiPagination && !filters.length) {
       useApiPagination.setLimit(rowsPerPage);
       useApiPagination.setPage(page);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage]);
+    setExpandedRow(null);
+  }, [filters, page, rowsPerPage, useApiPagination]);
 
   // Sync content length
   useEffect(() => {
     setContentLength((prev) => {
       if (useApiPagination) {
-        if (shouldUseClientPagination) {
+        if (filters.length) {
           return processedContent.length;
         }
         if (apiTotalCount) {
@@ -106,17 +103,14 @@ export function HorizontalTable({
       }
       return processedContent.length;
     });
-  }, [
-    processedContent,
-    apiTotalCount,
-    shouldUseClientPagination,
-    useApiPagination,
-  ]);
+  }, [processedContent, apiTotalCount, useApiPagination, filters.length]);
 
   useEffect(() => {
     setPage(0);
-    setShouldUseClientPagination(!!filters.length);
-  }, [filters, setShouldUseClientPagination]);
+    if (useApiPagination) {
+      setShouldUseClientPagination(!!filters.length);
+    }
+  }, [filters, setShouldUseClientPagination, useApiPagination]);
 
   const handleSort = (column: string): void => {
     const newSortOrder =
@@ -132,11 +126,10 @@ export function HorizontalTable({
     setPage(0);
   };
 
-  const colSpan =
-    expandElement || optionElement ? header.length + 1 : header.length;
+  const colSpan = expandElement ? header.length + 1 : header.length;
 
   const paginatedSortedContent =
-    useApiPagination && !shouldUseClientPagination
+    useApiPagination && !filters.length
       ? processedContent
       : processedContent.slice(
           page * rowsPerPage,
@@ -231,19 +224,13 @@ export function HorizontalTable({
                       </Button>
                     </td>
                   ) : null}
-
-                  {optionElement ? (
-                    <td className="mt-1 flex justify-center">
-                      {optionElement(rowIdx)}
-                    </td>
-                  ) : null}
                 </tr>
                 {expandElement ? (
                   <ExpandRow
                     isIn={expandedRow === rowIdx}
                     colSpan={header.length + 1}
                   >
-                    {expandElement(rowIdx)}
+                    {expandElement(row[0])}
                   </ExpandRow>
                 ) : null}
               </Fragment>
@@ -311,6 +298,7 @@ export function HorizontalTable({
                 length: Math.ceil(contentLength / rowsPerPage),
               }).map((_, index) => (
                 <Button
+                  key={index}
                   active={index === page}
                   onClick={() => setPage(index)}
                   width={40}

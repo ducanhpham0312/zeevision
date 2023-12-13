@@ -20,8 +20,7 @@ export interface TableProps {
    */
   content: (string | number)[][];
 
-  expandElement?: (idx: number) => ReactNode;
-  optionElement?: (idx: number) => ReactNode;
+  expandElement?: (id: string | number) => ReactNode;
 
   alterRowColor?: boolean;
   filterConfig?: DataFilterProps["filterConfig"];

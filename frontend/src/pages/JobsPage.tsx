@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Table } from "../components/Table";
 import { useQueryJobs } from "../hooks/useQueryJobs";
 import { useTableStore } from "../contexts/useTableStore";
@@ -18,50 +18,64 @@ export default function JobsPage() {
       <Table
         alterRowColor
         orientation="horizontal"
-        useApiPagination={{
-          setLimit,
-          setPage,
-        }}
+        useApiPagination={useMemo(
+          () => ({
+            setLimit,
+            setPage,
+          }),
+          [setLimit, setPage],
+        )}
         apiTotalCount={totalCount}
-        header={[
-          "Instance Key",
-          "Job Key",
-          "Job Type",
-          "Retries",
-          "Worker",
-          "State",
-          "Time",
-        ]}
-        filterConfig={{
-          mainFilter: { column: "Job Key" },
-          filterOptions: {
-            "Job Key": "string",
-            "Job Type": "string",
-            Retries: "string",
-            Worker: "string",
-            State: "string",
-            Time: "time",
-          },
-        }}
-        navLinkColumn={{
-          "Instance Key": (value: string | number) =>
-            `/instances/${value.toString()}`,
-        }}
-        content={
-          jobs
-            ? jobs.map(
-                ({ instanceKey, key, type, retries, worker, state, time }) => [
-                  instanceKey,
-                  key,
-                  type,
-                  retries,
-                  worker,
-                  state,
-                  time,
-                ],
-              )
-            : []
-        }
+        header={useMemo(
+          () => [
+            "Instance Key",
+            "Job Key",
+            "Job Type",
+            "Retries",
+            "Worker",
+            "State",
+            "Time",
+          ],
+          [],
+        )}
+        filterConfig={useMemo(
+          () => ({
+            mainFilter: { column: "Job Key" },
+            filterOptions: {
+              "Job Key": "string",
+              "Job Type": "string",
+              Retries: "string",
+              Worker: "string",
+              State: "string",
+              Time: "time",
+            },
+          }),
+          [],
+        )}
+        navLinkColumn={useMemo(
+          () => ({
+            "Instance Key": (value: string | number) =>
+              `/instances/${value.toString()}`,
+          }),
+          [],
+        )}
+        content={useMemo(
+          () =>
+            jobs
+              ? jobs.map(
+                  ({
+                    instanceKey,
+                    key,
+                    type,
+                    retries,
+                    worker,
+                    state,
+                    time,
+                  }) => [instanceKey, key, type, retries, worker, state, time],
+                )
+              : [],
+          [],
+        )}
       />
     </div>
   );
