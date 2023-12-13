@@ -126,9 +126,13 @@ func ToStoragePagination(pagination *Pagination) *storage.Pagination {
 	}
 }
 
+// Custom format since it's not found in the time module.
+// Time in RFC3339 format, but with milliseconds (including zero digits)
+const RFC3339Milli = "2006-01-02T15:04:05.000Z07:00"
+
 // Convert time to RFC3339 format.
 func formatTime(t time.Time) string {
-	return t.UTC().Format(time.RFC3339)
+	return t.UTC().Format(RFC3339Milli)
 }
 
 // Convert nullable time to RFC3339 format. Null times are converted to nil.
