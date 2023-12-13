@@ -51,13 +51,12 @@ func TestFromStorageInstance(t *testing.T) {
 				EndTime:              sql.NullTime{},
 			},
 			expected: &Instance{
-				BpmnLiveStatus: "", // TODO
-				StartTime:      nowFormatted,
-				EndTime:        nil,
-				InstanceKey:    10,
-				ProcessKey:     1,
-				Version:        1,
-				Status:         "ACTIVE",
+				StartTime:   nowFormatted,
+				EndTime:     nil,
+				InstanceKey: 10,
+				ProcessKey:  1,
+				Version:     1,
+				Status:      "ACTIVE",
 			},
 		},
 		{
@@ -71,13 +70,12 @@ func TestFromStorageInstance(t *testing.T) {
 				EndTime:              sql.NullTime{Time: now, Valid: true},
 			},
 			expected: &Instance{
-				BpmnLiveStatus: "", // TODO
-				StartTime:      nowFormatted,
-				EndTime:        &nowFormatted,
-				InstanceKey:    20,
-				ProcessKey:     2,
-				Version:        2,
-				Status:         "COMPLETED",
+				StartTime:   nowFormatted,
+				EndTime:     &nowFormatted,
+				InstanceKey: 20,
+				ProcessKey:  2,
+				Version:     2,
+				Status:      "COMPLETED",
 			},
 		},
 	}
@@ -122,14 +120,11 @@ func TestFromStorageProcess(t *testing.T) {
 				},
 			},
 			expected: &Process{
-				ActiveInstances:    0,  // TODO
-				CompletedInstances: 0,  // TODO
-				BpmnLiveStatus:     "", // TODO
-				DeploymentTime:     now.UTC().Format(RFC3339Milli),
-				BpmnProcessID:      "main-loop",
-				BpmnResource:       "",
-				ProcessKey:         1,
-				Version:            1,
+				DeploymentTime: now.UTC().Format(RFC3339Milli),
+				BpmnProcessID:  "main-loop",
+				BpmnResource:   "",
+				ProcessKey:     1,
+				Version:        1,
 			},
 		},
 		{
@@ -148,14 +143,11 @@ func TestFromStorageProcess(t *testing.T) {
 				Instances: []storage.Instance{},
 			},
 			expected: &Process{
-				ActiveInstances:    0,  // TODO
-				CompletedInstances: 0,  // TODO
-				BpmnLiveStatus:     "", // TODO
-				DeploymentTime:     now.UTC().Format(RFC3339Milli),
-				BpmnProcessID:      "main-loop",
-				BpmnResource:       "",
-				ProcessKey:         2,
-				Version:            1,
+				DeploymentTime: now.UTC().Format(RFC3339Milli),
+				BpmnProcessID:  "main-loop",
+				BpmnResource:   "",
+				ProcessKey:     2,
+				Version:        1,
 			},
 		},
 	}
