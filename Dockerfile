@@ -29,7 +29,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # Install
-FROM alpine:3.18
+FROM alpine:3.19
 
 WORKDIR /app
 
