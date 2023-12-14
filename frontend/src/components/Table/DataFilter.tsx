@@ -39,13 +39,14 @@ export interface DataFilterProps {
 
 type FilterOptionType = {
   name: string;
-  queryInputNameList: Array<string>;
+  queryInputList: Array<{ name: string; placeholder: string }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterFunc: (...args: any[]) => boolean;
 };
 
 type FilterState = {
   column: string;
+  type: FilterType;
   active: boolean;
   filterName: string;
   filterValue: Record<string, string>;
@@ -53,76 +54,111 @@ type FilterState = {
   filterFunc: (...args: any[]) => boolean;
 };
 
-const columnFilterOptions: Record<FilterType, Array<FilterOptionType>> = {
-  string: [
-    {
+const DEFAULT_PLACEHOLDER = "Enter value...";
+
+const columnFilterOptions: Record<
+  FilterType,
+  Record<string, FilterOptionType>
+> = {
+  string: {
+    is: {
       name: "is",
-      queryInputNameList: ["is"],
+      queryInputList: [{ name: "is", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
         return queryString.toString() === input.toString();
       },
     },
-    {
+    "is not": {
       name: "is not",
-      queryInputNameList: ["is-not"],
+      queryInputList: [{ name: "is-not", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
         return queryString.toString() !== input.toString();
       },
     },
-    {
+    contains: {
       name: "contains",
-      queryInputNameList: ["contains"],
+      queryInputList: [{ name: "contains", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
         return input.toString().includes(queryString);
       },
     },
-  ],
-  time: [
-    {
+  },
+  time: {
+    before: {
       name: "before",
-      queryInputNameList: ["before"],
+      queryInputList: [
+        { name: "before-year", placeholder: "YYYY" },
+        { name: "before-month", placeholder: "MM" },
+        { name: "before-day", placeholder: "DD" },
+        { name: "before-hour", placeholder: "HH" },
+        { name: "before-minute", placeholder: "MM" },
+        { name: "before-second", placeholder: "SS" },
+      ],
       filterFunc: (input: string, queryString: string) => {
         return queryString === input;
       },
     },
-    {
+    after: {
       name: "after",
-      queryInputNameList: ["after"],
+      queryInputList: [
+        { name: "after-year", placeholder: "YYYY" },
+        { name: "after-month", placeholder: "MM" },
+        { name: "after-day", placeholder: "DD" },
+        { name: "after-hour", placeholder: "HH" },
+        { name: "after-minute", placeholder: "MM" },
+        { name: "after-second", placeholder: "SS" },
+      ],
       filterFunc: (input: string, queryString: string) => {
         return queryString !== input;
       },
     },
-    {
+    "is between": {
       name: "is between",
-      queryInputNameList: ["is-between-first", "is-between-second"],
+      queryInputList: [
+        { name: "is-between-year-first", placeholder: "YYYY" },
+        { name: "is-between-month-first", placeholder: "MM" },
+        { name: "is-between-day-first", placeholder: "DD" },
+        { name: "is-between-hour-first", placeholder: "HH" },
+        { name: "is-between-minute-first", placeholder: "MM" },
+        { name: "is-between-second-first", placeholder: "SS" },
+        { name: "is-between-year-second", placeholder: "YYYY" },
+        { name: "is-between-month-second", placeholder: "MM" },
+        { name: "is-between-day-second", placeholder: "DD" },
+        { name: "is-between-hour-second", placeholder: "HH" },
+        { name: "is-between-minute-second", placeholder: "MM" },
+        { name: "is-between-second-second", placeholder: "SS" },
+      ],
       filterFunc: (input: string, queryString: string) => {
         return queryString !== input;
       },
     },
-  ],
-  value: [
-    {
+  },
+  value: {
+    is: {
       name: "is",
-      queryInputNameList: ["is"],
+      queryInputList: [{ name: "is", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
         return queryString.toString() === input.toString();
       },
     },
-    {
+    "is not": {
       name: "is not",
-      queryInputNameList: ["is-not"],
+      queryInputList: [{ name: "is-not", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
         return queryString.toString() !== input.toString();
       },
     },
-    {
+    "is between": {
       name: "is between",
-      queryInputNameList: ["is-between-first", "is-between-second"],
+      queryInputList: [
+        { name: "is-between-first", placeholder: DEFAULT_PLACEHOLDER },
+        { name: "is-between-second", placeholder: DEFAULT_PLACEHOLDER },
+      ],
       filterFunc: (input: string, queryString: string) => {
         return queryString.toString() !== input.toString();
       },
     },
-  ],
+  },
 };
 
 const getInitFilterState = (
@@ -130,15 +166,16 @@ const getInitFilterState = (
 ): Record<string, Record<string, FilterState>> =>
   Object.entries(filterConfig.filterOptions).reduce(
     (a, [column, type]) => {
-      a[column] = columnFilterOptions[type].reduce(
+      a[column] = Object.values(columnFilterOptions[type]).reduce(
         (a, filterOption) => {
           a[filterOption.name] = {
             active: false,
+            type,
             column: column,
             filterName: filterOption.name,
-            filterValue: filterOption.queryInputNameList.reduce(
-              (a, queryInputName) => {
-                a[queryInputName] = "";
+            filterValue: filterOption.queryInputList.reduce(
+              (a, { name }) => {
+                a[name] = "";
                 return a;
               },
               {} as Record<string, string>,
@@ -240,11 +277,20 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
 
   const handleChangeQueryString =
     (column: string, filterName: string) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFilterState((prev) => {
-        prev[column][filterName].filterValue[e.target.name] = e.target.value;
-        return { ...prev };
-      });
+    (e: React.ChangeEvent<HTMLInputElement> | string, name?: string) => {
+      if (typeof e === "string" || e instanceof String) {
+        if (name) {
+          setFilterState((prev) => {
+            prev[column][filterName].filterValue[name] = e as string;
+            return { ...prev };
+          });
+        }
+      } else {
+        setFilterState((prev) => {
+          prev[column][filterName].filterValue[e.target.name] = e.target.value;
+          return { ...prev };
+        });
+      }
     };
 
   const deactivateEmptyFilter = () => {
@@ -291,7 +337,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
               <p>Filter {<FilterAltIcon />}</p>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" className="mr-4 mt-1 w-[250px]">
-              <DropdownMenuLabel>Choose a column</DropdownMenuLabel>
+              <DropdownMenuLabel>Choose any columns</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {Object.keys(filterConfig.filterOptions).map((column) => {
                 const filterType = filterConfig.filterOptions[column];
@@ -306,42 +352,47 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent className="mr-[13px] w-[300px]">
-                        {columnFilterOptions[filterType].map((filterOption) => {
-                          const { name } = filterOption;
-                          const thisFilterState = filterState[column][name];
-                          return (
-                            <DropdownMenuItem
-                              onPointerLeave={(e) => e.preventDefault()}
-                              onPointerMove={(e) => e.preventDefault()}
-                              onClick={handleToggleFilter(column, name)}
-                              key={name}
-                              className="flex flex-col gap-3"
-                            >
-                              <div className="group flex w-full items-center gap-2">
-                                <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
-                                  <div
-                                    className={twMerge(
-                                      "h-full w-full rounded-full transition group-hover:bg-gray-300",
-                                      thisFilterState.active
-                                        ? "bg-accent group-hover:bg-accent"
-                                        : "",
+                        <DropdownMenuLabel className="pt-1">
+                          {column}
+                        </DropdownMenuLabel>
+                        {Object.values(columnFilterOptions[filterType]).map(
+                          (filterOption) => {
+                            const { name } = filterOption;
+                            const thisFilterState = filterState[column][name];
+                            return (
+                              <DropdownMenuItem
+                                onPointerLeave={(e) => e.preventDefault()}
+                                onPointerMove={(e) => e.preventDefault()}
+                                onClick={handleToggleFilter(column, name)}
+                                key={name}
+                                className="flex flex-col gap-3"
+                              >
+                                <div className="group flex w-full items-center gap-2">
+                                  <div className="h-4 w-4 rounded-full border-2 border-black/50 p-[1px]">
+                                    <div
+                                      className={twMerge(
+                                        "h-full w-full rounded-full transition group-hover:bg-gray-300",
+                                        thisFilterState.active
+                                          ? "bg-accent group-hover:bg-accent"
+                                          : "",
+                                      )}
+                                    />
+                                  </div>
+                                  <p>{name}</p>
+                                </div>
+                                {thisFilterState.active ? (
+                                  <InputFields
+                                    filterState={thisFilterState}
+                                    onChange={handleChangeQueryString(
+                                      column,
+                                      thisFilterState.filterName,
                                     )}
                                   />
-                                </div>
-                                <p>{name}</p>
-                              </div>
-                              {thisFilterState.active ? (
-                                <InputFields
-                                  filterState={thisFilterState}
-                                  onChange={handleChangeQueryString(
-                                    column,
-                                    thisFilterState.filterName,
-                                  )}
-                                />
-                              ) : null}
-                            </DropdownMenuItem>
-                          );
-                        })}
+                                ) : null}
+                              </DropdownMenuItem>
+                            );
+                          },
+                        )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-error">
                           <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
@@ -423,30 +474,87 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
   );
 }
 
+function isIsoDate(str: string): boolean {
+  if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+  const d = new Date(str);
+  return d instanceof Date && !isNaN(d.getTime()) && d.toISOString() === str; // valid date
+}
+
 const InputFields = ({
   filterState,
   onChange,
 }: {
   filterState: FilterState;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement> | string,
+    name?: string,
+  ) => void;
 }) => {
+  const filterOption =
+    columnFilterOptions[filterState.type][filterState.filterName];
+
   return (
-    <div
-      className="flex w-full flex-col gap-2"
-      onClick={(e) => e.stopPropagation()}
-    >
-      {Object.keys(filterState.filterValue).map((name, index) => (
-        <div onKeyDown={(e) => e.stopPropagation()} key={name}>
-          <Input
-            autoFocus={index === 0}
-            name={name}
-            value={filterState.filterValue[name]}
-            onChange={onChange}
-            placeholder="Enter query value here"
-            className="w-full"
-          />
+    <div className="w-full" onClick={(e) => e.stopPropagation()}>
+      {filterState.type === "time" ? (
+        <div className="grid grid-cols-3 gap-1">
+          {filterOption.queryInputList.map(({ name, placeholder }, index) => (
+            <div
+              className="flex items-center justify-center"
+              onKeyDown={(e) => e.stopPropagation()}
+              key={name}
+            >
+              <Input
+                onPaste={(e) => {
+                  const clipboardData = e.clipboardData.getData("Text");
+                  if (isIsoDate(clipboardData)) {
+                    e.preventDefault();
+                    const date = new Date(clipboardData);
+                    // find the quotient
+                    const parsedDate = [
+                      date.getUTCFullYear(),
+                      date.getUTCMonth(),
+                      date.getUTCDate(),
+                      date.getUTCHours(),
+                      date.getUTCMinutes(),
+                      date.getUTCSeconds(),
+                    ].map((date) => date.toString());
+
+                    const beginIndex = 6 * parseInt((index / 6).toString());
+                    filterOption.queryInputList
+                      .slice(beginIndex, beginIndex + 6)
+                      .forEach((filter, index) =>
+                        onChange(parsedDate[index], filter.name),
+                      );
+                  }
+                }}
+                autoFocus={index === 0}
+                name={name}
+                value={filterState.filterValue[name]}
+                onChange={onChange}
+                placeholder={placeholder}
+                className="w-full"
+              />
+              {(index + 1) % 3 !== 0 ? (
+                <p className="pl-1">{(index + 1) % 6 < 3 ? "/" : ":"}</p>
+              ) : null}
+            </div>
+          ))}
         </div>
-      ))}
+      ) : (
+        filterOption.queryInputList.map(({ name, placeholder }, index) => (
+          <div onKeyDown={(e) => e.stopPropagation()} key={name}>
+            <Input
+              autoFocus={index === 0}
+              name={name}
+              value={filterState.filterValue[name]}
+              onChange={onChange}
+              placeholder={placeholder}
+              className="w-full"
+            />
+            {index < filterOption.queryInputList.length - 1 ? <p>and</p> : null}
+          </div>
+        ))
+      )}
     </div>
   );
 };

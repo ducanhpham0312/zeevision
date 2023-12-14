@@ -86,8 +86,12 @@ export function HorizontalTable({
       useApiPagination.setLimit(rowsPerPage);
       useApiPagination.setPage(page);
     }
-    setExpandedRow(null);
   }, [filters, page, rowsPerPage, useApiPagination]);
+
+  // Collapse expandable row on page / row per page changes
+  useEffect(() => {
+    setExpandedRow(null);
+  }, [page, rowsPerPage]);
 
   // Sync content length
   useEffect(() => {
@@ -169,7 +173,7 @@ export function HorizontalTable({
         </thead>
         <tbody
           aria-label="custom pagination table"
-          className="border-l-2 border-r-2 border-accent"
+          className="border-l border-r border-black/10"
         >
           {(loading ? [] : paginatedSortedContent).map((row, rowIdx) => {
             return (
@@ -213,7 +217,7 @@ export function HorizontalTable({
                     </td>
                   ))}
                   {expandElement ? (
-                    <td className="p-3">
+                    <td className="flex justify-center p-3">
                       <Button
                         onClick={() =>
                           setExpandedRow((prev) =>
@@ -238,27 +242,27 @@ export function HorizontalTable({
             );
           })}
           {content.length === 0 && !loading ? (
-            <tr>
+            <tr className="border-b border-black/10">
               <td colSpan={colSpan}>
-                <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                <div className="flex h-20 w-full items-center justify-center">
                   <p>No data to display.</p>
                 </div>
               </td>
             </tr>
           ) : null}
           {content.length > 0 && contentLength === 0 && !loading ? (
-            <tr>
+            <tr className="border-b border-black/10">
               <td colSpan={colSpan}>
-                <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                <div className="flex h-20 w-full items-center justify-center">
                   <p>No data satisfying selection.</p>
                 </div>
               </td>
             </tr>
           ) : null}
           {loading ? (
-            <tr>
+            <tr className="border-b border-black/10">
               <td colSpan={colSpan}>
-                <div className="flex h-20 w-full items-center justify-center border border-black/10">
+                <div className="flex h-20 w-full items-center justify-center">
                   <p>Loading...</p>
                 </div>
               </td>
@@ -267,7 +271,6 @@ export function HorizontalTable({
         </tbody>
       </table>
 
-      <div className="sticky bottom-12 w-full border-t-2 border-accent" />
       <div className="sticky bottom-0 mt-auto h-12 bg-white">
         <div className="flex h-12 w-full items-center justify-end gap-8 px-3 pt-1">
           <div className="flex gap-4">
@@ -277,6 +280,7 @@ export function HorizontalTable({
               value={rowsPerPage}
               onChange={handleChangeRowsPerPage}
             >
+              <option value={1}>1</option>
               {[10, 25, 50, 100].map((val) => (
                 <option value={val}>{val}</option>
               ))}
@@ -284,9 +288,11 @@ export function HorizontalTable({
             </select>
           </div>
           <p className="text-sm text-black/60">
-            {rowsPerPage * page + 1}-
-            {Math.min(rowsPerPage * (page + 1), contentLength)} of{" "}
-            {contentLength}
+            {`${rowsPerPage * page + 1}-${
+              rowsPerPage !== -1
+                ? Math.min(rowsPerPage * (page + 1), contentLength)
+                : contentLength
+            } of ${contentLength}`}
           </p>
           {/* have at least 2 page button to render */}
           {Math.ceil(contentLength / rowsPerPage) > 1 ? (
