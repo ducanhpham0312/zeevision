@@ -71,7 +71,7 @@ export default function ProcessesPage() {
           )}
           expandElement={useCallback(
             (id: string | number) => (
-              <div className="flex h-full flex-col gap-4 p-4">
+              <div className="flex h-full flex-col gap-4 p-3 pb-1">
                 <div className="flex-grow">
                   <Table
                     alterRowColor={false}

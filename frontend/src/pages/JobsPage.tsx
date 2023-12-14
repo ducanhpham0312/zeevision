@@ -74,7 +74,7 @@ export default function JobsPage() {
                   }) => [instanceKey, key, type, retries, worker, state, time],
                 )
               : [],
-          [],
+          [jobs],
         )}
       />
     </div>

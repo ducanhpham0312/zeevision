@@ -122,14 +122,15 @@ export function HorizontalTable({
   const handleChangeRowsPerPage = (
     event: ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const newRowPerPage = parseInt(event.target.value, 10);
     setPage(0);
+    setRowsPerPage(newRowPerPage);
   };
 
   const colSpan = expandElement ? header.length + 1 : header.length;
 
   const paginatedSortedContent =
-    useApiPagination && !filters.length
+    (useApiPagination && !filters.length) || rowsPerPage === -1
       ? processedContent
       : processedContent.slice(
           page * rowsPerPage,
@@ -276,14 +277,10 @@ export function HorizontalTable({
               value={rowsPerPage}
               onChange={handleChangeRowsPerPage}
             >
-              <option value={1}>{1}</option>
-              {Array.from({ length: 6 }, (_, index) => (index + 1) * 5).map(
-                (option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ),
-              )}
+              {[10, 25, 50, 100].map((val) => (
+                <option value={val}>{val}</option>
+              ))}
+              <option value={-1}>All</option>
             </select>
           </div>
           <p className="text-sm text-black/60">

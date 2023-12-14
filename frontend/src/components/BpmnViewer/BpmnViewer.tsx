@@ -45,7 +45,6 @@ type ViewBoxInner = {
 export function BpmnViewer({
   bpmnString,
   width,
-  height,
   navigated,
   control,
   colorOptions,
