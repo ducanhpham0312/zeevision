@@ -65,21 +65,30 @@ const columnFilterOptions: Record<
       name: "is",
       queryInputList: [{ name: "is", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
-        return queryString.toString() === input.toString();
+        return (
+          queryString.toString().toLowerCase() ===
+          input.toString().toLowerCase()
+        );
       },
     },
     "is not": {
       name: "is not",
       queryInputList: [{ name: "is-not", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
-        return queryString.toString() !== input.toString();
+        return (
+          queryString.toString().toLowerCase() !==
+          input.toString().toLowerCase()
+        );
       },
     },
     contains: {
       name: "contains",
       queryInputList: [{ name: "contains", placeholder: DEFAULT_PLACEHOLDER }],
       filterFunc: (input: string, queryString: string) => {
-        return input.toString().includes(queryString);
+        return input
+          .toString()
+          .toLowerCase()
+          .includes(queryString.toString().toLowerCase());
       },
     },
   },
@@ -493,6 +502,30 @@ const InputFields = ({
   const filterOption =
     columnFilterOptions[filterState.type][filterState.filterName];
 
+  const handleChangeNumericWithMaxLength = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    maxLength: number,
+  ) => {
+    if (!/^-?\d+$/.test(e.target.value) || e.target.value.length > maxLength) {
+      return;
+    }
+    onChange(e);
+    if (e.target.value.length === maxLength) {
+      const nextInputIndex =
+        filterOption.queryInputList.findIndex(
+          (input) => input.name === e.target.name,
+        ) + 1;
+      const nextInputId =
+        filterOption.queryInputList.length > nextInputIndex
+          ? filterOption.queryInputList[nextInputIndex].name
+          : null;
+
+      if (nextInputId) {
+        document.getElementById(nextInputId)?.focus();
+      }
+    }
+  };
+
   return (
     <div className="w-full" onClick={(e) => e.stopPropagation()}>
       {filterState.type === "time" ? (
@@ -509,7 +542,6 @@ const InputFields = ({
                   if (isIsoDate(clipboardData)) {
                     e.preventDefault();
                     const date = new Date(clipboardData);
-                    // find the quotient
                     const parsedDate = [
                       date.getUTCFullYear(),
                       date.getUTCMonth(),
@@ -529,8 +561,11 @@ const InputFields = ({
                 }}
                 autoFocus={index === 0}
                 name={name}
+                id={name}
                 value={filterState.filterValue[name]}
-                onChange={onChange}
+                onChange={(e) =>
+                  handleChangeNumericWithMaxLength(e, placeholder.length)
+                }
                 placeholder={placeholder}
                 className="w-full"
               />
@@ -546,6 +581,7 @@ const InputFields = ({
             <Input
               autoFocus={index === 0}
               name={name}
+              id={name}
               value={filterState.filterValue[name]}
               onChange={onChange}
               placeholder={placeholder}
