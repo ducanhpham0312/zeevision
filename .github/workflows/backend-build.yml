@@ -38,7 +38,6 @@ jobs:
           platforms: linux/amd64
 
       - name: Build arm image
-        if: github.event.schedule == '0 12 * * *'
         uses: docker/build-push-action@v5
         with:
           context: ./
