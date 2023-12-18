@@ -384,6 +384,9 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
       }
     };
 
+  /**
+   * Should set filter active state to false for filters with all empty values
+   */
   const deactivateEmptyFilter = () => {
     setFilterState((prev) => {
       Object.entries(prev).forEach(([column, filters]) =>
@@ -395,9 +398,6 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
               )
             ) {
               prev[column][filterName].active = false;
-              Object.keys(prev[column][filterName].filterValue).forEach(
-                (key) => (prev[column][filterName].filterValue[key] = ""),
-              );
             }
           }
         }),
@@ -527,31 +527,34 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                           <p className="text-black/60">{`${filter.filterName}`}</p>
                           {filter.type === "time" ? (
                             <p>
-                              {Object.keys(filter.filterValue).length === 6
-                                ? filterValueToDate(
-                                    filter.filterValue,
-                                    Object.keys(
+                              {
+                                // ensuring the input to have length of 6
+                                Object.keys(filter.filterValue).length === 6
+                                  ? filterValueToDate(
                                       filter.filterValue,
-                                    ) as TimeFilterValueNameType,
-                                    filter.filterName === "after" ? 0 : 999,
-                                  ).toISOString()
-                                : ``.concat(
-                                    filterValueToDate(
-                                      filter.filterValue,
-                                      Object.keys(filter.filterValue).slice(
-                                        0,
-                                        5,
+                                      Object.keys(
+                                        filter.filterValue,
                                       ) as TimeFilterValueNameType,
-                                    ).toISOString(),
-                                    " and ",
-                                    filterValueToDate(
-                                      filter.filterValue,
-                                      Object.keys(filter.filterValue).slice(
-                                        6,
-                                        11,
-                                      ) as TimeFilterValueNameType,
-                                    ).toISOString(),
-                                  )}
+                                      filter.filterName === "after" ? 0 : 999,
+                                    ).toISOString()
+                                  : ``.concat(
+                                      filterValueToDate(
+                                        filter.filterValue,
+                                        Object.keys(filter.filterValue).slice(
+                                          0,
+                                          5,
+                                        ) as TimeFilterValueNameType,
+                                      ).toISOString(),
+                                      " and ",
+                                      filterValueToDate(
+                                        filter.filterValue,
+                                        Object.keys(filter.filterValue).slice(
+                                          6,
+                                          11,
+                                        ) as TimeFilterValueNameType,
+                                      ).toISOString(),
+                                    )
+                              }
                             </p>
                           ) : (
                             <p>
