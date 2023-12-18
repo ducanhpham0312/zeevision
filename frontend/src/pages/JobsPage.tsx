@@ -44,7 +44,7 @@ export default function JobsPage() {
             filterOptions: {
               "Job Key": "string",
               "Job Type": "string",
-              Retries: "string",
+              Retries: "number",
               Worker: "string",
               State: "string",
               Time: "time",

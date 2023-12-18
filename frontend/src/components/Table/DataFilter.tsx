@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import { Input } from "../Input";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -21,7 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useTableStore } from "../../contexts/useTableStore";
 
-export type FilterType = "string" | "time" | "value";
+export type FilterType = "string" | "time" | "number";
 
 export interface DataFilterProps {
   filterConfig: {
@@ -56,6 +56,8 @@ type FilterState = {
 
 const DEFAULT_PLACEHOLDER = "Enter value...";
 
+type TimeFilterValueNameType = [string, string, string, string, string, string];
+
 const columnFilterOptions: Record<
   FilterType,
   Record<string, FilterOptionType>
@@ -64,9 +66,9 @@ const columnFilterOptions: Record<
     is: {
       name: "is",
       queryInputList: [{ name: "is", placeholder: DEFAULT_PLACEHOLDER }],
-      filterFunc: (input: string, queryString: string) => {
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
         return (
-          queryString.toString().toLowerCase() ===
+          queryValue["is"].toString().toLowerCase() ===
           input.toString().toLowerCase()
         );
       },
@@ -74,9 +76,9 @@ const columnFilterOptions: Record<
     "is not": {
       name: "is not",
       queryInputList: [{ name: "is-not", placeholder: DEFAULT_PLACEHOLDER }],
-      filterFunc: (input: string, queryString: string) => {
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
         return (
-          queryString.toString().toLowerCase() !==
+          queryValue["is-not"].toString().toLowerCase() !==
           input.toString().toLowerCase()
         );
       },
@@ -84,11 +86,11 @@ const columnFilterOptions: Record<
     contains: {
       name: "contains",
       queryInputList: [{ name: "contains", placeholder: DEFAULT_PLACEHOLDER }],
-      filterFunc: (input: string, queryString: string) => {
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
         return input
           .toString()
           .toLowerCase()
-          .includes(queryString.toString().toLowerCase());
+          .includes(queryValue["contains"].toString().toLowerCase());
       },
     },
   },
@@ -103,8 +105,25 @@ const columnFilterOptions: Record<
         { name: "before-minute", placeholder: "MM" },
         { name: "before-second", placeholder: "SS" },
       ],
-      filterFunc: (input: string, queryString: string) => {
-        return queryString === input;
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
+        try {
+          const inputDate = new Date(input);
+          const queryDate = filterValueToDate(
+            queryValue,
+            [
+              "before-year",
+              "before-month",
+              "before-day",
+              "before-hour",
+              "before-minute",
+              "before-second",
+            ],
+            999,
+          );
+          return inputDate.getTime() <= queryDate.getTime();
+        } catch (error) {
+          return false;
+        }
       },
     },
     after: {
@@ -117,8 +136,25 @@ const columnFilterOptions: Record<
         { name: "after-minute", placeholder: "MM" },
         { name: "after-second", placeholder: "SS" },
       ],
-      filterFunc: (input: string, queryString: string) => {
-        return queryString !== input;
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
+        try {
+          const inputDate = new Date(input);
+          const queryDate = filterValueToDate(
+            queryValue,
+            [
+              "after-year",
+              "after-month",
+              "after-day",
+              "after-hour",
+              "after-minute",
+              "after-second",
+            ],
+            0,
+          );
+          return inputDate.getTime() >= queryDate.getTime();
+        } catch (error) {
+          return false;
+        }
       },
     },
     "is between": {
@@ -137,24 +173,66 @@ const columnFilterOptions: Record<
         { name: "is-between-minute-second", placeholder: "MM" },
         { name: "is-between-second-second", placeholder: "SS" },
       ],
-      filterFunc: (input: string, queryString: string) => {
-        return queryString !== input;
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
+        try {
+          const inputDate = new Date(input);
+          // 0 ms
+          const queryDateFirst = filterValueToDate(
+            queryValue,
+            [
+              "is-between-year-first",
+              "is-between-month-first",
+              "is-between-day-first",
+              "is-between-hour-first",
+              "is-between-minute-first",
+              "is-between-second-first",
+            ],
+            0,
+          );
+          // 999 ms
+          const queryDateSecond = filterValueToDate(
+            queryValue,
+            [
+              "is-between-year-second",
+              "is-between-month-second",
+              "is-between-day-second",
+              "is-between-hour-second",
+              "is-between-minute-second",
+              "is-between-second-second",
+            ],
+            999,
+          );
+          return (
+            queryDateFirst.getTime() <= inputDate.getTime() &&
+            inputDate.getTime() <= queryDateSecond.getTime()
+          );
+        } catch (error) {
+          return false;
+        }
       },
     },
   },
-  value: {
+  number: {
     is: {
       name: "is",
       queryInputList: [{ name: "is", placeholder: DEFAULT_PLACEHOLDER }],
-      filterFunc: (input: string, queryString: string) => {
-        return queryString.toString() === input.toString();
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
+        try {
+          return parseInt(queryValue["is"]) === parseInt(input);
+        } catch (error) {
+          return false;
+        }
       },
     },
     "is not": {
       name: "is not",
       queryInputList: [{ name: "is-not", placeholder: DEFAULT_PLACEHOLDER }],
-      filterFunc: (input: string, queryString: string) => {
-        return queryString.toString() !== input.toString();
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
+        try {
+          return parseInt(queryValue["is-not"]) !== parseInt(input);
+        } catch (error) {
+          return false;
+        }
       },
     },
     "is between": {
@@ -163,8 +241,15 @@ const columnFilterOptions: Record<
         { name: "is-between-first", placeholder: DEFAULT_PLACEHOLDER },
         { name: "is-between-second", placeholder: DEFAULT_PLACEHOLDER },
       ],
-      filterFunc: (input: string, queryString: string) => {
-        return queryString.toString() !== input.toString();
+      filterFunc: (input: string, queryValue: Record<string, string>) => {
+        try {
+          return (
+            parseInt(queryValue["is-between-first"]) <= parseInt(input) &&
+            parseInt(input) <= parseInt(queryValue["is-between-second"])
+          );
+        } catch (error) {
+          return false;
+        }
       },
     },
   },
@@ -242,10 +327,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
             ) {
               newFilterCount[column] += 1;
               a.push((input: Record<string, string | number>): boolean =>
-                filter.filterFunc(
-                  input[filter.column],
-                  ...Object.values(filter.filterValue),
-                ),
+                filter.filterFunc(input[filter.column], filter.filterValue),
               );
             }
             return a;
@@ -308,8 +390,8 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
         Object.keys(filters).forEach((filterName) => {
           if (prev[column][filterName].active) {
             if (
-              Object.values(prev[column][filterName].filterValue).some(
-                (value) => !value,
+              !Object.values(prev[column][filterName].filterValue).some(
+                (value) => value,
               )
             ) {
               prev[column][filterName].active = false;
@@ -443,11 +525,41 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                         <div className="flex gap-1.5">
                           <p>{`${column}`}</p>
                           <p className="text-black/60">{`${filter.filterName}`}</p>
-                          <p>
-                            {`${Object.values(filter.filterValue).join(
-                              " and ",
-                            )}`}
-                          </p>
+                          {filter.type === "time" ? (
+                            <p>
+                              {Object.keys(filter.filterValue).length === 6
+                                ? filterValueToDate(
+                                    filter.filterValue,
+                                    Object.keys(
+                                      filter.filterValue,
+                                    ) as TimeFilterValueNameType,
+                                    filter.filterName === "after" ? 0 : 999,
+                                  ).toISOString()
+                                : ``.concat(
+                                    filterValueToDate(
+                                      filter.filterValue,
+                                      Object.keys(filter.filterValue).slice(
+                                        0,
+                                        5,
+                                      ) as TimeFilterValueNameType,
+                                    ).toISOString(),
+                                    " and ",
+                                    filterValueToDate(
+                                      filter.filterValue,
+                                      Object.keys(filter.filterValue).slice(
+                                        6,
+                                        11,
+                                      ) as TimeFilterValueNameType,
+                                    ).toISOString(),
+                                  )}
+                            </p>
+                          ) : (
+                            <p>
+                              {`${Object.values(filter.filterValue).join(
+                                " and ",
+                              )}`}
+                            </p>
+                          )}
                         </div>
                         <div
                           onClick={handleToggleFilter(
@@ -506,24 +618,23 @@ const InputFields = ({
     e: React.ChangeEvent<HTMLInputElement>,
     maxLength: number,
   ) => {
-    if (!/^-?\d+$/.test(e.target.value) || e.target.value.length > maxLength) {
+    if (!/^-?\d*$/.test(e.target.value) || e.target.value.length > maxLength) {
       return;
     }
     onChange(e);
     if (e.target.value.length === maxLength) {
-      const nextInputIndex =
-        filterOption.queryInputList.findIndex(
-          (input) => input.name === e.target.name,
-        ) + 1;
+      const inputIndex = filterOption.queryInputList.findIndex(
+        (input) => input.name === e.target.name,
+      );
       const nextInputId =
-        filterOption.queryInputList.length > nextInputIndex
-          ? filterOption.queryInputList[nextInputIndex].name
+        filterOption.queryInputList.length > inputIndex + 1
+          ? filterOption.queryInputList[inputIndex + 1].name
           : null;
-
       if (nextInputId) {
-        document.getElementById(nextInputId)?.focus();
+        return document.getElementById(nextInputId)?.focus();
       }
     }
+    return;
   };
 
   return (
@@ -531,54 +642,62 @@ const InputFields = ({
       {filterState.type === "time" ? (
         <div className="grid grid-cols-3 gap-1">
           {filterOption.queryInputList.map(({ name, placeholder }, index) => (
-            <div
-              className="flex items-center justify-center"
-              onKeyDown={(e) => e.stopPropagation()}
-              key={name}
-            >
-              <Input
-                onPaste={(e) => {
-                  const clipboardData = e.clipboardData.getData("Text");
-                  if (isIsoDate(clipboardData)) {
-                    e.preventDefault();
-                    const date = new Date(clipboardData);
-                    const parsedDate = [
-                      date.getUTCFullYear(),
-                      date.getUTCMonth(),
-                      date.getUTCDate(),
-                      date.getUTCHours(),
-                      date.getUTCMinutes(),
-                      date.getUTCSeconds(),
-                    ].map((date) => date.toString());
+            <Fragment key={name}>
+              <div
+                className="flex items-center justify-center"
+                onKeyDown={(e) => e.stopPropagation()}
+              >
+                <Input
+                  onPaste={(e) => {
+                    const clipboardData = e.clipboardData.getData("Text");
+                    if (isIsoDate(clipboardData)) {
+                      e.preventDefault();
+                      const date = new Date(clipboardData);
+                      const parsedDate = [
+                        date.getUTCFullYear(),
+                        date.getUTCMonth() + 1,
+                        date.getUTCDate(),
+                        date.getUTCHours(),
+                        date.getUTCMinutes(),
+                        date.getUTCSeconds(),
+                      ].map((date) => date.toString());
 
-                    const beginIndex = 6 * parseInt((index / 6).toString());
-                    filterOption.queryInputList
-                      .slice(beginIndex, beginIndex + 6)
-                      .forEach((filter, index) =>
-                        onChange(parsedDate[index], filter.name),
-                      );
+                      const beginIndex = 6 * parseInt((index / 6).toString());
+                      filterOption.queryInputList
+                        .slice(beginIndex, beginIndex + 6)
+                        .forEach((filter, index) =>
+                          onChange(parsedDate[index], filter.name),
+                        );
+                    }
+                  }}
+                  autoFocus={index === 0}
+                  name={name}
+                  id={name}
+                  value={filterState.filterValue[name]}
+                  onChange={(e) =>
+                    handleChangeNumericWithMaxLength(e, placeholder.length)
                   }
-                }}
-                autoFocus={index === 0}
-                name={name}
-                id={name}
-                value={filterState.filterValue[name]}
-                onChange={(e) =>
-                  handleChangeNumericWithMaxLength(e, placeholder.length)
-                }
-                placeholder={placeholder}
-                className="w-full"
-              />
-              {(index + 1) % 3 !== 0 ? (
-                <p className="pl-1">{(index + 1) % 6 < 3 ? "/" : ":"}</p>
+                  placeholder={placeholder}
+                  className="w-full"
+                />
+                {(index + 1) % 3 !== 0 ? (
+                  <p className="pl-1">{(index + 1) % 6 < 3 ? "/" : ":"}</p>
+                ) : null}
+              </div>
+              {index + 1 < filterOption.queryInputList.length &&
+              (index + 1) % 6 === 0 ? (
+                <div className="col-span-3">
+                  <p>and</p>
+                </div>
               ) : null}
-            </div>
+            </Fragment>
           ))}
         </div>
       ) : (
         filterOption.queryInputList.map(({ name, placeholder }, index) => (
           <div onKeyDown={(e) => e.stopPropagation()} key={name}>
             <Input
+              type={filterState.type === "number" ? "number" : "text"}
               autoFocus={index === 0}
               name={name}
               id={name}
@@ -593,4 +712,33 @@ const InputFields = ({
       )}
     </div>
   );
+};
+
+/**
+ * Should take in the filter values and the order in which the value names represent the Date in Year / Month / Day, Hour : Minute : Second
+ * @param queryValue
+ * @param valueName
+ * @param millisecond
+ * @returns new Date object that represent the filter values
+ */
+const filterValueToDate = (
+  queryValue: Record<string, string>,
+  valueName: TimeFilterValueNameType,
+  millisecond: number = 0,
+): Date => {
+  const queryValueNumber = Object.fromEntries(
+    Object.entries(queryValue).map(([key, val]) => [
+      key,
+      val !== "" ? parseInt(val) : 0,
+    ]),
+  );
+
+  const dateData = valueName.map((name) =>
+    name in queryValueNumber ? queryValueNumber[name] : 0,
+  ) as [number, number, number, number, number, number];
+
+  // set the value in month position to be 1 less
+  dateData[1] -= 1;
+
+  return new Date(Date.UTC(...dateData, millisecond));
 };

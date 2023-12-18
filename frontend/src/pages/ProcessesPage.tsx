@@ -47,7 +47,7 @@ export default function ProcessesPage() {
               filterOptions: {
                 "Process Key": "string",
                 "BPMN Process ID": "string",
-                Version: "value",
+                Version: "number",
                 "Deployment Time": "time",
               },
             }),

@@ -44,7 +44,7 @@ export default function InstancesPage() {
               "Instance Key": "string",
               "BPMN Process ID": "string",
               Status: "string",
-              Version: "value",
+              Version: "number",
               "Start Time": "time",
             },
           }),

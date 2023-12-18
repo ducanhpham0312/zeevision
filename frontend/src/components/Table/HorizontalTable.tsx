@@ -282,7 +282,9 @@ export function HorizontalTable({
             >
               <option value={1}>1</option>
               {[10, 25, 50, 100].map((val) => (
-                <option value={val}>{val}</option>
+                <option key={val} value={val}>
+                  {val}
+                </option>
               ))}
               <option value={-1}>All</option>
             </select>
