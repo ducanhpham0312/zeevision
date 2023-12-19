@@ -160,7 +160,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
       </thead>
       <tbody
         aria-label="custom pagination table"
-        class="border-l-2 border-r-2 border-accent"
+        class="border-l border-r border-black/10"
       >
         <tr
           class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
@@ -178,7 +178,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -219,7 +219,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -260,7 +260,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -301,7 +301,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -342,7 +342,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -383,7 +383,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -428,7 +428,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -469,7 +469,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -510,7 +510,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -551,7 +551,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -592,7 +592,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -633,7 +633,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -678,7 +678,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -719,7 +719,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -760,7 +760,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -801,7 +801,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -842,7 +842,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -883,7 +883,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -928,7 +928,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -969,7 +969,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1010,7 +1010,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1051,7 +1051,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1092,7 +1092,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1133,7 +1133,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1178,7 +1178,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1219,7 +1219,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1260,7 +1260,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1301,7 +1301,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1342,7 +1342,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1383,7 +1383,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1428,7 +1428,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1469,7 +1469,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1510,7 +1510,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1551,7 +1551,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1592,7 +1592,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1633,7 +1633,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1678,7 +1678,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1719,7 +1719,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1760,7 +1760,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1801,7 +1801,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1842,7 +1842,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1883,7 +1883,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1928,7 +1928,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -1969,7 +1969,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2010,7 +2010,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2051,7 +2051,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2092,7 +2092,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2133,7 +2133,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2178,7 +2178,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2219,7 +2219,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2260,7 +2260,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2301,7 +2301,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2342,7 +2342,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2383,7 +2383,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2428,7 +2428,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2469,7 +2469,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2510,7 +2510,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2551,7 +2551,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2592,7 +2592,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2633,7 +2633,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                 class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
               >
                 <div
-                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 left-0 top-[-5px] -translate-y-[100%]"
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
                 >
                   <p
                     class="whitespace-nowrap text-sm"
@@ -2665,9 +2665,6 @@ exports[`HorizontalTable Component renders correctly 1`] = `
       </tbody>
     </table>
     <div
-      class="sticky bottom-12 w-full border-t-2 border-accent"
-    />
-    <div
       class="sticky bottom-0 mt-auto h-12 bg-white"
     >
       <div
@@ -2690,24 +2687,9 @@ exports[`HorizontalTable Component renders correctly 1`] = `
               1
             </option>
             <option
-              value="5"
-            >
-              5
-            </option>
-            <option
               value="10"
             >
               10
-            </option>
-            <option
-              value="15"
-            >
-              15
-            </option>
-            <option
-              value="20"
-            >
-              20
             </option>
             <option
               value="25"
@@ -2715,9 +2697,19 @@ exports[`HorizontalTable Component renders correctly 1`] = `
               25
             </option>
             <option
-              value="30"
+              value="50"
             >
-              30
+              50
+            </option>
+            <option
+              value="100"
+            >
+              100
+            </option>
+            <option
+              value="-1"
+            >
+              All
             </option>
           </select>
         </div>

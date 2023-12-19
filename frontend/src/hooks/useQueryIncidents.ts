@@ -7,34 +7,56 @@ interface QueryIncidentsReturnType {
   incidents: IncidentType[];
 }
 
-const INCIDENTS_QUERY = () => gql`
-  query Incidents($limit: Int!, $offset: Int!) {
-    incidents(pagination: { limit: $limit, offset: $offset }) {
-      totalCount
-      items {
-        incidentKey
-        elementId
-        instanceKey
-        errorType
-        errorMessage
-        state
-        time
-      }
-    }
-  }
-`;
+const INCIDENTS_QUERY = (shouldUseClientPagination: boolean) =>
+  shouldUseClientPagination
+    ? gql`
+        query Incidents {
+          incidents {
+            totalCount
+            items {
+              incidentKey
+              elementId
+              instanceKey
+              errorType
+              errorMessage
+              state
+              time
+            }
+          }
+        }
+      `
+    : gql`
+        query Incidents($limit: Int!, $offset: Int!) {
+          incidents(pagination: { limit: $limit, offset: $offset }) {
+            totalCount
+            items {
+              incidentKey
+              elementId
+              instanceKey
+              errorType
+              errorMessage
+              state
+              time
+            }
+          }
+        }
+      `;
 
 export function useQueryIncidents(
   page: number,
   limit: number,
+  shouldUseClientPagination: boolean,
 ): QueryIncidentsReturnType {
-  const incidentsData = useQueryWithLoading(INCIDENTS_QUERY(), {
-    pollInterval: queryPollIntervalMs,
-    variables: {
-      offset: page * limit,
-      limit,
+  const incidentsData = useQueryWithLoading(
+    INCIDENTS_QUERY(shouldUseClientPagination),
+    {
+      pollInterval: queryPollIntervalMs,
+      variables: {
+        offset: page * limit,
+        limit,
+      },
     },
-  });
+  );
 
   return {
     totalCount: incidentsData.data?.incidents.totalCount,

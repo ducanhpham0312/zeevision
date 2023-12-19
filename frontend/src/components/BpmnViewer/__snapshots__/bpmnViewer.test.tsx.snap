@@ -40,7 +40,7 @@ exports[`ResponsiveBpmnViewer correctly render the ResponsiveBpmnViewer snapshot
           <span>
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1lrr7yx-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-xn6q2u-MuiSvgIcon-root"
               data-testid="ZoomInIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -73,7 +73,7 @@ exports[`ResponsiveBpmnViewer correctly render the ResponsiveBpmnViewer snapshot
           <span>
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1lrr7yx-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-xn6q2u-MuiSvgIcon-root"
               data-testid="ZoomOutIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -103,7 +103,7 @@ exports[`ResponsiveBpmnViewer correctly render the ResponsiveBpmnViewer snapshot
           <span>
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1lrr7yx-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-xn6q2u-MuiSvgIcon-root"
               data-testid="CenterFocusWeakIcon"
               focusable="false"
               viewBox="0 0 24 24"

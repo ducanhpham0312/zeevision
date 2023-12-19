@@ -4,8 +4,19 @@ import { useQueryJobs } from "../hooks/useQueryJobs";
 import { useTableStore } from "../contexts/useTableStore";
 
 export default function JobsPage() {
-  const { page, limit, setLimit, setPage, resetPagination } = useTableStore();
-  const { jobs, totalCount } = useQueryJobs(page, limit);
+  const {
+    page,
+    limit,
+    setLimit,
+    setPage,
+    resetPagination,
+    shouldUseClientPagination,
+  } = useTableStore();
+  const { jobs, totalCount } = useQueryJobs(
+    page,
+    limit,
+    shouldUseClientPagination,
+  );
 
   useEffect(() => {
     return () => {

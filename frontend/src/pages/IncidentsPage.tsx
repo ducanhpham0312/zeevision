@@ -4,8 +4,19 @@ import { useQueryIncidents } from "../hooks/useQueryIncidents";
 import { useTableStore } from "../contexts/useTableStore";
 
 export default function IncidentsPage() {
-  const { page, limit, setLimit, setPage, resetPagination } = useTableStore();
-  const { incidents, totalCount } = useQueryIncidents(page, limit);
+  const {
+    page,
+    limit,
+    setLimit,
+    setPage,
+    resetPagination,
+    shouldUseClientPagination,
+  } = useTableStore();
+  const { incidents, totalCount } = useQueryIncidents(
+    page,
+    limit,
+    shouldUseClientPagination,
+  );
 
   const apiPagination = useMemo(
     () => ({

@@ -95,8 +95,8 @@ const columnFilterOptions: Record<
     },
   },
   time: {
-    before: {
-      name: "before",
+    "is before": {
+      name: "is before",
       queryInputList: [
         { name: "before-year", placeholder: "YYYY" },
         { name: "before-month", placeholder: "MM" },
@@ -126,8 +126,8 @@ const columnFilterOptions: Record<
         }
       },
     },
-    after: {
-      name: "after",
+    "is after": {
+      name: "is after",
       queryInputList: [
         { name: "after-year", placeholder: "YYYY" },
         { name: "after-month", placeholder: "MM" },
@@ -406,6 +406,21 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
     });
   };
 
+  const clearAllFilterInColumn = (col: string) => {
+    setFilterState((prev) => {
+      Object.entries(prev).forEach(([column, filters]) =>
+        Object.keys(filters).forEach((filterName) => {
+          if (column === col && prev[column][filterName].active) {
+            Object.keys(prev[column][filterName].filterValue).forEach(
+              (key) => (prev[column][filterName].filterValue[key] = ""),
+            );
+          }
+        }),
+      );
+      return { ...prev };
+    });
+  };
+
   return (
     <div className="flex w-full flex-col">
       <div className="mb-1 flex w-full gap-2">
@@ -485,7 +500,10 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                           },
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-error">
+                        <DropdownMenuItem
+                          className="text-error"
+                          onClick={() => clearAllFilterInColumn(column)}
+                        >
                           <ClearAllIcon sx={{ fontSize: "20px", mr: 1 }} />
                           <span>Clear column filters</span>
                         </DropdownMenuItem>
