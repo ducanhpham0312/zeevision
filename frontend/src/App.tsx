@@ -17,6 +17,7 @@ import { Snackbar } from "./components/Snackbar";
 import SingleProcessPage from "./pages/SingleProcessPage";
 import SingleInstancePage from "./pages/SingleInstancePage";
 import { useEffect } from "react";
+import { NotifyNewEntity } from "./components/NotifyNewEntity";
 
 const Layout = () => {
   // redirect to "/processes" page
@@ -31,6 +32,7 @@ const Layout = () => {
     <>
       <Navbar />
       <Snackbar />
+      <NotifyNewEntity />
       <div className="h-screen w-screen p-4 pr-0 pt-[70px]">
         <Outlet />
       </div>
