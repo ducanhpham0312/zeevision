@@ -157,7 +157,7 @@ function VariablesTable({ variables }: VariableListProps) {
         filterOptions: {
           "Variable Name": "string",
           "Variable Value": "string",
-          Time: "string",
+          Time: "time",
         },
       }}
       content={
