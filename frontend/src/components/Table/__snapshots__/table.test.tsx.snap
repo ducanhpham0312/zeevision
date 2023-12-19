@@ -1,10 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HorizontalTable Component renders correctly 1`] = `
+exports[`HorizontalTable Component filters data correctly with the main filter 1`] = `
 <DocumentFragment>
   <div
     class="flex h-full flex-col"
   >
+    <div
+      class="flex w-full flex-col"
+    >
+      <div
+        class="mb-1 flex w-full gap-2"
+      >
+        <input
+          class="placeholder:text-muted-foreground flex h-10 rounded border-2 border-accent/20 bg-background px-3 py-2 text-sm transition file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 flex-grow"
+          placeholder="Search by Variable Name"
+        />
+        <div>
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            class="relative box-border h-full w-full rounded bg-second-accent p-2 px-4 text-accent transition hover:bg-hover hover:shadow-lg active:bg-active"
+            data-state="closed"
+            id="radix-:r0:"
+            type="button"
+          >
+            <p>
+              Filter 
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                data-testid="FilterAltIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4.25 5.61C6.27 8.2 10 13 10 13v6c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-6s3.72-4.8 5.74-7.39c.51-.66.04-1.61-.79-1.61H5.04c-.83 0-1.3.95-.79 1.61z"
+                />
+              </svg>
+            </p>
+          </button>
+        </div>
+      </div>
+      <div
+        class="w-full"
+      >
+        <div
+          class="flex flex-wrap gap-2"
+        />
+      </div>
+    </div>
     <table
       class="relative w-full border-collapse rounded bg-white"
     >
@@ -51,7 +95,7 @@ exports[`HorizontalTable Component renders correctly 1`] = `
                   class="relative flex justify-between pr-5"
                 >
                   <p>
-                    Variable name
+                    Variable Name
                   </p>
                   <div
                     class="absolute right-0"
@@ -2680,8 +2724,2764 @@ exports[`HorizontalTable Component renders correctly 1`] = `
           </p>
           <select
             class="text-sm"
+            data-testid="select"
           >
             <option
+              data-testid="option"
+              value="1"
+            >
+              1
+            </option>
+            <option
+              value="10"
+            >
+              10
+            </option>
+            <option
+              value="25"
+            >
+              25
+            </option>
+            <option
+              value="50"
+            >
+              50
+            </option>
+            <option
+              value="100"
+            >
+              100
+            </option>
+            <option
+              value="-1"
+            >
+              All
+            </option>
+          </select>
+        </div>
+        <p
+          class="text-sm text-black/60"
+        >
+          1-10 of 12
+        </p>
+        <div
+          class="flex gap-1.5"
+        >
+          <button
+            class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+            style="width: 40px;"
+          >
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 4px;"
+            />
+            <span>
+              1
+            </span>
+          </button>
+          <button
+            class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded bg-second-accent px-3 py-2"
+            style="width: 40px;"
+          >
+            <div
+              class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+              style="height: 0px;"
+            />
+            <span>
+              2
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`HorizontalTable Component renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="flex h-full flex-col"
+  >
+    <table
+      class="relative w-full border-collapse rounded bg-white"
+    >
+      <thead
+        class="border-b-2 border-accent font-bold text-text"
+      >
+        <tr>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="relative flex justify-between pr-5"
+                >
+                  <p>
+                    Element ID
+                  </p>
+                  <div
+                    class="absolute right-0"
+                  />
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="relative flex justify-between pr-5"
+                >
+                  <p>
+                    Variable Name
+                  </p>
+                  <div
+                    class="absolute right-0"
+                  />
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="relative flex justify-between pr-5"
+                >
+                  <p>
+                    Variable Value
+                  </p>
+                  <div
+                    class="absolute right-0"
+                  />
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="relative flex justify-between pr-5"
+                >
+                  <p>
+                    Flow Scope Key
+                  </p>
+                  <div
+                    class="absolute right-0"
+                  />
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="relative flex justify-between pr-5"
+                >
+                  <p>
+                    Time created
+                  </p>
+                  <div
+                    class="absolute right-0"
+                  />
+                </div>
+              </span>
+            </button>
+          </th>
+          <th
+            class="cursor-pointer py-1 text-left"
+          >
+            <button
+              class="group/button hover:shadow-lg transition relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 w-full text-left"
+            >
+              <div
+                class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                style="height: 0px;"
+              />
+              <span>
+                <div
+                  class="relative flex justify-between pr-5"
+                >
+                  <p>
+                    Option
+                  </p>
+                  <div
+                    class="absolute right-0"
+                  />
+                </div>
+              </span>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        aria-label="custom pagination table"
+        class="border-l border-r border-black/10"
+      >
+        <tr
+          class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                items
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                [{"id":1,"value":10,"inCart":10,"inStock":20},{"id":2,"value":20,"inCart":2,"inStock":10}]
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984108
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667765
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                isValid
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                true
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984108
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667765
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                total
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                200
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984108
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667765
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                another-multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                anotherVariable
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                string
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984432
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667333
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                new-multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                kmean
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                newValue
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984100
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667542
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                sixth-multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                amp
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                integer
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984642
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667164
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                items
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                [{"id":1,"value":10,"inCart":10,"inStock":20},{"id":2,"value":20,"inCart":2,"inStock":10}]
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984108
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667765
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                isValid
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                true
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984108
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667765
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 bg-second-accent hover:bg-second-accent/20"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                total
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                200
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984108
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667765
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="border-b border-black/10 hover:bg-second-accent/10"
+        >
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                another-multi-instance-process
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                anotherVariable
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                string
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                2251799813984432
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                1696667333
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td
+            class="group p-3"
+          >
+            <div
+              class="flex items-center gap-2"
+            >
+              <p>
+                Show History
+              </p>
+              <button
+                class="group/button hover:shadow-lg relative box-border text-accent hover:bg-hover active:bg-active rounded px-3 py-2 opacity-0 transition group-hover:opacity-100"
+              >
+                <div
+                  class="absolute scale-50 rounded bg-[#202020] px-2 py-1 text-white opacity-0 transition group-hover/button:scale-100 group-hover/button:opacity-100 right-0 top-[-5px] -translate-y-[100%]"
+                >
+                  <p
+                    class="whitespace-nowrap text-sm"
+                  >
+                    Copy
+                  </p>
+                </div>
+                <div
+                  class="transition-width absolute bottom-0 left-0 w-full transform rounded bg-accent duration-100"
+                  style="height: 0px;"
+                />
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="ContentCopyIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      class="sticky bottom-0 mt-auto h-12 bg-white"
+    >
+      <div
+        class="flex h-12 w-full items-center justify-end gap-8 px-3 pt-1"
+      >
+        <div
+          class="flex gap-4"
+        >
+          <p
+            class="text-sm"
+          >
+            Rows per page:
+          </p>
+          <select
+            class="text-sm"
+            data-testid="select"
+          >
+            <option
+              data-testid="option"
               value="1"
             >
               1
@@ -2806,7 +5606,7 @@ exports[`VerticalTable Component renders correctly 1`] = `
         <th
           class="border border-r-0 p-3 text-left"
         >
-          Process key
+          Process Key
         </th>
         <td
           class="border border-l-0 p-3 text-left"

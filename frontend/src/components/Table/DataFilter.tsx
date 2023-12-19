@@ -528,7 +528,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
         <div className="flex flex-wrap gap-2">
           {Object.entries(filterState).map(([column, type]) =>
             Object.values(type).map((filter) => (
-              <React.Fragment key={filter.filterName}>
+              <Fragment key={filter.filterName}>
                 {filter.active ? (
                   <Popover
                     onOpenChange={(open) => {
@@ -607,7 +607,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                     </PopoverContent>
                   </Popover>
                 ) : null}
-              </React.Fragment>
+              </Fragment>
             )),
           )}
         </div>
