@@ -31,7 +31,7 @@ describe("VerticalTable Component", () => {
         content={[]}
       />,
     );
-    expect(container.firstChild).toBeEmptyDOMElement();
+    expect(container).toBeEmptyDOMElement();
   });
 });
 
@@ -60,7 +60,7 @@ describe("HorizontalTable Component", () => {
     expect(getAllByText("multi-instance-process").length).toEqual(6);
   });
 
-  it("renders header, empty row and pagination when the content is empty", () => {
+  it("renders header and empty row when the content is empty", () => {
     const component = render(
       <Table
         orientation={horizontalOrientation}
@@ -69,7 +69,7 @@ describe("HorizontalTable Component", () => {
       />,
     );
     expect(component.getByRole("table")).toBeInTheDocument();
-    expect(component.getAllByRole("row").length).toEqual(3);
+    expect(component.getAllByRole("row").length).toEqual(2);
     expect(component.getAllByRole("button")[0]).toBeInTheDocument();
   });
 
@@ -118,7 +118,7 @@ describe("HorizontalTable Component", () => {
   });
 
   it("should set page correctly", () => {
-    const { getByText, getByLabelText } = render(
+    const { getByText, getByRole } = render(
       <Table
         orientation={horizontalOrientation}
         header={horizontalHeaders}
@@ -126,27 +126,52 @@ describe("HorizontalTable Component", () => {
       />,
     );
 
-    expect(getByText("1–10 of 12")).toBeInTheDocument();
-    fireEvent.click(getByLabelText("Go to next page"));
-    expect(getByText("11–12 of 12")).toBeInTheDocument();
+    expect(getByText("1-10 of 12")).toBeInTheDocument();
+    fireEvent.click(
+      getByRole("button", {
+        name: "2",
+      }),
+    );
+    expect(getByText("11-12 of 12")).toBeInTheDocument();
   });
 
   it("should set rows per page correctly", () => {
-    const { getByLabelText, container } = render(
+    const { getByTestId, container } = render(
       <Table
         orientation={horizontalOrientation}
         header={horizontalHeaders}
         content={horizontalContent}
       />,
     );
-
-    expect(getByLabelText("rows per page")).toHaveValue("10");
+    fireEvent.change(getByTestId("select"), { target: { value: 10 } });
     expect(container.querySelector("tbody")?.childElementCount).toEqual(10);
 
-    fireEvent.change(getByLabelText("rows per page"), {
-      target: { value: "20" },
-    });
-    expect(getByLabelText("rows per page")).toHaveValue("20");
+    fireEvent.change(getByTestId("select"), { target: { value: 25 } });
     expect(container.querySelector("tbody")?.childElementCount).toEqual(12);
+  });
+
+  it("filters data correctly with the main filter", () => {
+    const { asFragment, getByPlaceholderText, getByRole, getAllByRole } =
+      render(
+        <Table
+          orientation={horizontalOrientation}
+          header={horizontalHeaders}
+          content={horizontalContent}
+          filterConfig={{
+            mainFilter: {
+              column: "Variable Name",
+            },
+            filterOptions: {
+              "Variable Name": "string",
+              "Variable Value": "string",
+              Time: "string",
+            },
+          }}
+        />,
+      );
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByPlaceholderText("Search by Variable Name")).toBeInTheDocument();
+    fireEvent.change(getByRole("textbox"), { target: { value: "isValid" } });
+    expect(getAllByRole("row").length).toEqual(2);
   });
 });

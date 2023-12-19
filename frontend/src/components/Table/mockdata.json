@@ -54,7 +54,7 @@
       "Instance key",
       "BPMN process ID",
       "Version",
-      "Process key",
+      "Process Key",
       "State",
       "Start time",
       "End time"
@@ -76,7 +76,7 @@
     "alignment": "center",
     "headers": [
       "Element ID",
-      "Variable name",
+      "Variable Name",
       "Variable Value",
       "Flow Scope Key",
       "Time created",

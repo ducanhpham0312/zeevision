@@ -340,7 +340,8 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
       newFilters.push((input: Record<string, string | number>): boolean => {
         return input[filterConfig.mainFilter.column]
           .toString()
-          .includes(mainFilterQueryString);
+          .toLowerCase()
+          .includes(mainFilterQueryString.toString().toLowerCase());
       });
     }
 
@@ -528,7 +529,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
         <div className="flex flex-wrap gap-2">
           {Object.entries(filterState).map(([column, type]) =>
             Object.values(type).map((filter) => (
-              <React.Fragment key={filter.filterName}>
+              <Fragment key={filter.filterName}>
                 {filter.active ? (
                   <Popover
                     onOpenChange={(open) => {
@@ -607,7 +608,7 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
                     </PopoverContent>
                   </Popover>
                 ) : null}
-              </React.Fragment>
+              </Fragment>
             )),
           )}
         </div>

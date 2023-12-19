@@ -276,11 +276,14 @@ export function HorizontalTable({
           <div className="flex gap-4">
             <p className="text-sm">Rows per page:</p>
             <select
+              data-testid="select"
               className="text-sm"
               value={rowsPerPage}
               onChange={handleChangeRowsPerPage}
             >
-              <option value={1}>1</option>
+              <option data-testid="option" value={1}>
+                1
+              </option>
               {[10, 25, 50, 100].map((val) => (
                 <option key={val} value={val}>
                   {val}
