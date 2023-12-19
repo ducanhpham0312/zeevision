@@ -340,7 +340,8 @@ export function DataFilter({ filterConfig, setFilter }: DataFilterProps) {
       newFilters.push((input: Record<string, string | number>): boolean => {
         return input[filterConfig.mainFilter.column]
           .toString()
-          .includes(mainFilterQueryString);
+          .toLowerCase()
+          .includes(mainFilterQueryString.toString().toLowerCase());
       });
     }
 
