@@ -281,7 +281,9 @@ export function HorizontalTable({
               value={rowsPerPage}
               onChange={handleChangeRowsPerPage}
             >
-              <option data-testid="option" value={1}>1</option>
+              <option data-testid="option" value={1}>
+                1
+              </option>
               {[10, 25, 50, 100].map((val) => (
                 <option key={val} value={val}>
                   {val}

@@ -127,9 +127,11 @@ describe("HorizontalTable Component", () => {
     );
 
     expect(getByText("1-10 of 12")).toBeInTheDocument();
-    fireEvent.click(getByRole("button", {
-      name: "2"
-    }));
+    fireEvent.click(
+      getByRole("button", {
+        name: "2",
+      }),
+    );
     expect(getByText("11-12 of 12")).toBeInTheDocument();
   });
 
@@ -141,34 +143,35 @@ describe("HorizontalTable Component", () => {
         content={horizontalContent}
       />,
     );
-    fireEvent.change(getByTestId("select"), { target: { value: 10 } })
+    fireEvent.change(getByTestId("select"), { target: { value: 10 } });
     expect(container.querySelector("tbody")?.childElementCount).toEqual(10);
-    
-    fireEvent.change(getByTestId("select"), { target: { value: 25 } })
+
+    fireEvent.change(getByTestId("select"), { target: { value: 25 } });
     expect(container.querySelector("tbody")?.childElementCount).toEqual(12);
   });
 
   it("filters data correctly with the main filter", () => {
-    const { asFragment, getByPlaceholderText, getByRole, getAllByRole } = render(
-      <Table
-        orientation={horizontalOrientation}
-        header={horizontalHeaders}
-        content={horizontalContent}
-        filterConfig={{
-          mainFilter: {
-            column: "Variable Name",
-          },
-          filterOptions: {
-            "Variable Name": "string",
-            "Variable Value": "string",
-            Time: "string",
-          },
-        }}
-      />,
-    )
+    const { asFragment, getByPlaceholderText, getByRole, getAllByRole } =
+      render(
+        <Table
+          orientation={horizontalOrientation}
+          header={horizontalHeaders}
+          content={horizontalContent}
+          filterConfig={{
+            mainFilter: {
+              column: "Variable Name",
+            },
+            filterOptions: {
+              "Variable Name": "string",
+              "Variable Value": "string",
+              Time: "string",
+            },
+          }}
+        />,
+      );
     expect(asFragment()).toMatchSnapshot();
     expect(getByPlaceholderText("Search by Variable Name")).toBeInTheDocument();
-    fireEvent.change(getByRole("textbox"), { target: { value: "isValid"}});
+    fireEvent.change(getByRole("textbox"), { target: { value: "isValid" } });
     expect(getAllByRole("row").length).toEqual(2);
-  })
+  });
 });
