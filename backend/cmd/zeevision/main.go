@@ -64,36 +64,6 @@ func main() {
 	// need to be closed manually
 	defer kafkaConsumer.Close()
 
-	// TODO these should be stored somewhere else. they don't need to be
-	// fixed, so they could be configuration - but the types of messages we
-	// can handle are fixed in code, so they should only be changed if the
-	// messages we care about move to different topics, or if there are new
-	// or removed message types
-	topics := []string{
-		"zeebe-deployment",
-		"zeebe-deployment-distribution",
-		"zeebe-error",
-		"zeebe-incident",
-		"zeebe-job",
-		"zeebe-job-batch",
-		"zeebe-message",
-		"zeebe-message-subscription",
-		"zeebe-message-subscription-start-event",
-		"zeebe-process",
-		"zeebe-process-event",
-		"zeebe-process-instance",
-		"zeebe-process-instance-result",
-		"zeebe-process-message-subscription",
-		"zeebe-timer",
-		"zeebe-variable",
-	}
-	for _, topic := range topics {
-		err = kafkaConsumer.ConsumeTopic(0, topic)
-		if err != nil {
-			zap.L().Panic("Failed consuming", zap.String("topic", topic), zap.Error(err))
-		}
-	}
-
 	server, err := endpoint.NewFromEnv(fetcher)
 	if err != nil {
 		zap.L().Fatal("Failed creating a new endpoint from environment variables", zap.Error(err))

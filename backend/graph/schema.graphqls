@@ -40,9 +40,6 @@ type PaginatedProcesses {
 }
 
 type Process {
-  activeInstances: Int!
-  completedInstances: Int!
-  bpmnLiveStatus: String!
   bpmnResource: String! @goField(forceResolver: true)
   bpmnProcessId: String!
   deploymentTime: DateTime!
@@ -58,7 +55,6 @@ type PaginatedInstances {
 }
 
 type Instance {
-  bpmnLiveStatus: String!
   startTime: DateTime!
   endTime: DateTime
   instanceKey: Int!
