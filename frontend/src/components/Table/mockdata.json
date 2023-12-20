@@ -54,7 +54,7 @@
       "Instance key",
       "BPMN process ID",
       "Version",
-      "Process key",
+      "Process Key",
       "State",
       "Start time",
       "End time"
@@ -66,8 +66,8 @@
         1,
         2251799813685249,
         "ELEMENT_ACTIVATING",
-        1696667765,
-        1696667800
+        "2023-12-20T11:46:31.198Z",
+        "2024-12-20T11:46:31.198Z"
       ]
     ]
   },
@@ -76,7 +76,7 @@
     "alignment": "center",
     "headers": [
       "Element ID",
-      "Variable name",
+      "Variable Name",
       "Variable Value",
       "Flow Scope Key",
       "Time created",
@@ -88,7 +88,7 @@
         "items",
         "[{\"id\":1,\"value\":10,\"inCart\":10,\"inStock\":20},{\"id\":2,\"value\":20,\"inCart\":2,\"inStock\":10}]",
         2251799813984108,
-        1696667765,
+        "2023-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -96,7 +96,7 @@
         "isValid",
         "true",
         2251799813984108,
-        1696667765,
+        "2023-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -104,7 +104,7 @@
         "total",
         "200",
         2251799813984108,
-        1696667765,
+        "2023-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -112,15 +112,15 @@
         "anotherVariable",
         "string",
         2251799813984432,
-        1696667333,
+        "2023-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
         "new-multi-instance-process",
-        "kmean",
+        "total",
         "newValue",
         2251799813984100,
-        1696667542,
+        "2023-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -128,7 +128,7 @@
         "amp",
         "integer",
         2251799813984642,
-        1696667164,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -136,7 +136,7 @@
         "items",
         "[{\"id\":1,\"value\":10,\"inCart\":10,\"inStock\":20},{\"id\":2,\"value\":20,\"inCart\":2,\"inStock\":10}]",
         2251799813984108,
-        1696667765,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -144,7 +144,7 @@
         "isValid",
         "true",
         2251799813984108,
-        1696667765,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -152,7 +152,7 @@
         "total",
         "200",
         2251799813984108,
-        1696667765,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -160,7 +160,7 @@
         "anotherVariable",
         "string",
         2251799813984432,
-        1696667333,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -168,7 +168,7 @@
         "kmean",
         "newValue",
         2251799813984100,
-        1696667542,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ],
       [
@@ -176,7 +176,7 @@
         "amp",
         "integer",
         2251799813984642,
-        1696667164,
+        "2024-12-20T11:46:31.198Z",
         "Show History"
       ]
     ]

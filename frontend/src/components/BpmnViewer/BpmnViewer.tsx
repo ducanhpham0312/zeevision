@@ -45,7 +45,6 @@ type ViewBoxInner = {
 export function BpmnViewer({
   bpmnString,
   width,
-  height,
   navigated,
   control,
   colorOptions,
@@ -59,6 +58,7 @@ export function BpmnViewer({
   useEffect(() => {
     if (!bpmnString || bpmnString.length === 0) {
       return;
+      [];
     }
 
     const modeler = navigated
@@ -72,10 +72,6 @@ export function BpmnViewer({
     async function openDiagram(xmlString: string) {
       try {
         await modeler.importXML(xmlString);
-
-        colorOptions?.forEach(({ elementId, intent }) => {
-          setBpmnMarker(modeler, elementId, intent);
-        });
       } catch (err) {
         console.error(err);
       }
@@ -86,7 +82,57 @@ export function BpmnViewer({
     return () => {
       modeler.destroy();
     };
-  }, [bpmnString, colorOptions, navigated]);
+  }, [bpmnString, navigated]);
+
+  const setBpmnMarker = useCallback(
+    (elementId: string, intent: string) => {
+      if (!modeler) {
+        return;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const canvas = modeler.get("canvas") as any;
+
+      canvas.removeMarker(elementId, "completed");
+      canvas.removeMarker(elementId, "terminated");
+      canvas.removeMarker(elementId, "incident");
+      canvas.removeMarker(elementId, "flow_taken");
+      canvas.removeMarker(elementId, "activated");
+      switch (intent) {
+        case "ELEMENT_ACTIVATING":
+        case "ELEMENT_ACTIVATED":
+          canvas.addMarker(elementId, "activated");
+          break;
+        case "ELEMENT_COMPLETING":
+        case "ELEMENT_COMPLETED":
+        case "INCIDENT_RESOLVED":
+          canvas.addMarker(elementId, "completed");
+          break;
+        case "ELEMENT_TERMINATING":
+        case "ELEMENT_TERMINATED":
+          canvas.addMarker(elementId, "terminated");
+          break;
+        case "INCIDENT_CREATED":
+          canvas.addMarker(elementId, "incident");
+          break;
+        case "SEQUENCE_FLOW_TAKEN":
+          canvas.addMarker(elementId, "flow_taken");
+      }
+    },
+    [modeler],
+  );
+
+  useEffect(() => {
+    if (modeler) {
+      try {
+        colorOptions?.forEach(({ elementId, intent }) => {
+          setBpmnMarker(elementId, intent);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [colorOptions, modeler, setBpmnMarker]);
 
   const handleResetView = useCallback(() => {
     if (!modeler) {
@@ -117,41 +163,12 @@ export function BpmnViewer({
     (modeler.get("canvas") as any).zoom(zoom);
   };
 
-  const setBpmnMarker = (
-    modeler: Viewer,
-    elementId: string,
-    intent: string,
-  ) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const canvas = modeler.get("canvas") as any;
-    switch (intent) {
-      case "ELEMENT_ACTIVATING":
-      case "ELEMENT_ACTIVATED":
-        canvas.addMarker(elementId, "activated");
-        break;
-      case "ELEMENT_COMPLETING":
-      case "ELEMENT_COMPLETED":
-      case "INCIDENT_RESOLVED":
-        canvas.addMarker(elementId, "completed");
-        break;
-      case "ELEMENT_TERMINATING":
-      case "ELEMENT_TERMINATED":
-        canvas.addMarker(elementId, "terminated");
-        break;
-      case "INCIDENT_CREATED":
-        canvas.addMarker(elementId, "incident");
-        break;
-      case "SEQUENCE_FLOW_TAKEN":
-        canvas.addMarker(elementId, "flow_taken");
-    }
-  };
-
   useEffect(() => {
     if (width && width < 400) {
       return;
     }
     handleResetView();
-  }, [width, height, handleResetView]);
+  }, [width, handleResetView]);
 
   return (
     <div
@@ -167,21 +184,23 @@ export function BpmnViewer({
             helperText="Zoom In"
             onClick={handleZoom(currentZoom * (1 + zoomStrength))}
           >
-            <ZoomInIcon sx={{ fontSize: "20px" }} />
+            <ZoomInIcon sx={{ fontSize: "20px", ml: "-2px", mt: "-2px" }} />
           </Button>
           <Button
             variant="secondary"
             helperText="Zoom Out"
             onClick={handleZoom(currentZoom * (1 - zoomStrength))}
           >
-            <ZoomOutIcon sx={{ fontSize: "20px" }} />
+            <ZoomOutIcon sx={{ fontSize: "20px", ml: "-2px", mt: "-2px" }} />
           </Button>
           <Button
             variant="secondary"
             helperText="Reset View"
             onClick={handleResetView}
           >
-            <CenterFocusWeakIcon sx={{ fontSize: "20px" }} />
+            <CenterFocusWeakIcon
+              sx={{ fontSize: "20px", ml: "-2px", mt: "-2px" }}
+            />
           </Button>
         </div>
       ) : null}

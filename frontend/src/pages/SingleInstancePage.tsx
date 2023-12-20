@@ -7,6 +7,7 @@ import { Tabs } from "@mui/base/Tabs";
 import { TabsList } from "@mui/base/TabsList";
 import { TabPanel } from "@mui/base/TabPanel";
 import { Tab } from "@mui/base/Tab";
+import { useMemo } from "react";
 
 export default function SingleInstancesPage() {
   const params = useParams();
@@ -25,7 +26,7 @@ export default function SingleInstancesPage() {
     auditLogs,
     incidents,
   } = instance;
-  const getLatestLogs = (): { elementId: string; intent: string }[] => {
+  const getLatestLogs = useMemo((): { elementId: string; intent: string }[] => {
     const latestLogs: Record<string, string> = {};
     incidents?.items.forEach((incident) => {
       latestLogs[incident.elementId] =
@@ -40,7 +41,7 @@ export default function SingleInstancesPage() {
       elementId,
       intent,
     }));
-  };
+  }, [incidents, auditLogs]);
   const tabsData = [
     {
       label: "Variables",
@@ -57,7 +58,7 @@ export default function SingleInstancesPage() {
     },
   ];
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col pr-4">
       <ResizableContainer direction="vertical">
         <div className="flex h-full">
           <ResizableContainer direction="horizontal">
@@ -102,26 +103,31 @@ export default function SingleInstancesPage() {
             navigated
             className="h-full flex-grow overflow-hidden"
             bpmnString={bpmnResource}
-            colorOptions={getLatestLogs()}
+            colorOptions={getLatestLogs}
           />
         </div>
       </ResizableContainer>
       <div className="relative flex-grow overflow-auto">
-        <div className="absolute h-full w-full">
-          <Tabs defaultValue={"Variables"} className="bg-white">
-            <TabsList className="mb-5 mt-10 grid w-full grid-cols-4 rounded-xl border-2">
+        <div className="absolute h-full w-full pt-5">
+          <Tabs defaultValue={0} className="flex h-full flex-col bg-white">
+            <TabsList className="mb-4 flex w-full gap-2 border-b-2 border-accent">
               {tabsData.map((tab, index) => (
-                <Tab
-                  key={index}
-                  value={tab.label}
-                  className={`m-1 rounded-xl py-2 hover:bg-second-accent focus:bg-second-accent/100`}
-                >
-                  {tab.label}
-                </Tab>
+                <div key={index} className="flex-grow">
+                  <Tab
+                    value={index}
+                    className={`w-full rounded-xl border-2 border-accent py-2 transition-all hover:bg-second-accent hover:shadow-lg focus:bg-second-accent active:bg-accent/20 aria-selected:h-[53px] aria-selected:rounded-b-none aria-selected:bg-accent aria-selected:text-white aria-selected:shadow-lg`}
+                  >
+                    {tab.label}
+                  </Tab>
+                </div>
               ))}
             </TabsList>
             {tabsData.map((tab, index) => (
-              <TabPanel key={index} value={tab.label}>
+              <TabPanel
+                key={`panel-${index}`}
+                value={index}
+                className="flex-grow overflow-auto"
+              >
                 {tab.content}
               </TabPanel>
             ))}
@@ -143,6 +149,16 @@ function VariablesTable({ variables }: VariableListProps) {
       header={["Variable Name", "Variable Value", "Time"]}
       noStyleColumn={{
         "Variable Value": (value: string | number) => value.toString(),
+      }}
+      filterConfig={{
+        mainFilter: {
+          column: "Variable Name",
+        },
+        filterOptions: {
+          "Variable Name": "string",
+          "Variable Value": "string",
+          Time: "time",
+        },
       }}
       content={
         variables && variables.length > 0
@@ -170,6 +186,17 @@ function JobsTable({ jobs }: JobListProps) {
         "State",
         "Time",
       ]}
+      filterConfig={{
+        mainFilter: { column: "Job Key" },
+        filterOptions: {
+          "Job Key": "string",
+          "Job Type": "string",
+          Retries: "string",
+          Worker: "string",
+          State: "string",
+          Time: "time",
+        },
+      }}
       content={
         jobs
           ? jobs.map(
@@ -198,6 +225,16 @@ function AuditLogsTable({ auditLogs }: AuditLogListProps) {
       alterRowColor
       orientation="horizontal"
       header={["Element ID", "Element Type", "Intent", "Position", "Time"]}
+      filterConfig={{
+        mainFilter: { column: "Element ID" },
+        filterOptions: {
+          "Element ID": "string",
+          "Element Type": "string",
+          Intent: "string",
+          Position: "string",
+          Time: "time",
+        },
+      }}
       content={
         auditLogs
           ? auditLogs.map(
@@ -232,6 +269,19 @@ function IncidentsTable({ incidents }: IncidentListProps) {
       ]}
       noStyleColumn={{
         "Error Message": (value: string | number) => value.toString(),
+      }}
+      filterConfig={{
+        mainFilter: {
+          column: "Incident Key",
+        },
+        filterOptions: {
+          "Element ID": "string",
+          "Incident Key": "string",
+          "Error Type": "string",
+          "Error Message": "string",
+          State: "string",
+          Time: "time",
+        },
       }}
       content={
         incidents

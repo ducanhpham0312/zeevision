@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { HorizontalTable } from "./HorizontalTable";
 import { VerticalTable } from "./VerticalTable";
-import { twMerge } from "tailwind-merge";
+import { DataFilterProps } from "./DataFilter";
 
 export interface TableProps {
   /**
@@ -20,31 +20,33 @@ export interface TableProps {
    */
   content: (string | number)[][];
 
-  expandElement?: (idx: number) => ReactNode;
-  optionElement?: (idx: number) => ReactNode;
+  expandElement?: (id: string | number) => ReactNode;
 
   alterRowColor?: boolean;
-  className?: string;
+  filterConfig?: DataFilterProps["filterConfig"];
   navLinkColumn?: Record<string, (value: string | number) => string>;
   noStyleColumn?: Record<string, (value: string | number) => string>;
+
+  useApiPagination?: {
+    setPage: (page: number) => void;
+    setLimit: (limit: number) => void;
+  };
+  apiTotalCount?: number;
 }
 
 export function Table({
   orientation,
-  className,
   alterRowColor = true,
   ...props
 }: TableProps) {
   if (props.header.length === 0) return null;
   return (
-    <table
-      className={twMerge("w-full border-collapse rounded bg-white", className)}
-    >
+    <>
       {orientation === "horizontal" ? (
         <HorizontalTable alterRowColor={alterRowColor} {...props} />
       ) : (
         <VerticalTable {...props} />
       )}
-    </table>
+    </>
   );
 }

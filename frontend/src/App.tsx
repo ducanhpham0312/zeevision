@@ -1,5 +1,11 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import ProcessesPage from "./pages/ProcessesPage";
 import InstancesPage from "./pages/InstancesPage";
@@ -10,16 +16,27 @@ import JobsPage from "./pages/JobsPage";
 import { Snackbar } from "./components/Snackbar";
 import SingleProcessPage from "./pages/SingleProcessPage";
 import SingleInstancePage from "./pages/SingleInstancePage";
+import { useEffect } from "react";
 
-const Layout = () => (
-  <>
-    <Navbar />
-    <Snackbar />
-    <div className="h-screen w-screen p-4 pt-[70px]">
-      <Outlet />
-    </div>
-  </>
-);
+const Layout = () => {
+  // redirect to "/processes" page
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/processes");
+    }
+  }, [location.pathname, navigate]);
+  return (
+    <>
+      <Navbar />
+      <Snackbar />
+      <div className="h-screen w-screen p-4 pr-0 pt-[70px]">
+        <Outlet />
+      </div>
+    </>
+  );
+};
 
 const router = createBrowserRouter([
   {
