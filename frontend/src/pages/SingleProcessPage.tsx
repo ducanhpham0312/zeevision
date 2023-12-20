@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
 import { ResizableContainer } from "../components/ResizableContainer";
-import { useMemo } from "react";
 
 export default function SingleProcessPage() {
   const params = useParams();
