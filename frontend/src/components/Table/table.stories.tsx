@@ -20,6 +20,15 @@ export const Horizontal: Story = {
     orientation: "horizontal",
     header: mockdata.horizontal.headers,
     content: mockdata.horizontal.content,
+    filterConfig: {
+      mainFilter: {
+        column: "Variable Name",
+      },
+      filterOptions: {
+        "Variable Name": "string",
+        "Time created": "time",
+      },
+    },
   },
 };
 
