@@ -9,6 +9,8 @@ import { SnackMessageType, useUIStore } from "../../contexts/useUIStore";
 import { SnackbarCloseReason } from "@mui/base";
 import { VariantProps, tv } from "tailwind-variants";
 
+const SNACKBAR_AUTO_CLOSE_MS = 5000;
+
 type TransitionStatus =
   | "entering"
   | "entered"
@@ -41,6 +43,8 @@ interface SnackbarContentProps
    */
   nodeRef?: React.MutableRefObject<null>;
 
+  messageNode?: React.ReactNode;
+
   className?: string;
   /**
    * A function that handles the closing of the snackbar.
@@ -55,7 +59,7 @@ interface SnackbarContentProps
 
 export function Snackbar() {
   const { snackbarContent, closeSnackBar } = useUIStore();
-  const { open, message, title, type } = snackbarContent;
+  const { messageNode, open, message, title, type } = snackbarContent;
   const [exited, setExited] = React.useState(true);
   const timeoutId = React.useRef<number | undefined>();
   const nodeRef = React.useRef(null);
@@ -82,7 +86,7 @@ export function Snackbar() {
       }
       timeoutId.current = setTimeout(() => {
         closeSnackBar();
-      }, 3000) as unknown as number;
+      }, SNACKBAR_AUTO_CLOSE_MS) as unknown as number;
     }
 
     return () => {
@@ -113,6 +117,7 @@ export function Snackbar() {
             type={type}
             title={title}
             message={message}
+            messageNode={messageNode}
             status={status}
             handleClose={handleClose}
             nodeRef={nodeRef}
@@ -131,6 +136,7 @@ export function SnackbarContent({
   handleClose,
   nodeRef,
   className,
+  messageNode,
 }: SnackbarContentProps) {
   return (
     <div
@@ -163,9 +169,13 @@ export function SnackbarContent({
           }}
         />
       )}
-      <div className="flex max-w-full">
+      <div className="flex flex-col max-w-full">
         <p className="snackbar-title">{title}</p>
-        <p className="snackbar-description">{message}</p>
+        {messageNode ? (
+          messageNode
+        ) : (
+          <p className="snackbar-description">{message}</p>
+        )}
       </div>
 
       <button

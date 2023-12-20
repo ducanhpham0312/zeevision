@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQueryAllEntities } from "./useQueryAllEntities";
 import { useUIStore } from "../contexts/useUIStore";
+import { Button } from "../components/Button";
 
 export function useNotifyNewEntity() {
   const { loading, incidents, instances, processes } = useQueryAllEntities();
@@ -9,6 +10,46 @@ export function useNotifyNewEntity() {
   const [incidentKeySet, setIncidentKeySet] = useState<Set<string>>();
 
   const { setSnackbarContent } = useUIStore();
+
+  const createNewProcessSnackbar = useCallback(
+    (processKey: string) => {
+      setTimeout(() =>
+        setSnackbarContent({
+          title: "New Process",
+          messageNode: (
+            <div>
+              <p>New process has been added with the key</p>
+              <Button variant="secondary">{processKey}</Button>
+            </div>
+          ),
+          type: "success",
+        }),
+      );
+    },
+    [setSnackbarContent],
+  );
+
+  const createNewInstanceSnackbar = useCallback(
+    (instanceKey: string, processKey: string) => {
+      setTimeout(() =>
+        setSnackbarContent({
+          title: "New Process",
+          messageNode: (
+            <div>
+              <p>
+                New instance <Button variant="secondary">{instanceKey}</Button>{" "}
+                of process
+                <Button variant="secondary">{processKey}</Button>
+                has been added with the key
+              </p>
+            </div>
+          ),
+          type: "success",
+        }),
+      );
+    },
+    [setSnackbarContent],
+  );
 
   useEffect(() => {
     if (loading) {
@@ -49,10 +90,12 @@ export function useNotifyNewEntity() {
           instances.instanceAndProcessKeyList.map((item) => item.instanceKey),
         ),
       );
-      setTimeout(
-        () =>
-          setSnackbarContent({ message: "123", title: "123", type: "error" }),
-        0,
+      const newInstances = instances.instanceAndProcessKeyList.filter(
+        (item) => !instanceKeySet.has(item.instanceKey),
+      )[0];
+      createNewInstanceSnackbar(
+        newInstances.instanceKey,
+        newInstances.processKey,
       );
     }
     if (incidents.totalCount > incidentKeySet.size) {
@@ -67,7 +110,8 @@ export function useNotifyNewEntity() {
     instances,
     processKeySet,
     processes,
-    setSnackbarContent,
+    createNewProcessSnackbar,
+    createNewInstanceSnackbar,
   ]);
 
   return;

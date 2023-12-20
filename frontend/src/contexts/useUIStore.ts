@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { create } from "zustand";
 
 interface UIStoreType {
@@ -26,7 +27,8 @@ export const useUIStore = create<UIStoreType>((set) => ({
 
 export type SnackMessageType = {
   title: string;
-  message: string;
+  message?: string;
+  messageNode?: ReactNode;
   type: "success" | "error";
   open: boolean;
 };
