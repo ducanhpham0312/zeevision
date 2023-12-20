@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { ResponsiveBpmnViewer } from "../components/BpmnViewer";
 import { useQueryProcessData } from "../hooks/useQuerySingleProcess";
 import { ResizableContainer } from "../components/ResizableContainer";
+import { useMemo } from "react";
 
 export default function SingleProcessPage() {
   const params = useParams();
@@ -50,7 +51,7 @@ export default function SingleProcessPage() {
         </div>
       </ResizableContainer>
       <div className="relative flex-grow overflow-auto">
-        <div className="absolute h-full w-full">
+        <div className="absolute mt-2 h-full w-full">
           <Table
             alterRowColor
             orientation="horizontal"
@@ -58,6 +59,15 @@ export default function SingleProcessPage() {
             navLinkColumn={{
               "Instance Key": (value: string | number) =>
                 `/instances/${value.toString()}`,
+            }}
+            filterConfig={{
+              mainFilter: { column: "Instance Key" },
+              filterOptions: {
+                "Instance Key": "string",
+                Status: "string",
+                Version: "number",
+                "Start Time": "time",
+              },
             }}
             content={
               instances
