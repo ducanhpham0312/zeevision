@@ -1,1 +1,0 @@
-export { NotifyNewEntity } from "./NotifyNewEntity";

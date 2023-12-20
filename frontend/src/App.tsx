@@ -17,10 +17,11 @@ import { Snackbar } from "./components/Snackbar";
 import SingleProcessPage from "./pages/SingleProcessPage";
 import SingleInstancePage from "./pages/SingleInstancePage";
 import { useEffect } from "react";
-import { NotifyNewEntity } from "./components/NotifyNewEntity";
+import { useNotifyNewEntity } from "./hooks/useNotifyNewEntity";
 
 const Layout = () => {
   // redirect to "/processes" page
+  useNotifyNewEntity();
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -28,11 +29,11 @@ const Layout = () => {
       navigate("/processes");
     }
   }, [location.pathname, navigate]);
+
   return (
     <>
       <Navbar />
       <Snackbar />
-      <NotifyNewEntity />
       <div className="h-screen w-screen p-4 pr-0 pt-[70px]">
         <Outlet />
       </div>

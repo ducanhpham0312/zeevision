@@ -2,13 +2,17 @@ import { gql, useQuery } from "@apollo/client";
 import { queryPollIntervalMs } from "../utils/constants";
 
 interface QueryAllEntitiesType {
+  loading: boolean;
   processes: {
     totalCount: number;
     processKeyList: Array<string>;
   };
   instances: {
     totalCount: number;
-    instanceKeyList: Array<string>;
+    instanceAndProcessKeyList: Array<{
+      instanceKey: string;
+      processKey: string;
+    }>;
   };
   incidents: {
     totalCount: number;
@@ -17,13 +21,13 @@ interface QueryAllEntitiesType {
       incidentKey: string;
     }>;
   };
-  jobs: {
-    totalCount: number;
-    jobAndInstanceKeyList: Array<{
-      instanceKey: string;
-      jobKey: string;
-    }>;
-  };
+  // jobs: {
+  //   totalCount: number;
+  //   jobAndInstanceKeyList: Array<{
+  //     instanceKey: string;
+  //     jobKey: string;
+  //   }>;
+  // };
 }
 
 const ENTITIES_COUNT_AND_KEY = () => gql`
@@ -38,6 +42,7 @@ const ENTITIES_COUNT_AND_KEY = () => gql`
       totalCount
       items {
         instanceKey
+        processKey
       }
     }
     incidents {
@@ -47,13 +52,13 @@ const ENTITIES_COUNT_AND_KEY = () => gql`
         incidentKey
       }
     }
-    jobs {
-      totalCount
-      items {
-        key
-        instanceKey
-      }
-    }
+    # jobs {
+    #   totalCount
+    #   items {
+    #     key
+    #     instanceKey
+    #   }
+    # }
   }
 `;
 
@@ -71,8 +76,8 @@ export function useQueryAllEntities(): QueryAllEntitiesType {
     },
     instances: {
       totalCount: entitiesData.data?.instances.totalCount,
-      instanceKeyList: entitiesData.data?.instances.items.map(
-        (item: { instanceKey: string }) => item.instanceKey,
+      instanceAndProcessKeyList: entitiesData.data?.instances.items.map(
+        (item: { instanceKey: string; processKey: string }) => item,
       ),
     },
     incidents: {
@@ -81,14 +86,15 @@ export function useQueryAllEntities(): QueryAllEntitiesType {
         (item: { instanceKey: string; incidentKey: string }) => item,
       ),
     },
-    jobs: {
-      totalCount: entitiesData.data?.jobs.totalCount,
-      jobAndInstanceKeyList: entitiesData.data?.jobs.items.map(
-        ({ instanceKey, key }: { instanceKey: string; key: string }) => ({
-          instanceKey,
-          jobKey: key,
-        }),
-      ),
-    },
+    loading: entitiesData.loading,
+    // jobs: {
+    //   totalCount: entitiesData.data?.jobs.totalCount,
+    //   jobAndInstanceKeyList: entitiesData.data?.jobs.items.map(
+    //     ({ instanceKey, key }: { instanceKey: string; key: string }) => ({
+    //       instanceKey,
+    //       jobKey: key,
+    //     }),
+    //   ),
+    // },
   };
 }

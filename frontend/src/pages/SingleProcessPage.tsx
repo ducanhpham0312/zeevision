@@ -8,6 +8,7 @@ export default function SingleProcessPage() {
   const params = useParams();
   const { process } = useQueryProcessData(params.id || "");
 
+  console.log(process);
   const {
     processKey,
     bpmnProcessId,
