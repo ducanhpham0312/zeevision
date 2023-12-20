@@ -164,8 +164,8 @@ func (consumer *Consumer) ConsumeTopic(partition int32, topic string) (err error
 				case msgChannel <- msg.Value:
 					zap.L().Info("Consumed message",
 						zap.Int64("offset", msg.Offset),
-						zap.String("", topic),
-						zap.Int32("", partition))
+						zap.String("topic", topic),
+						zap.Int32("partition", partition))
 				case <-closeChannel:
 					// Also listen to closeChannel here to
 					// avoid dropping values on the floor

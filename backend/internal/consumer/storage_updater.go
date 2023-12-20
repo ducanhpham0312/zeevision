@@ -21,7 +21,12 @@ type storageUpdater struct {
 	wg *sync.WaitGroup
 }
 
-func newDatabaseUpdater(storer storage.Storer, msgChannels map[string]msgChannelType, closeChannel signalChannelType, wg *sync.WaitGroup) *storageUpdater {
+func newDatabaseUpdater(
+	storer storage.Storer,
+	msgChannels map[string]msgChannelType,
+	closeChannel signalChannelType,
+	wg *sync.WaitGroup,
+) *storageUpdater {
 	// Turn the channels into listen-only channels
 	listenOnlyMsgChannels := map[string]listenOnlyMsgChannel{}
 	for topic, channel := range msgChannels {
@@ -119,8 +124,8 @@ func (u *storageUpdater) handlingDispatch(topic string, untypedRecord *UntypedRe
 		}
 	default:
 		zap.L().Warn("Unhandled record:",
-			zap.String("value type", string(untypedRecord.ValueType)),
-			zap.String("intent", string(untypedRecord.Intent)))
+			zap.String("ValueType", string(untypedRecord.ValueType)),
+			zap.String("Intent", string(untypedRecord.Intent)))
 	}
 	return nil
 }
@@ -158,7 +163,7 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 			processDefinitionKey := process.ProcessDefinitionKey
 			deploymentTime := time.UnixMilli(record.Timestamp)
 			version := process.Version
-			zap.L().Info("Deploying ", zap.String("bpmn process", bpmnProcessID))
+			zap.L().Info("Deploying", zap.String("bpmnProcessID", bpmnProcessID))
 
 			err := storer.ProcessDeployed(
 				processDefinitionKey,
@@ -170,9 +175,9 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 			if err != nil {
 				errs = append(errs, err)
 			} else {
-				zap.L().Info("Deployed process with ",
-					zap.Int64("process definition", processDefinitionKey),
-					zap.String("bpmn process", bpmnProcessID))
+				zap.L().Info("Deployed process",
+					zap.Int64("processDefinitionKey", processDefinitionKey),
+					zap.String("bpmnProcessID", bpmnProcessID))
 			}
 		}
 
@@ -185,8 +190,8 @@ func (u *storageUpdater) handleDeployment(untypedRecord *UntypedRecord) error {
 		// zeebe partitions but I'm not sure that's useful information to us
 	default:
 		zap.L().Warn("Unhandled intent for ",
-			zap.String("value type", string(record.ValueType)),
-			zap.String("intent", string(record.Intent)))
+			zap.String("ValueType", string(record.ValueType)),
+			zap.String("Intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -208,12 +213,12 @@ func (u *storageUpdater) handleProcess(untypedRecord *UntypedRecord) error {
 		// I think these should already be handled in deploy?
 		// Log them here anyway in case that's *not* always the case
 		zap.L().Info("Process created:",
-			zap.Int64("process definition", processDefinitionKey),
-			zap.String("bpmn process", bpmnProcessID))
+			zap.Int64("processDefinitionKey", processDefinitionKey),
+			zap.String("bpmnProcessID", bpmnProcessID))
 	default:
 		zap.L().Warn("Unhandled intent for ",
-			zap.String("value type", string(record.ValueType)),
-			zap.String("intent", string(record.Intent)))
+			zap.String("ValueType", string(record.ValueType)),
+			zap.String("Intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -248,8 +253,8 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	)
 	if err != nil {
 		zap.L().Error(
-			"Failed to log event to audit log: position %d, element id %s, err: %v",
-			zap.Int64("record position", record.Position),
+			"Failed to log event to audit log:",
+			zap.Int64("Position", record.Position),
 			zap.String("elementID", elementID),
 			zap.Error(err),
 		)
@@ -261,11 +266,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 	switch record.Intent { // nolint:exhaustive
 	case IntentElementActivating:
 		if bpmnElementType == BpmnElementTypeProcess {
-			zap.L().Info("Process instance activating:", zap.Int64("process instance", processInstanceKey))
+			zap.L().Info("Process instance activating:", zap.Int64("processInstanceKey", processInstanceKey))
 		}
 	case IntentElementActivated:
 		if bpmnElementType == BpmnElementTypeProcess {
-			zap.L().Info("Process instance activated:", zap.Int64("process instance", processInstanceKey))
+			zap.L().Info("Process instance activated:", zap.Int64("processInstanceKey", processInstanceKey))
 			return storer.ProcessInstanceActivated(
 				processInstanceKey,
 				processDefinitionKey,
@@ -275,11 +280,11 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		}
 	case IntentElementCompleting:
 		if bpmnElementType == BpmnElementTypeProcess {
-			zap.L().Info("Process instance completing:", zap.Int64("process instance", processInstanceKey))
+			zap.L().Info("Process instance completing:", zap.Int64("processInstanceKey", processInstanceKey))
 		}
 	case IntentElementCompleted:
 		if bpmnElementType == BpmnElementTypeProcess {
-			zap.L().Info("Process instance completed:", zap.Int64("process instance", processInstanceKey))
+			zap.L().Info("Process instance completed:", zap.Int64("processInstanceKey", processInstanceKey))
 			return storer.ProcessInstanceCompleted(
 				processInstanceKey,
 				timestamp,
@@ -299,8 +304,8 @@ func (u *storageUpdater) handleProcessInstance(untypedRecord *UntypedRecord) err
 		}
 	default:
 		zap.L().Warn("Unhandled intent for ",
-			zap.String("value type", string(record.ValueType)),
-			zap.String("intent", string(record.Intent)))
+			zap.String("ValueType", string(record.ValueType)),
+			zap.String("Intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -324,7 +329,7 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 		zap.L().Info("Variable created",
 			zap.String("name", name),
 			zap.String("value", value),
-			zap.Int64("process instance", processInstanceKey))
+			zap.Int64("processInstanceKey", processInstanceKey))
 		return storer.VariableCreated(
 			processInstanceKey,
 			name,
@@ -335,7 +340,7 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 		zap.L().Info("Variable updated",
 			zap.String("name", name),
 			zap.String("value", value),
-			zap.Int64("process instance", processInstanceKey))
+			zap.Int64("processInstanceKey", processInstanceKey))
 		return storer.VariableUpdated(
 			processInstanceKey,
 			name,
@@ -344,8 +349,8 @@ func (u *storageUpdater) handleVariable(untypedRecord *UntypedRecord) error {
 		)
 	default:
 		zap.L().Warn("Unhandled intent for ",
-			zap.String("value type", string(record.ValueType)),
-			zap.String("intent", string(record.Intent)))
+			zap.String("ValueType", string(record.ValueType)),
+			zap.String("Intent", string(record.Intent)))
 	}
 
 	// If we get here we did nothing or missed all err returns so handling
@@ -371,8 +376,8 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 	switch record.Intent { // nolint:exhaustive
 	case IntentCreated:
 		zap.L().Info("Incident created",
-			zap.String("error type", errorType),
-			zap.Int64("process instance", processInstanceKey))
+			zap.String("errorType", errorType),
+			zap.Int64("processInstanceKey", processInstanceKey))
 		return storer.IncidentCreated(
 			key,
 			processInstanceKey,
@@ -383,16 +388,16 @@ func (u *storageUpdater) handleIncident(untypedRecord *UntypedRecord) error {
 		)
 	case IntentResolved:
 		zap.L().Info("Incident resolved",
-			zap.String("error type", errorType),
-			zap.Int64("process instance", processInstanceKey))
+			zap.String("errorType", errorType),
+			zap.Int64("processInstanceKey", processInstanceKey))
 		return storer.IncidentResolved(
 			key,
 			time,
 		)
 	default:
 		zap.L().Warn("Unhandled intent for ",
-			zap.String("value type", string(record.ValueType)),
-			zap.String("intent", string(record.Intent)))
+			zap.String("ValueType", string(record.ValueType)),
+			zap.String("Intent", string(record.Intent)))
 
 	}
 
@@ -430,8 +435,10 @@ func (u *storageUpdater) handleJob(untypedRecord *UntypedRecord) error {
 	time := time.UnixMilli(record.Timestamp)
 
 	if record.Intent == IntentCreated {
-		log.Printf("Job created: %s (instance %d, element %s)",
-			jobType, processInstanceKey, elementID)
+		zap.L().Info("Job created",
+			zap.String("jobType", jobType),
+			zap.Int64("processInstanceKey", processInstanceKey),
+			zap.String("elementID", elementID))
 		return storer.JobCreated(
 			key,
 			elementID,
@@ -444,8 +451,10 @@ func (u *storageUpdater) handleJob(untypedRecord *UntypedRecord) error {
 	}
 	// Other intents should only come in for jobs that already
 	// exist so they're Update type tasks
-	log.Printf("Job state changed: %s, %s (instance %d, element %s)",
-		state, jobType, processInstanceKey, elementID)
+	zap.L().Info("Job state changed",
+		zap.String("jobType", jobType),
+		zap.Int64("processInstanceKey", processInstanceKey),
+		zap.String("elementID", elementID))
 	return storer.JobUpdated(
 		key,
 		retries,
