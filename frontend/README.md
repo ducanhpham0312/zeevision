@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-You should see the the following after running `npm run dev`
+You should see something like the following after running `npm run dev`
 
 ```bash
 > zeevision@0.0.0 dev
@@ -56,57 +56,63 @@ You're ready to develop !
 
 ### Unit Testing
 
-For ensuring individual components function as expected, we use [Jest](https://jestjs.io/). To run the tests, use the following command:
+For ensuring individual components function as expected, we use [Jest](https://jestjs.io/). 
+- Run the tests:
+  ```bash
+  npm run test
+  ```
+- Run the tests with snapshot update:
+  ```bash
+  npm run test:update
+  ```
+- Run the tests with coverage:
+  ```bash
+  npm run test:coverage
+  ```
+## Integration Testing
 
-```bash
-npm run test
-```
+For basic application flow testing in the frontend (currently without any backend data), we use [Cypress](https://www.cypress.io/). 
 
-## Intergration Testing
-
-For comprehensive application flow testing, we use [Cypress](https://www.cypress.io/). To run the tests, use the following command:
-
-```bash
-npm run cypress
-```
-
+- To run the tests from the command line:
+  ```bash
+  npm run cypress:run
+  ```
+- To run the tests with Cypress LaunchPad (all interactions will be shown in an UI):
+  ```bash
+  npm run cypress:open
+  ```
 ## Storybook
 
-For visualizing and testing UI components in isolation, we use [Storybook](https://storybook.js.org/). To run the tests, use the following command:
-
-```bash
-npm run storybook
-```
+For visualizing and testing UI components in isolation, we use [Storybook](https://storybook.js.org/). 
+- Start the storybook:
+  ```bash
+  npm run storybook
+  ```
 
 ## Eslint
 
 For ensuring code quality and adhering to coding standards, we use [ESLint](https://eslint.org/).
-To check the code for any linting issues, use the following command:
-
-```bash
-npm run eslint
-```
-
-To automatically fix many of the linting issues, use:
-
-```bash
-npm run eslint:fix
-```
+- To check the code for any linting issues:
+  ```bash
+  npm run eslint
+  ```
+- To automatically fix many of the linting issues:
+  ```bash
+  npm run eslint:fix
+  ```
 
 ## Prettier
 
 For automatically formatting our code to maintain a consistent style, we use [Prettier](https://prettier.io/).
-To format the code, use the following command:
+- To check code formatting:
+  ```bash
+  npm run prettier
+  ```
 
-```bash
-npm run prettier
-```
-
-To automatically fix formatting issues, use:
-
-```bash
-npm run prettier:fix
-```
+- To automatically fix formatting issues:
+  ```bash
+  npm run prettier:fix
+  ```
 
 ## Tech Stack <a name="tech-stack"/>
 
