@@ -62,7 +62,8 @@ You're ready to develop !
 
 ### Unit Testing
 
-For ensuring individual components function as expected, we use [Jest](https://jestjs.io/). 
+For ensuring individual components function as expected, we use [Jest](https://jestjs.io/).
+
 - Run the tests:
   ```bash
   npm run test
@@ -75,9 +76,10 @@ For ensuring individual components function as expected, we use [Jest](https://j
   ```bash
   npm run test:coverage
   ```
+
 ### Integration Testing
 
-For basic application flow testing in the frontend (currently without any backend data), we use [Cypress](https://www.cypress.io/). 
+For basic application flow testing in the frontend (currently without any backend data), we use [Cypress](https://www.cypress.io/).
 
 - To run the tests from the command line:
   ```bash
@@ -87,9 +89,11 @@ For basic application flow testing in the frontend (currently without any backen
   ```bash
   npm run cypress:open
   ```
+
 ## Storybook
 
-For visualizing and testing UI components in isolation, we use [Storybook](https://storybook.js.org/). 
+For visualizing and testing UI components in isolation, we use [Storybook](https://storybook.js.org/).
+
 - Start the storybook:
   ```bash
   npm run storybook
@@ -98,6 +102,7 @@ For visualizing and testing UI components in isolation, we use [Storybook](https
 ## Eslint
 
 For ensuring code quality and adhering to coding standards, we use [ESLint](https://eslint.org/).
+
 - To check the code for any linting issues:
   ```bash
   npm run eslint
@@ -110,7 +115,9 @@ For ensuring code quality and adhering to coding standards, we use [ESLint](http
 ## Prettier
 
 For automatically formatting our code to maintain a consistent style, we use [Prettier](https://prettier.io/).
+
 - To check code formatting:
+
   ```bash
   npm run prettier
   ```
