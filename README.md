@@ -37,4 +37,3 @@ A Zeebe workflow monitoring application.
 
 ## Deploy processes and create instances
 - Please follow the guidelines in `zeebe-test-bench` to see the steps
-
