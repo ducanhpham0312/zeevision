@@ -1,15 +1,21 @@
 # Frontend README
 
-[Introduction](#introduction) •
-[Getting Started](#getting-started) •
-[Tests](#tests) •
-[Tech Stack](#tech-stack)
+- [Frontend README](#frontend-readme)
+  - [Introduction](#introduction)
+  - [Getting started](#getting-started)
+  - [Tests](#tests)
+    - [Unit Testing](#unit-testing)
+    - [Integration Testing](#integration-testing)
+  - [Storybook](#storybook)
+  - [Eslint](#eslint)
+  - [Prettier](#prettier)
+  - [Tech Stack](#tech-stack)
 
-## Introduction <a name="introduction"/>
+## Introduction
 
 This document provides an overview of the frontend part of our application. It outlines how to get started, guides on tests and the technologies used.
 
-## Getting started <a name="getting-started"/>
+## Getting started
 
 Before you begin, ensure you have the following installed:
 
@@ -36,7 +42,7 @@ npm install
 npm run dev
 ```
 
-You should see the the following after running `npm run dev`
+You should see something like the following after running `npm run dev`
 
 ```bash
 > zeevision@0.0.0 dev
@@ -52,63 +58,69 @@ You should see the the following after running `npm run dev`
 
 You're ready to develop !
 
-## Tests <a name="tests"/>
+## Tests
 
 ### Unit Testing
 
-For ensuring individual components function as expected, we use [Jest](https://jestjs.io/). To run the tests, use the following command:
+For ensuring individual components function as expected, we use [Jest](https://jestjs.io/). 
+- Run the tests:
+  ```bash
+  npm run test
+  ```
+- Run the tests with snapshot update:
+  ```bash
+  npm run test:update
+  ```
+- Run the tests with coverage:
+  ```bash
+  npm run test:coverage
+  ```
+### Integration Testing
 
-```bash
-npm run test
-```
+For basic application flow testing in the frontend (currently without any backend data), we use [Cypress](https://www.cypress.io/). 
 
-## Intergration Testing
-
-For comprehensive application flow testing, we use [Cypress](https://www.cypress.io/). To run the tests, use the following command:
-
-```bash
-npm run cypress
-```
-
+- To run the tests from the command line:
+  ```bash
+  npm run cypress:run
+  ```
+- To run the tests with Cypress LaunchPad (all interactions will be shown in an UI):
+  ```bash
+  npm run cypress:open
+  ```
 ## Storybook
 
-For visualizing and testing UI components in isolation, we use [Storybook](https://storybook.js.org/). To run the tests, use the following command:
-
-```bash
-npm run storybook
-```
+For visualizing and testing UI components in isolation, we use [Storybook](https://storybook.js.org/). 
+- Start the storybook:
+  ```bash
+  npm run storybook
+  ```
 
 ## Eslint
 
 For ensuring code quality and adhering to coding standards, we use [ESLint](https://eslint.org/).
-To check the code for any linting issues, use the following command:
-
-```bash
-npm run eslint
-```
-
-To automatically fix many of the linting issues, use:
-
-```bash
-npm run eslint:fix
-```
+- To check the code for any linting issues:
+  ```bash
+  npm run eslint
+  ```
+- To automatically fix many of the linting issues:
+  ```bash
+  npm run eslint:fix
+  ```
 
 ## Prettier
 
 For automatically formatting our code to maintain a consistent style, we use [Prettier](https://prettier.io/).
-To format the code, use the following command:
+- To check code formatting:
+  ```bash
+  npm run prettier
+  ```
 
-```bash
-npm run prettier
-```
+- To automatically fix formatting issues:
+  ```bash
+  npm run prettier:fix
+  ```
 
-To automatically fix formatting issues, use:
-
-```bash
-npm run prettier:fix
-```
-
-## Tech Stack <a name="tech-stack"/>
+## Tech Stack
 
 - [React](https://react.dev/) - A JavaScript library for building user interfaces, known for its efficiency and flexibility. React's reusable components streamline UI development, while its rich ecosystem and strong industry adoption provide robust solutions and community support, crucial for scalable and manageable applications.
 - [Vite](https://vitejs.dev/) - An ultra-fast frontend build tool, leveraging native ES modules for lightning-fast server start and hot module replacement (HMR). Vite is chosen for its speed in builds and reloads, out-of-the-box features like TypeScript support, and simple yet optimized production build process, enhancing modern web development efficiency.
