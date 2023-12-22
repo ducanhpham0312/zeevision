@@ -1,15 +1,21 @@
 # Frontend README
 
-[Introduction](#introduction) •
-[Getting Started](#getting-started) •
-[Tests](#tests) •
-[Tech Stack](#tech-stack)
+- [Frontend README](#frontend-readme)
+  - [Introduction](#introduction)
+  - [Getting started](#getting-started)
+  - [Tests](#tests)
+    - [Unit Testing](#unit-testing)
+    - [Integration Testing](#integration-testing)
+  - [Storybook](#storybook)
+  - [Eslint](#eslint)
+  - [Prettier](#prettier)
+  - [Tech Stack](#tech-stack)
 
-## Introduction <a name="introduction"/>
+## Introduction
 
 This document provides an overview of the frontend part of our application. It outlines how to get started, guides on tests and the technologies used.
 
-## Getting started <a name="getting-started"/>
+## Getting started
 
 Before you begin, ensure you have the following installed:
 
@@ -52,7 +58,7 @@ You should see something like the following after running `npm run dev`
 
 You're ready to develop !
 
-## Tests <a name="tests"/>
+## Tests
 
 ### Unit Testing
 
@@ -69,7 +75,7 @@ For ensuring individual components function as expected, we use [Jest](https://j
   ```bash
   npm run test:coverage
   ```
-## Integration Testing
+### Integration Testing
 
 For basic application flow testing in the frontend (currently without any backend data), we use [Cypress](https://www.cypress.io/). 
 
@@ -114,7 +120,7 @@ For automatically formatting our code to maintain a consistent style, we use [Pr
   npm run prettier:fix
   ```
 
-## Tech Stack <a name="tech-stack"/>
+## Tech Stack
 
 - [React](https://react.dev/) - A JavaScript library for building user interfaces, known for its efficiency and flexibility. React's reusable components streamline UI development, while its rich ecosystem and strong industry adoption provide robust solutions and community support, crucial for scalable and manageable applications.
 - [Vite](https://vitejs.dev/) - An ultra-fast frontend build tool, leveraging native ES modules for lightning-fast server start and hot module replacement (HMR). Vite is chosen for its speed in builds and reloads, out-of-the-box features like TypeScript support, and simple yet optimized production build process, enhancing modern web development efficiency.
