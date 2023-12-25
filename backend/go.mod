@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.41
 	github.com/IBM/sarama v1.42.1
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-chi/chi/v5 v5.0.10
+	github.com/go-chi/chi/v5 v5.0.11
 	github.com/gorilla/websocket v1.5.1
 	github.com/mandrigin/gin-spa v0.0.0-20200212133200-790d0c0c7335
 	github.com/rs/cors v1.10.1
