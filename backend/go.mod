@@ -3,7 +3,7 @@ module github.com/ducanhpham0312/zeevision/backend
 go 1.21
 
 require (
-	github.com/99designs/gqlgen v0.17.41
+	github.com/99designs/gqlgen v0.17.43
 	github.com/IBM/sarama v1.42.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-chi/chi/v5 v5.0.10
@@ -11,7 +11,7 @@ require (
 	github.com/mandrigin/gin-spa v0.0.0-20200212133200-790d0c0c7335
 	github.com/rs/cors v1.10.1
 	github.com/stretchr/testify v1.8.4
-	github.com/vektah/gqlparser/v2 v2.5.10
+	github.com/vektah/gqlparser/v2 v2.5.11
 	golang.org/x/sync v0.5.0
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/driver/sqlite v1.5.4
