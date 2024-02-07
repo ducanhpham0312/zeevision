@@ -1,5 +1,5 @@
 # Use golang as the backend builder image
-FROM golang:1.21-alpine AS backend-builder
+FROM golang:1.22-alpine AS backend-builder
 
 WORKDIR /build
 
