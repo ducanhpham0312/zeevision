@@ -37,15 +37,15 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
-      - name: Build arm image
-        if: github.event.schedule == '0 12 * * *'
-        uses: docker/build-push-action@v5
-        with:
-          context: ./
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/arm64
+      #- name: Build arm image
+      #  if: github.event.schedule == '0 12 * * *'
+      #  uses: docker/build-push-action@v5
+      #  with:
+      #    context: ./
+      #    push: false
+      #    cache-from: type=gha
+      #    cache-to: type=gha,mode=max
+      #    platforms: linux/arm64
 
   lint:
     runs-on: ubuntu-latest
