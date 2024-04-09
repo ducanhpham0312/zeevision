@@ -42,7 +42,7 @@
     "tailwind-merge": "^2.2.0",
     "tailwind-variants": "^0.1.19",
     "usehooks-ts": "^2.9.1",
-    "zustand": "^4.4.7"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.6",
