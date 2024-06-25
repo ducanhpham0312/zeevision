@@ -79,7 +79,7 @@
     "storybook-addon-manual-mocks": "^1.0.3",
     "tailwindcss": "^3.4.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.3.3",
+    "typescript": "^5.5.2",
     "vite": "^4.5.1"
   },
   "optionalDependencies": {
